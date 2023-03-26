@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.taxidrivercalculator.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_homeFragment_to_addShift"
+            app:destination="@id/addShift" />
+        <action
+            android:id="@+id/action_navigation_home_to_settingsActivity"
+            app:destination="@id/settingsActivity" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.example.taxidrivercalculator.ui.dashboard.DashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="com.example.taxidrivercalculator.ui.notifications.NotificationsFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/addShift"
+        android:name="com.example.taxidrivercalculator.AddShift"
+        android:label="@string/title_new_shift"
+        tools:layout="@layout/fragment_add_shift">
+        <action
+            android:id="@+id/action_addShift_to_home_fragment"
+            app:destination="@id/navigation_home" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_navigation_home"
+        app:destination="@id/navigation_home" />
+    <activity
+        android:id="@+id/settingsActivity"
+        android:name="com.example.taxidrivercalculator.SettingsActivity"
+        android:label="settings_activity"
+        tools:layout="@layout/settings_activity" />
+    <activity
+        android:id="@+id/logActivity"
+        android:name="com.example.taxidrivercalculator.LogActivity"
+        android:label="activity_log"
+        app:action="log_to_addshift"
+        tools:layout="@layout/activity_log"
+        />
+    <action
+        android:id="@+id/action_edit_current"
+        app:destination="@id/addShift" />
+</navigation>

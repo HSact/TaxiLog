@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Taxi Driver Calculator</string>
+    <string name="logo_text">Taxi Driver\nCalculator</string>
+    <string name="title_home">Сводка</string>
+    <string name="title_dashboard">Цели</string>
+    <string name="title_notifications">Статистика</string>
+    <string name="title_settings">Настройки</string>
+    <string name="title_about">О приложении</string>
+    <string name="title_new_shift">Новая смена</string>
+    <string name="title_my_shifts">Мои смены</string>
+    <string name="select_language">Выберите язык</string>
+    <string name="settings_interface">Интерфейс</string>
+    <string name="settings_language">Язык</string>
+    <string name="settings_theme">Тема</string>
+    <string name="settings_light">Светлая</string>
+    <string name="settings_dark">Темная</string>
+    <string name="settings_km_mi">Км/Мили</string>
+    <string name="settings_km">Км</string>
+    <string name="settings_mi">Мили</string>
+    <string name="settings_car">Авто</string>
+    <string name="settings_consumption">Расход топлива (л/100км)</string>
+    <string name="settings_rented_car">Арендованное авто</string>
+    <string name="settings_rent_cost">Стоимость аренды</string>
+    <string name="settings_calculate_service">Учитывать стоимость обслуживания авто</string>
+    <string name="settings_service_cost_per_km">Стоимость обслуживания за 1 Км пробега</string>
+    <string name="settings_plan">План</string>
+    <string name="settings_goal_per_month">Цель заработка в месяц</string>
+    <string name="settings_schedule">График</string>
+    <string name="settings_calculate_taxes">Расчитывать налоги</string>
+    <string name="settings_tax_rate">Налоговая ставка %</string>
+    <string name="apply">Применить</string>
+    <string name="addshift_date_and_time">Дата и время</string>
+    <string name="addshift_date">Дата:</string>
+    <string name="addshift_online">На линии:</string>
+    <string name="addshift_break">Перерыв</string>
+    <string name="addshift_break_time">Перерыв:</string>
+    <string name="addshift_money">Деньги</string>
+    <string name="addshift_earnings">Заработок</string>
+    <string name="addshift_wash">Мойка</string>
+    <string name="addshift_fuel_cost">Стоимость топлива</string>
+    <string name="addshift_mileage">Пробег</string>
+    <string name="addshift_submit">Добавить</string>
+    <string name="last_shift">Последняя смена</string>
+    <string name="date">Дата</string>
+    <string name="costs">Траты</string>
+    <string name="time">Время</string>
+    <string name="total">Итого</string>
+    <string name="per_hour">В час</string>
+    <string name="new_shift">Добавить смену</string>
+    <string name="profit">Чистыми</string>
+    <string name="id">ID</string>
+    <string name="delete_all">Delete all</string>
+
+
+    <string-array name="languages">
+        <item>Английский</item>
+        <item>Русский</item>
+    </string-array>
+
+
+</resources>
