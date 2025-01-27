@@ -98,7 +98,8 @@
                     android:layout_height="wrap_content"
                     android:minWidth="60dp"
                     android:layout_marginLeft="10dp"
-                    android:text="@string/settings_light" />
+                    android:text="@string/settings_light"
+                    android:layout_width="wrap_content"/>
 
                 <RadioButton
                     android:id="@+id/radioDark"
