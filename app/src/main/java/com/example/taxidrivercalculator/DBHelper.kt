@@ -97,7 +97,6 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             execSQL("UPDATE shifts_table SET _id = $i++ WHERE _id < SIZE+1")
             close()
         }
-
     }*/
 
     fun editShift(index: Int) {
@@ -117,7 +116,6 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         cv.put("id", index-1)
         val cursor = this.getShift()
         cursor!!.moveToPosition(index)
-
         cv.put("date", cursor.getString(cursor.getColumnIndex(DATE_COl)+0))
         cv.put("time", cursor.getString(cursor.getColumnIndex(TIME_COL)+0))
         cv.put("earnings", cursor.getDouble(cursor.getColumnIndex(EARNINGS_COL)+0))
@@ -125,7 +123,6 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         cv.put("fuel", cursor.getDouble(cursor.getColumnIndex(FUEL_COL)+0))
         cv.put("mileage", cursor.getDouble(cursor.getColumnIndex(MILEAGE_COL)+0))
         cv.put("profit", cursor.getDouble(cursor.getColumnIndex(PROFIT_COL)+0))
-
         db.replace(TABLE_NAME, "id = $index", cv)*/
         //db.execSQL("")
         db.close()

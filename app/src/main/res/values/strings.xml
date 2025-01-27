@@ -55,6 +55,20 @@
     <string name="profit">Profit</string>
     <string name="id">ID</string>
     <string name="delete_all">Delete all</string>
+    <string name="you_haven_t_set_goal_yet">You haven\'t set a goal yet</string>
+    <string name="your_goal_per_month">Your goal is %s per month</string>
+    <string name="n_a">N/A</string>
+    <string name="hours">" hours"</string>
+    <string name="shifts_count">Shifts count</string>
+    <string name="average_earnings_per_hour">Average earnings per hour</string>
+    <string name="average_profit_per_hour">Average profit per hour</string>
+    <string name="average_shift_duration">Average shift duration</string>
+    <string name="average_mileage">Average mileage</string>
+    <string name="total_shift_duration">Total shift duration</string>
+    <string name="total_mileage">Total mileage</string>
+    <string name="total_wash">Total wash</string>
+    <string name="total_earnings">Total earnings</string>
+    <string name="total_profit">Total profit</string>
 
 
     <string-array name="languages">

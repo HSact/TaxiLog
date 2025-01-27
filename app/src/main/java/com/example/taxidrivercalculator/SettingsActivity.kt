@@ -37,6 +37,7 @@ class SettingsActivity : AppCompatActivity() {
 
     lateinit var spinnerLang: Spinner
     lateinit var radioTheme: RadioGroup
+    lateinit var radioDefault: RadioButton
     lateinit var radioLight: RadioButton
     lateinit var radioDark: RadioButton
     lateinit var radioMiKm: RadioGroup
@@ -47,6 +48,9 @@ class SettingsActivity : AppCompatActivity() {
     lateinit var textServiceCost: EditText
     lateinit var textGoalPerMonth: EditText
     lateinit var radioSchedule: RadioGroup
+    lateinit var radio70: RadioButton
+    lateinit var radio61: RadioButton
+    lateinit var radio52: RadioButton
     lateinit var textTaxRate: EditText
     lateinit var buttonApply: Button
 
@@ -110,6 +114,7 @@ class SettingsActivity : AppCompatActivity() {
         spinnerLang = binding.spinnerLang
 
         radioTheme = binding.radioTheme
+        radioDefault = binding.radioDefault
         radioLight = binding.radioLight
         radioDark = binding.radioDark
 
@@ -121,7 +126,12 @@ class SettingsActivity : AppCompatActivity() {
         textRentCost = binding.editTextRentCost
         textServiceCost = binding.editTextServiceCost
         textGoalPerMonth = binding.editTextGoalPerMonth
+
         radioSchedule = binding.radioSchedule
+        radio70 = binding.radio70
+        radio61 = binding.radio61
+        radio52 = binding.radio52
+
         textTaxRate = binding.editTextTaxRate
         buttonApply = binding.buttonApply
     }
@@ -170,15 +180,25 @@ class SettingsActivity : AppCompatActivity() {
     }
     private fun loadThemeSelection() {
         val currentTheme = AppCompatDelegate.getDefaultNightMode()
-        if (currentTheme==2)
+
+        if (currentTheme==-100)
         {
+            radioDefault.isChecked=true
             radioLight.isChecked=false
-            radioDark.isChecked=true
+            radioDark.isChecked=false
         }
+
         if (currentTheme==1)
         {
+            radioDefault.isChecked=false
             radioLight.isChecked=true
             radioDark.isChecked=false
+        }
+        if (currentTheme==2)
+        {
+            radioDefault.isChecked=false
+            radioLight.isChecked=false
+            radioDark.isChecked=true
         }
     }
     private fun loadKmMiSelection()
@@ -295,6 +315,14 @@ class SettingsActivity : AppCompatActivity() {
         settings.putInt("Schedule", radioSchedule.checkedRadioButtonId)
         settings.putBoolean("Taxes", switchTaxes.isChecked)
         settings.putString("Tax_rate", textTaxRate.text.toString())
+
+        val radioScheduleText = when (radioSchedule.checkedRadioButtonId) {
+            R.id.radio70 -> radio70.text
+            R.id.radio61 -> radio61.text
+            R.id.radio52 -> radio52.text
+            else -> {"0"}
+        }
+        settings.putString("Schedule_text", radioScheduleText.toString())
         settings.apply()
     }
 

@@ -1,11 +1,9 @@
 package com.example.taxidrivercalculator
 
 import android.app.AlertDialog
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
@@ -23,7 +21,7 @@ import com.example.taxidrivercalculator.ui.home.HomeFragment
 
 class LogActivity : AppCompatActivity() {
 
-    private val shifts = mutableListOf<Shift>()
+    private var shifts = mutableListOf<Shift>()
 
     private lateinit var binding: ActivityLogBinding
     private lateinit var bindingR: RecyclerviewItemBinding
@@ -36,12 +34,9 @@ class LogActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.title_my_shifts)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-
         makeArray()
         val recycler: RecyclerView = findViewById(R.id.recyclerView)
         recycler.layoutManager = LinearLayoutManager(this)
-
-
 
 
         recycler.adapter = CustomRecyclerAdapter(fillList())

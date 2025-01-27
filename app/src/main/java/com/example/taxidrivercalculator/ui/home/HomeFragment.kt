@@ -93,7 +93,7 @@ class HomeFragment : Fragment() {
         textEarnings.text = cursor.getString(cursor.getColumnIndex(DBHelper.EARNINGS_COL)+0)
         textCosts.text = ((cursor.getDouble(cursor.getColumnIndex(DBHelper.WASH_COL)+0))+
                 (cursor.getDouble(cursor.getColumnIndex(DBHelper.FUEL_COL)+0))).toString()
-        textTime.text = cursor.getString(cursor.getColumnIndex(DBHelper.TIME_COL)+0) + " hours"
+        textTime.text = cursor.getString(cursor.getColumnIndex(DBHelper.TIME_COL)+0) + getString(R.string.hours)
         textTotal.text = cursor.getString(cursor.getColumnIndex(DBHelper.PROFIT_COL)+0)
         textPerHour.text = perHour.toString()
         textPlan.text = cursor.getString(cursor.getColumnIndex(DBHelper.PROFIT_COL)+0) + " of dohuya"
@@ -102,13 +102,13 @@ class HomeFragment : Fragment() {
 
     private fun setEmptyBDView ()
     {
-        textDate.text = "empty blyat"
-        textEarnings.text = "empty blyat"
-        textCosts.text = "empty blyat"
-        textTime.text = "empty blyat"
-        textTotal.text = "empty blyat"
-        textPerHour.text = "empty blyat"
-        textPlan.text = "empty blyat"
+        textDate.text = getString(R.string.n_a)
+        textEarnings.text = getString(R.string.n_a)
+        textCosts.text = getString(R.string.n_a)
+        textTime.text = getString(R.string.n_a)
+        textTotal.text = getString(R.string.n_a)
+        textPerHour.text = getString(R.string.n_a)
+        textPlan.text = getString(R.string.n_a)
     }
 
     override fun onDestroyView() {

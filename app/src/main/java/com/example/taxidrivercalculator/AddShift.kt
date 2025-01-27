@@ -2,8 +2,6 @@ package com.example.taxidrivercalculator
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,21 +11,13 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
-import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.example.taxidrivercalculator.databinding.FragmentAddShiftBinding
 import com.example.taxidrivercalculator.ui.DatePickerFragment
 import com.example.taxidrivercalculator.ui.TimePickerFragment
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
-import kotlin.concurrent.thread
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 
 class AddShift : Fragment(R.layout.fragment_add_shift) {
@@ -60,9 +50,6 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
     lateinit var buttonSubmit: Button
 
 
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
     private var _binding: FragmentAddShiftBinding? = null
     private val binding get() = _binding!!
@@ -75,17 +62,6 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
         super.onCreate(savedInstanceState)
 
         MainActivity.botNav.isVisible = false
-
-        /*supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "About"*/
-
-
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-
-        }
-        //navView.visibility = View.GONE
 
 
     }
