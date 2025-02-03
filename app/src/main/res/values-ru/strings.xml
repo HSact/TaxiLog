@@ -55,10 +55,10 @@
     <string name="your_goal_per_month">Вы поставили цель %s в месяц</string>
     <string name="n_a">N/A</string>
     <string name="hours">" hours"</string>
-    <string name="shifts_count">Shifts count</string>
-    <string name="average_earnings_per_hour">Average earnings per hour</string>
-    <string name="average_profit_per_hour">Average profit per hour</string>
-    <string name="average_shift_duration">Average shift duration</string>
+    <string name="shifts_count">Всего смен</string>
+    <string name="average_earnings_per_hour">Средний грязный доход</string>
+    <string name="average_profit_per_hour">Средний чистый доход</string>
+    <string name="average_shift_duration">Средняя продолжительность смены</string>
     <string name="average_mileage">Средний пробег</string>
     <string name="total_shift_duration">Общая продолжительность смен</string>
     <string name="total_mileage">Общий пробег</string>

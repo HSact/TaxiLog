@@ -1,6 +1,7 @@
 package com.example.taxidrivercalculator.ui.home
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -53,6 +54,7 @@ class HomeFragment : Fragment() {
         bindItems()
         printShift()
 
+
         binding.buttonNewShift.setOnClickListener {
 
             newShift()
@@ -86,9 +88,6 @@ class HomeFragment : Fragment() {
 
         val perHour = (((cursor.getDouble(cursor.getColumnIndex(DBHelper.EARNINGS_COL)+0))/
                 cursor.getDouble(cursor.getColumnIndex(DBHelper.TIME_COL)+0))*100.0).toInt()/100.0
-        //val a = cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COl)+0)
-        //val b = cursor.getString(cursor.getColumnIndex(DBHelper.TIME_COL)+0)
-        //Toast.makeText(activity,a+" "+b, Toast.LENGTH_SHORT).show()
         textDate.text = cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COl)+0)
         textEarnings.text = cursor.getString(cursor.getColumnIndex(DBHelper.EARNINGS_COL)+0)
         textCosts.text = ((cursor.getDouble(cursor.getColumnIndex(DBHelper.WASH_COL)+0))+
@@ -96,7 +95,18 @@ class HomeFragment : Fragment() {
         textTime.text = cursor.getString(cursor.getColumnIndex(DBHelper.TIME_COL)+0) + getString(R.string.hours)
         textTotal.text = cursor.getString(cursor.getColumnIndex(DBHelper.PROFIT_COL)+0)
         textPerHour.text = perHour.toString()
-        textPlan.text = cursor.getString(cursor.getColumnIndex(DBHelper.PROFIT_COL)+0) + " of dohuya"
+
+
+        val settings = this.activity?.getSharedPreferences("Settings", Activity.MODE_PRIVATE)
+        val goalMonthString = settings?.getString("Goal_per_month", "")
+        if (goalMonthString == null || goalMonthString == "")
+        {
+            textPlan.text = getString(R.string.n_a)
+        }
+        else
+        {
+            textPlan.text = cursor.getString(cursor.getColumnIndex(DBHelper.PROFIT_COL)+0) +" of " + goalMonthString
+        }
         cursor.close()
     }
 

@@ -103,6 +103,11 @@ class DashboardFragment : Fragment() {
         {
             setTodayProgress(null)
         }
+        if (goalMonth==-1.0)
+        {
+            setEmptyProgress()
+            return root
+        }
 
 
         //calc week
@@ -145,9 +150,10 @@ class DashboardFragment : Fragment() {
     private fun defineGoals() {
         val settings = this.activity?.getSharedPreferences("Settings", Activity.MODE_PRIVATE)
         val goalMonthString = settings?.getString("Goal_per_month", "")
-        if (goalMonthString == null || goalMonthString == "")
+        if (goalMonthString == null || goalMonthString == "" || goalMonthString == "-1")
         {
             textAssignedGoal.text = getString(R.string.you_haven_t_set_goal_yet)
+            setEmptyProgress()
             return
         }
         displayMonthGoal(goalMonthString)
@@ -172,8 +178,8 @@ class DashboardFragment : Fragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setTodayProgress(todayProfit: Double?) {
-        if (todayProfit == null)
+    public fun setTodayProgress(todayProfit: Double?) {
+        if (todayProfit == null || goalDay == -1.0)
         {
             progressDay.progress = 0
             todayPercent.text = "0%"

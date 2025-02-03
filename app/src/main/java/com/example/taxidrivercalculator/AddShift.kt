@@ -13,8 +13,10 @@ import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.example.taxidrivercalculator.databinding.FragmentAddShiftBinding
+import com.example.taxidrivercalculator.databinding.FragmentDashboardBinding
 import com.example.taxidrivercalculator.ui.DatePickerFragment
 import com.example.taxidrivercalculator.ui.TimePickerFragment
+import com.example.taxidrivercalculator.ui.dashboard.DashboardFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -316,14 +318,12 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
         val db = DBHelper(requireActivity(), null)
         db.addShift(currentShift.date, msToHours(currentShift.totalTime),
             currentShift.earnings, currentShift.wash, currentShift.fuelCost, currentShift.mileage, currentShift.profit)
-
         Toast.makeText(activity,"Suck ass!",Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_addShift_to_home_fragment)
         MainActivity.botNav.isVisible = true
+
+        //TODO: make goals change immediately
     }
-
-
-
 
     override fun onResume() {
         MainActivity.botNav.isVisible = false
@@ -332,6 +332,7 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
 
     override fun onDestroy() {
         MainActivity.botNav.isVisible = true
+        //FragmentDashboard.
         super.onDestroy()
     }
 
@@ -341,36 +342,4 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
         val row = binding.tableBreak
         row.isVisible = check1.isChecked
     }
-
-
-
-
-    companion object {
-
-    }
-
-    /*fun setTime()
-    {
-        var b: Int
-        var c: Int
-        var a = TimePickerDialog(this,TimePickerDialog.OnTimeSetListener(function = {view, b, c},-> b=b)
-
-    }*/
-    /*@RequiresApi(Build.VERSION_CODES.N)
-    fun clickTimePicker(view: View) {
-        val c = Calendar.getInstance()
-        val hour = c.get(Calendar.HOUR)
-        val minute = c.get(Calendar.MINUTE)
-        /*fun Context.toast(message: CharSequence) =
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()*/
-        val tpd = TimePickerDialog(context,TimePickerDialog.OnTimeSetListener(function = { view, h, m ->
-
-            Toast.makeText(context, h.toString() + " : " + m +" : " , Toast.LENGTH_LONG).show()
-
-        }),hour,minute,false)
-
-        tpd.show()
-    }*/
-
-
 }
