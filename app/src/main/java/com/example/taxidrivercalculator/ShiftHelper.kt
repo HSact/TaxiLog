@@ -4,7 +4,7 @@ import com.example.taxidrivercalculator.DBHelper
 import com.example.taxidrivercalculator.Shift
 
 object ShiftHelper {
-    fun makeArray(db: DBHelper): MutableList<Shift>? {
+    fun makeArray(db: DBHelper): MutableList<Shift> {
         val shifts = mutableListOf<Shift>()
         val cursor = db.getShift()
 
@@ -12,7 +12,7 @@ object ShiftHelper {
         cursor!!.moveToLast()
         if (cursor.position == -1) {
             cursor.close()
-            return null
+            return mutableListOf()
         }
         cursor.moveToFirst()
         var i = 0
@@ -70,6 +70,14 @@ object ShiftHelper {
         }
         return totalMileage/shifts.size
     }
+    fun calcAverageFuelCost (shifts: MutableList<Shift>): Double
+    {
+        var totalFuelCost = 0.0
+        shifts.indices.forEach {
+                i -> totalFuelCost+=shifts[i].mileage
+        }
+        return totalFuelCost/shifts.size
+    }
     fun calcTotalShiftDuration (shifts: MutableList<Shift>): Double
     {
         var totalHours = 0.0
@@ -85,6 +93,14 @@ object ShiftHelper {
                 i -> totalMileage+=shifts[i].mileage
         }
         return totalMileage
+    }
+    fun calcTotalFuelCost (shifts: MutableList<Shift>): Double
+    {
+        var totalFuel = 0.0
+        shifts.indices.forEach {
+                i -> totalFuel+=shifts[i].fuelCost
+        }
+        return totalFuel
     }
     fun calcTotalWash (shifts: MutableList<Shift>): Double
     {

@@ -114,13 +114,31 @@
                 android:layout_height="match_parent" >
 
                 <TextView
-                    android:id="@+id/textTotal_Duration"
+                    android:id="@+id/textAv_fuel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/average_fuel"
+                    android:textSize="24sp" />
+                <TextView
+                    android:id="@+id/textAv_fuel_val"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/n_a"
+                    android:textSize="24sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/textTotal_duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/total_shift_duration"
                     android:textSize="24sp" />
                 <TextView
-                    android:id="@+id/textTotal_Duration_val"
+                    android:id="@+id/textTotal_duration_val"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/n_a"
@@ -139,6 +157,24 @@
                     android:textSize="24sp" />
                 <TextView
                     android:id="@+id/textTotal_mileage_val"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/n_a"
+                    android:textSize="24sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/textTotal_fuel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/total_fuel"
+                    android:textSize="24sp" />
+                <TextView
+                    android:id="@+id/textTotal_fuel_val"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/n_a"
@@ -186,13 +222,13 @@
                 android:layout_height="match_parent" >
 
                 <TextView
-                    android:id="@+id/textTotal_Profit"
+                    android:id="@+id/textTotalProfit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/total_profit"
                     android:textSize="24sp" />
                 <TextView
-                    android:id="@+id/textTotal_Profit_val"
+                    android:id="@+id/textTotalProfit_val"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/n_a"

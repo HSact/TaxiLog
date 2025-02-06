@@ -34,7 +34,8 @@ class LogActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.title_my_shifts)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        makeArray()
+        //makeArray()
+        shifts=ShiftHelper.makeArray(DBHelper(this, null))
         val recycler: RecyclerView = findViewById(R.id.recyclerView)
         recycler.layoutManager = LinearLayoutManager(this)
 
@@ -77,7 +78,7 @@ class LogActivity : AppCompatActivity() {
         return data
     }
 
-    private fun makeArray()
+    /*private fun makeArray()
     {
         val db = DBHelper(this, null)
         val cursor = db.getShift()
@@ -108,7 +109,7 @@ class LogActivity : AppCompatActivity() {
         } while (cursor.moveToNext())
 
         cursor.close()
-    }
+    }*/
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed();
@@ -125,7 +126,7 @@ class LogActivity : AppCompatActivity() {
         /*alert.setPositiveButton("YES") {dialog, id -> deleteShift(view.id)}
         alert.setNegativeButton("CANCEL", null)
         alert.setMessage("Delete shift ID " + view.id + "?")*/
-        alert.setTitle("Edit or delete shift " + view.id + "?")
+        alert.setTitle(getString(R.string.edit_or_delete_shift) + view.id + "?")
         with(alert)
         {
             //setTitle("Edit or delete shift" + items[which])
