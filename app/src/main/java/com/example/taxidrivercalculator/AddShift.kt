@@ -230,7 +230,6 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
 
         val n = ShiftHelper.centsRound(fuelPrice*editMileage.text.toString().toDouble()*consumption/100)
         editFuelCost.setText(n.toString())
-        //TODO Finish fuel cost guess
     }
 
     private fun calculateShift ()
