@@ -85,8 +85,9 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
         loadGuess()
 
         editMileage.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
-                guessFuelCost()
+            override fun afterTextChanged(p0: Editable?)
+            {
+                    guessFuelCost()
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -207,22 +208,28 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
                 editObj.setText(time.toString())
             }
         }
-
         // show
         timePickerFragment.show(supportFragmentManager, "TimePickerFragment")
-
     }
 
+    @SuppressLint("SetTextI18n")
     private fun guessFuelCost ()
     {
         val settings = requireContext().getSharedPreferences("Settings", Activity.MODE_PRIVATE)
         val fuelPrice: Double = settings.getString("Fuel_price", "0")?.toDoubleOrNull() ?: 0.0
-        if (!(settings.getBoolean("Seted_up", false)) || fuelPrice == 0.0)
+        val consumption: Double = settings.getString("Consumption", "0")?.toDoubleOrNull() ?: 0.0
+        if (!(settings.getBoolean("Seted_up", false)) || fuelPrice == 0.0 || consumption == 0.0)
         {
             return
         }
-        /*var n = fuelPrice*editMileage.text.toString().toDouble()/100
-        editFuelCost.text = n.toString()*/
+        if (editMileage.text.isEmpty())
+        {
+            editFuelCost.setText("")
+            return
+        }
+
+        val n = ShiftHelper.centsRound(fuelPrice*editMileage.text.toString().toDouble()*consumption/100)
+        editFuelCost.setText(n.toString())
         //TODO Finish fuel cost guess
     }
 

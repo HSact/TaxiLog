@@ -203,7 +203,8 @@
                 android:autofillHints=""
                 android:ems="10"
                 android:hint="5000"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:maxLength="8" />
 
         </TableRow>
 
@@ -228,7 +229,8 @@
                 android:autofillHints=""
                 android:ems="10"
                 android:hint="100"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:maxLength="8" />
         </TableRow>
 
         <TableRow
@@ -252,7 +254,8 @@
                 android:autofillHints=""
                 android:ems="10"
                 android:hint="300"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:maxLength="8" />
         </TableRow>
 
         <TableRow
@@ -276,7 +279,8 @@
                 android:autofillHints=""
                 android:ems="10"
                 android:hint="1500"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:maxLength="8" />
         </TableRow>
 
 
