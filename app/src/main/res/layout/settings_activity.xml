@@ -173,7 +173,8 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="visible">
 
             <TextView
                 android:id="@+id/textConsumption"
@@ -191,6 +192,32 @@
                 android:autofillHints=""
                 android:ems="10"
                 android:hint="10"
+                android:inputType="numberDecimal" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/textFuelPrice"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:maxWidth="1dp"
+                android:minHeight="50dp"
+                android:text="@string/settings_fuel_price" />
+
+            <EditText
+                android:id="@+id/editTextFuelPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="30"
                 android:inputType="numberDecimal" />
 
         </TableRow>

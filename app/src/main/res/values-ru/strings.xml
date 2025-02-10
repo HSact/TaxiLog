@@ -68,6 +68,7 @@
     <string name="edit_or_delete_shift">"Редактировать или удалить смену "</string>
     <string name="total_fuel">Общие траты на топливо</string>
     <string name="average_fuel">Average fuel cost</string>
+    <string name="settings_fuel_price">Fuel price</string>
 
 
     <string-array name="languages">

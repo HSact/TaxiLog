@@ -26,11 +26,6 @@ class SettingsActivity : AppCompatActivity() {
     //val but = findViewById<Button>(R.id.buttonApply)
     private lateinit var binding: SettingsActivityBinding
 
-    companion object
-    {
-
-    }
-
     lateinit var switchRent: Switch
     lateinit var switchService: Switch
     lateinit var switchTaxes: Switch
@@ -44,6 +39,7 @@ class SettingsActivity : AppCompatActivity() {
     lateinit var radioKm: RadioButton
     lateinit var radioMi: RadioButton
     lateinit var textConsumption: EditText
+    lateinit var textFuelCost: EditText
     lateinit var textRentCost: EditText
     lateinit var textServiceCost: EditText
     lateinit var textGoalPerMonth: EditText
@@ -54,16 +50,12 @@ class SettingsActivity : AppCompatActivity() {
     lateinit var textTaxRate: EditText
     lateinit var buttonApply: Button
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
 
         binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
 
         supportActionBar?.title = getString(R.string.title_settings)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -104,8 +96,6 @@ class SettingsActivity : AppCompatActivity() {
 
     }
 
-
-
     private fun bindItems() {
         switchRent = binding.switchRent
         switchService = binding.switchService
@@ -123,6 +113,8 @@ class SettingsActivity : AppCompatActivity() {
         radioMi = binding.radioMi
 
         textConsumption = binding.editTextConsumption
+
+        textFuelCost = binding.editTextFuelPrice
         textRentCost = binding.editTextRentCost
         textServiceCost = binding.editTextServiceCost
         textGoalPerMonth = binding.editTextGoalPerMonth
@@ -307,6 +299,7 @@ class SettingsActivity : AppCompatActivity() {
         settings.putString("Theme", getSelectedTheme())
         settings.putBoolean("KmMi", getKmMi())
         settings.putString("Consumption", textConsumption.text.toString())
+        settings.putString("Fuel_price", textConsumption.text.toString())
         settings.putBoolean("Rented", switchRent.isChecked)
         settings.putString("Rent_cost", textRentCost.text.toString())
         settings.putBoolean("Service", switchService.isChecked)

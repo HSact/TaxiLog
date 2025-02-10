@@ -1,9 +1,12 @@
 package com.example.taxidrivercalculator
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.navigation.fragment.findNavController
 import com.example.taxidrivercalculator.databinding.FragmentAddShiftBinding
 import com.example.taxidrivercalculator.databinding.FragmentDashboardBinding
@@ -80,6 +84,15 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
         bindItems()
         loadGuess()
 
+        editMileage.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+                guessFuelCost()
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+        })
         //pickDate()
 
         // Inflate the layout for this fragment
@@ -102,6 +115,7 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
         buttonSubmit.setOnClickListener {calculateShift()}
 
     }
+
 
     private fun bindItems ()
     {
@@ -143,7 +157,7 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
     @SuppressLint("SimpleDateFormat")
     fun convertTimeToLong(date: String): Long {
         val df = SimpleDateFormat("H:mm")
-        return df.parse(date).time
+        return df.parse(date)!!.time
     }
     private fun hoursToMs (hours: Int): Long
     {
@@ -160,11 +174,8 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun pickDate(editObj: EditText)
     {
-        // create new instance of DatePickerFragment
         val datePickerFragment = DatePickerFragment()
         val supportFragmentManager = requireActivity().supportFragmentManager
-
-        // we have to implement setFragmentResultListener
         supportFragmentManager.setFragmentResultListener(
             "REQUEST_KEY",
                 viewLifecycleOwner)
@@ -202,6 +213,19 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
 
     }
 
+    private fun guessFuelCost ()
+    {
+        val settings = requireContext().getSharedPreferences("Settings", Activity.MODE_PRIVATE)
+        val fuelPrice: Double = settings.getString("Fuel_price", "0")?.toDoubleOrNull() ?: 0.0
+        if (!(settings.getBoolean("Seted_up", false)) || fuelPrice == 0.0)
+        {
+            return
+        }
+        /*var n = fuelPrice*editMileage.text.toString().toDouble()/100
+        editFuelCost.text = n.toString()*/
+        //TODO Finish fuel cost guess
+    }
+
     private fun calculateShift ()
     {
         currentShift.onlineTime = convertTimeToLong(editEnd.text.toString()) - convertTimeToLong(editStart.text.toString())
@@ -227,15 +251,11 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
                 currentShift.breakTime += hoursToMs(24)
             }
             currentShift.totalTime=currentShift.onlineTime-currentShift.breakTime
-
         }
         else
         {
             currentShift.totalTime=currentShift.onlineTime
         }
-
-
-
         /*if (currentShift.totalTime > hoursToMs(12))
         {
             showWarningMessage("Your shift was for ${msToHours(currentShift.totalTime)} hours?")
@@ -272,8 +292,6 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
         currentShift.wash=editWash.text.toString().toDouble()
         currentShift.fuelCost=editFuelCost.text.toString().toDouble()
         currentShift.mileage=editMileage.text.toString().toDouble()
-
-
         currentShift.profit= currentShift.earnings-currentShift.wash-currentShift.fuelCost
 
         showSubmitMessage("Sure? You earn ${currentShift.profit} in ${msToHours(currentShift.totalTime)} hours?")
@@ -318,7 +336,7 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
         val db = DBHelper(requireActivity(), null)
         db.addShift(currentShift.date, msToHours(currentShift.totalTime),
             currentShift.earnings, currentShift.wash, currentShift.fuelCost, currentShift.mileage, currentShift.profit)
-        Toast.makeText(activity,"Suck ass!",Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity,"Success!",Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_addShift_to_home_fragment)
         MainActivity.botNav.isVisible = true
 

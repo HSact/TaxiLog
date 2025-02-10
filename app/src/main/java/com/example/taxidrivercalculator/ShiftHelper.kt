@@ -52,7 +52,7 @@ object ShiftHelper {
                 i -> sum+=shifts[i].profit
             totalHours+=shifts[i].time.toDouble()
         }
-        return sum/totalHours
+        return centsRound(sum/totalHours)
     }
     fun calcAverageShiftDuration (shifts: MutableList<Shift>): Double
     {
@@ -126,5 +126,8 @@ object ShiftHelper {
         }
         return totalProfit
     }
-
+    fun centsRound (n: Double): Double
+    {
+        return Math.round(n*100)/100.toDouble()
+    }
 }

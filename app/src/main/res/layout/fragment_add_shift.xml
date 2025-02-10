@@ -238,6 +238,30 @@
             android:weightSum="100">
 
             <TextView
+                android:id="@+id/textMileage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="100"
+                android:text="@string/addshift_mileage" />
+
+            <EditText
+                android:id="@+id/editTextMileage"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="300"
+                android:inputType="numberDecimal" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <TextView
                 android:id="@+id/textFuelCost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -255,29 +279,6 @@
                 android:inputType="numberDecimal" />
         </TableRow>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="100">
-
-            <TextView
-                android:id="@+id/textMileage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="100"
-                android:text="@string/addshift_mileage" />
-
-            <EditText
-                android:id="@+id/editTextMileage"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:autofillHints=""
-                android:ems="10"
-                android:hint="300"
-                android:inputType="numberDecimal" />
-        </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
