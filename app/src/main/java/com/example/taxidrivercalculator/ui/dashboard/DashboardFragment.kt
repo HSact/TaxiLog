@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -60,16 +62,13 @@ class DashboardFragment : Fragment() {
         val root: View = binding.root
         bindItems()
         defineGoals()
-
         val shifts = makeArray(DBHelper(requireActivity(), null))
-
 
         if (shifts.isNullOrEmpty())
         {
             setEmptyProgress()
             return root
         }
-
 
         val yearToday = (calendar.get(Calendar.YEAR)).toString()
         var monthToday = (calendar.get(Calendar.MONTH) +1).toString()
@@ -109,7 +108,6 @@ class DashboardFragment : Fragment() {
             return root
         }
 
-
         //calc week
         var thisWeekSum = 0.0
         i = 0
@@ -145,6 +143,11 @@ class DashboardFragment : Fragment() {
             textView.text = it
         }*/
         return root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        animateBars()
     }
 
     private fun defineGoals() {
@@ -228,17 +231,18 @@ class DashboardFragment : Fragment() {
 
         textAssignedGoal = binding.textAssignedGoal
     }
-    /*private fun animateBars()
+    private fun animateBars()
     {
-        val animDuration: Long = 1000
+        /*val animDuration: Long = 1000
         progressDay.setProgress(0, false)
         progressWeek.setProgress(0, false)
         progressMonth.setProgress(0, false)
         lateinit var anim: Animation
+        anim = AnimationUtils.loadAnimation(requireContext(),0)
         anim.duration = animDuration
         progressDay.startAnimation(anim)
-        //progressDay.setProgress(75, true)
-    }*/
+        //progressDay.setProgress(75, true)*/
+    }
 
 
     override fun onDestroyView() {

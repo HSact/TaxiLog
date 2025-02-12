@@ -161,10 +161,8 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         // below is the variable for id column
         val ID_COL = "_id"
 
-        // below is the variable for name column
         val DATE_COl = "date"
 
-        // below is the variable for age column
         val TIME_COL = "time"
 
         val EARNINGS_COL = "earnings"
