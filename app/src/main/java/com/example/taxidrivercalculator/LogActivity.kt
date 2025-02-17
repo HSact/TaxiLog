@@ -1,6 +1,7 @@
 package com.example.taxidrivercalculator
 
 import android.app.AlertDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -150,10 +151,10 @@ class LogActivity : AppCompatActivity() {
     private fun editShift(index: Int)
     {
         //TODO: FIX intent
-        //startActivity(Intent (this, MainActivity::class.java))
+        /*startActivity(Intent (this, MainActivity::class.java))
 
-        //findNavController().navigate(R.id.action_homeFragment_to_addShift)
-        /*val logIntent = Intent(this, AddShift::class.java)
+        findNavController().navigate(R.id.action_homeFragment_to_addShift)
+        val logIntent = Intent(this, AddShift::class.java)
         startActivity(logIntent)*/
 
     }

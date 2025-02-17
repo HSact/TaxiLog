@@ -63,19 +63,29 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.insert(TABLE_NAME, null, values)
         db.close()
     }
-    fun recreateDB (shifts: MutableList<Shift>)
-    {
+    fun recreateDB(shifts: MutableList<Shift>) {
         deleteAll()
         val db = this.writableDatabase
-        val values = ContentValues()
-        for (currentShift in shifts)
-        {
-            addShift(currentShift.date, currentShift.time.toDouble(),
-            currentShift.earnings, currentShift.wash, currentShift.fuelCost, currentShift.mileage, currentShift.profit)
-
-            db.insert(TABLE_NAME, null, values)
+        db.execSQL("DELETE FROM sqlite_sequence WHERE name='$TABLE_NAME'")
+        db.beginTransaction()
+        try {
+            for (currentShift in shifts) {
+                val values = ContentValues().apply {
+                    put(DATE_COl, currentShift.date)
+                    put(TIME_COL, currentShift.time.toDouble())
+                    put(EARNINGS_COL, currentShift.earnings)
+                    put(WASH_COL, currentShift.wash)
+                    put(FUEL_COL, currentShift.fuelCost)
+                    put(MILEAGE_COL, currentShift.mileage)
+                    put(PROFIT_COL, currentShift.profit)
+                }
+                db.insert(TABLE_NAME, null, values)
+            }
+            db.setTransactionSuccessful()
+        } finally {
+            db.endTransaction()
+            db.close()
         }
-        db.close()
     }
 
     // below method is to get
@@ -93,13 +103,13 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     }
 
-    fun updateId (index: Int) {
+    /*fun updateId (index: Int) {
         val db = this.writableDatabase
         DELETE_INDEX = index
         db.execSQL("UPDATE shifts_table SET _id = _id - 1 WHERE _id > $index")
         db.close()
 
-    }
+    }*/
 
     fun editShift(index: Int) {
         val db = this.writableDatabase
@@ -112,43 +122,19 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     public fun deleteShift(index: Int) {
         val db = this.writableDatabase
-        //db.delete(TABLE_NAME, "_id =$index", null)
         val shifts = ShiftHelper.makeArray(this)
         shifts.removeAt(index-1)
         recreateDB(shifts)
-        /*val cv = ContentValues()
-        cv.put("id", index-1)
-        val cursor = this.getShift()
-        cursor!!.moveToPosition(index)
-        cv.put("date", cursor.getString(cursor.getColumnIndex(DATE_COl)+0))
-        cv.put("time", cursor.getString(cursor.getColumnIndex(TIME_COL)+0))
-        cv.put("earnings", cursor.getDouble(cursor.getColumnIndex(EARNINGS_COL)+0))
-        cv.put("wash", cursor.getDouble(cursor.getColumnIndex(WASH_COL)+0))
-        cv.put("fuel", cursor.getDouble(cursor.getColumnIndex(FUEL_COL)+0))
-        cv.put("mileage", cursor.getDouble(cursor.getColumnIndex(MILEAGE_COL)+0))
-        cv.put("profit", cursor.getDouble(cursor.getColumnIndex(PROFIT_COL)+0))
-        db.replace(TABLE_NAME, "id = $index", cv)*/
-        //db.execSQL("")
         db.close()
-
-        /*val cursor = this.getShift()
-        cursor!!.moveToPosition(index)
-        if (cursor.isLast)
-        {
-            return
-        }
-        updateId(index)*/
-
     }
 
     fun deleteAll() {
         val db = this.writableDatabase
         db.execSQL("DELETE FROM "+ TABLE_NAME)
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
-        onCreate(db)
+        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
+        //onCreate(db)
         db.close()
     }
-
 
     companion object {
         // here we have defined variables for our database
@@ -164,11 +150,8 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
         // below is the variable for id column
         val ID_COL = "_id"
-
         val DATE_COl = "date"
-
         val TIME_COL = "time"
-
         val EARNINGS_COL = "earnings"
         val WASH_COL = "wash"
         val FUEL_COL = "fuel"
