@@ -39,11 +39,8 @@ class LogActivity : AppCompatActivity() {
         val recycler: RecyclerView = findViewById(R.id.recyclerView)
         recycler.layoutManager = LinearLayoutManager(this)
 
-
         recycler.adapter = CustomRecyclerAdapter(fillList())
         recycler.hasOnClickListeners()
-
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -163,7 +160,7 @@ class LogActivity : AppCompatActivity() {
 
     private fun deleteShift(index: Int)
     {
-        shifts.removeAt(index)
+        //shifts.removeAt(index)
         val db = DBHelper(this, null)
         db.deleteShift(index)
         db.close()
@@ -176,9 +173,4 @@ class LogActivity : AppCompatActivity() {
         db.close()
         recreate()
     }
-    private fun recreateDB()
-    {
-        shifts.indices.forEach { i -> shifts[i].id=i }
-    }
-
 }

@@ -77,7 +77,7 @@ class NotificationsFragment : Fragment() {
         textTotal_fuel = binding.textTotalFuelVal
     }
     @SuppressLint("SetTextI18n")
-    private fun displayInfo () //TODO: finish calc and disp
+    private fun displayInfo ()
     {
         textShifts_count.text = shifts.size.toString()
 

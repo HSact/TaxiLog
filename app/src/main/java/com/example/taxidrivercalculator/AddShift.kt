@@ -164,10 +164,7 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
     {
         return (hours*60*60*1000).toLong()
     }
-    private fun msToHours (ms: Long) : Double
-    {
-        return ((ms/60.0/60.0/1000.0)*100.0).toInt()/100.0
-    }
+
     /*fun currentTimeToLong(): Long {
         return System.currentTimeMillis()
     }*/
@@ -300,7 +297,7 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
         currentShift.mileage=editMileage.text.toString().toDouble()
         currentShift.profit= currentShift.earnings-currentShift.wash-currentShift.fuelCost
 
-        showSubmitMessage("Sure? You earn ${currentShift.profit} in ${msToHours(currentShift.totalTime)} hours?")
+        showSubmitMessage("Sure? You earn ${currentShift.profit} in ${ShiftHelper.msToHours(currentShift.totalTime)} hours?")
 
     }
 
@@ -340,7 +337,7 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
         /*val toast = Toast(activity)
         toast.setText("Success!")*/
         val db = DBHelper(requireActivity(), null)
-        db.addShift(currentShift.date, msToHours(currentShift.totalTime),
+        db.addShift(currentShift.date, ShiftHelper.msToHours(currentShift.totalTime),
             currentShift.earnings, currentShift.wash, currentShift.fuelCost, currentShift.mileage, currentShift.profit)
         Toast.makeText(activity,"Success!",Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_addShift_to_home_fragment)

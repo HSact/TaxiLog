@@ -8,7 +8,6 @@ object ShiftHelper {
         val shifts = mutableListOf<Shift>()
         val cursor = db.getShift()
 
-
         cursor!!.moveToLast()
         if (cursor.position == -1) {
             cursor.close()
@@ -32,6 +31,11 @@ object ShiftHelper {
 
         cursor.close()
         return shifts
+    }
+
+    fun msToHours (ms: Long) : Double
+    {
+        return ((ms/60.0/60.0/1000.0)*100.0).toInt()/100.0
     }
 
     fun calcAverageEarningsPerHour (shifts: MutableList<Shift>): Double

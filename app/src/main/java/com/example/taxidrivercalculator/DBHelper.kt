@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import androidx.core.content.ContentProviderCompat.requireContext
 
 class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
@@ -34,7 +35,6 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         onCreate(db)
     }
 
-    // This method is for adding data in our database
     fun addShift(
         date: String, time: Double, earnings: Double, wash: Double,
         fuel: Double, mileage: Double, profit: Double) {
@@ -61,10 +61,20 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
         // all values are inserted into database
         db.insert(TABLE_NAME, null, values)
+        db.close()
+    }
+    fun recreateDB (shifts: MutableList<Shift>)
+    {
+        deleteAll()
+        val db = this.writableDatabase
+        val values = ContentValues()
+        for (currentShift in shifts)
+        {
+            addShift(currentShift.date, currentShift.time.toDouble(),
+            currentShift.earnings, currentShift.wash, currentShift.fuelCost, currentShift.mileage, currentShift.profit)
 
-
-        // at last we are
-        // closing our database
+            db.insert(TABLE_NAME, null, values)
+        }
         db.close()
     }
 
@@ -90,14 +100,6 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.close()
 
     }
-    /*fun updateId () {
-        val db = this.writableDatabase
-        var i = 0
-        db.run {
-            execSQL("UPDATE shifts_table SET _id = $i++ WHERE _id < SIZE+1")
-            close()
-        }
-    }*/
 
     fun editShift(index: Int) {
         val db = this.writableDatabase
@@ -108,10 +110,12 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.close()
     }
 
-    fun deleteShift(index: Int) {
+    public fun deleteShift(index: Int) {
         val db = this.writableDatabase
-        db.delete(TABLE_NAME, "_id =$index", null)
-
+        //db.delete(TABLE_NAME, "_id =$index", null)
+        val shifts = ShiftHelper.makeArray(this)
+        shifts.removeAt(index-1)
+        recreateDB(shifts)
         /*val cv = ContentValues()
         cv.put("id", index-1)
         val cursor = this.getShift()
