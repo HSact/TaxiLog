@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TableLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.taxidrivercalculator.DBHelper
@@ -21,6 +23,8 @@ class NotificationsFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private lateinit var tableLayout: TableLayout
+    private lateinit var textListIsEmtpy: TextView
     private lateinit var textShifts_count: TextView
     private lateinit var textAv_er_ph: TextView
     private lateinit var textAv_profit_ph: TextView
@@ -46,13 +50,16 @@ class NotificationsFragment : Fragment() {
 
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        //TODO: display stats
-        //makeArray()
+
         shifts=ShiftHelper.makeArray(DBHelper(requireContext(), null))
         bindItems()
+        if (shifts.size!=0)
+        {
+            textListIsEmtpy.visibility = View.GONE
+            tableLayout.visibility = View.VISIBLE
+            displayInfo()
+        }
 
-
-        displayInfo()
         return root
     }
 
@@ -63,6 +70,8 @@ class NotificationsFragment : Fragment() {
 
     private fun bindItems ()
     {
+        tableLayout = binding.tableLayout
+        textListIsEmtpy = binding.textListIsEmpty
         textShifts_count = binding.textShiftsCountVal
         textAv_er_ph = binding.textAvErPhVal
         textAv_profit_ph = binding.textAvProfitPhVal
@@ -80,7 +89,6 @@ class NotificationsFragment : Fragment() {
     private fun displayInfo ()
     {
         textShifts_count.text = shifts.size.toString()
-
         textAv_er_ph.text = ShiftHelper.calcAverageEarningsPerHour(shifts).toString()
         textAv_profit_ph.text  = ShiftHelper.calcAverageProfitPerHour(shifts).toString()
         textAv_duration.text  = ShiftHelper.calcAverageShiftDuration(shifts).toString()

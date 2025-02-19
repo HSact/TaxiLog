@@ -76,39 +76,6 @@ class LogActivity : AppCompatActivity() {
         return data
     }
 
-    /*private fun makeArray()
-    {
-        val db = DBHelper(this, null)
-        val cursor = db.getShift()
-        shifts.clear()
-
-
-        cursor!!.moveToLast()
-        if (cursor.position==-1)
-        {
-            cursor.close()
-            return
-        }
-        cursor.moveToFirst()
-        var i = 0
-        do
-        {
-            shifts.add(Shift(0,"","",0.0,0.0,0.0,0.0,0.0))
-            shifts[i].id=cursor.getInt(cursor.getColumnIndex(DBHelper.ID_COL)+0)
-            shifts[i].date=cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COl)+0)
-            shifts[i].time=cursor.getString(cursor.getColumnIndex(DBHelper.TIME_COL)+0)
-            shifts[i].earnings=cursor.getDouble(cursor.getColumnIndex(DBHelper.EARNINGS_COL)+0)
-            shifts[i].wash=cursor.getDouble(cursor.getColumnIndex(DBHelper.WASH_COL)+0)
-            shifts[i].fuelCost=cursor.getDouble(cursor.getColumnIndex(DBHelper.FUEL_COL)+0)
-            shifts[i].mileage=cursor.getDouble(cursor.getColumnIndex(DBHelper.MILEAGE_COL)+0)
-            shifts[i].profit=cursor.getDouble(cursor.getColumnIndex(DBHelper.PROFIT_COL)+0)
-            i++
-
-        } while (cursor.moveToNext())
-
-        cursor.close()
-    }*/
-
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed();
         return super.onSupportNavigateUp()
@@ -156,6 +123,17 @@ class LogActivity : AppCompatActivity() {
         findNavController().navigate(R.id.action_homeFragment_to_addShift)
         val logIntent = Intent(this, AddShift::class.java)
         startActivity(logIntent)*/
+        /*val bundle = Bundle().apply {
+            putInt("SHIFT_ID", index-1) // Передаем ID смены в аргументы фрагмента
+        }
+
+        val fragment = AddShift()
+        fragment.arguments = bundle
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.nav_host_fragment_activity_main, fragment) // ID контейнера с фрагментами
+            .addToBackStack(null) // Добавляем в стек возврата
+            .commit()*/
 
     }
 
