@@ -127,17 +127,14 @@ class SettingsActivity : AppCompatActivity() {
         textTaxRate = binding.editTextTaxRate
         buttonApply = binding.buttonApply
     }
-
-
-
-    private fun applySettings() {
+    private fun applySettings()
+    {
         setLocate(injectLangSpinner())
         saveSettings()
         switchTheme()
-
-        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES) <== work
     }
-    private fun loadSettings() {
+    private fun loadSettings()
+    {
         loadLangSpinner()
         val settings = getSharedPreferences("Settings", Activity.MODE_PRIVATE)
         if (!(settings.getBoolean("Seted_up", false)))
@@ -156,11 +153,9 @@ class SettingsActivity : AppCompatActivity() {
         radioSchedule.check(settings.getInt("Schedule", 0))
         switchTaxes.isChecked = settings.getBoolean("Taxes", false)
         textTaxRate.setText(settings.getString("Tax_rate", ""))
-
-
-
     }
-    private fun loadLangSpinner() {
+    private fun loadLangSpinner()
+    {
         val currentLang: String = getLocate()
         if (currentLang=="en")
         {
@@ -171,7 +166,8 @@ class SettingsActivity : AppCompatActivity() {
             spinnerLang.setSelection(1)
         }
     }
-    private fun loadThemeSelection() {
+    private fun loadThemeSelection()
+    {
         val currentTheme = AppCompatDelegate.getDefaultNightMode()
 
         if (currentTheme==-100)
@@ -209,10 +205,8 @@ class SettingsActivity : AppCompatActivity() {
             radioMi.isChecked=true
         }
     }
-
-
-    private fun switchTheme() {
-
+    private fun switchTheme()
+    {
         when {
             radioDark.isChecked -> {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -233,8 +227,10 @@ class SettingsActivity : AppCompatActivity() {
         settings.apply()*/
     }
 
-    private fun setLocate(lang: String) {
-        if (lang != "en" && lang != "ru") {
+    private fun setLocate(lang: String)
+    {
+        if (lang != "en" && lang != "ru")
+        {
             return
         }
         val locale = Locale(lang)
@@ -268,11 +264,13 @@ class SettingsActivity : AppCompatActivity() {
         setLocate(language)
     }*/
 
-    private fun getLocate(): String {
+    private fun getLocate(): String
+    {
         val sharedPreferences = getSharedPreferences("Settings", Activity.MODE_PRIVATE)
         return sharedPreferences.getString("My_Lang", "").toString()
     }
-    private fun getSelectedTheme(): String {
+    private fun getSelectedTheme(): String
+    {
         if (radioDark.isChecked)
         {
             return "dark"
@@ -283,7 +281,8 @@ class SettingsActivity : AppCompatActivity() {
         }
         return ""
     }
-    private fun getKmMi(): Boolean {
+    private fun getKmMi(): Boolean
+    {
         if (radioKm.isChecked)
         {
             return true
@@ -349,7 +348,8 @@ class SettingsActivity : AppCompatActivity() {
         //supportFragmentManager.putFragment(outState,"Settings", SettingsActivity)
     }
 
-    override fun onSupportNavigateUp(): Boolean {
+    override fun onSupportNavigateUp(): Boolean
+    {
         onBackPressed();
         return super.onSupportNavigateUp()
     }

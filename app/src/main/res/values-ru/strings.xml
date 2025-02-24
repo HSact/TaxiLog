@@ -71,6 +71,11 @@
     <string name="settings_fuel_price">Fuel price</string>
     <string name="statsHeader">Overall stats</string>
     <string name="list_is_empty">No shifts detected</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_shift">Delete shist</string>
 
 
     <string-array name="languages">

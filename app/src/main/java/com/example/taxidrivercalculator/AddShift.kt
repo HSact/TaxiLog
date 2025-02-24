@@ -42,7 +42,6 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
 
     lateinit var currentShift: CalcShift
 
-
     lateinit var editDate: EditText
     lateinit var editStart: EditText
     lateinit var editEnd: EditText
@@ -71,8 +70,6 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
 
 
     }
-
-
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -89,9 +86,7 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
             {
                     guessFuelCost()
             }
-
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
         })
         //pickDate()
@@ -116,8 +111,6 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
         buttonSubmit.setOnClickListener {calculateShift()}
 
     }
-
-
     private fun bindItems ()
     {
         editDate = binding.buttonDatePick
@@ -132,7 +125,6 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
         editMileage = binding.editTextMileage
         buttonSubmit = binding.buttonSubmit
     }
-
     @SuppressLint("SimpleDateFormat")
     private fun loadGuess ()
     {
@@ -298,6 +290,12 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
         currentShift.profit= currentShift.earnings-currentShift.wash-currentShift.fuelCost
 
         showSubmitMessage("Sure? You earn ${currentShift.profit} in ${ShiftHelper.msToHours(currentShift.totalTime)} hours?")
+
+    }
+    private fun loadExistShift(id: Int)
+    {
+        val shifts=ShiftHelper.makeArray(DBHelper(requireContext(), null))
+        val currentShift = shifts[id-1]
 
     }
 

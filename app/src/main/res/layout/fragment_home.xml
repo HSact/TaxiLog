@@ -49,7 +49,6 @@
                     android:id="@+id/textHomeDateR"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="1.01.2021"
                     android:textSize="24sp" />
             </TableRow>
 

@@ -32,16 +32,12 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        loadSettings()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         val navView: BottomNavigationView = binding.navView
         val navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main)
-
         botNav = navView
-
+        loadSettings()
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
@@ -50,8 +46,6 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
-
-
 
     /*private fun loadLocate() {
         val sharedPreferences = getSharedPreferences("Settings", Activity.MODE_PRIVATE)
@@ -79,13 +73,11 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> {
                 val settingsIntent = Intent(this, SettingsActivity::class.java)
                 startActivity(settingsIntent)
-
                 true
             }
             R.id.action_about -> {
                 val aboutIntent = Intent (this, AboutActivity::class.java)
                 startActivity(aboutIntent)
-
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -94,8 +86,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed();
-
-
         return super.onSupportNavigateUp()
     }
 

@@ -10,7 +10,9 @@ import android.view.View
 import android.widget.PopupMenu
 import android.widget.TableLayout
 import android.widget.Toast
+import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.taxidrivercalculator.databinding.ActivityLogBinding
 import com.example.taxidrivercalculator.databinding.RecyclerviewItemBinding
 import com.example.taxidrivercalculator.ui.home.HomeFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class LogActivity : AppCompatActivity() {
@@ -35,7 +38,6 @@ class LogActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.title_my_shifts)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        //makeArray()
         shifts=ShiftHelper.makeArray(DBHelper(this, null))
         val recycler: RecyclerView = findViewById(R.id.recyclerView)
         recycler.layoutManager = LinearLayoutManager(this)
@@ -58,10 +60,10 @@ class LogActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_delete_all -> {
                 val alert = AlertDialog.Builder(this)
-                alert.setTitle("Delete")
-                alert.setPositiveButton("YES") {dialog, id -> deleteAll()}
-                alert.setNegativeButton("CANCEL", null)
-                alert.setMessage("Delete all?")
+                alert.setTitle(R.string.delete)
+                alert.setPositiveButton(getString(R.string.yes)) { dialog, id -> deleteAll()}
+                alert.setNegativeButton(getString(R.string.cancel), null)
+                alert.setMessage(R.string.delete_all)
                 alert.show()
                 true
             }
@@ -81,13 +83,10 @@ class LogActivity : AppCompatActivity() {
         return super.onSupportNavigateUp()
     }
 
-    fun onClickElement(view: View) {
-
-        //Toast.makeText(this, view.id.toString(), Toast.LENGTH_SHORT).show()
-        val items = arrayOf("Edit", "Delete")
-
+    /*fun onClickElement(view: View)
+    {
+        val items = arrayOf(getString(R.string.edit), getString(R.string.delete))
         val alert = AlertDialog.Builder(this)
-
         /*alert.setPositiveButton("YES") {dialog, id -> deleteShift(view.id)}
         alert.setNegativeButton("CANCEL", null)
         alert.setMessage("Delete shift ID " + view.id + "?")*/
@@ -100,30 +99,45 @@ class LogActivity : AppCompatActivity() {
             }
         alert.show()
         }
-    /*fun showPopup(v: View) {
-        val popup = PopupMenu(this, v)
-        val inflater: MenuInflater = popup.menuInflater
-        inflater.inflate(R.menu.shift_float_menu, popup.menu)
-
-        popup.show()*/
+    }*/
+    fun onClickElement(view: View)
+    {
+        val items = arrayOf(getString(R.string.delete))
+        val alert = AlertDialog.Builder(this)
+        /*alert.setPositiveButton("YES") {dialog, id -> deleteShift(view.id)}
+        alert.setNegativeButton("CANCEL", null)
+        alert.setMessage("Delete shift ID " + view.id + "?")*/
+        alert.setTitle(getString(R.string.delete_shift) + view.id + "?")
+        with(alert)
+        {
+            //setTitle("Edit or delete shift" + items[which])
+            setItems(items) { dialog, id ->
+                onPopUpMenuClicked(id, view.id)
+            }
+            alert.show()
+        }
     }
 
-    private fun onPopUpMenuClicked (item: Int, shiftId: Int)
+    /*private fun onPopUpMenuClicked (item: Int, shiftId: Int)
     {
-        Toast.makeText(applicationContext, "$item for ID $shiftId is clicked", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(applicationContext, "$item for ID $shiftId is clicked", Toast.LENGTH_SHORT).show()
         if (item==0) editShift(shiftId)
         if (item==1) deleteShift(shiftId)
+    }*/
+    private fun onPopUpMenuClicked (item: Int, shiftId: Int)
+    {
+        //Toast.makeText(applicationContext, "$item for ID $shiftId is clicked", Toast.LENGTH_SHORT).show()
+        if (item==0) deleteShift(shiftId)
     }
 
     private fun editShift(index: Int)
     {
-        //TODO: FIX intent
         /*startActivity(Intent (this, MainActivity::class.java))
 
-        findNavController().navigate(R.id.action_homeFragment_to_addShift)
+        //this.findNavController(index).navigate(R.id.action_homeFragment_to_addShift)
         val logIntent = Intent(this, AddShift::class.java)
-        startActivity(logIntent)*/
-        /*val bundle = Bundle().apply {
+        startActivity(logIntent)
+        val bundle = Bundle().apply {
             putInt("SHIFT_ID", index-1) // Передаем ID смены в аргументы фрагмента
         }
 

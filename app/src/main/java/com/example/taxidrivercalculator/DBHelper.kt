@@ -120,7 +120,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.close()
     }
 
-    public fun deleteShift(index: Int) {
+    fun deleteShift(index: Int) {
         val db = this.writableDatabase
         val shifts = ShiftHelper.makeArray(this)
         shifts.removeAt(index-1)
