@@ -125,7 +125,7 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-    public fun newShift()
+    fun newShift()
     {
         findNavController().navigate(R.id.action_homeFragment_to_addShift)
     }

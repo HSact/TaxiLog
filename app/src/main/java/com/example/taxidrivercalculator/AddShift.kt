@@ -74,7 +74,7 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAddShiftBinding.inflate(inflater, container, false)
         currentShift=CalcShift
 

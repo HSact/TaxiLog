@@ -90,7 +90,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     // below method is to get
     // all data from our database
-    fun getShift(): Cursor? {
+    fun getShift(): Cursor {
 
         // here we are creating a readable
         // variable of our database

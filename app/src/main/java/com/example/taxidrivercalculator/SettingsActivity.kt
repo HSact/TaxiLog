@@ -283,11 +283,7 @@ class SettingsActivity : AppCompatActivity() {
     }
     private fun getKmMi(): Boolean
     {
-        if (radioKm.isChecked)
-        {
-            return true
-        }
-        return false
+        return radioKm.isChecked
     }
 
 
@@ -343,14 +339,9 @@ class SettingsActivity : AppCompatActivity() {
            return ""
     }
 
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        super.onSaveInstanceState(outState, outPersistentState)
-        //supportFragmentManager.putFragment(outState,"Settings", SettingsActivity)
-    }
-
     override fun onSupportNavigateUp(): Boolean
     {
-        onBackPressed();
+        onBackPressed()
         return super.onSupportNavigateUp()
     }
 

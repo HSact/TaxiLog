@@ -181,7 +181,7 @@ class DashboardFragment : Fragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    public fun setTodayProgress(todayProfit: Double?) {
+    fun setTodayProgress(todayProfit: Double?) {
         if (todayProfit == null || goalDay == -1.0)
         {
             progressDay.progress = 0

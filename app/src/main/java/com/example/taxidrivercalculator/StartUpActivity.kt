@@ -58,7 +58,7 @@ class StartUpActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
-        moveTaskToBack(true);
+        moveTaskToBack(true)
         exitProcess(-1)
     }
 
