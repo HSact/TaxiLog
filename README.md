@@ -14,7 +14,7 @@ TaxiLog is an app for taxi drivers that helps track shifts and analyze earnings.
 
 📥 Installation
 
-🔹 Via Obtanium
+🔹 Via [Obtanium](https://github.com/ImranR98/Obtanium)
 
 If you have Obtanium installed, add this repository to it for automatic updates.
 
@@ -41,7 +41,7 @@ TaxiLog – это приложение для водителей такси, к
 
 📥 Установка
 
-🔹 Через Obtanium:
+🔹 Через [Obtanium](https://github.com/ImranR98/Obtanium):
 
 Если у вас установлен Obtanium, добавьте в него этот репозиторий и обновляйтесь автоматически.
 
