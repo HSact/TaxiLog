@@ -339,8 +339,6 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         Toast.makeText(activity, getString(R.string.shift_added_successfully),Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_addShift_to_home_fragment)
         MainActivity.botNav.isVisible = true
-
-        //TODO: make goals change immediately
     }
 
     override fun onResume() {
