@@ -56,7 +56,7 @@
     <string name="you_haven_t_set_goal_yet">You haven\'t set a goal yet</string>
     <string name="your_goal_per_month">Your goal is %s per month</string>
     <string name="n_a">N/A</string>
-    <string name="hours">" hours"</string>
+    <string name="hours">hours</string>
     <string name="shifts_count">Shifts count</string>
     <string name="average_earnings_per_hour">Average earnings per hour</string>
     <string name="average_profit_per_hour">Average profit per hour</string>
@@ -78,6 +78,9 @@
     <string name="yes">Yes</string>
     <string name="cancel">Cancel</string>
     <string name="delete_shift">Delete shift</string>
+    <string name="today">Today</string>
+    <string name="this_week">This week</string>
+    <string name="this_month">This month</string>
 
 
     <string-array name="languages">

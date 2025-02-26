@@ -129,7 +129,8 @@ class SettingsActivity : AppCompatActivity() {
     }
     private fun applySettings()
     {
-        setLocate(injectLangSpinner())
+        //setLocate(injectLangSpinner())
+        LocaleHelper.setLocale(this, injectLangSpinner())
         saveSettings()
         switchTheme()
     }
@@ -217,17 +218,12 @@ class SettingsActivity : AppCompatActivity() {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 //return
             }
-
-            /*else -> {
-                return
-            }*/
         }
         /*val settings = getSharedPreferences("Settings", Context.MODE_PRIVATE).edit()
         settings.putString("Theme", getSelectedTheme())
         settings.apply()*/
     }
-
-    private fun setLocate(lang: String)
+    /*private fun setLocate(lang: String)
     {
         if (lang != "en" && lang != "ru")
         {
@@ -236,25 +232,13 @@ class SettingsActivity : AppCompatActivity() {
         val locale = Locale(lang)
         Locale.setDefault(locale)
         val config = Configuration()
-
         config.setLocale(locale)
         baseContext.resources.updateConfiguration(config, baseContext.resources.displayMetrics)
-
-        /*baseContext.applicationContext.createConfigurationContext(configuration)
-        baseContext.resources.displayMetrics.setTo(metrics)
-        val overrideConfiguration = baseContext.resources.configuration
-        overrideConfiguration.setLocales(LocaleList)
-        val context = createConfigurationContext(overrideConfiguration)
-        val resources: Resources = context.resources*/
-        //Locale.setDefault(locale)
-
         val editor = getSharedPreferences("Settings", Context.MODE_PRIVATE).edit()
         editor.putString("My_Lang", lang)
         editor.apply()
-
-
         startActivity(Intent (this, MainActivity::class.java))
-    }
+    }*/
 
     /*fun loadLocate() {
         val sharedPref = getPreferences(Context.MODE_PRIVATE) ?: return

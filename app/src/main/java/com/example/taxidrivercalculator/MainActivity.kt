@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
     companion object
     {
         lateinit var botNav: BottomNavigationView
-
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,6 +88,24 @@ class MainActivity : AppCompatActivity() {
         return super.onSupportNavigateUp()
     }
 
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.updateLocale(newBase, LocaleHelper.getSavedLanguage(newBase)))
+    }
+
+    /*override fun attachBaseContext(newBase: Context)
+    {
+        val settings = getSharedPreferences("Settings", Activity.MODE_PRIVATE)
+        if (settings.getBoolean("Seted_up", false))
+        {
+            //val language: String = getSharedPreferences.getString("My_Lang", "").toString()
+            val locale = Locale(settings.getString("My_Lang", "").toString())
+            val config = Configuration(newBase.resources.configuration)
+            config.setLocale(locale)
+            val newContext = newBase.createConfigurationContext(config)
+        }
+        super.attachBaseContext(this)
+    }*/
+
     /*override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
@@ -98,23 +115,8 @@ class MainActivity : AppCompatActivity() {
     private fun loadSettings()
     {
         //loadTheme()
-        loadLocate()
-    }
-
-    private fun setLocate(lang: String) {
-        if (lang != "en" && lang != "ru") {
-            return
-        }
-        val locale = Locale(lang)
-        Locale.setDefault(locale)
-        val config = Configuration()
-        config.setLocale(locale)
-        baseContext.resources.updateConfiguration(config, baseContext.resources.displayMetrics)
-
-        val editor = getSharedPreferences("Settings", Context.MODE_PRIVATE).edit()
-        editor.putString("My_Lang", lang)
-        editor.apply()
-
+        //loadLocate()
+        LocaleHelper.setLocale(this, LocaleHelper.getSavedLanguage(this))
     }
 
     private fun loadTheme()
@@ -132,12 +134,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadLocate() {
+    private fun loadLocate()
+    {
         //val sharedPref = getPreferences(Context.MODE_PRIVATE) ?: return
-
         val sharedPreferences = getSharedPreferences("Settings", Activity.MODE_PRIVATE)
         val language: String = sharedPreferences.getString("My_Lang", "").toString()
-        setLocate(language)
+        LocaleHelper.setLocale(this, language)
     }
-
 }

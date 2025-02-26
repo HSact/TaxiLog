@@ -32,7 +32,7 @@
         tools:layout="@layout/fragment_notifications" />
     <fragment
         android:id="@+id/addShift"
-        android:name="com.example.taxidrivercalculator.AddShift"
+        android:name="com.example.taxidrivercalculator.AddShiftFragment"
         android:label="@string/title_new_shift"
         tools:layout="@layout/fragment_add_shift">
         <action

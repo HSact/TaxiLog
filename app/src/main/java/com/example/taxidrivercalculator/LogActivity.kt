@@ -135,13 +135,13 @@ class LogActivity : AppCompatActivity() {
         /*startActivity(Intent (this, MainActivity::class.java))
 
         //this.findNavController(index).navigate(R.id.action_homeFragment_to_addShift)
-        val logIntent = Intent(this, AddShift::class.java)
+        val logIntent = Intent(this, AddShiftFragment::class.java)
         startActivity(logIntent)
         val bundle = Bundle().apply {
             putInt("SHIFT_ID", index-1) // Передаем ID смены в аргументы фрагмента
         }
 
-        val fragment = AddShift()
+        val fragment = AddShiftFragment()
         fragment.arguments = bundle
 
         supportFragmentManager.beginTransaction()

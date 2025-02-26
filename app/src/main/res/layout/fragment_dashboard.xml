@@ -124,7 +124,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:maxWidth="1dp"
-                    android:text="Today"
+                    android:text="@string/today"
                     android:textSize="20sp" />
 
                 <TextView
@@ -134,7 +134,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:maxWidth="1dp"
-                    android:text="This week"
+                    android:text="@string/this_week"
                     android:textSize="20sp" />
 
                 <TextView
@@ -144,7 +144,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:maxWidth="1dp"
-                    android:text="This month"
+                    android:text="@string/this_month"
                     android:textSize="20sp" />
             </TableRow>
 

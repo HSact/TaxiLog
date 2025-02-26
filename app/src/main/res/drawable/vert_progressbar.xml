@@ -4,10 +4,6 @@
     <item android:id="@android:id/background">
         <shape>
             <corners android:radius="5dip" />
-
-
-
-
         </shape>
     </item>
     <item android:id="@android:id/progress">
@@ -16,9 +12,7 @@
             android:gravity="bottom" >
             <shape>
                 <corners android:radius="5dip" />
-
                 <solid android:color="@color/yellow_3" />
-
             </shape>
         </clip>
     </item>

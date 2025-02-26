@@ -41,7 +41,6 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -85,18 +84,15 @@ class HomeFragment : Fragment() {
             cursor.close()
             return
         }
-
         val perHour = (((cursor.getDouble(cursor.getColumnIndex(DBHelper.EARNINGS_COL)+0))/
                 cursor.getDouble(cursor.getColumnIndex(DBHelper.TIME_COL)+0))*100.0).toInt()/100.0
         textDate.text = cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COl)+0)
         textEarnings.text = cursor.getString(cursor.getColumnIndex(DBHelper.EARNINGS_COL)+0)
         textCosts.text = ((cursor.getDouble(cursor.getColumnIndex(DBHelper.WASH_COL)+0))+
                 (cursor.getDouble(cursor.getColumnIndex(DBHelper.FUEL_COL)+0))).toString()
-        textTime.text = cursor.getString(cursor.getColumnIndex(DBHelper.TIME_COL)+0) + getString(R.string.hours)
+        textTime.text = cursor.getString(cursor.getColumnIndex(DBHelper.TIME_COL)+0) + " " + getString(R.string.hours)
         textTotal.text = cursor.getString(cursor.getColumnIndex(DBHelper.PROFIT_COL)+0)
         textPerHour.text = perHour.toString()
-
-
         val settings = this.activity?.getSharedPreferences("Settings", Activity.MODE_PRIVATE)
         val goalMonthString = settings?.getString("Goal_per_month", "")
         if (goalMonthString == null || goalMonthString == "")

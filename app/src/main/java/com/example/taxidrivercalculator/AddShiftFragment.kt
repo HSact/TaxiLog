@@ -14,19 +14,14 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
 import androidx.navigation.fragment.findNavController
 import com.example.taxidrivercalculator.databinding.FragmentAddShiftBinding
-import com.example.taxidrivercalculator.databinding.FragmentDashboardBinding
 import com.example.taxidrivercalculator.ui.DatePickerFragment
 import com.example.taxidrivercalculator.ui.TimePickerFragment
-import com.example.taxidrivercalculator.ui.dashboard.DashboardFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
-
-
-class AddShift : Fragment(R.layout.fragment_add_shift) {
+class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     object CalcShift {
         var date: String =""
@@ -40,28 +35,21 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
         var profit: Double = 0.0
     }
 
-    lateinit var currentShift: CalcShift
-
-    lateinit var editDate: EditText
-    lateinit var editStart: EditText
-    lateinit var editEnd: EditText
-    lateinit var checkBreak: CheckBox
-    lateinit var editBreakStart: EditText
-    lateinit var editBreakEnd: EditText
-    lateinit var editEarnings: EditText
-    lateinit var editWash: EditText
-    lateinit var editFuelCost: EditText
-    lateinit var editMileage: EditText
-    lateinit var buttonSubmit: Button
-
-
+    private lateinit var currentShift: CalcShift
+    private lateinit var editDate: EditText
+    private lateinit var editStart: EditText
+    private lateinit var editEnd: EditText
+    private lateinit var checkBreak: CheckBox
+    private lateinit var editBreakStart: EditText
+    private lateinit var editBreakEnd: EditText
+    private lateinit var editEarnings: EditText
+    private lateinit var editWash: EditText
+    private lateinit var editFuelCost: EditText
+    private lateinit var editMileage: EditText
+    private lateinit var buttonSubmit: Button
 
     private var _binding: FragmentAddShiftBinding? = null
     private val binding get() = _binding!!
-
-    /*private var _binding2: ActivityMainBinding? = null
-    private val binding2 get() = _binding2!!*/
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -351,7 +339,6 @@ class AddShift : Fragment(R.layout.fragment_add_shift) {
 
     override fun onDestroy() {
         MainActivity.botNav.isVisible = true
-        //FragmentDashboard.
         super.onDestroy()
     }
 
