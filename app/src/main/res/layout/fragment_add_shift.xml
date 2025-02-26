@@ -14,7 +14,7 @@
         android:isScrollContainer="false"
         android:orientation="vertical"
         android:padding="10dp"
-        tools:context=".AddShiftFragment">
+        tools:context=".ui.fragments.AddShiftFragment">
 
 
         <LinearLayout

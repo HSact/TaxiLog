@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="10dp"
-        tools:context=".ui.home.HomeFragment">
+        tools:context=".ui.fragments.HomeFragment">
 
         <LinearLayout
             android:layout_width="match_parent"

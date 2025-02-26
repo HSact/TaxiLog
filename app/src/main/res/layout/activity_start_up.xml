@@ -7,7 +7,7 @@
     android:backgroundTint="#404345"
     android:orientation="vertical"
     android:theme="@style/Theme.TaxiDriverCalculator"
-    tools:context=".StartUpActivity">
+    tools:context=".ui.activities.StartUpActivity">
 
     <LinearLayout
         android:id="@+id/Logo_layout"

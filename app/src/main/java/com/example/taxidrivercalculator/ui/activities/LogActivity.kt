@@ -1,26 +1,24 @@
-package com.example.taxidrivercalculator
+package com.example.taxidrivercalculator.ui.activities
 
 import android.app.AlertDialog
-import android.content.Intent
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.PopupMenu
-import android.widget.TableLayout
 import android.widget.Toast
-import androidx.navigation.Navigation
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.taxidrivercalculator.helpers.CustomRecyclerAdapter
+import com.example.taxidrivercalculator.helpers.DBHelper
+import com.example.taxidrivercalculator.helpers.LocaleHelper
+import com.example.taxidrivercalculator.R
+import com.example.taxidrivercalculator.helpers.Shift
+import com.example.taxidrivercalculator.helpers.ShiftHelper
 import com.example.taxidrivercalculator.databinding.ActivityLogBinding
 import com.example.taxidrivercalculator.databinding.RecyclerviewItemBinding
-import com.example.taxidrivercalculator.ui.home.HomeFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class LogActivity : AppCompatActivity() {
@@ -38,7 +36,12 @@ class LogActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.title_my_shifts)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        shifts=ShiftHelper.makeArray(DBHelper(this, null))
+        shifts= ShiftHelper.makeArray(DBHelper(this, null))
+        if (shifts.isEmpty())
+        {
+            Toast.makeText(applicationContext,
+                getString(R.string.list_is_empty), Toast.LENGTH_SHORT).show()
+        }
         val recycler: RecyclerView = findViewById(R.id.recyclerView)
         recycler.layoutManager = LinearLayoutManager(this)
 
@@ -50,6 +53,14 @@ class LogActivity : AppCompatActivity() {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_log, menu)
         return true
+    }
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(
+            LocaleHelper.updateLocale(
+                newBase,
+                LocaleHelper.getSavedLanguage(newBase)
+            )
+        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -67,7 +78,6 @@ class LogActivity : AppCompatActivity() {
                 alert.show()
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -133,22 +143,18 @@ class LogActivity : AppCompatActivity() {
     private fun editShift(index: Int)
     {
         /*startActivity(Intent (this, MainActivity::class.java))
-
         //this.findNavController(index).navigate(R.id.action_homeFragment_to_addShift)
         val logIntent = Intent(this, AddShiftFragment::class.java)
         startActivity(logIntent)
         val bundle = Bundle().apply {
-            putInt("SHIFT_ID", index-1) // Передаем ID смены в аргументы фрагмента
+            putInt("SHIFT_ID", index-1)
         }
-
         val fragment = AddShiftFragment()
         fragment.arguments = bundle
-
         supportFragmentManager.beginTransaction()
-            .replace(R.id.nav_host_fragment_activity_main, fragment) // ID контейнера с фрагментами
-            .addToBackStack(null) // Добавляем в стек возврата
+            .replace(R.id.nav_host_fragment_activity_main, fragment)
+            .addToBackStack(null)
             .commit()*/
-
     }
 
     private fun deleteShift(index: Int)
@@ -157,6 +163,8 @@ class LogActivity : AppCompatActivity() {
         val db = DBHelper(this, null)
         db.deleteShift(index)
         db.close()
+        Toast.makeText(applicationContext,
+            getString(R.string.shift_deleted_successfully, index.toString()), Toast.LENGTH_SHORT).show()
         recreate()
     }
     private fun deleteAll()
@@ -164,6 +172,8 @@ class LogActivity : AppCompatActivity() {
         val db = DBHelper(this, null)
         db.deleteAll()
         db.close()
+        Toast.makeText(applicationContext,
+            getString(R.string.all_shifts_have_been_deleted_successfully), Toast.LENGTH_SHORT).show()
         recreate()
     }
 }

@@ -1,4 +1,4 @@
-package com.example.taxidrivercalculator.ui.notifications
+package com.example.taxidrivercalculator.ui.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -7,18 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TableLayout
 import android.widget.TextView
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.example.taxidrivercalculator.DBHelper
-import com.example.taxidrivercalculator.MainActivity
-import com.example.taxidrivercalculator.Shift
-import com.example.taxidrivercalculator.ShiftHelper
-import com.example.taxidrivercalculator.databinding.FragmentNotificationsBinding
+import com.example.taxidrivercalculator.helpers.DBHelper
+import com.example.taxidrivercalculator.helpers.Shift
+import com.example.taxidrivercalculator.helpers.ShiftHelper
+import com.example.taxidrivercalculator.databinding.FragmentStatsBinding
 
-class NotificationsFragment : Fragment() {
+class StatsFragment : Fragment() {
 
-    private var _binding: FragmentNotificationsBinding? = null
+    private var _binding: FragmentStatsBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -46,10 +43,10 @@ class NotificationsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
+        _binding = FragmentStatsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        shifts=ShiftHelper.makeArray(DBHelper(requireContext(), null))
+        shifts= ShiftHelper.makeArray(DBHelper(requireContext(), null))
         bindItems()
         if (shifts.size!=0)
         {

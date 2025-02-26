@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".AboutActivity">
+    tools:context=".ui.activities.AboutActivity">
 
     <TextView
         android:id="@+id/textAbout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Bla bla bla" />
+        android:textSize="20sp" />
 </LinearLayout>

@@ -1,6 +1,5 @@
-package com.example.taxidrivercalculator.ui.dashboard
+package com.example.taxidrivercalculator.ui.fragments
 
-import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Build
@@ -8,29 +7,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.example.taxidrivercalculator.DBHelper
-import com.example.taxidrivercalculator.MainActivity
+import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.R
-import com.example.taxidrivercalculator.Shift
-import com.example.taxidrivercalculator.ShiftHelper.makeArray
-import com.example.taxidrivercalculator.databinding.FragmentDashboardBinding
+import com.example.taxidrivercalculator.helpers.ShiftHelper.makeArray
+import com.example.taxidrivercalculator.databinding.FragmentGoalsBinding
+import com.example.taxidrivercalculator.helpers.Shift
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class DashboardFragment : Fragment() {
+class GoalsFragment : Fragment() {
 
-    private var _binding: FragmentDashboardBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    private var _binding: FragmentGoalsBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var progressDay: ProgressBar
@@ -47,7 +39,6 @@ class DashboardFragment : Fragment() {
 
     private val calendar = Calendar.getInstance()
 
-
     @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("SimpleDateFormat")
     override fun onCreateView(
@@ -56,91 +47,121 @@ class DashboardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        _binding = FragmentGoalsBinding.inflate(inflater, container, false)
         val root: View = binding.root
         bindItems()
         defineGoals()
         val shifts = makeArray(DBHelper(requireActivity(), null))
-
-        if (shifts.isNullOrEmpty())
+        if (shifts.isNullOrEmpty() || goalMonth == -1.0)
         {
             setEmptyProgress()
             return root
         }
-
-        val yearToday = (calendar.get(Calendar.YEAR)).toString()
-        var monthToday = (calendar.get(Calendar.MONTH) +1).toString()
-        val weekToday = (calendar.get(Calendar.WEEK_OF_YEAR))
-        val calendarSettable = Calendar.getInstance()
-
-        if (monthToday.length==1)
-        {
-            monthToday = "0$monthToday"
-        }
-
-        val dateFormat = SimpleDateFormat ("dd.MM.yyyy")
-        val currentDate = dateFormat.format(Date())
-        var idToday = -1
-
-        //calc today
-        var i = 0
-        do {
-            if (shifts[i].date == currentDate)
-            {
-                idToday=i
-                break
-            }
-            i++
-        } while (i<shifts.size)
-        if (idToday!=-1)
-        {
-            setTodayProgress(shifts[idToday].profit)
-        }
-        else
-        {
-            setTodayProgress(null)
-        }
-        if (goalMonth==-1.0)
-        {
-            setEmptyProgress()
-            return root
-        }
-
-        //calc week
-        var thisWeekSum = 0.0
-        i = 0
-        do {
-            val thisDate = dateFormat.parse(shifts[i].date) ?: break
-            calendarSettable.time = thisDate
-            val thisWeek = calendarSettable.get(Calendar.WEEK_OF_YEAR)
-
-
-            if (thisWeek == weekToday && thisDate.toString().contains(yearToday))
-            {
-                thisWeekSum += shifts[i].profit
-            }
-            i++
-        } while (i<shifts.size)
-        setWeekProgress(thisWeekSum)
-
-        //calc month
-        i = 0
-        var thisMonthSum = 0.0
-        do {
-            val thisDateText = shifts[i].date
-            if (thisDateText.indexOf(monthToday) == 3 && thisDateText.contains(yearToday))
-            {
-                thisMonthSum += shifts[i].profit
-            }
-            i++
-        } while (i<shifts.size)
-        setMonthProgress(thisMonthSum)
+        setAllProgress ()
 
         /*val textView: TextView = binding.textDashboard
         dashboardViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }*/
         return root
+    }
+
+    override fun onStart() {
+        defineGoals()
+        val shifts = makeArray(DBHelper(requireActivity(), null))
+        if (shifts.isNullOrEmpty() || goalMonth == -1.0)
+        {
+            setEmptyProgress()
+        }
+        else {
+        setAllProgress()
+        }
+        super.onStart()
+    }
+
+    private fun calculateDayProgress(): Double
+    {
+        val shifts = makeArray(DBHelper(requireActivity(), null))
+        val currentDate = getDayToday()
+        var idToday = -1
+
+        var i = 0
+        do {
+            if (shifts[i].date == currentDate) {
+                idToday = i
+                break
+            }
+            i++
+        } while (i < shifts.size)
+        if (idToday != -1)
+        {
+            return shifts[idToday].profit
+        }
+        else
+        {
+            return 0.0
+        }
+    }
+
+    private fun calculateWeekProgress(): Double
+    {
+        val calendarSettable = Calendar.getInstance()
+        val shifts = makeArray(DBHelper(requireActivity(), null))
+        var thisWeekSum = 0.0
+        var i = 0
+        val dateFormat = SimpleDateFormat ("dd.MM.yyyy")
+        do
+        {
+            val thisDate = dateFormat.parse(shifts[i].date) ?: break
+            calendarSettable.time = thisDate
+            val thisWeek = calendarSettable.get(Calendar.WEEK_OF_YEAR)
+            if (thisWeek == getWeekToday() && thisDate.toString().contains(getYearToday())) {
+                thisWeekSum += shifts[i].profit
+            }
+            i++
+        } while (i < shifts.size)
+        return thisWeekSum
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getDayToday(): String {
+        val dateFormat = SimpleDateFormat ("dd.MM.yyyy")
+        val currentDate = dateFormat.format(Date())
+        return currentDate
+    }
+
+    private fun getWeekToday(): Int {
+        val weekToday = (calendar.get(Calendar.WEEK_OF_YEAR))
+        return weekToday
+    }
+
+    private fun getMonthToday(): String {
+        var monthToday = (calendar.get(Calendar.MONTH) + 1).toString()
+        if (monthToday.length==1)
+        {
+            monthToday = "0$monthToday"
+        }
+        return monthToday
+    }
+
+    private fun getYearToday(): String {
+        val yearToday = (calendar.get(Calendar.YEAR)).toString()
+        return yearToday
+    }
+
+    private fun calculateMonthProgress(): Double
+    {
+        val shifts = makeArray(DBHelper(requireActivity(), null))
+        var i = 0
+        var thisMonthSum = 0.0
+        do {
+            val thisDateText = shifts[i].date
+            if (thisDateText.indexOf(getMonthToday()) == 3 && thisDateText.contains(getYearToday())) {
+                thisMonthSum += shifts[i].profit
+            }
+            i++
+        } while (i < shifts.size)
+        return thisMonthSum
     }
 
     override fun onResume() {
@@ -176,6 +197,14 @@ class DashboardFragment : Fragment() {
 
     private fun displayMonthGoal(goalMonthString: String) {
         textAssignedGoal.text = getString(R.string.your_goal_per_month, goalMonthString)
+    }
+
+    fun setAllProgress ()
+    {
+
+        setTodayProgress(calculateDayProgress())
+        setWeekProgress(calculateWeekProgress())
+        setMonthProgress(calculateMonthProgress())
     }
 
     @SuppressLint("SetTextI18n")
@@ -241,8 +270,6 @@ class DashboardFragment : Fragment() {
         progressDay.startAnimation(anim)
         //progressDay.setProgress(75, true)*/
     }
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

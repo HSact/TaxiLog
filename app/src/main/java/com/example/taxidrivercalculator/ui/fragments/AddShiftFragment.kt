@@ -1,4 +1,4 @@
-package com.example.taxidrivercalculator
+package com.example.taxidrivercalculator.ui.fragments
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -15,9 +15,11 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
+import com.example.taxidrivercalculator.helpers.DBHelper
+import com.example.taxidrivercalculator.ui.activities.MainActivity
+import com.example.taxidrivercalculator.R
+import com.example.taxidrivercalculator.helpers.ShiftHelper
 import com.example.taxidrivercalculator.databinding.FragmentAddShiftBinding
-import com.example.taxidrivercalculator.ui.DatePickerFragment
-import com.example.taxidrivercalculator.ui.TimePickerFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -64,7 +66,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddShiftBinding.inflate(inflater, container, false)
-        currentShift=CalcShift
+        currentShift= CalcShift
 
         bindItems()
         loadGuess()
@@ -205,16 +207,18 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
             return
         }
 
-        val n = ShiftHelper.centsRound(fuelPrice*editMileage.text.toString().toDouble()*consumption/100)
+        val n = ShiftHelper.centsRound(
+            fuelPrice * editMileage.text.toString().toDouble() * consumption / 100
+        )
         editFuelCost.setText(n.toString())
     }
 
     private fun calculateShift ()
     {
-        currentShift.onlineTime = convertTimeToLong(editEnd.text.toString()) - convertTimeToLong(editStart.text.toString())
-        if (currentShift.onlineTime<0)
+        CalcShift.onlineTime = convertTimeToLong(editEnd.text.toString()) - convertTimeToLong(editStart.text.toString())
+        if (CalcShift.onlineTime <0)
         {
-            currentShift.onlineTime += hoursToMs(24)
+            CalcShift.onlineTime += hoursToMs(24)
         }
         if (checkBreak.isChecked)
         {
@@ -228,16 +232,16 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
                 showErrorMessage("empty_BreakEnd")
                 return
             }
-            currentShift.breakTime=convertTimeToLong(editBreakEnd.text.toString())-convertTimeToLong(editBreakStart.text.toString())
-            if (currentShift.breakTime<0)
+            CalcShift.breakTime =convertTimeToLong(editBreakEnd.text.toString())-convertTimeToLong(editBreakStart.text.toString())
+            if (CalcShift.breakTime <0)
             {
-                currentShift.breakTime += hoursToMs(24)
+                CalcShift.breakTime += hoursToMs(24)
             }
-            currentShift.totalTime=currentShift.onlineTime-currentShift.breakTime
+            CalcShift.totalTime = CalcShift.onlineTime - CalcShift.breakTime
         }
         else
         {
-            currentShift.totalTime=currentShift.onlineTime
+            CalcShift.totalTime = CalcShift.onlineTime
         }
         /*if (currentShift.totalTime > hoursToMs(12))
         {
@@ -271,18 +275,18 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
             return
         }
 
-        currentShift.earnings=editEarnings.text.toString().toDouble()
-        currentShift.wash=editWash.text.toString().toDouble()
-        currentShift.fuelCost=editFuelCost.text.toString().toDouble()
-        currentShift.mileage=editMileage.text.toString().toDouble()
-        currentShift.profit= currentShift.earnings-currentShift.wash-currentShift.fuelCost
+        CalcShift.earnings =editEarnings.text.toString().toDouble()
+        CalcShift.wash =editWash.text.toString().toDouble()
+        CalcShift.fuelCost =editFuelCost.text.toString().toDouble()
+        CalcShift.mileage =editMileage.text.toString().toDouble()
+        CalcShift.profit = CalcShift.earnings - CalcShift.wash - CalcShift.fuelCost
 
-        showSubmitMessage("Sure? You earn ${currentShift.profit} in ${ShiftHelper.msToHours(currentShift.totalTime)} hours?")
+        showSubmitMessage("Sure? You earn ${CalcShift.profit} in ${ShiftHelper.msToHours(CalcShift.totalTime)} hours?")
 
     }
     private fun loadExistShift(id: Int)
     {
-        val shifts=ShiftHelper.makeArray(DBHelper(requireContext(), null))
+        val shifts= ShiftHelper.makeArray(DBHelper(requireContext(), null))
         val currentShift = shifts[id-1]
 
     }
@@ -318,14 +322,21 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     private fun submit()
     {
-        currentShift.date=editDate.text.toString()
+        CalcShift.date =editDate.text.toString()
 
         /*val toast = Toast(activity)
         toast.setText("Success!")*/
         val db = DBHelper(requireActivity(), null)
-        db.addShift(currentShift.date, ShiftHelper.msToHours(currentShift.totalTime),
-            currentShift.earnings, currentShift.wash, currentShift.fuelCost, currentShift.mileage, currentShift.profit)
-        Toast.makeText(activity,"Success!",Toast.LENGTH_SHORT).show()
+        db.addShift(
+            CalcShift.date,
+            ShiftHelper.msToHours(CalcShift.totalTime),
+            CalcShift.earnings,
+            CalcShift.wash,
+            CalcShift.fuelCost,
+            CalcShift.mileage,
+            CalcShift.profit
+        )
+        Toast.makeText(activity, getString(R.string.shift_added_successfully),Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_addShift_to_home_fragment)
         MainActivity.botNav.isVisible = true
 

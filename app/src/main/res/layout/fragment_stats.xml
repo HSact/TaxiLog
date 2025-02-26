@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="10dp"
-        tools:context=".ui.notifications.NotificationsFragment">
+        tools:context=".ui.fragments.StatsFragment">
 
         <TextView
             android:id="@+id/textStatsHeader"

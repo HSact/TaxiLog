@@ -15,6 +15,7 @@
     <string name="settings_interface">Interface</string>
     <string name="settings_language">Language</string>
     <string name="settings_theme">Theme</string>
+    <string name="settings_auto">Auto</string>
     <string name="settings_light">Light</string>
     <string name="settings_dark">Dark</string>
     <string name="settings_km_mi">km/mi</string>
@@ -81,6 +82,12 @@
     <string name="today">Today</string>
     <string name="this_week">This week</string>
     <string name="this_month">This month</string>
+    <string name="about_text">https://github.com/HSact/TaxiLog</string>
+    <string name="https_github_com_hsact_taxilog" translatable="false">https://github.com/HSact/TaxiLog</string>
+    <string name="app_repository">"App repository"</string>
+    <string name="shift_added_successfully">Shift added successfully</string>
+    <string name="shift_deleted_successfully">Shift %1$s deleted successfully</string>
+    <string name="all_shifts_have_been_deleted_successfully">All shifts have been deleted successfully</string>
 
 
     <string-array name="languages">

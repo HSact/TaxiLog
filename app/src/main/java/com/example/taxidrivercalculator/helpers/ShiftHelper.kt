@@ -1,7 +1,4 @@
-package com.example.taxidrivercalculator
-
-import com.example.taxidrivercalculator.DBHelper
-import com.example.taxidrivercalculator.Shift
+package com.example.taxidrivercalculator.helpers
 
 object ShiftHelper {
     fun makeArray(db: DBHelper): MutableList<Shift> {

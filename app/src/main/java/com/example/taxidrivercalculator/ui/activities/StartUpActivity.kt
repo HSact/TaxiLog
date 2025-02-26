@@ -1,20 +1,14 @@
-package com.example.taxidrivercalculator
+package com.example.taxidrivercalculator.ui.activities
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.AttributeSet
-import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import com.example.taxidrivercalculator.databinding.ActivityStartUpBinding
-import kotlinx.coroutines.delay
-import java.util.*
 import kotlin.system.exitProcess
 
 class StartUpActivity : AppCompatActivity() {
@@ -29,7 +23,7 @@ class StartUpActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.imageLogo.alpha = 0f
         binding.textLogo.alpha = 0f
-        binding.buttonOkay.setOnClickListener{startActivity(Intent(this,SettingsActivity::class.java))}
+        binding.buttonOkay.setOnClickListener{startActivity(Intent(this, SettingsActivity::class.java))}
         binding.buttonNope.setOnClickListener{startActivity(Intent(this, MainActivity::class.java))}
         val settings = getSharedPreferences("Settings", Activity.MODE_PRIVATE)
         val theme: String = settings.getString("Theme", "").toString()

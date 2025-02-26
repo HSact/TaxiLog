@@ -15,7 +15,7 @@
         android:orientation="vertical"
         android:padding="10dp"
         android:stretchColumns="0"
-        tools:context=".SettingsActivity">
+        tools:context=".ui.activities.SettingsActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -91,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:minWidth="60dp"
-                    android:text="Auto" />
+                    android:text="@string/settings_auto" />
 
                 <RadioButton
                     android:id="@+id/radioLight"

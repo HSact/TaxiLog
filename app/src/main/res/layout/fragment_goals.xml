@@ -12,7 +12,7 @@
         android:minHeight="500dp"
         android:orientation="vertical"
         android:padding="10dp"
-        tools:context=".ui.dashboard.DashboardFragment">
+        tools:context=".ui.fragments.GoalsFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,7 +25,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/you_haven_t_set_goal_yet"
-                android:textSize="20sp" />
+                android:textSize="24sp" />
 
         </LinearLayout>
 

@@ -1,24 +1,21 @@
-package com.example.taxidrivercalculator
+package com.example.taxidrivercalculator.ui.activities
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.os.Bundle
-import android.text.method.TextKeyListener.clear
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.ActivityMainBinding
+import com.example.taxidrivercalculator.helpers.LocaleHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.util.*
 
 
 class MainActivity : AppCompatActivity() {

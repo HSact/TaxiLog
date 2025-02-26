@@ -13,6 +13,7 @@
     <string name="settings_interface">Интерфейс</string>
     <string name="settings_language">Язык</string>
     <string name="settings_theme">Тема</string>
+    <string name="settings_auto">Авто</string>
     <string name="settings_light">Светлая</string>
     <string name="settings_dark">Темная</string>
     <string name="settings_km_mi">Км/Мили</string>
@@ -79,6 +80,11 @@
     <string name="today">Сегодня</string>
     <string name="this_week">Эта неделя</string>
     <string name="this_month">Этот месяц</string>
+    <string name="about_text">https://github.com/HSact/TaxiLog</string>
+    <string name="app_repository">"Репозиторий приложения"</string>
+    <string name="shift_added_successfully">Смена успешно сохранена</string>
+    <string name="shift_deleted_successfully">Смена %1$s удалена успешно</string>
+    <string name="all_shifts_have_been_deleted_successfully">Все смены были успешно удалены</string>
 
 
     <string-array name="languages">

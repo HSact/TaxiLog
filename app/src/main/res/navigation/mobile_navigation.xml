@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.taxidrivercalculator.ui.home.HomeFragment"
+        android:name="com.example.taxidrivercalculator.ui.fragments.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home">
 
@@ -21,18 +21,18 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.taxidrivercalculator.ui.dashboard.DashboardFragment"
+        android:name="com.example.taxidrivercalculator.ui.fragments.GoalsFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_goals" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.example.taxidrivercalculator.ui.notifications.NotificationsFragment"
+        android:name="com.example.taxidrivercalculator.ui.fragments.StatsFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_stats" />
     <fragment
         android:id="@+id/addShift"
-        android:name="com.example.taxidrivercalculator.AddShiftFragment"
+        android:name="com.example.taxidrivercalculator.ui.fragments.AddShiftFragment"
         android:label="@string/title_new_shift"
         tools:layout="@layout/fragment_add_shift">
         <action
@@ -44,12 +44,12 @@
         app:destination="@id/navigation_home" />
     <activity
         android:id="@+id/settingsActivity"
-        android:name="com.example.taxidrivercalculator.SettingsActivity"
+        android:name="com.example.taxidrivercalculator.ui.activities.SettingsActivity"
         android:label="settings_activity"
         tools:layout="@layout/settings_activity" />
     <activity
         android:id="@+id/logActivity"
-        android:name="com.example.taxidrivercalculator.LogActivity"
+        android:name="com.example.taxidrivercalculator.ui.activities.LogActivity"
         android:label="activity_log"
         app:action="log_to_addshift"
         tools:layout="@layout/activity_log"

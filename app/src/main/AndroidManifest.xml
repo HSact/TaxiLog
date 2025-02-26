@@ -11,10 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TaxiDriverCalculator">
         <activity
-            android:name=".LogActivity"
+            android:name=".ui.activities.LogActivity"
             android:exported="false" />
         <activity
-            android:name=".StartUpActivity"
+            android:name=".ui.activities.StartUpActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,14 +22,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AboutActivity"
+            android:name=".ui.activities.AboutActivity"
             android:exported="false" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".ui.activities.SettingsActivity"
             android:exported="false"
             android:label="@string/title_settings" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:launchMode="singleTop" />

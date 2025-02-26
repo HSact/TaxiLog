@@ -1,4 +1,4 @@
-package com.example.taxidrivercalculator
+package com.example.taxidrivercalculator.helpers
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TableLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.taxidrivercalculator.R
 
 
 class CustomRecyclerAdapter(private val myShifts: List<Shift>) :

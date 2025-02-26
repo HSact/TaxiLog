@@ -1,4 +1,4 @@
-package com.example.taxidrivercalculator
+package com.example.taxidrivercalculator.helpers
 
 import android.content.Context
 import android.content.res.Configuration

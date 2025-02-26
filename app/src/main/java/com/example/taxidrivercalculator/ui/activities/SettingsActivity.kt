@@ -1,22 +1,16 @@
-package com.example.taxidrivercalculator
+package com.example.taxidrivercalculator.ui.activities
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.view.View
 import android.widget.*
-import androidx.annotation.ContentView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
-import androidx.lifecycle.Lifecycle
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.taxidrivercalculator.helpers.LocaleHelper
+import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.SettingsActivityBinding
-import java.util.*
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -52,6 +46,7 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        LocaleHelper.setLocale(this, LocaleHelper.getSavedLanguage(this))
 
 
         binding = SettingsActivityBinding.inflate(layoutInflater)
@@ -77,6 +72,10 @@ class SettingsActivity : AppCompatActivity() {
         buttonApply.setOnClickListener{
             applySettings()
             recreate()
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            finish()
         }
 
 
@@ -94,6 +93,14 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(homeIntent)
         }*/
 
+    }
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(
+            LocaleHelper.updateLocale(
+                newBase,
+                LocaleHelper.getSavedLanguage(newBase)
+            )
+        )
     }
 
     private fun bindItems() {

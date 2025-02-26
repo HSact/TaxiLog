@@ -1,4 +1,4 @@
-package com.example.taxidrivercalculator.ui
+package com.example.taxidrivercalculator.ui.fragments
 
 import android.app.DatePickerDialog
 import android.app.Dialog
