@@ -55,10 +55,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         MainActivity.botNav.isVisible = false
-
-
     }
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
@@ -79,10 +76,6 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
         })
-        //pickDate()
-
-        // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_add_shift, container, false)
         return binding.root
     }
     @RequiresApi(Build.VERSION_CODES.N)
@@ -165,17 +158,14 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
                 editObj.setText(date.toString())
             }
         }
-
         datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
     }
 
     private fun pickTime(editObj: EditText)
     {
-
         // create new instance of DatePickerFragment
         val timePickerFragment = TimePickerFragment()
         val supportFragmentManager = requireActivity().supportFragmentManager
-
 
         // we have to implement setFragmentResultListener
         supportFragmentManager.setFragmentResultListener(
@@ -224,12 +214,12 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         {
             if (editBreakStart.text.toString()=="")
             {
-                showErrorMessage("empty_BreakStart")
+                showErrorMessage(getString(R.string.break_start_is_empty))
                 return
             }
             if (editBreakEnd.text.toString()=="")
             {
-                showErrorMessage("empty_BreakEnd")
+                showErrorMessage(getString(R.string.break_end_is_empty))
                 return
             }
             CalcShift.breakTime =convertTimeToLong(editBreakEnd.text.toString())-convertTimeToLong(editBreakStart.text.toString())
@@ -257,7 +247,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         }*/
         if (editEarnings.text.isEmpty())
         {
-            showErrorMessage("empty_Earnings")
+            showErrorMessage(getString(R.string.earnings_is_empty))
             return
         }
         if (editWash.text.isEmpty())
@@ -266,12 +256,12 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         }
         if (editFuelCost.text.isEmpty())
         {
-            showErrorMessage("empty_Fuel")
+            showErrorMessage(getString(R.string.fuel_cost_is_empty))
             return
         }
         if (editMileage.text.isEmpty())
         {
-            showErrorMessage("empty_Mileage")
+            showErrorMessage(getString(R.string.mileage_is_empty))
             return
         }
 
@@ -281,13 +271,12 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         CalcShift.mileage =editMileage.text.toString().toDouble()
         CalcShift.profit = CalcShift.earnings - CalcShift.wash - CalcShift.fuelCost
 
-        showSubmitMessage("Sure? You earn ${CalcShift.profit} in ${ShiftHelper.msToHours(CalcShift.totalTime)} hours?")
-
-    }
-    private fun loadExistShift(id: Int)
-    {
-        val shifts= ShiftHelper.makeArray(DBHelper(requireContext(), null))
-        val currentShift = shifts[id-1]
+        showSubmitMessage(
+            getString(
+                R.string.you_earn_in_hours,
+                CalcShift.profit.toString(),
+                ShiftHelper.msToHours(CalcShift.totalTime).toString()
+            ))
 
     }
 

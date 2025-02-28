@@ -34,13 +34,13 @@ class AboutActivity : AppCompatActivity() {
 
             override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
-                ds.isUnderlineText = false // Убираем подчеркивание, если нужно
+                ds.isUnderlineText = false
             }
         }
         spannableString.setSpan(clickableSpan, 0, spannableString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         textAbout.text = spannableString
         textAbout.movementMethod = LinkMovementMethod.getInstance()
-        textAbout.highlightColor = Color.TRANSPARENT // Убираем цвет фона при нажатии
+        textAbout.highlightColor = Color.TRANSPARENT
 
     }
     override fun attachBaseContext(newBase: Context) {
