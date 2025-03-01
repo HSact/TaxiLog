@@ -1,5 +1,7 @@
 package com.example.taxidrivercalculator.helpers
 
+import kotlin.math.round
+
 object ShiftHelper {
     fun makeArray(db: DBHelper): MutableList<Shift> {
         val shifts = mutableListOf<Shift>()
@@ -23,18 +25,10 @@ object ShiftHelper {
             shifts[i].mileage = cursor.getDouble(cursor.getColumnIndex(DBHelper.MILEAGE_COL) + 0)
             shifts[i].profit = cursor.getDouble(cursor.getColumnIndex(DBHelper.PROFIT_COL) + 0)
             i++
-
         } while (cursor.moveToNext())
-
         cursor.close()
         return shifts
     }
-
-    fun msToHours (ms: Long) : Double
-    {
-        return ((ms/60.0/60.0/1000.0)*100.0).toInt()/100.0
-    }
-
     fun calcAverageEarningsPerHour (shifts: MutableList<Shift>): Double
     {
         var sum = 0.0
@@ -43,7 +37,7 @@ object ShiftHelper {
                 i -> sum+=shifts[i].earnings
                 totalHours+=shifts[i].time.toDouble()
         }
-        return sum/totalHours
+        return centsRound( sum/totalHours)
     }
     fun calcAverageProfitPerHour (shifts: MutableList<Shift>): Double
     {
@@ -61,7 +55,7 @@ object ShiftHelper {
         shifts.indices.forEach {
                 i -> totalHours+=shifts[i].time.toDouble()
         }
-        return totalHours/shifts.size
+        return oneRound( totalHours/shifts.size)
     }
     fun calcAverageMileage (shifts: MutableList<Shift>): Double
     {
@@ -69,7 +63,7 @@ object ShiftHelper {
         shifts.indices.forEach {
                 i -> totalMileage+=shifts[i].mileage
         }
-        return totalMileage/shifts.size
+        return oneRound( totalMileage/shifts.size)
     }
     fun calcAverageFuelCost (shifts: MutableList<Shift>): Double
     {
@@ -77,7 +71,7 @@ object ShiftHelper {
         shifts.indices.forEach {
                 i -> totalFuelCost+=shifts[i].mileage
         }
-        return totalFuelCost/shifts.size
+        return centsRound( totalFuelCost/shifts.size)
     }
     fun calcTotalShiftDuration (shifts: MutableList<Shift>): Double
     {
@@ -130,5 +124,13 @@ object ShiftHelper {
     fun centsRound (n: Double): Double
     {
         return Math.round(n*100)/100.toDouble()
+    }
+    fun oneRound (n: Double): Double
+    {
+        return Math.round(n*10)/10.toDouble()
+    }
+    fun msToHours (ms: Long) : Double
+    {
+        return ((ms/60.0/60.0/1000.0)*100.0).toInt()/100.0
     }
 }
