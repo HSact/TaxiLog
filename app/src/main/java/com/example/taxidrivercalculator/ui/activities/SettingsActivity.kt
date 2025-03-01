@@ -71,13 +71,13 @@ class SettingsActivity : AppCompatActivity() {
 
         buttonApply.setOnClickListener{
             applySettings()
-            recreate()
+            //recreate()
             val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
-            finish()
+            finishAffinity()
         }
-
 
         /*if (savedInstanceState == null) {
             supportFragmentManager
@@ -85,8 +85,6 @@ class SettingsActivity : AppCompatActivity() {
                 .replace(R.id.settings, SettingsFragment())
                 .commit()
         }*/
-
-
 
         /*but.setOnClickListener{
             val homeIntent = Intent(this, HomeFragment::class.java)
