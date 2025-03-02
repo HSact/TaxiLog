@@ -128,7 +128,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         editStart.setText(beginTime)
         if (convertTimeToLong(beginTime)>convertTimeToLong(endTime))
         {
-            editDate.setText(beginDate.toString())
+            editDate.setText(beginDate.format(formatter))
         }
         //System.currentTimeMillis()
 
@@ -155,7 +155,6 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         return System.currentTimeMillis()
     }*/
 
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun pickDate(editObj: EditText)
     {
         val datePickerFragment = DatePickerFragment()
