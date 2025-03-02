@@ -103,6 +103,7 @@ class GoalsFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun calculateWeekProgress(): Double
     {
         val calendarSettable = Calendar.getInstance()

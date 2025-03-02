@@ -21,6 +21,8 @@ import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.helpers.ShiftHelper
 import com.example.taxidrivercalculator.databinding.FragmentAddShiftBinding
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
@@ -57,7 +59,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         super.onCreate(savedInstanceState)
         MainActivity.botNav.isVisible = false
     }
-    @RequiresApi(Build.VERSION_CODES.N)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -78,7 +80,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         })
         return binding.root
     }
-    @RequiresApi(Build.VERSION_CODES.N)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -112,13 +114,22 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
     private fun loadGuess ()
     {
         val dateFormat = SimpleDateFormat ("dd.MM.yyyy")
+        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         val timeFormat = SimpleDateFormat ("H:mm")
-        val currentDate = dateFormat.format(Date())
-        val currentTime = timeFormat.format(Date())
-        editDate.setText(currentDate)
-        editEnd.setText(currentTime)
-        val a = convertLongToTime(convertTimeToLong(currentTime)-hoursToMs(10))
-        editStart.setText(a)
+        var endDate = dateFormat.format(Date())
+        val endTime = timeFormat.format(Date())
+        val beginTime = convertLongToTime(convertTimeToLong(endTime)-hoursToMs(10))
+        var beginDate = LocalDate.parse(endDate, formatter)
+        beginDate = beginDate.minusDays(1)
+        endDate = beginDate.format(formatter)
+
+        editDate.setText(endDate)
+        editEnd.setText(endTime)
+        editStart.setText(beginTime)
+        if (convertTimeToLong(beginTime)>convertTimeToLong(endTime))
+        {
+            editDate.setText(beginDate.toString())
+        }
         //System.currentTimeMillis()
 
     }
