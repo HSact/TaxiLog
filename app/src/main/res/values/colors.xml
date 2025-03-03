@@ -13,4 +13,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name ="hint_day">#888888</color>
     <color name ="hint_night">#999999</color>
+    <color name="dark_gray">#212121</color>
 </resources>
