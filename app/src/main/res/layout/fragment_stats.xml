@@ -46,14 +46,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/shifts_count"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
 
                 <TextView
                     android:id="@+id/textShifts_count_val"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/n_a"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
             </TableRow>
 
             <TableRow
@@ -65,14 +65,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/average_earnings_per_hour"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
 
                 <TextView
                     android:id="@+id/textAv_er_ph_val"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/n_a"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
             </TableRow>
 
             <TableRow
@@ -84,14 +84,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/average_profit_per_hour"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
 
                 <TextView
                     android:id="@+id/textAv_profit_ph_val"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/n_a"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
             </TableRow>
 
             <TableRow
@@ -103,14 +103,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/average_shift_duration"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
 
                 <TextView
                     android:id="@+id/textAv_duration_val"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/n_a"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
             </TableRow>
 
             <TableRow
@@ -122,14 +122,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/average_mileage"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
 
                 <TextView
                     android:id="@+id/textAv_mileage_val"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/n_a"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
             </TableRow>
 
             <TableRow
@@ -141,14 +141,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/average_fuel"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
 
                 <TextView
                     android:id="@+id/textAv_fuel_val"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/n_a"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
             </TableRow>
 
             <TableRow
@@ -160,14 +160,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/total_shift_duration"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
 
                 <TextView
                     android:id="@+id/textTotal_duration_val"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/n_a"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
             </TableRow>
 
             <TableRow
@@ -179,14 +179,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/total_mileage"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
 
                 <TextView
                     android:id="@+id/textTotal_mileage_val"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/n_a"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
             </TableRow>
 
             <TableRow
@@ -198,14 +198,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/total_fuel"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
 
                 <TextView
                     android:id="@+id/textTotal_fuel_val"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/n_a"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
             </TableRow>
 
             <TableRow
@@ -217,14 +217,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/total_wash"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
 
                 <TextView
                     android:id="@+id/textTotal_wash_val"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/n_a"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
             </TableRow>
 
             <TableRow
@@ -236,14 +236,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/total_earnings"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
 
                 <TextView
                     android:id="@+id/textTotalEarnings_val"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/n_a"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
             </TableRow>
 
             <TableRow
@@ -255,14 +255,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/total_profit"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
 
                 <TextView
                     android:id="@+id/textTotalProfit_val"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/n_a"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/statsTextSize" />
             </TableRow>
         </TableLayout>
     </LinearLayout>

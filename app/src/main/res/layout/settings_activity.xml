@@ -185,7 +185,7 @@
                 android:minHeight="50dp"
                 android:text="@string/settings_consumption" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextConsumption"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -211,7 +211,7 @@
                 android:minHeight="50dp"
                 android:text="@string/settings_fuel_price" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextFuelPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -225,10 +225,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:gravity="right"
+            android:gravity="end"
             android:orientation="horizontal">
 
-            <Switch
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchRent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -254,7 +254,7 @@
                 android:maxWidth="1dp"
                 android:text="@string/settings_rent_cost" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextRentCost"
                 android:layout_width="36dp"
                 android:layout_height="50dp"
@@ -268,11 +268,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="right"
+            android:gravity="end"
             android:orientation="vertical">
 
 
-            <Switch
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchService"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -298,7 +298,7 @@
                 android:maxWidth="1dp"
                 android:text="@string/settings_service_cost_per_km" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextServiceCost"
                 android:layout_width="36dp"
                 android:layout_height="50dp"
@@ -339,7 +339,7 @@
                 android:maxWidth="1dp"
                 android:text="@string/settings_goal_per_month" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextGoalPerMonth"
                 android:layout_width="36dp"
                 android:layout_height="50dp"
@@ -405,7 +405,7 @@
             android:orientation="horizontal">
 
 
-            <Switch
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchTaxes"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -434,7 +434,7 @@
                 android:maxWidth="1dp"
                 android:text="@string/settings_tax_rate" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextTaxRate"
                 android:layout_width="36dp"
                 android:layout_height="50dp"
@@ -459,7 +459,6 @@
                 android:layout_weight="1"
                 android:text="@string/apply" />
         </TableRow>
-
 
     </TableLayout>
 

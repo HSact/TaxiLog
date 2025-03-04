@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import com.example.taxidrivercalculator.helpers.LocaleHelper
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.SettingsActivityBinding
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -20,34 +21,33 @@ class SettingsActivity : AppCompatActivity() {
     //val but = findViewById<Button>(R.id.buttonApply)
     private lateinit var binding: SettingsActivityBinding
 
-    lateinit var switchRent: Switch
-    lateinit var switchService: Switch
-    lateinit var switchTaxes: Switch
+    private lateinit var switchRent: SwitchMaterial
+    private lateinit var switchService: SwitchMaterial
+    private lateinit var switchTaxes: SwitchMaterial
 
-    lateinit var spinnerLang: Spinner
-    lateinit var radioTheme: RadioGroup
-    lateinit var radioDefault: RadioButton
-    lateinit var radioLight: RadioButton
-    lateinit var radioDark: RadioButton
-    lateinit var radioMiKm: RadioGroup
-    lateinit var radioKm: RadioButton
-    lateinit var radioMi: RadioButton
-    lateinit var textConsumption: EditText
-    lateinit var textFuelCost: EditText
-    lateinit var textRentCost: EditText
-    lateinit var textServiceCost: EditText
-    lateinit var textGoalPerMonth: EditText
-    lateinit var radioSchedule: RadioGroup
-    lateinit var radio70: RadioButton
-    lateinit var radio61: RadioButton
-    lateinit var radio52: RadioButton
-    lateinit var textTaxRate: EditText
-    lateinit var buttonApply: Button
+    private lateinit var spinnerLang: Spinner
+    private lateinit var radioTheme: RadioGroup
+    private lateinit var radioDefault: RadioButton
+    private lateinit var radioLight: RadioButton
+    private lateinit var radioDark: RadioButton
+    private lateinit var radioMiKm: RadioGroup
+    private lateinit var radioKm: RadioButton
+    private lateinit var radioMi: RadioButton
+    private lateinit var textConsumption: EditText
+    private lateinit var textFuelCost: EditText
+    private lateinit var textRentCost: EditText
+    private lateinit var textServiceCost: EditText
+    private lateinit var textGoalPerMonth: EditText
+    private lateinit var radioSchedule: RadioGroup
+    private lateinit var radio70: RadioButton
+    private lateinit var radio61: RadioButton
+    private lateinit var radio52: RadioButton
+    private lateinit var textTaxRate: EditText
+    private lateinit var buttonApply: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LocaleHelper.setLocale(this, LocaleHelper.getSavedLanguage(this))
-
 
         binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -303,7 +303,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
 
-    private fun switchVisualize(switch: Switch)
+    private fun switchVisualize(switch: SwitchMaterial)
     {
         val table: TableRow
         when (switch) {
