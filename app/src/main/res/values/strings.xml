@@ -43,7 +43,7 @@
     <string name="addshift_wash">Wash</string>
     <string name="addshift_fuel_cost">Fuel cost</string>
     <string name="addshift_mileage">Mileage</string>
-    <string name="addshift_submit">Submit!</string>
+    <string name="addshift_submit">Submit</string>
     <string name="last_shift">Last shift</string>
     <string name="date">Date</string>
     <string name="costs">Costs</string>
@@ -97,6 +97,8 @@
     <string name="ok">OK</string>
     <string name="nope">Nope</string>
     <string name="looks_like_it_s_a_first_launch_nlet_s_set_it_up">Looks like it\'s a first launch.\nLet\'s set it up!</string>
+    <string name="submit">Submit</string>
+    <string name="error">Error</string>
 
 
     <string-array name="languages">

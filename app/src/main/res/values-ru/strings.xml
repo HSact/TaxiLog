@@ -41,7 +41,7 @@
     <string name="addshift_wash">Мойка</string>
     <string name="addshift_fuel_cost">Стоимость топлива</string>
     <string name="addshift_mileage">Пробег</string>
-    <string name="addshift_submit">Добавить</string>
+    <string name="addshift_submit">Подтвердить</string>
     <string name="last_shift">Последняя смена</string>
     <string name="date">Дата</string>
     <string name="costs">Траты</string>
@@ -94,6 +94,8 @@
     <string name="ok">OK</string>
     <string name="nope">Потом</string>
     <string name="looks_like_it_s_a_first_launch_nlet_s_set_it_up">Похоже, это первый запуск.\nДавайте всё настроим!</string>
+    <string name="submit">Подвтерждение</string>
+    <string name="error">Ошибка</string>
 
 
     <string-array name="languages">
