@@ -27,6 +27,7 @@
                 android:text="@string/you_haven_t_set_goal_yet"
                 android:textSize="24sp" />
 
+
         </LinearLayout>
 
         <TableLayout
@@ -34,6 +35,19 @@
             android:layout_height="match_parent"
             android:layout_marginTop="100dp"
             android:minHeight="300dp">
+            <EditText
+                android:id="@+id/buttonDatePick"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autofillHints=""
+                android:gravity="fill_vertical"
+                android:hint="1.01.2025"
+                android:inputType="date"
+                android:maxEms="0"
+                android:maxLength="10"
+                android:minWidth="80dp"
+                android:minHeight="48dp"
+                android:textSize="16sp" />
 
             <TableRow
                 android:layout_width="match_parent"

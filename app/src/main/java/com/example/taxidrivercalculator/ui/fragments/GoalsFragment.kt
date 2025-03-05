@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -17,6 +18,8 @@ import com.example.taxidrivercalculator.helpers.ShiftHelper.makeArray
 import com.example.taxidrivercalculator.databinding.FragmentGoalsBinding
 import com.example.taxidrivercalculator.helpers.Shift
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -29,6 +32,8 @@ class GoalsFragment : Fragment() {
     private lateinit var progressWeek: ProgressBar
     private lateinit var progressMonth: ProgressBar
 
+    private lateinit var buttonDatePicker: EditText
+
     private lateinit var todayPercent: TextView
     private lateinit var weekPercent: TextView
     private lateinit var monthPercent: TextView
@@ -39,7 +44,6 @@ class GoalsFragment : Fragment() {
 
     private val calendar = Calendar.getInstance()
 
-    @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("SimpleDateFormat")
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,7 +62,16 @@ class GoalsFragment : Fragment() {
             return root
         }
         setAllProgress ()
+        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
+        val now = LocalDateTime.now()
+        val currentDate = now.toLocalDate()
+        buttonDatePicker.setText(currentDate.format(formatter))
+        buttonDatePicker.setOnFocusChangeListener { view, b ->  if (buttonDatePicker.isFocused) pickDate(buttonDatePicker)}
+        buttonDatePicker.setOnClickListener {
+            pickDate(buttonDatePicker)
+        }
+        //val textView: TextView = binding.textDashboard
         /*val textView: TextView = binding.textDashboard
         dashboardViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
@@ -122,6 +135,22 @@ class GoalsFragment : Fragment() {
             i++
         } while (i < shifts.size)
         return thisWeekSum
+    }
+
+    private fun pickDate(editObj: EditText)
+    {
+        val datePickerFragment = DatePickerFragment()
+        val supportFragmentManager = requireActivity().supportFragmentManager
+        supportFragmentManager.setFragmentResultListener(
+            "REQUEST_KEY",
+            viewLifecycleOwner)
+        { resultKey, bundle ->
+            if (resultKey == "REQUEST_KEY") {
+                val date = bundle.getString("SELECTED_DATE")
+                editObj.setText(date.toString())
+            }
+        }
+        datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -200,7 +229,7 @@ class GoalsFragment : Fragment() {
         textAssignedGoal.text = getString(R.string.your_goal_per_month, goalMonthString)
     }
 
-    fun setAllProgress ()
+    private fun setAllProgress ()
     {
 
         setTodayProgress(calculateDayProgress())
@@ -252,6 +281,8 @@ class GoalsFragment : Fragment() {
         progressDay = binding.progressDay
         progressWeek = binding.progressWeek
         progressMonth = binding.progressMonth
+
+        buttonDatePicker = binding.buttonDatePick
 
         todayPercent = binding.textTodayPercent
         weekPercent = binding.textWeekPercent
