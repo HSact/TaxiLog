@@ -1,20 +1,31 @@
 package com.example.taxidrivercalculator.ui.fragments
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.widget.DatePicker
-import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
     private val calendar = Calendar.getInstance()
+    lateinit var selectedDate: String
 
+    @SuppressLint("SimpleDateFormat")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // default date
+
+        val sdf = SimpleDateFormat("dd.MM.yyyy")
+        try {
+            val date = sdf.parse(selectedDate)
+            calendar.time = date // Устанавливаем дату в календарь
+            // Теперь calendar будет на нужной дате
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)

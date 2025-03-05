@@ -77,9 +77,9 @@
     <string name="yes">Да</string>
     <string name="cancel">Отмена</string>
     <string name="delete_shift">Удалить смену</string>
-    <string name="today">Сегодня</string>
-    <string name="this_week">Эта неделя</string>
-    <string name="this_month">Этот месяц</string>
+    <string name="day">День</string>
+    <string name="this_week">Неделя</string>
+    <string name="this_month">Месяц</string>
     <string name="about_text">https://github.com/HSact/TaxiLog</string>
     <string name="app_repository">"Репозиторий приложения"</string>
     <string name="shift_added_successfully">Смена успешно сохранена</string>

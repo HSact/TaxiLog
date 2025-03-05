@@ -8,7 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.TableLayout
 import android.widget.TextView
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.R
@@ -27,6 +30,8 @@ class GoalsFragment : Fragment() {
     private var _binding: FragmentGoalsBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var tableProgress: TableLayout
+
     private lateinit var progressDay: ProgressBar
     private lateinit var progressWeek: ProgressBar
     private lateinit var progressMonth: ProgressBar
@@ -41,6 +46,9 @@ class GoalsFragment : Fragment() {
     private var goalMonth: Double = -1.0
     private var goalWeek: Double = -1.0
     private var goalDay: Double = -1.0
+    private lateinit var dayName: TextView
+    private lateinit var weekName: TextView
+    private lateinit var monthName: TextView
 
 
     override fun onCreateView(
@@ -97,7 +105,6 @@ class GoalsFragment : Fragment() {
         val shifts = makeArray(DBHelper(requireActivity(), null))
         val currentDate = getCurrentDay()
         var idToday = -1
-
         var i = 0
         do {
             if (shifts[i].date == currentDate) {
@@ -159,6 +166,7 @@ class GoalsFragment : Fragment() {
     private fun pickDate(editObj: EditText)
     {
         val datePickerFragment = DatePickerFragment()
+        datePickerFragment.selectedDate = editObj.text.toString()
         val supportFragmentManager = requireActivity().supportFragmentManager
         supportFragmentManager.setFragmentResultListener(
             "REQUEST_KEY",
@@ -243,6 +251,8 @@ class GoalsFragment : Fragment() {
         {
             textAssignedGoal.text = getString(R.string.you_haven_t_set_goal_yet)
             setEmptyProgress()
+            buttonDatePicker.isGone
+            tableProgress.isGone
             return
         }
         displayMonthGoal(goalMonthString)
@@ -258,7 +268,8 @@ class GoalsFragment : Fragment() {
             "5/2" -> denominatorDay = 21.4
         }
         goalDay = goalMonth / denominatorDay
-
+        buttonDatePicker.isVisible
+        tableProgress.isVisible
     }
 
     private fun displayMonthGoal(goalMonthString: String) {
@@ -284,6 +295,7 @@ class GoalsFragment : Fragment() {
         val progress = (todayProfit/goal*100).toInt()
         todayPercent.text = "$progress%"
         progressDay.progress = progress
+        //dayName.text=getCurrentDay()
     }
 
     @SuppressLint("SetTextI18n")
@@ -292,6 +304,7 @@ class GoalsFragment : Fragment() {
         val progress = (thisWeekSum/goal*100).toInt()
         weekPercent.text = "$progress%"
         progressWeek.progress = progress
+        //weekName.text=getCurrentWeek().toString()
     }
 
     @SuppressLint("SetTextI18n")
@@ -300,6 +313,7 @@ class GoalsFragment : Fragment() {
         val progress = (thisMonthSum/goal*100).toInt()
         monthPercent.text = "$progress%"
         progressMonth.progress = progress
+        //monthName.text=getCurrentMonth()
     }
 
     private fun setEmptyProgress() {
@@ -313,16 +327,17 @@ class GoalsFragment : Fragment() {
 
     private fun bindItems()
     {
+        tableProgress = binding.tableProgress
         progressDay = binding.progressDay
         progressWeek = binding.progressWeek
         progressMonth = binding.progressMonth
-
+        dayName = binding.textGoalPerDay
+        weekName = binding.textGoalPerWeek
+        monthName = binding.textGoalPerMonth
         buttonDatePicker = binding.buttonDatePick
-
         todayPercent = binding.textTodayPercent
         weekPercent = binding.textWeekPercent
         monthPercent = binding.textMontPercent
-
         textAssignedGoal = binding.textAssignedGoal
     }
     private fun animateBars()

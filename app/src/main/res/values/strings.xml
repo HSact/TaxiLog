@@ -79,9 +79,9 @@
     <string name="yes">Yes</string>
     <string name="cancel">Cancel</string>
     <string name="delete_shift">Delete shift</string>
-    <string name="today">Today</string>
-    <string name="this_week">This week</string>
-    <string name="this_month">This month</string>
+    <string name="day">Day</string>
+    <string name="this_week">Week</string>
+    <string name="this_month">Month</string>
     <string name="about_text">https://github.com/HSact/TaxiLog</string>
     <string name="https_github_com_hsact_taxilog" translatable="false">https://github.com/HSact/TaxiLog</string>
     <string name="app_repository">"App repository"</string>
