@@ -2,21 +2,26 @@ package com.example.taxidrivercalculator.ui.fragments
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.TableLayout
 import android.widget.TextView
-import androidx.annotation.RequiresApi
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.helpers.ShiftHelper.makeArray
 import com.example.taxidrivercalculator.databinding.FragmentGoalsBinding
-import com.example.taxidrivercalculator.helpers.Shift
-import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
+import java.time.temporal.WeekFields
 import java.util.*
 
 
@@ -25,9 +30,14 @@ class GoalsFragment : Fragment() {
     private var _binding: FragmentGoalsBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var tableProgress: TableLayout
+
     private lateinit var progressDay: ProgressBar
     private lateinit var progressWeek: ProgressBar
     private lateinit var progressMonth: ProgressBar
+
+    private lateinit var buttonDatePicker: EditText
+    private var pickedDate: String = ""
 
     private lateinit var todayPercent: TextView
     private lateinit var weekPercent: TextView
@@ -36,11 +46,11 @@ class GoalsFragment : Fragment() {
     private var goalMonth: Double = -1.0
     private var goalWeek: Double = -1.0
     private var goalDay: Double = -1.0
+    private lateinit var dayName: TextView
+    private lateinit var weekName: TextView
+    private lateinit var monthName: TextView
 
-    private val calendar = Calendar.getInstance()
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    @SuppressLint("SimpleDateFormat")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,7 +68,18 @@ class GoalsFragment : Fragment() {
             return root
         }
         setAllProgress ()
+        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
+        val now = LocalDateTime.now()
+        val currentDate = now.toLocalDate()
+        pickedDate = currentDate.format(formatter)
+        buttonDatePicker.setText(currentDate.format(formatter))
+        buttonDatePicker.setOnFocusChangeListener { view, b ->  if (buttonDatePicker.isFocused) pickDate(buttonDatePicker)}
+        buttonDatePicker.setOnClickListener {
+            pickDate(buttonDatePicker)
+            //setAllProgress ()
+        }
+        //val textView: TextView = binding.textDashboard
         /*val textView: TextView = binding.textDashboard
         dashboardViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
@@ -82,9 +103,8 @@ class GoalsFragment : Fragment() {
     private fun calculateDayProgress(): Double
     {
         val shifts = makeArray(DBHelper(requireActivity(), null))
-        val currentDate = getDayToday()
+        val currentDate = getCurrentDay()
         var idToday = -1
-
         var i = 0
         do {
             if (shifts[i].date == currentDate) {
@@ -103,53 +123,31 @@ class GoalsFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SimpleDateFormat")
-    private fun calculateWeekProgress(): Double
-    {
-        val calendarSettable = Calendar.getInstance()
+    private fun calculateWeekProgress(): Double {
         val shifts = makeArray(DBHelper(requireActivity(), null))
         var thisWeekSum = 0.0
-        var i = 0
-        val dateFormat = SimpleDateFormat ("dd.MM.yyyy")
-        do
+
+        val currentWeek = getCurrentWeek()
+        val currentYear = LocalDate.now().year
+        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
+        for (shift in shifts)
         {
-            val thisDate = dateFormat.parse(shifts[i].date) ?: break
-            calendarSettable.time = thisDate
-            val thisWeek = calendarSettable.get(Calendar.WEEK_OF_YEAR)
-            if (thisWeek == getWeekToday() && thisDate.toString().contains(getYearToday())) {
-                thisWeekSum += shifts[i].profit
+            val thisDate = try
+            {
+                LocalDate.parse(shift.date, dateFormatter)
             }
-            i++
-        } while (i < shifts.size)
+            catch (e: DateTimeParseException)
+            {
+                continue
+            }
+            val shiftWeek = thisDate.get(WeekFields.of(Locale.getDefault()).weekOfYear())
+            if (shiftWeek == currentWeek && thisDate.year == currentYear) {
+                thisWeekSum += shift.profit
+            }
+        }
         return thisWeekSum
     }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun getDayToday(): String {
-        val dateFormat = SimpleDateFormat ("dd.MM.yyyy")
-        val currentDate = dateFormat.format(Date())
-        return currentDate
-    }
-
-    private fun getWeekToday(): Int {
-        val weekToday = (calendar.get(Calendar.WEEK_OF_YEAR))
-        return weekToday
-    }
-
-    private fun getMonthToday(): String {
-        var monthToday = (calendar.get(Calendar.MONTH) + 1).toString()
-        if (monthToday.length==1)
-        {
-            monthToday = "0$monthToday"
-        }
-        return monthToday
-    }
-
-    private fun getYearToday(): String {
-        val yearToday = (calendar.get(Calendar.YEAR)).toString()
-        return yearToday
-    }
-
     private fun calculateMonthProgress(): Double
     {
         val shifts = makeArray(DBHelper(requireActivity(), null))
@@ -157,13 +155,89 @@ class GoalsFragment : Fragment() {
         var thisMonthSum = 0.0
         do {
             val thisDateText = shifts[i].date
-            if (thisDateText.indexOf(getMonthToday()) == 3 && thisDateText.contains(getYearToday())) {
+            if (thisDateText.indexOf(getCurrentMonth()) == 3 && thisDateText.contains(getCurrentYear())) {
                 thisMonthSum += shifts[i].profit
             }
             i++
         } while (i < shifts.size)
         return thisMonthSum
     }
+
+    private fun pickDate(editObj: EditText)
+    {
+        val datePickerFragment = DatePickerFragment()
+        datePickerFragment.selectedDate = editObj.text.toString()
+        val supportFragmentManager = requireActivity().supportFragmentManager
+        supportFragmentManager.setFragmentResultListener(
+            "REQUEST_KEY",
+            viewLifecycleOwner)
+        { resultKey, bundle ->
+            if (resultKey == "REQUEST_KEY") {
+                val date = bundle.getString("SELECTED_DATE")
+                editObj.setText(date.toString())
+                pickedDate = date.toString()
+                setAllProgress ()
+            }
+        }
+        datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
+    }
+
+    private fun getCurrentDay(): String {
+        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
+        return try {
+            pickedDate?.takeIf { it.isNotEmpty() }
+                ?.let { LocalDate.parse(it, dateFormatter).format(dateFormatter) }
+                ?: LocalDate.now().format(dateFormatter)
+        } catch (e: DateTimeParseException) {
+            LocalDate.now().format(dateFormatter)
+        }
+    }
+
+    private fun getCurrentWeek(): Int {
+        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
+        val date = if (!pickedDate.isNullOrEmpty()) {
+            try {
+                LocalDate.parse(pickedDate, formatter)
+            } catch (e: DateTimeParseException) {
+
+                return -1
+            }
+        } else {
+            LocalDate.now()
+        }
+        return date.get(WeekFields.of(Locale.getDefault()).weekOfYear())
+    }
+
+    private fun getCurrentMonth(): String {
+        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
+        val thisDate = try {
+            pickedDate?.takeIf { it.isNotEmpty() }?.let {
+                LocalDate.parse(it, dateFormatter)
+            } ?: LocalDate.now()
+        } catch (e: DateTimeParseException) {
+            return "0"
+        }
+        return thisDate.monthValue.toString().padStart(2, '0')
+    }
+
+    private fun getCurrentYear(): String
+    {
+        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
+        val thisDate = try {
+            pickedDate?.takeIf { it.isNotEmpty() }?.let {
+                LocalDate.parse(it, dateFormatter)
+            } ?: LocalDate.now()
+        } catch (e: DateTimeParseException) {
+            return "0"
+        }
+
+        return thisDate.year.toString()
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -177,6 +251,8 @@ class GoalsFragment : Fragment() {
         {
             textAssignedGoal.text = getString(R.string.you_haven_t_set_goal_yet)
             setEmptyProgress()
+            buttonDatePicker.isGone
+            tableProgress.isGone
             return
         }
         displayMonthGoal(goalMonthString)
@@ -192,17 +268,16 @@ class GoalsFragment : Fragment() {
             "5/2" -> denominatorDay = 21.4
         }
         goalDay = goalMonth / denominatorDay
-
-
+        buttonDatePicker.isVisible
+        tableProgress.isVisible
     }
 
     private fun displayMonthGoal(goalMonthString: String) {
         textAssignedGoal.text = getString(R.string.your_goal_per_month, goalMonthString)
     }
 
-    fun setAllProgress ()
+    private fun setAllProgress ()
     {
-
         setTodayProgress(calculateDayProgress())
         setWeekProgress(calculateWeekProgress())
         setMonthProgress(calculateMonthProgress())
@@ -220,6 +295,7 @@ class GoalsFragment : Fragment() {
         val progress = (todayProfit/goal*100).toInt()
         todayPercent.text = "$progress%"
         progressDay.progress = progress
+        //dayName.text=getCurrentDay()
     }
 
     @SuppressLint("SetTextI18n")
@@ -228,6 +304,7 @@ class GoalsFragment : Fragment() {
         val progress = (thisWeekSum/goal*100).toInt()
         weekPercent.text = "$progress%"
         progressWeek.progress = progress
+        //weekName.text=getCurrentWeek().toString()
     }
 
     @SuppressLint("SetTextI18n")
@@ -236,6 +313,7 @@ class GoalsFragment : Fragment() {
         val progress = (thisMonthSum/goal*100).toInt()
         monthPercent.text = "$progress%"
         progressMonth.progress = progress
+        //monthName.text=getCurrentMonth()
     }
 
     private fun setEmptyProgress() {
@@ -249,14 +327,17 @@ class GoalsFragment : Fragment() {
 
     private fun bindItems()
     {
+        tableProgress = binding.tableProgress
         progressDay = binding.progressDay
         progressWeek = binding.progressWeek
         progressMonth = binding.progressMonth
-
+        dayName = binding.textGoalPerDay
+        weekName = binding.textGoalPerWeek
+        monthName = binding.textGoalPerMonth
+        buttonDatePicker = binding.buttonDatePick
         todayPercent = binding.textTodayPercent
         weekPercent = binding.textWeekPercent
         monthPercent = binding.textMontPercent
-
         textAssignedGoal = binding.textAssignedGoal
     }
     private fun animateBars()

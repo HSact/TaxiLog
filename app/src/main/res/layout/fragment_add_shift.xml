@@ -115,7 +115,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <CheckBox
+            <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/checkBreak"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

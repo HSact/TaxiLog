@@ -14,7 +14,7 @@ import kotlin.system.exitProcess
 class StartUpActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityStartUpBinding
-    private val logo_duration: Long = 1500
+    private val logoDuration: Long = 1500
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,17 +37,17 @@ class StartUpActivity : AppCompatActivity() {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             //var a = AppCompatDelegate.getDefaultNightMode()
         }
-        binding.imageLogo.animate().setDuration(logo_duration).alpha(1f)
-        binding.textLogo.animate().setDuration(logo_duration).alpha(1f)
+        binding.imageLogo.animate().setDuration(logoDuration).alpha(1f)
+        binding.textLogo.animate().setDuration(logoDuration).alpha(1f)
         if (settings.getBoolean("Seted_up", false))
         {
             Handler(Looper.getMainLooper()).postDelayed({
-                startActivity(Intent (this, MainActivity::class.java))}, logo_duration)
+                startActivity(Intent (this, MainActivity::class.java))}, logoDuration)
         }
         else
         {
             Handler(Looper.getMainLooper()).postDelayed({
-                setUp()}, logo_duration)
+                setUp()}, logoDuration)
         }
     }
 
@@ -66,7 +66,7 @@ class StartUpActivity : AppCompatActivity() {
 
         binding.LogoLayout.isVisible=false
 
-        binding.SetUpLayout.animate().setDuration(logo_duration).alpha(1f)
+        binding.SetUpLayout.animate().setDuration(logoDuration).alpha(1f)
         //binding.textFirstLaunch.animate().setDuration(logo_duration).alpha(1f)
         //binding.buttonOkay.animate().setDuration(logo_duration).alpha(1f)
 

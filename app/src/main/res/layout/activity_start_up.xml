@@ -64,7 +64,7 @@
                 android:layout_weight="1"
                 android:gravity="bottom|center"
                 android:paddingBottom="50dp"
-                android:text="Looks like it's a first launch.\nLet's set it up!"
+                android:text="@string/looks_like_it_s_a_first_launch_nlet_s_set_it_up"
                 android:textSize="34sp" />
 
             <LinearLayout
@@ -88,7 +88,7 @@
                         android:gravity="center|top"
                         android:minWidth="120dp"
                         android:minHeight="48dp"
-                        android:text="okay" />
+                        android:text="@string/ok" />
 
                     <Button
                         android:id="@+id/buttonNope"
@@ -100,7 +100,7 @@
                         android:gravity="center|top"
                         android:minWidth="120dp"
                         android:minHeight="48dp"
-                        android:text="Nope" />
+                        android:text="@string/nope" />
                 </LinearLayout>
 
 

@@ -22,6 +22,7 @@ import com.example.taxidrivercalculator.helpers.ShiftHelper
 import com.example.taxidrivercalculator.databinding.FragmentAddShiftBinding
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -111,27 +112,27 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         buttonSubmit = binding.buttonSubmit
     }
     @SuppressLint("SimpleDateFormat")
-    private fun loadGuess ()
-    {
-        val dateFormat = SimpleDateFormat ("dd.MM.yyyy")
+    private fun loadGuess() {
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-        val timeFormat = SimpleDateFormat ("H:mm")
-        var endDate = dateFormat.format(Date())
-        val endTime = timeFormat.format(Date())
-        val beginTime = convertLongToTime(convertTimeToLong(endTime)-hoursToMs(10))
-        var beginDate = LocalDate.parse(endDate, formatter)
-        beginDate = beginDate.minusDays(1)
-        endDate = beginDate.format(formatter)
+        val timeFormatter = DateTimeFormatter.ofPattern("H:mm")
 
-        editDate.setText(endDate)
+        val now = LocalDateTime.now()
+        val endDate = now.toLocalDate()
+        val endTime = now.toLocalTime().format(timeFormatter)
+
+        val beginTime = convertLongToTime(convertTimeToLong(endTime) - hoursToMs(10))
+        val beginDate = endDate.minusDays(1)
+
         editEnd.setText(endTime)
         editStart.setText(beginTime)
-        if (convertTimeToLong(beginTime)>convertTimeToLong(endTime))
-        {
+
+        if (convertTimeToLong(beginTime) > convertTimeToLong(endTime)) {
             editDate.setText(beginDate.format(formatter))
         }
-        //System.currentTimeMillis()
-
+        else
+        {
+            editDate.setText(endDate.format(formatter))
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -158,6 +159,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
     private fun pickDate(editObj: EditText)
     {
         val datePickerFragment = DatePickerFragment()
+        datePickerFragment.selectedDate = editObj.text.toString()
         val supportFragmentManager = requireActivity().supportFragmentManager
         supportFragmentManager.setFragmentResultListener(
             "REQUEST_KEY",
@@ -293,8 +295,8 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
     private fun showErrorMessage(errorCode: String)
     {
         val alert = AlertDialog.Builder(activity)
-        alert.setTitle("Error")
-        alert.setPositiveButton("OK", null)
+        alert.setTitle(getString(R.string.error))
+        alert.setPositiveButton(R.string.ok, null)
         alert.setMessage(errorCode)
         alert.show()
 
@@ -312,9 +314,9 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
     private fun showSubmitMessage (warningCode: String)
     {
         val alert = AlertDialog.Builder(activity)
-        alert.setTitle("Submit")
-        alert.setPositiveButton("OK") {dialog, id -> submit()}
-        alert.setNegativeButton("CANCEL", null)
+        alert.setTitle(getString(R.string.submit))
+        alert.setPositiveButton(R.string.ok) {dialog, id -> submit()}
+        alert.setNegativeButton(R.string.cancel, null)
         alert.setMessage(warningCode)
         alert.show()
     }
