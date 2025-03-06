@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import com.example.taxidrivercalculator.helpers.LocaleHelper
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.SettingsActivityBinding
+import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 
@@ -21,9 +22,9 @@ class SettingsActivity : AppCompatActivity() {
     //val but = findViewById<Button>(R.id.buttonApply)
     private lateinit var binding: SettingsActivityBinding
 
-    private lateinit var switchRent: SwitchMaterial
-    private lateinit var switchService: SwitchMaterial
-    private lateinit var switchTaxes: SwitchMaterial
+    private lateinit var switchRent: MaterialSwitch
+    private lateinit var switchService: MaterialSwitch
+    private lateinit var switchTaxes: MaterialSwitch
 
     private lateinit var spinnerLang: Spinner
     private lateinit var radioTheme: RadioGroup
@@ -303,7 +304,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
 
-    private fun switchVisualize(switch: SwitchMaterial)
+    private fun switchVisualize(switch: MaterialSwitch)
     {
         val table: TableRow
         when (switch) {
