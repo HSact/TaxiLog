@@ -3,28 +3,28 @@ package com.example.taxidrivercalculator.ui.fragments
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.annotation.RequiresApi
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.taxidrivercalculator.helpers.DBHelper
-import com.example.taxidrivercalculator.ui.activities.MainActivity
 import com.example.taxidrivercalculator.R
-import com.example.taxidrivercalculator.helpers.ShiftHelper
 import com.example.taxidrivercalculator.databinding.FragmentAddShiftBinding
+import com.example.taxidrivercalculator.helpers.DBHelper
+import com.example.taxidrivercalculator.helpers.ShiftHelper
+import com.example.taxidrivercalculator.ui.activities.MainActivity
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Date
 
 class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
