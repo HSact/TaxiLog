@@ -93,7 +93,7 @@
     <string name="you_earn_in_hours">Вы заработали %1$s за %2$s часов?</string>
     <string name="ok">OK</string>
     <string name="nope">Потом</string>
-    <string name="looks_like_it_s_a_first_launch_nlet_s_set_it_up">Похоже, это первый запуск.\nДавайте всё настроим!</string>
+    <string name="looks_like_it_s_a_first_launch_let_s_set_it_up">Похоже, это первый запуск.\nДавайте всё настроим!</string>
     <string name="submit">Подвтерждение</string>
     <string name="error">Ошибка</string>
 

@@ -74,7 +74,7 @@ class LogActivity : AppCompatActivity() {
                 alert.setTitle(R.string.delete)
                 alert.setPositiveButton(getString(R.string.yes)) { dialog, id -> deleteAll()}
                 alert.setNegativeButton(getString(R.string.cancel), null)
-                alert.setMessage(R.string.delete_all)
+                alert.setMessage((R.string.delete_all)) //TODO: add +?
                 alert.show()
                 true
             }
@@ -100,7 +100,7 @@ class LogActivity : AppCompatActivity() {
         /*alert.setPositiveButton("YES") {dialog, id -> deleteShift(view.id)}
         alert.setNegativeButton("CANCEL", null)
         alert.setMessage("Delete shift ID " + view.id + "?")*/
-        alert.setTitle(getString(R.string.edit_or_delete_shift) + view.id + "?")
+        alert.setTitle(getString(R.string.edit_or_delete_shift) + " " + view.id + "?")
         with(alert)
         {
             //setTitle("Edit or delete shift" + items[which])
@@ -117,7 +117,7 @@ class LogActivity : AppCompatActivity() {
         /*alert.setPositiveButton("YES") {dialog, id -> deleteShift(view.id)}
         alert.setNegativeButton("CANCEL", null)
         alert.setMessage("Delete shift ID " + view.id + "?")*/
-        alert.setTitle(getString(R.string.delete_shift) + view.id + "?")
+        alert.setTitle(getString(R.string.delete_shift) + " " + view.id + "?")
         with(alert)
         {
             //setTitle("Edit or delete shift" + items[which])

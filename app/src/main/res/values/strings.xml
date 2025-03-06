@@ -96,7 +96,7 @@
     <string name="you_earn_in_hours">You earn %1$s in %2$s hours?</string>
     <string name="ok">OK</string>
     <string name="nope">Nope</string>
-    <string name="looks_like_it_s_a_first_launch_nlet_s_set_it_up">Looks like it\'s a first launch.\nLet\'s set it up!</string>
+    <string name="looks_like_it_s_a_first_launch_let_s_set_it_up">Looks like it\'s a first launch.\nLet\'s set it up!</string>
     <string name="submit">Submit</string>
     <string name="error">Error</string>
 
