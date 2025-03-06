@@ -5,55 +5,139 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/editDate"
+    <!-- Заголовок диалога -->
+    <TextView
+        android:id="@+id/dialogTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Date (YYYY-MM-DD)"
-        android:inputType="date" />
+        android:text="Shift Editing"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"/>
 
-    <EditText
-        android:id="@+id/editTime"
+    <!-- TableLayout для выравнивания заголовков и полей ввода -->
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Time"
-        android:inputType="time" />
+        android:stretchColumns="1">
 
-    <EditText
-        android:id="@+id/editEarnings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Earnings"
-        android:inputType="numberDecimal" />
+        <!-- Строки с заголовками и полями ввода -->
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date (YYYY-MM-DD)"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp" />
+            <EditText
+                android:id="@+id/editDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Date"
+                android:inputType="date" />
+        </TableRow>
 
-    <EditText
-        android:id="@+id/editWash"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Wash Cost"
-        android:inputType="numberDecimal" />
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp" />
+            <EditText
+                android:id="@+id/editTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Time"
+                android:inputType="time" />
+        </TableRow>
 
-    <EditText
-        android:id="@+id/editFuelCost"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Fuel Cost"
-        android:inputType="numberDecimal" />
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Earnings"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp" />
+            <EditText
+                android:id="@+id/editEarnings"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Earnings"
+                android:inputType="numberDecimal" />
+        </TableRow>
 
-    <EditText
-        android:id="@+id/editMileage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Mileage"
-        android:inputType="numberDecimal" />
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wash Cost"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp" />
+            <EditText
+                android:id="@+id/editWash"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Wash Cost"
+                android:inputType="numberDecimal" />
+        </TableRow>
 
-    <EditText
-        android:id="@+id/editProfit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Profit"
-        android:inputType="numberDecimal" />
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fuel Cost"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp" />
+            <EditText
+                android:id="@+id/editFuelCost"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Fuel Cost"
+                android:inputType="numberDecimal" />
+        </TableRow>
 
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mileage"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp" />
+            <EditText
+                android:id="@+id/editMileage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Mileage"
+                android:inputType="numberDecimal" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profit"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp" />
+            <EditText
+                android:id="@+id/editProfit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Profit"
+                android:inputType="numberDecimal" />
+        </TableRow>
+
+    </TableLayout>
+
+    <!-- Кнопка сохранения -->
     <Button
         android:id="@+id/btnSave"
         android:layout_width="match_parent"
