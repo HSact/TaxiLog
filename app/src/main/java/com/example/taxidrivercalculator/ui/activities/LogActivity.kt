@@ -1,12 +1,15 @@
 package com.example.taxidrivercalculator.ui.activities
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -93,7 +96,7 @@ class LogActivity : AppCompatActivity() {
         return true
     }
 
-    /*fun onClickElement(view: View)
+    fun onClickElement(view: View)
     {
         val items = arrayOf(getString(R.string.edit), getString(R.string.delete))
         val alert = AlertDialog.Builder(this)
@@ -109,8 +112,8 @@ class LogActivity : AppCompatActivity() {
             }
         alert.show()
         }
-    }*/
-    fun onClickElement(view: View)
+    }
+    /*fun onClickElement(view: View)
     {
         val items = arrayOf(getString(R.string.delete))
         val alert = AlertDialog.Builder(this)
@@ -126,19 +129,19 @@ class LogActivity : AppCompatActivity() {
             }
             alert.show()
         }
-    }
+    }*/
 
-    /*private fun onPopUpMenuClicked (item: Int, shiftId: Int)
+    private fun onPopUpMenuClicked (item: Int, shiftId: Int)
     {
         //Toast.makeText(applicationContext, "$item for ID $shiftId is clicked", Toast.LENGTH_SHORT).show()
         if (item==0) editShift(shiftId)
         if (item==1) deleteShift(shiftId)
-    }*/
-    private fun onPopUpMenuClicked (item: Int, shiftId: Int)
+    }
+    /*private fun onPopUpMenuClicked (item: Int, shiftId: Int)
     {
         //Toast.makeText(applicationContext, "$item for ID $shiftId is clicked", Toast.LENGTH_SHORT).show()
         if (item==0) deleteShift(shiftId)
-    }
+    }*/
 
     private fun editShift(index: Int)
     {
@@ -155,6 +158,7 @@ class LogActivity : AppCompatActivity() {
             .replace(R.id.nav_host_fragment_activity_main, fragment)
             .addToBackStack(null)
             .commit()*/
+        showEditShiftDialog(shifts[index-1])
     }
 
     private fun deleteShift(index: Int)
@@ -174,5 +178,43 @@ class LogActivity : AppCompatActivity() {
         Toast.makeText(applicationContext,
             getString(R.string.all_shifts_have_been_deleted_successfully), Toast.LENGTH_SHORT).show()
         recreate()
+    }
+
+    private fun showEditShiftDialog(shift: Shift) {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_shift_edit)
+
+        val editDate: EditText = dialog.findViewById(R.id.editDate)
+        val editTime: EditText = dialog.findViewById(R.id.editTime)
+        val editEarnings: EditText = dialog.findViewById(R.id.editEarnings)
+        val editWash: EditText = dialog.findViewById(R.id.editWash)
+        val editFuelCost: EditText = dialog.findViewById(R.id.editFuelCost)
+        val editMileage: EditText = dialog.findViewById(R.id.editMileage)
+        val editProfit: EditText = dialog.findViewById(R.id.editProfit)
+        val btnSave: Button = dialog.findViewById(R.id.btnSave)
+
+        // Заполняем поля данными из объекта Shift
+        editDate.setText(shift.date)
+        editTime.setText(shift.time)
+        editEarnings.setText(shift.earnings.toString())
+        editWash.setText(shift.wash.toString())
+        editFuelCost.setText(shift.fuelCost.toString())
+        editMileage.setText(shift.mileage.toString())
+        editProfit.setText(shift.profit.toString())
+
+        // Обработка кнопки сохранения
+        btnSave.setOnClickListener {
+            shift.date = editDate.text.toString()
+            shift.time = editTime.text.toString()
+            shift.earnings = editEarnings.text.toString().toDouble()
+            shift.wash = editWash.text.toString().toDouble()
+            shift.fuelCost = editFuelCost.text.toString().toDouble()
+            shift.mileage = editMileage.text.toString().toDouble()
+            shift.profit = editProfit.text.toString().toDouble()
+
+            // Тут можно обновить данные в базе или передать обратно в адаптер
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 }
