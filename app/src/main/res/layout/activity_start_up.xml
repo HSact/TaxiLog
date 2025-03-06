@@ -64,7 +64,7 @@
                 android:layout_weight="1"
                 android:gravity="bottom|center"
                 android:paddingBottom="50dp"
-                android:text="@string/looks_like_it_s_a_first_launch_let_s_set_it_up"
+                android:text="@string/looks_like_its_a_first_launch_lets_set_it_up"
                 android:textSize="34sp" />
 
             <LinearLayout

@@ -102,19 +102,6 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     }
 
-    /*fun updateId (index: Int) {
-        val db = this.writableDatabase
-        DELETE_INDEX = index
-        db.execSQL("UPDATE shifts_table SET _id = _id - 1 WHERE _id > $index")
-        db.close()
-
-    }*/
-
-    fun editShift(index: Int) {
-        val db = this.writableDatabase
-        //db.delete(TABLE_NAME, "_id =$index", null)
-        db.close()
-    }
 
     fun deleteShift(index: Int) {
         val db = this.writableDatabase

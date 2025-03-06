@@ -97,7 +97,9 @@ class HomeFragment : Fragment() {
         }
         else
         {
-            textPlan.text = cursor.getString(cursor.getColumnIndex(DBHelper.PROFIT_COL)+0) +" of " + goalMonthString
+            textPlan.text = cursor.getString(cursor.getColumnIndex(DBHelper.PROFIT_COL)+0) +" " + getString(
+                R.string.of
+            ) + " " + goalMonthString
         }
         cursor.close()
     }

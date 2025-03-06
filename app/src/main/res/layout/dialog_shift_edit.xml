@@ -5,29 +5,26 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Заголовок диалога -->
     <TextView
         android:id="@+id/dialogTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Shift Editing"
+        android:text="@string/title_shift_editing"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp"
         android:gravity="center"/>
 
-    <!-- TableLayout для выравнивания заголовков и полей ввода -->
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:stretchColumns="1">
 
-        <!-- Строки с заголовками и полями ввода -->
         <TableRow>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Date (YYYY-MM-DD)"
+                android:text="@string/date"
                 android:textStyle="bold"
                 android:layout_marginEnd="8dp" />
             <EditText
@@ -35,7 +32,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Date"
                 android:inputType="date" />
         </TableRow>
 
@@ -43,7 +39,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Time"
+                android:text="@string/time"
                 android:textStyle="bold"
                 android:layout_marginEnd="8dp" />
             <EditText
@@ -51,7 +47,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Time"
                 android:inputType="time" />
         </TableRow>
 
@@ -59,7 +54,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Earnings"
+                android:text="@string/earnings"
                 android:textStyle="bold"
                 android:layout_marginEnd="8dp" />
             <EditText
@@ -67,7 +62,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Earnings"
                 android:inputType="numberDecimal" />
         </TableRow>
 
@@ -75,7 +69,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Wash Cost"
+                android:text="@string/wash"
                 android:textStyle="bold"
                 android:layout_marginEnd="8dp" />
             <EditText
@@ -83,7 +77,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Wash Cost"
                 android:inputType="numberDecimal" />
         </TableRow>
 
@@ -91,7 +84,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fuel Cost"
+                android:text="@string/fuel_cost"
                 android:textStyle="bold"
                 android:layout_marginEnd="8dp" />
             <EditText
@@ -99,7 +92,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Fuel Cost"
                 android:inputType="numberDecimal" />
         </TableRow>
 
@@ -107,7 +99,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mileage"
+                android:text="@string/mileage"
                 android:textStyle="bold"
                 android:layout_marginEnd="8dp" />
             <EditText
@@ -115,7 +107,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Mileage"
                 android:inputType="numberDecimal" />
         </TableRow>
 
@@ -123,7 +114,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Profit"
+                android:text="@string/profit"
                 android:textStyle="bold"
                 android:layout_marginEnd="8dp" />
             <EditText
@@ -131,16 +122,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Profit"
                 android:inputType="numberDecimal" />
         </TableRow>
 
     </TableLayout>
 
-    <!-- Кнопка сохранения -->
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel" />
     <Button
         android:id="@+id/btnSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save" />
+        android:text="@string/save" />
+
 </LinearLayout>
