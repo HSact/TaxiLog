@@ -89,7 +89,7 @@
                 android:id="@+id/textEarnings0"
                 android:layout_width="194dp"
                 android:layout_height="wrap_content"
-                android:text="@string/addshift_earnings"
+                android:text="@string/earnings"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="20sp" />
 
@@ -109,7 +109,7 @@
                 android:id="@+id/textWash0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/addshift_wash"
+                android:text="@string/wash"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="20sp" />
 
@@ -129,7 +129,7 @@
                 android:id="@+id/textFuel0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/addshift_fuel_cost"
+                android:text="@string/fuel_cost"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="20sp" />
 
@@ -149,7 +149,7 @@
                 android:id="@+id/textMileage0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/addshift_mileage"
+                android:text="@string/mileage"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="20sp" />
 

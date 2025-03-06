@@ -23,7 +23,6 @@ class CustomRecyclerAdapter(private val myShifts: List<Shift>) :
         val textFuel: TextView = itemView.findViewById(R.id.textFuel1)
         val textMileage: TextView = itemView.findViewById(R.id.textMileage1)
         val textProfit: TextView = itemView.findViewById(R.id.textProfit1)
-
     }
 
 

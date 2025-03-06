@@ -39,10 +39,10 @@
     <string name="addshift_break">Break</string>
     <string name="addshift_break_time">Break:</string>
     <string name="addshift_money">Money</string>
-    <string name="addshift_earnings">Earnings</string>
-    <string name="addshift_wash">Wash</string>
-    <string name="addshift_fuel_cost">Fuel cost</string>
-    <string name="addshift_mileage">Mileage</string>
+    <string name="earnings">Earnings</string>
+    <string name="wash">Wash</string>
+    <string name="fuel_cost">Fuel cost</string>
+    <string name="mileage">Mileage</string>
     <string name="addshift_submit">Submit</string>
     <string name="last_shift">Last shift</string>
     <string name="date">Date</string>
@@ -96,9 +96,14 @@
     <string name="you_earn_in_hours">You earn %1$s in %2$s hours?</string>
     <string name="ok">OK</string>
     <string name="nope">Nope</string>
-    <string name="looks_like_it_s_a_first_launch_let_s_set_it_up">Looks like it\'s a first launch.\nLet\'s set it up!</string>
+    <string name="looks_like_its_a_first_launch_lets_set_it_up">Looks like it\'s a first launch.\nLet\'s set it up!</string>
     <string name="submit">Submit</string>
     <string name="error">Error</string>
+    <string name="edit_invalid_data">Error! Invalid input data</string>
+    <string name="shift_edited_successfully">Shift edited successfully</string>
+    <string name="of">of</string>
+    <string name="title_shift_editing">Editing shift</string>
+    <string name="save">Save</string>
 
 
     <string-array name="languages">
