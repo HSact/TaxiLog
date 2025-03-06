@@ -74,7 +74,7 @@ class LogActivity : AppCompatActivity() {
                 alert.setTitle(R.string.delete)
                 alert.setPositiveButton(getString(R.string.yes)) { dialog, id -> deleteAll()}
                 alert.setNegativeButton(getString(R.string.cancel), null)
-                alert.setMessage((R.string.delete_all)) //TODO: add +?
+                alert.setMessage(getString(R.string.delete_all) + "?")
                 alert.show()
                 true
             }
@@ -159,7 +159,6 @@ class LogActivity : AppCompatActivity() {
 
     private fun deleteShift(index: Int)
     {
-        //shifts.removeAt(index)
         val db = DBHelper(this, null)
         db.deleteShift(index)
         db.close()
