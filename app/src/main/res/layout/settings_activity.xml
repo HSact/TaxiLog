@@ -228,7 +228,7 @@
             android:gravity="end"
             android:orientation="horizontal">
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/switchRent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -272,7 +272,7 @@
             android:orientation="vertical">
 
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/switchService"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -405,7 +405,7 @@
             android:orientation="horizontal">
 
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/switchTaxes"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
