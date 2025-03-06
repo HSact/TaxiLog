@@ -152,9 +152,6 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         return (hours*60*60*1000).toLong()
     }
 
-    /*fun currentTimeToLong(): Long {
-        return System.currentTimeMillis()
-    }*/
     private fun pickDate(editObj: EditText)
     {
         val datePickerFragment = DatePickerFragment()
@@ -324,8 +321,6 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
     {
         CalcShift.date =editDate.text.toString()
 
-        /*val toast = Toast(activity)
-        toast.setText("Success!")*/
         val db = DBHelper(requireActivity(), null)
         db.addShift(
             CalcShift.date,
