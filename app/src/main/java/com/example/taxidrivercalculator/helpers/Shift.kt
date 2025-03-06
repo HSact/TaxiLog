@@ -2,7 +2,7 @@ package com.example.taxidrivercalculator.helpers
 
 
 
-class Shift(
+data class Shift(
     var id: Int,
     var date: String,
     var time: String,
