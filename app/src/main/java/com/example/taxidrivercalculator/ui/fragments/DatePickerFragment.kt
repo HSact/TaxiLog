@@ -21,8 +21,8 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
         val sdf = SimpleDateFormat("dd.MM.yyyy")
         try {
             val date = sdf.parse(selectedDate)
-            calendar.time = date // Устанавливаем дату в календарь
-            // Теперь calendar будет на нужной дате
+            calendar.time = date
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
