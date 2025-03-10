@@ -88,11 +88,17 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         /*editDate.setOnClickListener() {
             pickDate()
         }*/
-        editDate.setOnFocusChangeListener { view, b ->  if (editDate.isFocused) pickDate(editDate)}
-        editStart.setOnFocusChangeListener { view, b ->  if (editStart.isFocused) pickTime(editStart)}
-        editEnd.setOnFocusChangeListener { view, b ->  if (editEnd.isFocused) pickTime(editEnd)}
-        editBreakStart.setOnFocusChangeListener { view, b ->  if (editBreakStart.isFocused) pickTime(editBreakStart)}
-        editBreakEnd.setOnFocusChangeListener { view, b ->  if (editBreakEnd.isFocused) pickTime(editBreakEnd)}
+        //editDate.setOnFocusChangeListener { view, b ->  if (editDate.isFocused) pickDate(editDate)}
+        editDate.setOnClickListener { pickDate(editDate) }
+        editStart.setOnClickListener { pickTime(editStart) }
+        //editStart.setOnFocusChangeListener { view, b ->  if (editStart.isFocused) pickTime(editStart)}
+        editEnd.setOnClickListener { pickTime(editEnd) }
+        //editEnd.setOnFocusChangeListener { view, b ->  if (editEnd.isFocused) pickTime(editEnd)}
+        editBreakStart.setOnClickListener { pickTime(editBreakStart) }
+        //editBreakStart.setOnFocusChangeListener { view, b ->  if (editBreakStart.isFocused) pickTime(editBreakStart)}
+        editBreakEnd.setOnClickListener { pickTime(editBreakEnd) }
+        //editBreakEnd.setOnFocusChangeListener { view, b ->  if (editBreakEnd.isFocused) pickTime(editBreakEnd)}
+        //editBreakEnd.setOnFocusChangeListener { view, b ->  if (editBreakEnd.isFocused) pickTime(editBreakEnd)}
         checkBreak.setOnClickListener { switchBrake() }
         buttonSubmit.setOnClickListener {calculateShift()}
 

@@ -27,12 +27,15 @@
                 android:text="@string/date"
                 android:textStyle="bold"
                 android:layout_marginEnd="8dp" />
+
             <EditText
                 android:id="@+id/editDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:inputType="date" />
+                android:focusable="false"
+                android:clickable="true"
+                android:inputType="none"/>
         </TableRow>
 
         <TableRow>
@@ -47,7 +50,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:inputType="time" />
+                android:maxLength="4"
+                android:inputType="numberDecimal" />
         </TableRow>
 
         <TableRow>
@@ -62,6 +66,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:maxLength="10"
                 android:inputType="numberDecimal" />
         </TableRow>
 
@@ -77,6 +82,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:maxLength="10"
                 android:inputType="numberDecimal" />
         </TableRow>
 
@@ -92,6 +98,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:maxLength="10"
                 android:inputType="numberDecimal" />
         </TableRow>
 
@@ -107,6 +114,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:maxLength="8"
                 android:inputType="numberDecimal" />
         </TableRow>
 
@@ -122,6 +130,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:maxLength="10"
                 android:inputType="numberDecimal" />
         </TableRow>
 

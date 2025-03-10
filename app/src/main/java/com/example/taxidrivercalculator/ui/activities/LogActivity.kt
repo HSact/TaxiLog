@@ -177,7 +177,6 @@ class LogActivity : AppCompatActivity() {
         editProfit.setText(shift.profit.toString())
 
         editDate.setOnClickListener { pickDate(editDate) }
-        editDate.setOnFocusChangeListener { view, b ->  if (editDate.isFocused) pickDate(editDate)}
         btnCancel.setOnClickListener { dialog.dismiss() }
 
         btnSave.setOnClickListener {
