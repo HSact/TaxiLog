@@ -150,7 +150,7 @@ class LogActivity : AppCompatActivity() {
     }
 
     private fun showEditShiftDialog(index: Int) {
-        val shift = shifts[index]
+        val shift = shifts[index].copy()
         val dialog = Dialog(this)
         bindingE = DialogShiftEditBinding.inflate(layoutInflater, null, false)
         dialog.setContentView(bindingE.root)
@@ -190,6 +190,13 @@ class LogActivity : AppCompatActivity() {
 
             if (shift.isValid())
             {
+                if (shift==shifts[index])
+                {
+                    dialog.dismiss()
+                    Toast.makeText(applicationContext,
+                        getString(R.string.nothing_changed), Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
                 shifts[index] = shift
                 DBHelper(this, null).recreateDB(shifts)
                 dialog.dismiss()
