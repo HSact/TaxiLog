@@ -23,10 +23,9 @@ import com.example.taxidrivercalculator.helpers.ShiftHelper
 import com.example.taxidrivercalculator.helpers.ShiftHelper.convertLongToTime
 import com.example.taxidrivercalculator.helpers.ShiftHelper.convertTimeToLong
 import com.example.taxidrivercalculator.ui.activities.MainActivity
-import java.text.SimpleDateFormat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Date
 
 class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
@@ -279,7 +278,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     private fun showErrorMessage(errorCode: String)
     {
-        val alert = AlertDialog.Builder(activity)
+        val alert = MaterialAlertDialogBuilder(requireContext())
         alert.setTitle(getString(R.string.error))
         alert.setPositiveButton(R.string.ok, null)
         alert.setMessage(errorCode)
@@ -298,7 +297,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
     }*/
     private fun showSubmitMessage (warningCode: String)
     {
-        val alert = AlertDialog.Builder(activity)
+        val alert = MaterialAlertDialogBuilder(requireContext())
         alert.setTitle(getString(R.string.submit))
         alert.setPositiveButton(R.string.ok) {dialog, id -> submit()}
         alert.setNegativeButton(R.string.cancel, null)
