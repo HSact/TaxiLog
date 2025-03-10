@@ -1,6 +1,13 @@
 package com.example.taxidrivercalculator.helpers
 
-import kotlin.math.round
+import android.annotation.SuppressLint
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
+import java.time.temporal.WeekFields
+import java.util.Date
+import java.util.Locale
 
 object ShiftHelper {
     fun makeArray(db: DBHelper): MutableList<Shift> {
@@ -29,7 +36,106 @@ object ShiftHelper {
         cursor.close()
         return shifts
     }
-    fun calcAverageEarningsPerHour (shifts: MutableList<Shift>): Double
+    fun calculateDayProgress(currentDate: String = getDayToday(), dbHelper: DBHelper): Double
+    {
+        val shifts = makeArray(dbHelper)
+        if (shifts.isEmpty()) return 0.0
+        val shift = shifts.find { it.date == currentDate } ?: return 0.0
+        return shift.profit
+    }
+
+    fun calculateWeekProgress(currentDate: String = getDayToday(), dbHelper: DBHelper): Double {
+        val shifts = makeArray(dbHelper)
+        var thisWeekSum = 0.0
+
+        val currentWeek = getCurrentWeek(currentDate)
+        val currentYear = LocalDate.now().year
+        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
+        for (shift in shifts)
+        {
+            val thisDate = try
+            {
+                LocalDate.parse(shift.date, dateFormatter)
+            }
+            catch (e: DateTimeParseException)
+            {
+                continue
+            }
+            val shiftWeek = thisDate.get(WeekFields.of(Locale.getDefault()).weekOfYear())
+            if (shiftWeek == currentWeek && thisDate.year == currentYear) {
+                thisWeekSum += shift.profit
+            }
+        }
+        return thisWeekSum
+    }
+    fun calculateMonthProgress(currentDate: String = getDayToday(), dbHelper: DBHelper): Double
+    {
+        val shifts = makeArray(dbHelper)
+        var i = 0
+        var thisMonthSum = 0.0
+        do {
+            val thisDateText = shifts[i].date
+            if (thisDateText.indexOf(getCurrentMonth(currentDate)) == 3 && thisDateText.contains(getCurrentYear())) {
+                thisMonthSum += shifts[i].profit
+            }
+            i++
+        } while (i < shifts.size)
+        return thisMonthSum
+    }
+
+    private fun getDayToday(): String
+    {
+        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        return LocalDate.now().format(dateFormatter)
+    }
+
+    private fun getCurrentWeek(dateReceived: String = ""): Int {
+        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
+        val date = if (dateReceived.isNotEmpty()) {
+            try {
+                LocalDate.parse(dateReceived, formatter)
+            } catch (e: DateTimeParseException) {
+                return -1
+            }
+        } else {
+            LocalDate.now()
+        }
+        return date.get(WeekFields.of(Locale.getDefault()).weekOfYear())
+    }
+
+    private fun getCurrentMonth(dateReceived: String = ""): String {
+        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
+        val thisDate = try {
+            dateReceived.takeIf { it.isNotEmpty() }?.let {
+                LocalDate.parse(it, dateFormatter)
+            } ?: LocalDate.now()
+        } catch (e: DateTimeParseException) {
+            return "0"
+        }
+        return thisDate.monthValue.toString().padStart(2, '0')
+    }
+
+    private fun getCurrentYear(dateReceived: String = ""): String
+    {
+        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
+        val thisDate = try {
+            dateReceived.takeIf { it.isNotEmpty() }?.let {
+                LocalDate.parse(it, dateFormatter)
+            } ?: LocalDate.now()
+        } catch (e: DateTimeParseException) {
+            return "0"
+        }
+        return thisDate.year.toString()
+    }
+
+    fun calcAverageEarningsPerHour(shift: Shift): Double {
+        return if (shift.time.toDouble() > 0.0) centsRound(shift.earnings / shift.time.toDouble()) else 0.0
+    }
+    fun calcAverageEarningsPerHour (shifts: List<Shift>): Double
     {
         var sum = 0.0
         var totalHours = 0.0
@@ -39,7 +145,8 @@ object ShiftHelper {
         }
         return centsRound( sum/totalHours)
     }
-    fun calcAverageProfitPerHour (shifts: MutableList<Shift>): Double
+
+    fun calcAverageProfitPerHour (shifts: List<Shift>): Double
     {
         var sum = 0.0
         var totalHours = 0.0
@@ -49,7 +156,7 @@ object ShiftHelper {
         }
         return centsRound(sum/totalHours)
     }
-    fun calcAverageShiftDuration (shifts: MutableList<Shift>): Double
+    fun calcAverageShiftDuration (shifts: List<Shift>): Double
     {
         var totalHours = 0.0
         shifts.indices.forEach {
@@ -57,7 +164,7 @@ object ShiftHelper {
         }
         return oneRound( totalHours/shifts.size)
     }
-    fun calcAverageMileage (shifts: MutableList<Shift>): Double
+    fun calcAverageMileage (shifts: List<Shift>): Double
     {
         var totalMileage = 0.0
         shifts.indices.forEach {
@@ -65,7 +172,7 @@ object ShiftHelper {
         }
         return oneRound( totalMileage/shifts.size)
     }
-    fun calcAverageFuelCost (shifts: MutableList<Shift>): Double
+    fun calcAverageFuelCost (shifts: List<Shift>): Double
     {
         var totalFuelCost = 0.0
         shifts.indices.forEach {
@@ -73,7 +180,7 @@ object ShiftHelper {
         }
         return centsRound( totalFuelCost/shifts.size)
     }
-    fun calcTotalShiftDuration (shifts: MutableList<Shift>): Double
+    fun calcTotalShiftDuration (shifts: List<Shift>): Double
     {
         var totalHours = 0.0
         shifts.indices.forEach {
@@ -81,7 +188,7 @@ object ShiftHelper {
         }
         return totalHours
     }
-    fun calcTotalMileage (shifts: MutableList<Shift>): Double
+    fun calcTotalMileage (shifts: List<Shift>): Double
     {
         var totalMileage = 0.0
         shifts.indices.forEach {
@@ -89,7 +196,7 @@ object ShiftHelper {
         }
         return totalMileage
     }
-    fun calcTotalFuelCost (shifts: MutableList<Shift>): Double
+    fun calcTotalFuelCost (shifts: List<Shift>): Double
     {
         var totalFuel = 0.0
         shifts.indices.forEach {
@@ -97,7 +204,7 @@ object ShiftHelper {
         }
         return totalFuel
     }
-    fun calcTotalWash (shifts: MutableList<Shift>): Double
+    fun calcTotalWash (shifts: List<Shift>): Double
     {
         var totalWash = 0.0
         shifts.indices.forEach {
@@ -105,7 +212,7 @@ object ShiftHelper {
         }
         return totalWash
     }
-    fun calcTotalEarnings (shifts: MutableList<Shift>): Double
+    fun calcTotalEarnings (shifts: List<Shift>): Double
     {
         var totalEarnings = 0.0
         shifts.indices.forEach {
@@ -113,7 +220,7 @@ object ShiftHelper {
         }
         return totalEarnings
     }
-    fun calcTotalProfit (shifts: MutableList<Shift>): Double
+    fun calcTotalProfit (shifts: List<Shift>): Double
     {
         var totalProfit = 0.0
         shifts.indices.forEach {
@@ -125,10 +232,24 @@ object ShiftHelper {
     {
         return Math.round(n*100)/100.toDouble()
     }
-    fun oneRound (n: Double): Double
+    private fun oneRound (n: Double): Double
     {
         return Math.round(n*10)/10.toDouble()
     }
+
+    @SuppressLint("SimpleDateFormat")
+    fun convertLongToTime(time: Long): String {
+        val date = Date(time)
+        val format = SimpleDateFormat("H:mm")
+        return format.format(date)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun convertTimeToLong(date: String): Long {
+        val df = SimpleDateFormat("H:mm")
+        return df.parse(date)!!.time
+    }
+
     fun msToHours (ms: Long) : Double
     {
         return ((ms/60.0/60.0/1000.0)*100.0).toInt()/100.0

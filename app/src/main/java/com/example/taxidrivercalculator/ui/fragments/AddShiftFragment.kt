@@ -20,11 +20,12 @@ import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.FragmentAddShiftBinding
 import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.helpers.ShiftHelper
+import com.example.taxidrivercalculator.helpers.ShiftHelper.convertLongToTime
+import com.example.taxidrivercalculator.helpers.ShiftHelper.convertTimeToLong
 import com.example.taxidrivercalculator.ui.activities.MainActivity
-import java.text.SimpleDateFormat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Date
 
 class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
@@ -88,14 +89,13 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         /*editDate.setOnClickListener() {
             pickDate()
         }*/
-        editDate.setOnFocusChangeListener { view, b ->  if (editDate.isFocused) pickDate(editDate)}
-        editStart.setOnFocusChangeListener { view, b ->  if (editStart.isFocused) pickTime(editStart)}
-        editEnd.setOnFocusChangeListener { view, b ->  if (editEnd.isFocused) pickTime(editEnd)}
-        editBreakStart.setOnFocusChangeListener { view, b ->  if (editBreakStart.isFocused) pickTime(editBreakStart)}
-        editBreakEnd.setOnFocusChangeListener { view, b ->  if (editBreakEnd.isFocused) pickTime(editBreakEnd)}
+        editDate.setOnClickListener { pickDate(editDate) }
+        editStart.setOnClickListener { pickTime(editStart) }
+        editEnd.setOnClickListener { pickTime(editEnd) }
+        editBreakStart.setOnClickListener { pickTime(editBreakStart) }
+        editBreakEnd.setOnClickListener { pickTime(editBreakEnd) }
         checkBreak.setOnClickListener { switchBrake() }
         buttonSubmit.setOnClickListener {calculateShift()}
-
     }
     private fun bindItems ()
     {
@@ -135,18 +135,6 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         }
     }
 
-    @SuppressLint("SimpleDateFormat")
-    fun convertLongToTime(time: Long): String {
-        val date = Date(time)
-        val format = SimpleDateFormat("H:mm")
-        return format.format(date)
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    fun convertTimeToLong(date: String): Long {
-        val df = SimpleDateFormat("H:mm")
-        return df.parse(date)!!.time
-    }
     private fun hoursToMs (hours: Int): Long
     {
         return (hours*60*60*1000).toLong()
@@ -290,7 +278,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     private fun showErrorMessage(errorCode: String)
     {
-        val alert = AlertDialog.Builder(activity)
+        val alert = MaterialAlertDialogBuilder(requireContext())
         alert.setTitle(getString(R.string.error))
         alert.setPositiveButton(R.string.ok, null)
         alert.setMessage(errorCode)
@@ -309,7 +297,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
     }*/
     private fun showSubmitMessage (warningCode: String)
     {
-        val alert = AlertDialog.Builder(activity)
+        val alert = MaterialAlertDialogBuilder(requireContext())
         alert.setTitle(getString(R.string.submit))
         alert.setPositiveButton(R.string.ok) {dialog, id -> submit()}
         alert.setNegativeButton(R.string.cancel, null)

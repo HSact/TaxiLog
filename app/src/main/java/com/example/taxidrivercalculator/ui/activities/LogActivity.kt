@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +26,7 @@ import com.example.taxidrivercalculator.databinding.ActivityLogBinding
 import com.example.taxidrivercalculator.databinding.DialogShiftEditBinding
 import com.example.taxidrivercalculator.databinding.RecyclerviewItemBinding
 import com.example.taxidrivercalculator.ui.fragments.DatePickerFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 class LogActivity : AppCompatActivity() {
@@ -103,7 +105,7 @@ class LogActivity : AppCompatActivity() {
     fun onClickElement(view: View)
     {
         val items = arrayOf(getString(R.string.edit), getString(R.string.delete))
-        val alert = AlertDialog.Builder(this)
+        val alert = MaterialAlertDialogBuilder(this)
         /*alert.setPositiveButton("YES") {dialog, id -> deleteShift(view.id)}
         alert.setNegativeButton("CANCEL", null)
         alert.setMessage("Delete shift ID " + view.id + "?")*/
@@ -150,10 +152,12 @@ class LogActivity : AppCompatActivity() {
     }
 
     private fun showEditShiftDialog(index: Int) {
-        val shift = shifts[index]
-        val dialog = Dialog(this)
+        val shift = shifts[index].copy()
+        val builder = MaterialAlertDialogBuilder(this)
+        val dialog = builder.create()
+
         bindingE = DialogShiftEditBinding.inflate(layoutInflater, null, false)
-        dialog.setContentView(bindingE.root)
+        dialog.setView(bindingE.root)
 
         val dialogTitle: TextView = bindingE.dialogTitle
         val editDate: EditText = bindingE.editDate
@@ -177,7 +181,6 @@ class LogActivity : AppCompatActivity() {
         editProfit.setText(shift.profit.toString())
 
         editDate.setOnClickListener { pickDate(editDate) }
-        editDate.setOnFocusChangeListener { view, b ->  if (editDate.isFocused) pickDate(editDate)}
         btnCancel.setOnClickListener { dialog.dismiss() }
 
         btnSave.setOnClickListener {
@@ -191,6 +194,13 @@ class LogActivity : AppCompatActivity() {
 
             if (shift.isValid())
             {
+                if (shift==shifts[index])
+                {
+                    dialog.dismiss()
+                    Toast.makeText(applicationContext,
+                        getString(R.string.nothing_changed), Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
                 shifts[index] = shift
                 DBHelper(this, null).recreateDB(shifts)
                 dialog.dismiss()

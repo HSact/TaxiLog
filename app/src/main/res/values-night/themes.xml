@@ -17,5 +17,6 @@
         <item name="android:colorBackground">@color/black</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="bottomNavigationBackground">@color/dark_gray</item>
+        <item name="colorBackgroundFloating">@color/dark_gray</item>
     </style>
 </resources>

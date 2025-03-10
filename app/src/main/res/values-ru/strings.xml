@@ -101,6 +101,8 @@
     <string name="of">из</string>
     <string name="title_shift_editing">Редактирование смены</string>
     <string name="save">Сохранить</string>
+    <string name="editShiftHours">Часы</string>
+    <string name="nothing_changed">Ничего не изменилось</string>
 
 
     <string-array name="languages">

@@ -17,6 +17,7 @@ import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.helpers.ShiftHelper.makeArray
 import com.example.taxidrivercalculator.databinding.FragmentGoalsBinding
+import com.example.taxidrivercalculator.helpers.ShiftHelper
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -72,9 +73,8 @@ class GoalsFragment : Fragment() {
 
         val now = LocalDateTime.now()
         val currentDate = now.toLocalDate()
-        pickedDate = currentDate.format(formatter)
+        pickedDate = getCurrentDay()
         buttonDatePicker.setText(currentDate.format(formatter))
-        buttonDatePicker.setOnFocusChangeListener { view, b ->  if (buttonDatePicker.isFocused) pickDate(buttonDatePicker)}
         buttonDatePicker.setOnClickListener {
             pickDate(buttonDatePicker)
             //setAllProgress ()
@@ -100,69 +100,6 @@ class GoalsFragment : Fragment() {
         super.onStart()
     }
 
-    private fun calculateDayProgress(): Double
-    {
-        val shifts = makeArray(DBHelper(requireActivity(), null))
-        val currentDate = getCurrentDay()
-        var idToday = -1
-        var i = 0
-        do {
-            if (shifts[i].date == currentDate) {
-                idToday = i
-                break
-            }
-            i++
-        } while (i < shifts.size)
-        if (idToday != -1)
-        {
-            return shifts[idToday].profit
-        }
-        else
-        {
-            return 0.0
-        }
-    }
-
-    private fun calculateWeekProgress(): Double {
-        val shifts = makeArray(DBHelper(requireActivity(), null))
-        var thisWeekSum = 0.0
-
-        val currentWeek = getCurrentWeek()
-        val currentYear = LocalDate.now().year
-        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-
-        for (shift in shifts)
-        {
-            val thisDate = try
-            {
-                LocalDate.parse(shift.date, dateFormatter)
-            }
-            catch (e: DateTimeParseException)
-            {
-                continue
-            }
-            val shiftWeek = thisDate.get(WeekFields.of(Locale.getDefault()).weekOfYear())
-            if (shiftWeek == currentWeek && thisDate.year == currentYear) {
-                thisWeekSum += shift.profit
-            }
-        }
-        return thisWeekSum
-    }
-    private fun calculateMonthProgress(): Double
-    {
-        val shifts = makeArray(DBHelper(requireActivity(), null))
-        var i = 0
-        var thisMonthSum = 0.0
-        do {
-            val thisDateText = shifts[i].date
-            if (thisDateText.indexOf(getCurrentMonth()) == 3 && thisDateText.contains(getCurrentYear())) {
-                thisMonthSum += shifts[i].profit
-            }
-            i++
-        } while (i < shifts.size)
-        return thisMonthSum
-    }
-
     private fun pickDate(editObj: EditText)
     {
         val datePickerFragment = DatePickerFragment()
@@ -186,58 +123,13 @@ class GoalsFragment : Fragment() {
         val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
         return try {
-            pickedDate?.takeIf { it.isNotEmpty() }
+            buttonDatePicker.text.takeIf { it.isNotEmpty() }
                 ?.let { LocalDate.parse(it, dateFormatter).format(dateFormatter) }
                 ?: LocalDate.now().format(dateFormatter)
         } catch (e: DateTimeParseException) {
             LocalDate.now().format(dateFormatter)
         }
     }
-
-    private fun getCurrentWeek(): Int {
-        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-
-        val date = if (!pickedDate.isNullOrEmpty()) {
-            try {
-                LocalDate.parse(pickedDate, formatter)
-            } catch (e: DateTimeParseException) {
-
-                return -1
-            }
-        } else {
-            LocalDate.now()
-        }
-        return date.get(WeekFields.of(Locale.getDefault()).weekOfYear())
-    }
-
-    private fun getCurrentMonth(): String {
-        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-
-        val thisDate = try {
-            pickedDate?.takeIf { it.isNotEmpty() }?.let {
-                LocalDate.parse(it, dateFormatter)
-            } ?: LocalDate.now()
-        } catch (e: DateTimeParseException) {
-            return "0"
-        }
-        return thisDate.monthValue.toString().padStart(2, '0')
-    }
-
-    private fun getCurrentYear(): String
-    {
-        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-
-        val thisDate = try {
-            pickedDate?.takeIf { it.isNotEmpty() }?.let {
-                LocalDate.parse(it, dateFormatter)
-            } ?: LocalDate.now()
-        } catch (e: DateTimeParseException) {
-            return "0"
-        }
-
-        return thisDate.year.toString()
-    }
-
 
     override fun onResume() {
         super.onResume()
@@ -278,9 +170,9 @@ class GoalsFragment : Fragment() {
 
     private fun setAllProgress ()
     {
-        setTodayProgress(calculateDayProgress())
-        setWeekProgress(calculateWeekProgress())
-        setMonthProgress(calculateMonthProgress())
+        setTodayProgress(ShiftHelper.calculateDayProgress(buttonDatePicker.text.toString(), DBHelper(requireActivity(), null)))
+        setWeekProgress(ShiftHelper.calculateWeekProgress(buttonDatePicker.text.toString(), DBHelper(requireActivity(), null)))
+        setMonthProgress(ShiftHelper.calculateMonthProgress(buttonDatePicker.text.toString(), DBHelper(requireActivity(), null)))
     }
 
     @SuppressLint("SetTextI18n")

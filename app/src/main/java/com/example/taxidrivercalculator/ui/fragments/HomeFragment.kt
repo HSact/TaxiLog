@@ -12,13 +12,11 @@ import androidx.navigation.fragment.findNavController
 import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.FragmentHomeBinding
+import com.example.taxidrivercalculator.helpers.ShiftHelper
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     private lateinit var textDate: TextView
@@ -27,9 +25,7 @@ class HomeFragment : Fragment() {
     private lateinit var textTime: TextView
     private lateinit var textTotal: TextView
     private lateinit var textPerHour: TextView
-    private lateinit var textPlan: TextView
-
-
+    private lateinit var textGoal: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,8 +35,6 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-
         return root
     }
 
@@ -48,23 +42,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         bindItems()
         printShift()
-
-
-        binding.buttonNewShift.setOnClickListener {
-
-            newShift()
-        }
-    }
-
-    private fun bindItems ()
-    {
-        textDate = binding.textHomeDateR
-        textEarnings = binding.textHomeEarningsR
-        textCosts = binding.textHomeCostsR
-        textTime = binding.textHomeTimeR
-        textTotal = binding.textHomeTotalR
-        textPerHour = binding.textHomePerHourR
-        textPlan = binding.textHomePlanR
+        binding.buttonNewShift.setOnClickListener { newShift() }
     }
 
     @SuppressLint("SetTextI18n")
@@ -76,35 +54,34 @@ class HomeFragment : Fragment() {
         cursor!!.moveToLast()
         if (cursor.position==-1)
         {
-            setEmptyBDView()
+            setEmptyView()
             cursor.close()
             return
         }
-        val perHour = (((cursor.getDouble(cursor.getColumnIndex(DBHelper.EARNINGS_COL)+0))/
-                cursor.getDouble(cursor.getColumnIndex(DBHelper.TIME_COL)+0))*100.0).toInt()/100.0
+        val shifts = ShiftHelper.makeArray(db)
+
         textDate.text = cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COl)+0)
         textEarnings.text = cursor.getString(cursor.getColumnIndex(DBHelper.EARNINGS_COL)+0)
         textCosts.text = ((cursor.getDouble(cursor.getColumnIndex(DBHelper.WASH_COL)+0))+
                 (cursor.getDouble(cursor.getColumnIndex(DBHelper.FUEL_COL)+0))).toString()
         textTime.text = cursor.getString(cursor.getColumnIndex(DBHelper.TIME_COL)+0) + " " + getString(R.string.hours)
         textTotal.text = cursor.getString(cursor.getColumnIndex(DBHelper.PROFIT_COL)+0)
-        textPerHour.text = perHour.toString()
+        textPerHour.text = ShiftHelper.calcAverageEarningsPerHour(shifts.last()).toString()
         val settings = this.activity?.getSharedPreferences("Settings", Activity.MODE_PRIVATE)
         val goalMonthString = settings?.getString("Goal_per_month", "")
         if (goalMonthString == null || goalMonthString == "")
         {
-            textPlan.text = getString(R.string.n_a)
+            textGoal.text = getString(R.string.n_a)
         }
         else
         {
-            textPlan.text = cursor.getString(cursor.getColumnIndex(DBHelper.PROFIT_COL)+0) +" " + getString(
-                R.string.of
-            ) + " " + goalMonthString
+            textGoal.text = ShiftHelper.calculateMonthProgress(shifts.last().date, db).toString() +
+                    " " + getString(R.string.of) + " " + goalMonthString
         }
         cursor.close()
     }
 
-    private fun setEmptyBDView ()
+    private fun setEmptyView ()
     {
         textDate.text = getString(R.string.n_a)
         textEarnings.text = getString(R.string.n_a)
@@ -112,16 +89,26 @@ class HomeFragment : Fragment() {
         textTime.text = getString(R.string.n_a)
         textTotal.text = getString(R.string.n_a)
         textPerHour.text = getString(R.string.n_a)
-        textPlan.text = getString(R.string.n_a)
+        textGoal.text = getString(R.string.n_a)
+    }
+
+    private fun bindItems ()
+    {
+        textDate = binding.textHomeDateR
+        textEarnings = binding.textHomeEarningsR
+        textCosts = binding.textHomeCostsR
+        textTime = binding.textHomeTimeR
+        textTotal = binding.textHomeTotalR
+        textPerHour = binding.textHomePerHourR
+        textGoal = binding.textHomeGoalR
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-    fun newShift()
+    private fun newShift()
     {
         findNavController().navigate(R.id.action_homeFragment_to_addShift)
     }
-
 }
