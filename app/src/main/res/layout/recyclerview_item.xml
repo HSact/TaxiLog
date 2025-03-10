@@ -19,6 +19,7 @@
         android:clickable="true"
         android:focusable="true"
         android:longClickable="true"
+        android:padding="10dp"
         android:onClick="onClickElement"
         tools:ignore="UsingOnClickInXml">
 
