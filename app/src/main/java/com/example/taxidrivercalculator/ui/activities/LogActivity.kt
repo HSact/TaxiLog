@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +26,7 @@ import com.example.taxidrivercalculator.databinding.ActivityLogBinding
 import com.example.taxidrivercalculator.databinding.DialogShiftEditBinding
 import com.example.taxidrivercalculator.databinding.RecyclerviewItemBinding
 import com.example.taxidrivercalculator.ui.fragments.DatePickerFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 class LogActivity : AppCompatActivity() {
@@ -103,7 +105,7 @@ class LogActivity : AppCompatActivity() {
     fun onClickElement(view: View)
     {
         val items = arrayOf(getString(R.string.edit), getString(R.string.delete))
-        val alert = AlertDialog.Builder(this)
+        val alert = MaterialAlertDialogBuilder(this)
         /*alert.setPositiveButton("YES") {dialog, id -> deleteShift(view.id)}
         alert.setNegativeButton("CANCEL", null)
         alert.setMessage("Delete shift ID " + view.id + "?")*/
@@ -151,9 +153,11 @@ class LogActivity : AppCompatActivity() {
 
     private fun showEditShiftDialog(index: Int) {
         val shift = shifts[index].copy()
-        val dialog = Dialog(this)
+        val builder = MaterialAlertDialogBuilder(this)
+        val dialog = builder.create()
+
         bindingE = DialogShiftEditBinding.inflate(layoutInflater, null, false)
-        dialog.setContentView(bindingE.root)
+        dialog.setView(bindingE.root)
 
         val dialogTitle: TextView = bindingE.dialogTitle
         val editDate: EditText = bindingE.editDate
