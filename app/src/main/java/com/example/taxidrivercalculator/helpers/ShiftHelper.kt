@@ -125,7 +125,7 @@ object ShiftHelper {
     {
         return Math.round(n*100)/100.toDouble()
     }
-    fun oneRound (n: Double): Double
+    private fun oneRound (n: Double): Double
     {
         return Math.round(n*10)/10.toDouble()
     }

@@ -72,9 +72,9 @@ class GoalsFragment : Fragment() {
 
         val now = LocalDateTime.now()
         val currentDate = now.toLocalDate()
-        pickedDate = currentDate.format(formatter)
+        //pickedDate = currentDate.format(formatter)
+        pickedDate = getCurrentDay()
         buttonDatePicker.setText(currentDate.format(formatter))
-        buttonDatePicker.setOnFocusChangeListener { view, b ->  if (buttonDatePicker.isFocused) pickDate(buttonDatePicker)}
         buttonDatePicker.setOnClickListener {
             pickDate(buttonDatePicker)
             //setAllProgress ()
@@ -186,7 +186,7 @@ class GoalsFragment : Fragment() {
         val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
         return try {
-            pickedDate?.takeIf { it.isNotEmpty() }
+            buttonDatePicker.text.takeIf { it.isNotEmpty() }
                 ?.let { LocalDate.parse(it, dateFormatter).format(dateFormatter) }
                 ?: LocalDate.now().format(dateFormatter)
         } catch (e: DateTimeParseException) {
@@ -197,9 +197,9 @@ class GoalsFragment : Fragment() {
     private fun getCurrentWeek(): Int {
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
-        val date = if (!pickedDate.isNullOrEmpty()) {
+        val date = if (!buttonDatePicker.text.isNullOrEmpty()) {
             try {
-                LocalDate.parse(pickedDate, formatter)
+                LocalDate.parse(buttonDatePicker.text, formatter)
             } catch (e: DateTimeParseException) {
 
                 return -1
@@ -214,7 +214,7 @@ class GoalsFragment : Fragment() {
         val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
         val thisDate = try {
-            pickedDate?.takeIf { it.isNotEmpty() }?.let {
+            buttonDatePicker.text.takeIf { it.isNotEmpty() }?.let {
                 LocalDate.parse(it, dateFormatter)
             } ?: LocalDate.now()
         } catch (e: DateTimeParseException) {
@@ -228,13 +228,12 @@ class GoalsFragment : Fragment() {
         val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
         val thisDate = try {
-            pickedDate?.takeIf { it.isNotEmpty() }?.let {
+            buttonDatePicker.text.takeIf { it.isNotEmpty() }?.let {
                 LocalDate.parse(it, dateFormatter)
             } ?: LocalDate.now()
         } catch (e: DateTimeParseException) {
             return "0"
         }
-
         return thisDate.year.toString()
     }
 
