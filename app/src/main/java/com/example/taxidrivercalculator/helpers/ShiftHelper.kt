@@ -1,6 +1,10 @@
 package com.example.taxidrivercalculator.helpers
 
-import kotlin.math.round
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
+import java.time.temporal.WeekFields
+import java.util.Locale
 
 object ShiftHelper {
     fun makeArray(db: DBHelper): MutableList<Shift> {
@@ -29,6 +33,97 @@ object ShiftHelper {
         cursor.close()
         return shifts
     }
+    fun calculateDayProgress(currentDate: String, dbHelper: DBHelper): Double
+    {
+        val shifts = makeArray(dbHelper)
+        if (shifts.isEmpty()) return 0.0
+        val shift = shifts.find { it.date == currentDate } ?: return 0.0
+        return shift.profit
+    }
+
+    fun calculateWeekProgress(currentDate: String, dbHelper: DBHelper): Double {
+        val shifts = makeArray(dbHelper)
+        var thisWeekSum = 0.0
+
+        val currentWeek = getCurrentWeek(currentDate)
+        val currentYear = LocalDate.now().year
+        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
+        for (shift in shifts)
+        {
+            val thisDate = try
+            {
+                LocalDate.parse(shift.date, dateFormatter)
+            }
+            catch (e: DateTimeParseException)
+            {
+                continue
+            }
+            val shiftWeek = thisDate.get(WeekFields.of(Locale.getDefault()).weekOfYear())
+            if (shiftWeek == currentWeek && thisDate.year == currentYear) {
+                thisWeekSum += shift.profit
+            }
+        }
+        return thisWeekSum
+    }
+    fun calculateMonthProgress(currentDate: String, dbHelper: DBHelper): Double
+    {
+        val shifts = makeArray(dbHelper)
+        var i = 0
+        var thisMonthSum = 0.0
+        do {
+            val thisDateText = shifts[i].date
+            if (thisDateText.indexOf(getCurrentMonth(currentDate)) == 3 && thisDateText.contains(getCurrentYear())) {
+                thisMonthSum += shifts[i].profit
+            }
+            i++
+        } while (i < shifts.size)
+        return thisMonthSum
+    }
+
+    private fun getCurrentWeek(dateReceived: String = ""): Int {
+        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
+        val date = if (dateReceived.isNotEmpty()) {
+            try {
+                LocalDate.parse(dateReceived, formatter)
+            } catch (e: DateTimeParseException) {
+                return -1
+            }
+        } else {
+            LocalDate.now()
+        }
+        return date.get(WeekFields.of(Locale.getDefault()).weekOfYear())
+    }
+
+    private fun getCurrentMonth(dateReceived: String = ""): String {
+        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
+        val thisDate = try {
+            dateReceived.takeIf { it.isNotEmpty() }?.let {
+                LocalDate.parse(it, dateFormatter)
+            } ?: LocalDate.now()
+        } catch (e: DateTimeParseException) {
+            return "0"
+        }
+        return thisDate.monthValue.toString().padStart(2, '0')
+    }
+
+    private fun getCurrentYear(dateReceived: String = ""): String
+    {
+        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
+        val thisDate = try {
+            dateReceived.takeIf { it.isNotEmpty() }?.let {
+                LocalDate.parse(it, dateFormatter)
+            } ?: LocalDate.now()
+        } catch (e: DateTimeParseException) {
+            return "0"
+        }
+        return thisDate.year.toString()
+    }
+
+
     fun calcAverageEarningsPerHour (shifts: MutableList<Shift>): Double
     {
         var sum = 0.0
