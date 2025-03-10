@@ -33,7 +33,7 @@ object ShiftHelper {
         cursor.close()
         return shifts
     }
-    fun calculateDayProgress(currentDate: String, dbHelper: DBHelper): Double
+    fun calculateDayProgress(currentDate: String = getDayToday(), dbHelper: DBHelper): Double
     {
         val shifts = makeArray(dbHelper)
         if (shifts.isEmpty()) return 0.0
@@ -41,7 +41,7 @@ object ShiftHelper {
         return shift.profit
     }
 
-    fun calculateWeekProgress(currentDate: String, dbHelper: DBHelper): Double {
+    fun calculateWeekProgress(currentDate: String = getDayToday(), dbHelper: DBHelper): Double {
         val shifts = makeArray(dbHelper)
         var thisWeekSum = 0.0
 
@@ -66,7 +66,7 @@ object ShiftHelper {
         }
         return thisWeekSum
     }
-    fun calculateMonthProgress(currentDate: String, dbHelper: DBHelper): Double
+    fun calculateMonthProgress(currentDate: String = getDayToday(), dbHelper: DBHelper): Double
     {
         val shifts = makeArray(dbHelper)
         var i = 0
@@ -80,6 +80,13 @@ object ShiftHelper {
         } while (i < shifts.size)
         return thisMonthSum
     }
+
+    private fun getDayToday(): String
+    {
+        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        return LocalDate.now().format(dateFormatter)
+    }
+
 
     private fun getCurrentWeek(dateReceived: String = ""): Int {
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
@@ -123,6 +130,9 @@ object ShiftHelper {
         return thisDate.year.toString()
     }
 
+    fun calcAverageEarningsPerHour(shift: Shift): Double {
+        return if (shift.time.toDouble() > 0.0) centsRound(shift.earnings / shift.time.toDouble()) else 0.0
+    }
     fun calcAverageEarningsPerHour (shifts: List<Shift>): Double
     {
         var sum = 0.0
@@ -133,6 +143,7 @@ object ShiftHelper {
         }
         return centsRound( sum/totalHours)
     }
+
     fun calcAverageProfitPerHour (shifts: List<Shift>): Double
     {
         var sum = 0.0

@@ -156,14 +156,14 @@
                 android:weightSum="1">
 
                 <TextView
-                    android:id="@+id/textHomePlan"
+                    android:id="@+id/textHomeGoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_plan"
                     android:textSize="24sp" />
 
                 <TextView
-                    android:id="@+id/textHomePlanR"
+                    android:id="@+id/textHomeGoalR"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="5000 of 6000"

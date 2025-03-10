@@ -12,11 +12,11 @@ import androidx.navigation.fragment.findNavController
 import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.FragmentHomeBinding
+import com.example.taxidrivercalculator.helpers.ShiftHelper
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
-
     private val binding get() = _binding!!
 
     private lateinit var textDate: TextView
@@ -26,8 +26,6 @@ class HomeFragment : Fragment() {
     private lateinit var textTotal: TextView
     private lateinit var textPerHour: TextView
     private lateinit var textGoal: TextView
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,8 +45,6 @@ class HomeFragment : Fragment() {
         binding.buttonNewShift.setOnClickListener { newShift() }
     }
 
-
-
     @SuppressLint("SetTextI18n")
     private fun printShift ()
     {
@@ -58,19 +54,19 @@ class HomeFragment : Fragment() {
         cursor!!.moveToLast()
         if (cursor.position==-1)
         {
-            setEmptyBDView()
+            setEmptyView()
             cursor.close()
             return
         }
-        val perHour = (((cursor.getDouble(cursor.getColumnIndex(DBHelper.EARNINGS_COL)+0))/
-                cursor.getDouble(cursor.getColumnIndex(DBHelper.TIME_COL)+0))*100.0).toInt()/100.0
+        val shifts = ShiftHelper.makeArray(db)
+
         textDate.text = cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COl)+0)
         textEarnings.text = cursor.getString(cursor.getColumnIndex(DBHelper.EARNINGS_COL)+0)
         textCosts.text = ((cursor.getDouble(cursor.getColumnIndex(DBHelper.WASH_COL)+0))+
                 (cursor.getDouble(cursor.getColumnIndex(DBHelper.FUEL_COL)+0))).toString()
         textTime.text = cursor.getString(cursor.getColumnIndex(DBHelper.TIME_COL)+0) + " " + getString(R.string.hours)
         textTotal.text = cursor.getString(cursor.getColumnIndex(DBHelper.PROFIT_COL)+0)
-        textPerHour.text = perHour.toString()
+        textPerHour.text = ShiftHelper.calcAverageEarningsPerHour(shifts.last()).toString()
         val settings = this.activity?.getSharedPreferences("Settings", Activity.MODE_PRIVATE)
         val goalMonthString = settings?.getString("Goal_per_month", "")
         if (goalMonthString == null || goalMonthString == "")
@@ -79,14 +75,13 @@ class HomeFragment : Fragment() {
         }
         else
         {
-            textGoal.text = cursor.getString(cursor.getColumnIndex(DBHelper.PROFIT_COL)+0) +" " + getString(
-                R.string.of
-            ) + " " + goalMonthString
+            textGoal.text = ShiftHelper.calculateMonthProgress(shifts.last().date, db).toString() +
+                    " " + getString(R.string.of) + " " + goalMonthString
         }
         cursor.close()
     }
 
-    private fun setEmptyBDView ()
+    private fun setEmptyView ()
     {
         textDate.text = getString(R.string.n_a)
         textEarnings.text = getString(R.string.n_a)
@@ -105,7 +100,7 @@ class HomeFragment : Fragment() {
         textTime = binding.textHomeTimeR
         textTotal = binding.textHomeTotalR
         textPerHour = binding.textHomePerHourR
-        textGoal = binding.textHomePlanR
+        textGoal = binding.textHomeGoalR
     }
 
     override fun onDestroyView() {
@@ -116,5 +111,4 @@ class HomeFragment : Fragment() {
     {
         findNavController().navigate(R.id.action_homeFragment_to_addShift)
     }
-
 }
