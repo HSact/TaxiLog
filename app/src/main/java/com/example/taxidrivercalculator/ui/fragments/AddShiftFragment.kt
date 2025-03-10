@@ -20,6 +20,8 @@ import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.FragmentAddShiftBinding
 import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.helpers.ShiftHelper
+import com.example.taxidrivercalculator.helpers.ShiftHelper.convertLongToTime
+import com.example.taxidrivercalculator.helpers.ShiftHelper.convertTimeToLong
 import com.example.taxidrivercalculator.ui.activities.MainActivity
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -88,20 +90,13 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         /*editDate.setOnClickListener() {
             pickDate()
         }*/
-        //editDate.setOnFocusChangeListener { view, b ->  if (editDate.isFocused) pickDate(editDate)}
         editDate.setOnClickListener { pickDate(editDate) }
         editStart.setOnClickListener { pickTime(editStart) }
-        //editStart.setOnFocusChangeListener { view, b ->  if (editStart.isFocused) pickTime(editStart)}
         editEnd.setOnClickListener { pickTime(editEnd) }
-        //editEnd.setOnFocusChangeListener { view, b ->  if (editEnd.isFocused) pickTime(editEnd)}
         editBreakStart.setOnClickListener { pickTime(editBreakStart) }
-        //editBreakStart.setOnFocusChangeListener { view, b ->  if (editBreakStart.isFocused) pickTime(editBreakStart)}
         editBreakEnd.setOnClickListener { pickTime(editBreakEnd) }
-        //editBreakEnd.setOnFocusChangeListener { view, b ->  if (editBreakEnd.isFocused) pickTime(editBreakEnd)}
-        //editBreakEnd.setOnFocusChangeListener { view, b ->  if (editBreakEnd.isFocused) pickTime(editBreakEnd)}
         checkBreak.setOnClickListener { switchBrake() }
         buttonSubmit.setOnClickListener {calculateShift()}
-
     }
     private fun bindItems ()
     {
@@ -141,18 +136,6 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         }
     }
 
-    @SuppressLint("SimpleDateFormat")
-    fun convertLongToTime(time: Long): String {
-        val date = Date(time)
-        val format = SimpleDateFormat("H:mm")
-        return format.format(date)
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    fun convertTimeToLong(date: String): Long {
-        val df = SimpleDateFormat("H:mm")
-        return df.parse(date)!!.time
-    }
     private fun hoursToMs (hours: Int): Long
     {
         return (hours*60*60*1000).toLong()

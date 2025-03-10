@@ -166,7 +166,7 @@
                     android:id="@+id/textHomeGoalR"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="5000 of 6000"
+                    android:text="5000 of 100000"
                     android:textSize="24sp" />
             </TableRow>
         </TableLayout>

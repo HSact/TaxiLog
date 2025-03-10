@@ -1,9 +1,12 @@
 package com.example.taxidrivercalculator.helpers
 
+import android.annotation.SuppressLint
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.time.temporal.WeekFields
+import java.util.Date
 import java.util.Locale
 
 object ShiftHelper {
@@ -86,7 +89,6 @@ object ShiftHelper {
         val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         return LocalDate.now().format(dateFormatter)
     }
-
 
     private fun getCurrentWeek(dateReceived: String = ""): Int {
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
@@ -234,6 +236,20 @@ object ShiftHelper {
     {
         return Math.round(n*10)/10.toDouble()
     }
+
+    @SuppressLint("SimpleDateFormat")
+    fun convertLongToTime(time: Long): String {
+        val date = Date(time)
+        val format = SimpleDateFormat("H:mm")
+        return format.format(date)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun convertTimeToLong(date: String): Long {
+        val df = SimpleDateFormat("H:mm")
+        return df.parse(date)!!.time
+    }
+
     fun msToHours (ms: Long) : Double
     {
         return ((ms/60.0/60.0/1000.0)*100.0).toInt()/100.0
