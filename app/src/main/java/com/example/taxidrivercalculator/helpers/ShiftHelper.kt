@@ -123,8 +123,7 @@ object ShiftHelper {
         return thisDate.year.toString()
     }
 
-
-    fun calcAverageEarningsPerHour (shifts: MutableList<Shift>): Double
+    fun calcAverageEarningsPerHour (shifts: List<Shift>): Double
     {
         var sum = 0.0
         var totalHours = 0.0
@@ -134,7 +133,7 @@ object ShiftHelper {
         }
         return centsRound( sum/totalHours)
     }
-    fun calcAverageProfitPerHour (shifts: MutableList<Shift>): Double
+    fun calcAverageProfitPerHour (shifts: List<Shift>): Double
     {
         var sum = 0.0
         var totalHours = 0.0
@@ -144,7 +143,7 @@ object ShiftHelper {
         }
         return centsRound(sum/totalHours)
     }
-    fun calcAverageShiftDuration (shifts: MutableList<Shift>): Double
+    fun calcAverageShiftDuration (shifts: List<Shift>): Double
     {
         var totalHours = 0.0
         shifts.indices.forEach {
@@ -152,7 +151,7 @@ object ShiftHelper {
         }
         return oneRound( totalHours/shifts.size)
     }
-    fun calcAverageMileage (shifts: MutableList<Shift>): Double
+    fun calcAverageMileage (shifts: List<Shift>): Double
     {
         var totalMileage = 0.0
         shifts.indices.forEach {
@@ -160,7 +159,7 @@ object ShiftHelper {
         }
         return oneRound( totalMileage/shifts.size)
     }
-    fun calcAverageFuelCost (shifts: MutableList<Shift>): Double
+    fun calcAverageFuelCost (shifts: List<Shift>): Double
     {
         var totalFuelCost = 0.0
         shifts.indices.forEach {
@@ -168,7 +167,7 @@ object ShiftHelper {
         }
         return centsRound( totalFuelCost/shifts.size)
     }
-    fun calcTotalShiftDuration (shifts: MutableList<Shift>): Double
+    fun calcTotalShiftDuration (shifts: List<Shift>): Double
     {
         var totalHours = 0.0
         shifts.indices.forEach {
@@ -176,7 +175,7 @@ object ShiftHelper {
         }
         return totalHours
     }
-    fun calcTotalMileage (shifts: MutableList<Shift>): Double
+    fun calcTotalMileage (shifts: List<Shift>): Double
     {
         var totalMileage = 0.0
         shifts.indices.forEach {
@@ -184,7 +183,7 @@ object ShiftHelper {
         }
         return totalMileage
     }
-    fun calcTotalFuelCost (shifts: MutableList<Shift>): Double
+    fun calcTotalFuelCost (shifts: List<Shift>): Double
     {
         var totalFuel = 0.0
         shifts.indices.forEach {
@@ -192,7 +191,7 @@ object ShiftHelper {
         }
         return totalFuel
     }
-    fun calcTotalWash (shifts: MutableList<Shift>): Double
+    fun calcTotalWash (shifts: List<Shift>): Double
     {
         var totalWash = 0.0
         shifts.indices.forEach {
@@ -200,7 +199,7 @@ object ShiftHelper {
         }
         return totalWash
     }
-    fun calcTotalEarnings (shifts: MutableList<Shift>): Double
+    fun calcTotalEarnings (shifts: List<Shift>): Double
     {
         var totalEarnings = 0.0
         shifts.indices.forEach {
@@ -208,7 +207,7 @@ object ShiftHelper {
         }
         return totalEarnings
     }
-    fun calcTotalProfit (shifts: MutableList<Shift>): Double
+    fun calcTotalProfit (shifts: List<Shift>): Double
     {
         var totalProfit = 0.0
         shifts.indices.forEach {

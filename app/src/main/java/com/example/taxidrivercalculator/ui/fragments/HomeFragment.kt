@@ -17,8 +17,6 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     private lateinit var textDate: TextView
@@ -27,7 +25,7 @@ class HomeFragment : Fragment() {
     private lateinit var textTime: TextView
     private lateinit var textTotal: TextView
     private lateinit var textPerHour: TextView
-    private lateinit var textPlan: TextView
+    private lateinit var textGoal: TextView
 
 
 
@@ -39,8 +37,6 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-
         return root
     }
 
@@ -48,24 +44,10 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         bindItems()
         printShift()
-
-
-        binding.buttonNewShift.setOnClickListener {
-
-            newShift()
-        }
+        binding.buttonNewShift.setOnClickListener { newShift() }
     }
 
-    private fun bindItems ()
-    {
-        textDate = binding.textHomeDateR
-        textEarnings = binding.textHomeEarningsR
-        textCosts = binding.textHomeCostsR
-        textTime = binding.textHomeTimeR
-        textTotal = binding.textHomeTotalR
-        textPerHour = binding.textHomePerHourR
-        textPlan = binding.textHomePlanR
-    }
+
 
     @SuppressLint("SetTextI18n")
     private fun printShift ()
@@ -93,11 +75,11 @@ class HomeFragment : Fragment() {
         val goalMonthString = settings?.getString("Goal_per_month", "")
         if (goalMonthString == null || goalMonthString == "")
         {
-            textPlan.text = getString(R.string.n_a)
+            textGoal.text = getString(R.string.n_a)
         }
         else
         {
-            textPlan.text = cursor.getString(cursor.getColumnIndex(DBHelper.PROFIT_COL)+0) +" " + getString(
+            textGoal.text = cursor.getString(cursor.getColumnIndex(DBHelper.PROFIT_COL)+0) +" " + getString(
                 R.string.of
             ) + " " + goalMonthString
         }
@@ -112,14 +94,25 @@ class HomeFragment : Fragment() {
         textTime.text = getString(R.string.n_a)
         textTotal.text = getString(R.string.n_a)
         textPerHour.text = getString(R.string.n_a)
-        textPlan.text = getString(R.string.n_a)
+        textGoal.text = getString(R.string.n_a)
+    }
+
+    private fun bindItems ()
+    {
+        textDate = binding.textHomeDateR
+        textEarnings = binding.textHomeEarningsR
+        textCosts = binding.textHomeCostsR
+        textTime = binding.textHomeTimeR
+        textTotal = binding.textHomeTotalR
+        textPerHour = binding.textHomePerHourR
+        textGoal = binding.textHomePlanR
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-    fun newShift()
+    private fun newShift()
     {
         findNavController().navigate(R.id.action_homeFragment_to_addShift)
     }
