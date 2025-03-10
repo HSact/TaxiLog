@@ -104,6 +104,7 @@
     <string name="of">of</string>
     <string name="title_shift_editing">Editing shift</string>
     <string name="save">Save</string>
+    <string name="editShiftHours">Hours</string>
 
 
     <string-array name="languages">
