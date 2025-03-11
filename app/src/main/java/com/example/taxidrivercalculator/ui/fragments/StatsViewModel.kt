@@ -1,6 +1,7 @@
 package com.example.taxidrivercalculator.ui.fragments
 
 import androidx.lifecycle.ViewModel
+import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.helpers.Shift
 import com.example.taxidrivercalculator.helpers.ShiftHelper
 import java.time.LocalDateTime
@@ -33,8 +34,12 @@ class StatsViewModel : ViewModel() {
         endDate = currentDate.format(formatter)
     }
 
-    fun updateShifts()
-    {
+    fun defineShifts(db: DBHelper) {
+        shiftsOrigin = ShiftHelper.makeArray(db)
+        shifts = shiftsOrigin.toMutableList()
+    }
+
+    fun updateShifts() {
         shifts = ShiftHelper.filterShiftsByDatePeriod(shiftsOrigin.toMutableList(), startDate,
             endDate).toMutableList()
     }

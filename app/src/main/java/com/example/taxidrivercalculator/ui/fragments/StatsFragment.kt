@@ -11,7 +11,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.helpers.Shift
-import com.example.taxidrivercalculator.helpers.ShiftHelper
 import com.example.taxidrivercalculator.databinding.FragmentStatsBinding
 import androidx.fragment.app.viewModels
 
@@ -45,7 +44,6 @@ class StatsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentStatsBinding.inflate(inflater, container, false)
         val root: View = binding.root
         bindItems()
@@ -53,8 +51,7 @@ class StatsFragment : Fragment() {
             viewModel.defineDates()
         }
         if (viewModel.shiftsOrigin.isEmpty() || viewModel.shifts.isEmpty()) {
-            viewModel.shiftsOrigin = ShiftHelper.makeArray(DBHelper(requireContext(), null))
-            viewModel.shifts = viewModel.shiftsOrigin.toMutableList()
+            viewModel.defineShifts(DBHelper(requireContext(), null))
         }
         butDatePickBegin.setText(viewModel.startDate)
         butDatePickEnd.setText(viewModel.endDate)
