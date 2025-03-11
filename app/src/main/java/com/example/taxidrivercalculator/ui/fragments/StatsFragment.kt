@@ -51,13 +51,8 @@ class StatsFragment : Fragment() {
         _binding = FragmentStatsBinding.inflate(inflater, container, false)
         val root: View = binding.root
         bindItems()
-        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         if (viewModel.startDate == null || viewModel.endDate == null) {
-            val now = LocalDateTime.now()
-            val currentDate = now.toLocalDate()
-            val firstDayOfMonth = now.toLocalDate().withDayOfMonth(1)
-            viewModel.startDate = firstDayOfMonth.format(formatter)
-            viewModel.endDate = currentDate.format(formatter)
+            viewModel.defineDates()
         }
         if (viewModel.shiftsOrigin.isEmpty() || viewModel.shifts.isEmpty()) {
             viewModel.shiftsOrigin = ShiftHelper.makeArray(DBHelper(requireContext(), null))
@@ -101,8 +96,6 @@ class StatsFragment : Fragment() {
         }
         datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
     }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()

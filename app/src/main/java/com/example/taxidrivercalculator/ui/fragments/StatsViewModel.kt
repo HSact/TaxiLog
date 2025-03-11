@@ -3,12 +3,15 @@ package com.example.taxidrivercalculator.ui.fragments
 import androidx.lifecycle.ViewModel
 import com.example.taxidrivercalculator.helpers.Shift
 import com.example.taxidrivercalculator.helpers.ShiftHelper
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class StatsViewModel : ViewModel() {
     var shifts = mutableListOf<Shift>()
     var shiftsOrigin = mutableListOf<Shift>()
     var startDate: String? = null
     var endDate: String? = null
+    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
     val shiftsCount: String get() = shifts.size.toString()
     val avErPh: String get() = ShiftHelper.calcAverageEarningsPerHour(shifts).toString()
@@ -22,6 +25,14 @@ class StatsViewModel : ViewModel() {
     val totalProfit: String get() = ShiftHelper.calcTotalProfit(shifts).toString()
     val avFuel: String get() = ShiftHelper.calcAverageFuelCost(shifts).toString()
     val totalFuel: String get() = ShiftHelper.calcTotalFuelCost(shifts).toString()
+
+    fun defineDates() {
+        val now = LocalDateTime.now()
+        val currentDate = now.toLocalDate()
+        val firstDayOfMonth = now.toLocalDate().withDayOfMonth(1)
+        startDate = firstDayOfMonth.format(formatter)
+        endDate = currentDate.format(formatter)
+    }
 
     fun updateShifts()
     {
