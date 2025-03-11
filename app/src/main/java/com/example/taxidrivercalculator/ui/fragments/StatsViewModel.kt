@@ -11,7 +11,7 @@ class StatsViewModel : ViewModel() {
     var shiftsOrigin = mutableListOf<Shift>()
     var startDate: String? = null
     var endDate: String? = null
-    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+    private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
     val shiftsCount: String get() = shifts.size.toString()
     val avErPh: String get() = ShiftHelper.calcAverageEarningsPerHour(shifts).toString()
