@@ -22,8 +22,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
-import java.time.temporal.WeekFields
-import java.util.*
 
 
 class GoalsFragment : Fragment() {
@@ -70,7 +68,6 @@ class GoalsFragment : Fragment() {
         }
         setAllProgress ()
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-
         val now = LocalDateTime.now()
         val currentDate = now.toLocalDate()
         pickedDate = getCurrentDay()

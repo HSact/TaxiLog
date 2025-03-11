@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TableLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -12,16 +13,19 @@ import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.helpers.Shift
 import com.example.taxidrivercalculator.helpers.ShiftHelper
 import com.example.taxidrivercalculator.databinding.FragmentStatsBinding
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class StatsFragment : Fragment() {
 
     private var _binding: FragmentStatsBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var tableLayout: TableLayout
     private lateinit var textListIsEmtpy: TextView
+    private lateinit var butDatePickBegin: EditText
+    private lateinit var butDatePickEnd: EditText
     private lateinit var textShifts_count: TextView
     private lateinit var textAv_er_ph: TextView
     private lateinit var textAv_profit_ph: TextView
@@ -36,6 +40,7 @@ class StatsFragment : Fragment() {
     private lateinit var textTotal_fuel: TextView
 
     private var shifts = mutableListOf<Shift>()
+    private var shiftsOrigin = mutableListOf<Shift>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,17 +50,53 @@ class StatsFragment : Fragment() {
 
         _binding = FragmentStatsBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        shifts= ShiftHelper.makeArray(DBHelper(requireContext(), null))
+        shiftsOrigin= ShiftHelper.makeArray(DBHelper(requireContext(), null))
+        shifts = shiftsOrigin.toMutableList()
         bindItems()
-        if (shifts.size!=0)
-        {
-            textListIsEmtpy.visibility = View.GONE
-            tableLayout.visibility = View.VISIBLE
-            displayInfo()
-        }
+        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        val now = LocalDateTime.now()
+        val currentDate = now.toLocalDate()
+        val firstDayOfMonth = now.toLocalDate().withDayOfMonth(1)
+        butDatePickBegin.setText(firstDayOfMonth.format(formatter))
+        butDatePickEnd.setText(currentDate.format(formatter))
+        updateShifts()
+        butDatePickBegin.setOnClickListener {pickDate(butDatePickBegin)}
+        butDatePickEnd.setOnClickListener {pickDate(butDatePickEnd)}
 
+        displayInfo()
         return root
+    }
+
+    private fun pickDate(editObj: EditText) {
+        val datePickerFragment = DatePickerFragment()
+        datePickerFragment.selectedDate = editObj.text.toString()
+        val supportFragmentManager = requireActivity().supportFragmentManager
+        if (editObj == butDatePickBegin)
+        {
+            datePickerFragment.maxDate = butDatePickEnd.text.toString()
+        }
+        if (editObj == butDatePickEnd)
+        {
+            datePickerFragment.minDate = butDatePickBegin.text.toString()
+        }
+        supportFragmentManager.setFragmentResultListener(
+            "REQUEST_KEY",
+            this) { resultKey, bundle ->
+            if (resultKey == "REQUEST_KEY") {
+                val date = bundle.getString("SELECTED_DATE")
+                editObj.setText(date.toString())
+                updateShifts()
+            }
+        }
+        datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
+        updateShifts()
+    }
+
+    private fun updateShifts()
+    {
+        shifts = ShiftHelper.filterShiftsByDatePeriod(shiftsOrigin.toMutableList(), butDatePickBegin.text.toString(),
+            butDatePickEnd.text.toString()).toMutableList()
+        displayInfo()
     }
 
     override fun onDestroyView() {
@@ -66,6 +107,8 @@ class StatsFragment : Fragment() {
     private fun bindItems ()
     {
         tableLayout = binding.tableLayout
+        butDatePickBegin = binding.buttonDatePickBegin
+        butDatePickEnd = binding.buttonDatePickEnd
         textListIsEmtpy = binding.textListIsEmpty
         textShifts_count = binding.textShiftsCountVal
         textAv_er_ph = binding.textAvErPhVal
@@ -83,6 +126,14 @@ class StatsFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun displayInfo ()
     {
+        if (shifts.isEmpty())
+        {
+            textListIsEmtpy.visibility = View.VISIBLE
+            tableLayout.visibility = View.GONE
+            return
+        }
+        textListIsEmtpy.visibility = View.GONE
+        tableLayout.visibility = View.VISIBLE
         textShifts_count.text = shifts.size.toString()
         textAv_er_ph.text = ShiftHelper.calcAverageEarningsPerHour(shifts).toString()
         textAv_profit_ph.text  = ShiftHelper.calcAverageProfitPerHour(shifts).toString()
