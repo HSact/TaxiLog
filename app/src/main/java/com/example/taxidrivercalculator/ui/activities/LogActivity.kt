@@ -1,5 +1,6 @@
 package com.example.taxidrivercalculator.ui.activities
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
@@ -151,6 +152,7 @@ class LogActivity : AppCompatActivity() {
         recreate()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showEditShiftDialog(index: Int) {
         val shift = shifts[index].copy()
         val builder = MaterialAlertDialogBuilder(this)

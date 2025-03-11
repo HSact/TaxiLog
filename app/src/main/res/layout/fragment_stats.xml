@@ -21,16 +21,24 @@
             android:text="@string/statsHeader"
             android:textSize="34sp" />
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/period"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center|start"
+                android:text="@string/period"
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/buttonDatePickBegin"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-
                 android:layout_gravity="start"
+                android:layout_marginStart="20dp"
                 android:autofillHints=""
                 android:clickable="true"
                 android:focusable="false"
@@ -41,19 +49,25 @@
                 android:maxLength="10"
                 android:minWidth="100dp"
                 android:minHeight="48dp"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:ignore="TextFields" />
 
-            <View
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/dash"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:gravity="center|start"
+                android:layout_marginStart="10dp"
+                android:text="-"
+                android:textSize="25sp"
+                tools:ignore="HardcodedText" />
 
 
             <EditText
                 android:id="@+id/buttonDatePickEnd"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-
+                android:layout_marginStart="10dp"
                 android:layout_gravity="end"
                 android:autofillHints=""
                 android:clickable="true"
@@ -65,17 +79,19 @@
                 android:maxLength="10"
                 android:minWidth="100dp"
                 android:minHeight="48dp"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:ignore="TextFields" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/textListIsEmpty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
             android:gravity="center"
-            android:visibility="gone"
             android:text="@string/list_is_empty"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:visibility="gone" />
 
         <TableLayout
             android:id="@+id/table_layout"

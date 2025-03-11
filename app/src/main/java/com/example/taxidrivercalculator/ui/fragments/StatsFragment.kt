@@ -13,17 +13,18 @@ import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.helpers.Shift
 import com.example.taxidrivercalculator.helpers.ShiftHelper
 import com.example.taxidrivercalculator.databinding.FragmentStatsBinding
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import androidx.fragment.app.viewModels
 
 class StatsFragment : Fragment() {
 
-    private var _binding: FragmentStatsBinding? = null
+    private val viewModel: StatsViewModel by viewModels()
 
+    private var _binding: FragmentStatsBinding? = null
     private val binding get() = _binding!!
     private lateinit var tableLayout: TableLayout
-    private lateinit var textListIsEmtpy: TextView
+    private lateinit var textListIsEmpty: TextView
     private lateinit var butDatePickBegin: EditText
     private lateinit var butDatePickEnd: EditText
     private lateinit var textShifts_count: TextView
@@ -40,7 +41,6 @@ class StatsFragment : Fragment() {
     private lateinit var textTotal_fuel: TextView
 
     private var shifts = mutableListOf<Shift>()
-    private var shiftsOrigin = mutableListOf<Shift>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,20 +50,25 @@ class StatsFragment : Fragment() {
 
         _binding = FragmentStatsBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        shiftsOrigin= ShiftHelper.makeArray(DBHelper(requireContext(), null))
-        shifts = shiftsOrigin.toMutableList()
         bindItems()
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-        val now = LocalDateTime.now()
-        val currentDate = now.toLocalDate()
-        val firstDayOfMonth = now.toLocalDate().withDayOfMonth(1)
-        butDatePickBegin.setText(firstDayOfMonth.format(formatter))
-        butDatePickEnd.setText(currentDate.format(formatter))
-        updateShifts()
+        if (viewModel.startDate == null || viewModel.endDate == null) {
+            val now = LocalDateTime.now()
+            val currentDate = now.toLocalDate()
+            val firstDayOfMonth = now.toLocalDate().withDayOfMonth(1)
+            viewModel.startDate = firstDayOfMonth.format(formatter)
+            viewModel.endDate = currentDate.format(formatter)
+        }
+        if (viewModel.shiftsOrigin.isEmpty() || viewModel.shifts.isEmpty()) {
+            viewModel.shiftsOrigin = ShiftHelper.makeArray(DBHelper(requireContext(), null))
+            viewModel.shifts = viewModel.shiftsOrigin.toMutableList()
+        }
+        butDatePickBegin.setText(viewModel.startDate)
+        butDatePickEnd.setText(viewModel.endDate)
+        viewModel.updateShifts()
+        displayInfo()
         butDatePickBegin.setOnClickListener {pickDate(butDatePickBegin)}
         butDatePickEnd.setOnClickListener {pickDate(butDatePickEnd)}
-
-        displayInfo()
         return root
     }
 
@@ -85,31 +90,55 @@ class StatsFragment : Fragment() {
             if (resultKey == "REQUEST_KEY") {
                 val date = bundle.getString("SELECTED_DATE")
                 editObj.setText(date.toString())
-                updateShifts()
+                if (editObj == butDatePickBegin) {
+                    viewModel.startDate = date
+                } else if (editObj == butDatePickEnd) {
+                    viewModel.endDate = date
+                }
+                viewModel.updateShifts()
+                displayInfo()
             }
         }
         datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
-        updateShifts()
     }
 
-    private fun updateShifts()
-    {
-        shifts = ShiftHelper.filterShiftsByDatePeriod(shiftsOrigin.toMutableList(), butDatePickBegin.text.toString(),
-            butDatePickEnd.text.toString()).toMutableList()
-        displayInfo()
-    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
+    @SuppressLint("SetTextI18n")
+    private fun displayInfo ()
+    {
+        shifts = viewModel.shifts
+        if (shifts.isEmpty())
+        {
+            tableLayout.visibility = View.GONE
+            textListIsEmpty.visibility = View.VISIBLE
+            return
+        }
+        textListIsEmpty.visibility = View.GONE
+        tableLayout.visibility = View.VISIBLE
+        textShifts_count.text = viewModel.shiftsCount
+        textAv_er_ph.text = viewModel.avErPh
+        textAv_profit_ph.text  = viewModel.avProfitPh
+        textAv_duration.text  = viewModel.avDuration
+        textAv_mileage.text  = viewModel.avMileage
+        textTotal_duration.text  = viewModel.totalDuration
+        textTotal_mileage.text  = viewModel.totalMileage
+        textTotal_wash.text  = viewModel.totalWash
+        textTotalEarnings.text  = viewModel.totalEarnings
+        textTotalProfit.text  = viewModel.totalProfit
+        textAv_fuel.text  = viewModel.avFuel
+        textTotal_fuel.text  = viewModel.totalFuel
+    }
     private fun bindItems ()
     {
         tableLayout = binding.tableLayout
         butDatePickBegin = binding.buttonDatePickBegin
         butDatePickEnd = binding.buttonDatePickEnd
-        textListIsEmtpy = binding.textListIsEmpty
+        textListIsEmpty = binding.textListIsEmpty
         textShifts_count = binding.textShiftsCountVal
         textAv_er_ph = binding.textAvErPhVal
         textAv_profit_ph = binding.textAvProfitPhVal
@@ -122,29 +151,5 @@ class StatsFragment : Fragment() {
         textTotalProfit = binding.textTotalProfitVal
         textAv_fuel = binding.textAvFuelVal
         textTotal_fuel = binding.textTotalFuelVal
-    }
-    @SuppressLint("SetTextI18n")
-    private fun displayInfo ()
-    {
-        if (shifts.isEmpty())
-        {
-            textListIsEmtpy.visibility = View.VISIBLE
-            tableLayout.visibility = View.GONE
-            return
-        }
-        textListIsEmtpy.visibility = View.GONE
-        tableLayout.visibility = View.VISIBLE
-        textShifts_count.text = shifts.size.toString()
-        textAv_er_ph.text = ShiftHelper.calcAverageEarningsPerHour(shifts).toString()
-        textAv_profit_ph.text  = ShiftHelper.calcAverageProfitPerHour(shifts).toString()
-        textAv_duration.text  = ShiftHelper.calcAverageShiftDuration(shifts).toString()
-        textAv_mileage.text  = ShiftHelper.calcAverageMileage(shifts).toString()
-        textTotal_duration.text  = ShiftHelper.calcTotalShiftDuration(shifts).toString()
-        textTotal_mileage.text  = ShiftHelper.calcTotalMileage(shifts).toString()
-        textTotal_wash.text  = ShiftHelper.calcTotalWash(shifts).toString()
-        textTotalEarnings.text  = ShiftHelper.calcTotalEarnings(shifts).toString()
-        textTotalProfit.text  = ShiftHelper.calcTotalProfit(shifts).toString()
-        textAv_fuel.text  = ShiftHelper.calcAverageFuelCost(shifts).toString()
-        textTotal_fuel.text  = ShiftHelper.calcTotalFuelCost(shifts).toString()
     }
 }
