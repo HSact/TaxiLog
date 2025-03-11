@@ -5,35 +5,37 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TableLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.helpers.Shift
-import com.example.taxidrivercalculator.helpers.ShiftHelper
 import com.example.taxidrivercalculator.databinding.FragmentStatsBinding
+import androidx.fragment.app.viewModels
 
 class StatsFragment : Fragment() {
 
-    private var _binding: FragmentStatsBinding? = null
+    private val viewModel: StatsViewModel by viewModels()
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    private var _binding: FragmentStatsBinding? = null
     private val binding get() = _binding!!
     private lateinit var tableLayout: TableLayout
-    private lateinit var textListIsEmtpy: TextView
-    private lateinit var textShifts_count: TextView
-    private lateinit var textAv_er_ph: TextView
-    private lateinit var textAv_profit_ph: TextView
-    private lateinit var textAv_duration: TextView
-    private lateinit var textAv_mileage: TextView
-    private lateinit var textTotal_duration: TextView
-    private lateinit var textTotal_mileage: TextView
-    private lateinit var textTotal_wash: TextView
+    private lateinit var textListIsEmpty: TextView
+    private lateinit var butDatePickBegin: EditText
+    private lateinit var butDatePickEnd: EditText
+    private lateinit var textShiftsCount: TextView
+    private lateinit var textAvErPh: TextView
+    private lateinit var textAvProfitPh: TextView
+    private lateinit var textAvDuration: TextView
+    private lateinit var textAvMileage: TextView
+    private lateinit var textTotalDuration: TextView
+    private lateinit var textTotalMileage: TextView
+    private lateinit var textTotalWash: TextView
     private lateinit var textTotalEarnings: TextView
     private lateinit var textTotalProfit: TextView
-    private lateinit var textAv_fuel: TextView
-    private lateinit var textTotal_fuel: TextView
+    private lateinit var textAvFuel: TextView
+    private lateinit var textTotalFuel: TextView
 
     private var shifts = mutableListOf<Shift>()
 
@@ -42,58 +44,100 @@ class StatsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentStatsBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        shifts= ShiftHelper.makeArray(DBHelper(requireContext(), null))
         bindItems()
-        if (shifts.size!=0)
-        {
-            textListIsEmtpy.visibility = View.GONE
-            tableLayout.visibility = View.VISIBLE
-            displayInfo()
+        if (viewModel.startDate == null || viewModel.endDate == null) {
+            viewModel.defineDates()
         }
-
+        if (viewModel.shiftsOrigin.isEmpty() || viewModel.shifts.isEmpty()) {
+            viewModel.defineShifts(DBHelper(requireContext(), null))
+        }
+        butDatePickBegin.setText(viewModel.startDate)
+        butDatePickEnd.setText(viewModel.endDate)
+        viewModel.updateShifts()
+        displayInfo()
+        butDatePickBegin.setOnClickListener {pickDate(butDatePickBegin)}
+        butDatePickEnd.setOnClickListener {pickDate(butDatePickEnd)}
         return root
+    }
+
+    private fun pickDate(editObj: EditText) {
+        val datePickerFragment = DatePickerFragment()
+        datePickerFragment.selectedDate = editObj.text.toString()
+        val supportFragmentManager = requireActivity().supportFragmentManager
+        if (editObj == butDatePickBegin)
+        {
+            datePickerFragment.maxDate = butDatePickEnd.text.toString()
+        }
+        if (editObj == butDatePickEnd)
+        {
+            datePickerFragment.minDate = butDatePickBegin.text.toString()
+        }
+        supportFragmentManager.setFragmentResultListener(
+            "REQUEST_KEY",
+            this) { resultKey, bundle ->
+            if (resultKey == "REQUEST_KEY") {
+                val date = bundle.getString("SELECTED_DATE")
+                editObj.setText(date.toString())
+                if (editObj == butDatePickBegin) {
+                    viewModel.startDate = date
+                } else if (editObj == butDatePickEnd) {
+                    viewModel.endDate = date
+                }
+                viewModel.updateShifts()
+                displayInfo()
+            }
+        }
+        datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-    private fun bindItems ()
-    {
-        tableLayout = binding.tableLayout
-        textListIsEmtpy = binding.textListIsEmpty
-        textShifts_count = binding.textShiftsCountVal
-        textAv_er_ph = binding.textAvErPhVal
-        textAv_profit_ph = binding.textAvProfitPhVal
-        textAv_duration = binding.textAvDurationVal
-        textAv_mileage = binding.textAvMileageVal
-        textTotal_duration = binding.textTotalDurationVal
-        textTotal_mileage = binding.textTotalMileageVal
-        textTotal_wash = binding.textTotalWashVal
-        textTotalEarnings = binding.textTotalEarningsVal
-        textTotalProfit = binding.textTotalProfitVal
-        textAv_fuel = binding.textAvFuelVal
-        textTotal_fuel = binding.textTotalFuelVal
-    }
     @SuppressLint("SetTextI18n")
     private fun displayInfo ()
     {
-        textShifts_count.text = shifts.size.toString()
-        textAv_er_ph.text = ShiftHelper.calcAverageEarningsPerHour(shifts).toString()
-        textAv_profit_ph.text  = ShiftHelper.calcAverageProfitPerHour(shifts).toString()
-        textAv_duration.text  = ShiftHelper.calcAverageShiftDuration(shifts).toString()
-        textAv_mileage.text  = ShiftHelper.calcAverageMileage(shifts).toString()
-        textTotal_duration.text  = ShiftHelper.calcTotalShiftDuration(shifts).toString()
-        textTotal_mileage.text  = ShiftHelper.calcTotalMileage(shifts).toString()
-        textTotal_wash.text  = ShiftHelper.calcTotalWash(shifts).toString()
-        textTotalEarnings.text  = ShiftHelper.calcTotalEarnings(shifts).toString()
-        textTotalProfit.text  = ShiftHelper.calcTotalProfit(shifts).toString()
-        textAv_fuel.text  = ShiftHelper.calcAverageFuelCost(shifts).toString()
-        textTotal_fuel.text  = ShiftHelper.calcTotalFuelCost(shifts).toString()
+        shifts = viewModel.shifts
+        if (shifts.isEmpty())
+        {
+            tableLayout.visibility = View.GONE
+            textListIsEmpty.visibility = View.VISIBLE
+            return
+        }
+        textListIsEmpty.visibility = View.GONE
+        tableLayout.visibility = View.VISIBLE
+        textShiftsCount.text = viewModel.shiftsCount
+        textAvErPh.text = viewModel.avErPh
+        textAvProfitPh.text  = viewModel.avProfitPh
+        textAvDuration.text  = viewModel.avDuration
+        textAvMileage.text  = viewModel.avMileage
+        textTotalDuration.text  = viewModel.totalDuration
+        textTotalMileage.text  = viewModel.totalMileage
+        textTotalWash.text  = viewModel.totalWash
+        textTotalEarnings.text  = viewModel.totalEarnings
+        textTotalProfit.text  = viewModel.totalProfit
+        textAvFuel.text  = viewModel.avFuel
+        textTotalFuel.text  = viewModel.totalFuel
+    }
+    private fun bindItems ()
+    {
+        tableLayout = binding.tableLayout
+        butDatePickBegin = binding.buttonDatePickBegin
+        butDatePickEnd = binding.buttonDatePickEnd
+        textListIsEmpty = binding.textListIsEmpty
+        textShiftsCount = binding.textShiftsCountVal
+        textAvErPh = binding.textAvErPhVal
+        textAvProfitPh = binding.textAvProfitPhVal
+        textAvDuration = binding.textAvDurationVal
+        textAvMileage = binding.textAvMileageVal
+        textTotalDuration = binding.textTotalDurationVal
+        textTotalMileage = binding.textTotalMileageVal
+        textTotalWash = binding.textTotalWashVal
+        textTotalEarnings = binding.textTotalEarningsVal
+        textTotalProfit = binding.textTotalProfitVal
+        textAvFuel = binding.textAvFuelVal
+        textTotalFuel = binding.textTotalFuelVal
     }
 }

@@ -71,7 +71,7 @@
     <string name="average_fuel">Средняя стоимость топлива</string>
     <string name="settings_fuel_price">Цена топлива</string>
     <string name="statsHeader">Общая статистика</string>
-    <string name="list_is_empty">Пока нет смен</string>
+    <string name="list_is_empty">Нет смен за этот период</string>
     <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
     <string name="yes">Да</string>
@@ -103,6 +103,7 @@
     <string name="save">Сохранить</string>
     <string name="editShiftHours">Часы</string>
     <string name="nothing_changed">Ничего не изменилось</string>
+    <string name="period">Период:</string>
 
 
     <string-array name="languages">

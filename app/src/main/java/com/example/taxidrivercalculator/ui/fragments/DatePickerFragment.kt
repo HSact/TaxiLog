@@ -14,14 +14,29 @@ import java.util.Locale
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
     private val calendar = Calendar.getInstance()
     lateinit var selectedDate: String
+    var minDate = ""
+    var maxDate = ""
+
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        var minDateLong: Long = 0
+        var maxDateLong: Long = Long.MAX_VALUE
+        if (minDate.isNotEmpty())
+        {
+            minDateLong = SimpleDateFormat("dd.MM.yyyy").parse(minDate)?.time ?: 0
+        }
+        if (maxDate.isNotEmpty())
+        {
+            maxDateLong = SimpleDateFormat("dd.MM.yyyy").parse(maxDate)?.time ?: Long.MAX_VALUE
+        }
 
         val sdf = SimpleDateFormat("dd.MM.yyyy")
         try {
             val date = sdf.parse(selectedDate)
-            calendar.time = date
+            if (date != null) {
+                calendar.time = date
+            }
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -29,10 +44,10 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-
-        // return new DatePickerDialog instance
-        return DatePickerDialog(requireActivity(), this, year, month, day)
+        val datePickerDialog = DatePickerDialog(requireActivity(), this, year, month, day)
+        datePickerDialog.datePicker.minDate = minDateLong
+        datePickerDialog.datePicker.maxDate = maxDateLong
+        return datePickerDialog
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:backgroundTint="#404345"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     android:theme="@style/Theme.TaxiDriverCalculator"
     tools:context=".ui.activities.StartUpActivity">
 

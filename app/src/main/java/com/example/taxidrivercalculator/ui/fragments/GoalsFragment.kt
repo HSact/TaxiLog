@@ -22,8 +22,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
-import java.time.temporal.WeekFields
-import java.util.*
 
 
 class GoalsFragment : Fragment() {
@@ -70,7 +68,6 @@ class GoalsFragment : Fragment() {
         }
         setAllProgress ()
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-
         val now = LocalDateTime.now()
         val currentDate = now.toLocalDate()
         pickedDate = getCurrentDay()
@@ -153,11 +150,12 @@ class GoalsFragment : Fragment() {
         var denominatorDay = 1.0
         val denominatorWeek = 4.5
         goalWeek = goalMonth / denominatorWeek
-        when (schedule)
-        {
-            "7/0" -> denominatorDay = 30.0
-            "6/1" -> denominatorDay = 25.7
-            "5/2" -> denominatorDay = 21.4
+        denominatorDay = when (schedule) {
+            "7/0" -> 30.0
+            "6/1" -> 25.7
+            "5/2" -> 21.4
+            "0" -> 30.0
+            else -> 30.0
         }
         goalDay = goalMonth / denominatorDay
         buttonDatePicker.isVisible

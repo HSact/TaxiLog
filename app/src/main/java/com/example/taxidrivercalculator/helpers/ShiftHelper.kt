@@ -83,6 +83,18 @@ object ShiftHelper {
         } while (i < shifts.size)
         return thisMonthSum
     }
+    fun filterShiftsByDatePeriod(shifts: List<Shift>, date1: String? = null, date2: String? = null): List<Shift> {
+        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
+        val startDate = date1?.let { LocalDate.parse(it, formatter) }
+        val endDate = date2?.let { LocalDate.parse(it, formatter) }
+
+        return shifts.filter { shift ->
+            val shiftDate = LocalDate.parse(shift.date, formatter)
+            (startDate == null || shiftDate >= startDate) &&
+                    (endDate == null || shiftDate <= endDate)
+        }
+    }
 
     private fun getDayToday(): String
     {
