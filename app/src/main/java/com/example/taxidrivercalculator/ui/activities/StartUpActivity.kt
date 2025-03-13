@@ -57,7 +57,6 @@ class StartUpActivity : AppCompatActivity() {
         exitProcess(-1)
     }
 
-
     private fun setUp()
     {
         //binding.textFirstLaunch.alpha = 0f
@@ -71,5 +70,4 @@ class StartUpActivity : AppCompatActivity() {
         //binding.buttonOkay.animate().setDuration(logo_duration).alpha(1f)
 
     }
-
 }

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.R
@@ -15,6 +16,7 @@ import com.example.taxidrivercalculator.databinding.FragmentHomeBinding
 import com.example.taxidrivercalculator.helpers.ShiftHelper
 
 class HomeFragment : Fragment() {
+    private val viewModel: HomeViewModel by viewModels()
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -41,55 +43,18 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bindItems()
-        printShift()
+        viewModel.shiftData.observe(viewLifecycleOwner) { shift ->
+            textDate.text = shift["date"]
+            textEarnings.text = shift["earnings"]
+            textCosts.text = shift["costs"]
+            textTime.text = shift["time"]
+            textTotal.text = shift["total"]
+            textPerHour.text = shift["perHour"]
+            textGoal.text = shift["goal"]
+        }
+        viewModel.calculateShift(requireContext())
+
         binding.buttonNewShift.setOnClickListener { newShift() }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun printShift ()
-    {
-        val db = DBHelper(requireActivity(), null)
-        //db.addShift("1.01.1001", 8.0, 1337.0, 228.0, 1488.0, 30.0, 300.0)
-        val cursor = db.getShift()
-        cursor!!.moveToLast()
-        if (cursor.position==-1)
-        {
-            setEmptyView()
-            cursor.close()
-            return
-        }
-        val shifts = ShiftHelper.makeArray(db)
-
-        textDate.text = cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COl)+0)
-        textEarnings.text = cursor.getString(cursor.getColumnIndex(DBHelper.EARNINGS_COL)+0)
-        textCosts.text = ((cursor.getDouble(cursor.getColumnIndex(DBHelper.WASH_COL)+0))+
-                (cursor.getDouble(cursor.getColumnIndex(DBHelper.FUEL_COL)+0))).toString()
-        textTime.text = cursor.getString(cursor.getColumnIndex(DBHelper.TIME_COL)+0) + " " + getString(R.string.hours)
-        textTotal.text = cursor.getString(cursor.getColumnIndex(DBHelper.PROFIT_COL)+0)
-        textPerHour.text = ShiftHelper.calcAverageEarningsPerHour(shifts.last()).toString()
-        val settings = this.activity?.getSharedPreferences("Settings", Activity.MODE_PRIVATE)
-        val goalMonthString = settings?.getString("Goal_per_month", "")
-        if (goalMonthString == null || goalMonthString == "")
-        {
-            textGoal.text = getString(R.string.n_a)
-        }
-        else
-        {
-            textGoal.text = ShiftHelper.calculateMonthProgress(shifts.last().date, db).toString() +
-                    " " + getString(R.string.of) + " " + goalMonthString
-        }
-        cursor.close()
-    }
-
-    private fun setEmptyView ()
-    {
-        textDate.text = getString(R.string.n_a)
-        textEarnings.text = getString(R.string.n_a)
-        textCosts.text = getString(R.string.n_a)
-        textTime.text = getString(R.string.n_a)
-        textTotal.text = getString(R.string.n_a)
-        textPerHour.text = getString(R.string.n_a)
-        textGoal.text = getString(R.string.n_a)
     }
 
     private fun bindItems ()
