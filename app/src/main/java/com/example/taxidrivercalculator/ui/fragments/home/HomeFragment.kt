@@ -1,4 +1,4 @@
-package com.example.taxidrivercalculator.ui.fragments
+package com.example.taxidrivercalculator.ui.fragments.home
 
 import android.os.Bundle
 import android.view.LayoutInflater

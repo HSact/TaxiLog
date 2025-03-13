@@ -1,4 +1,4 @@
-package com.example.taxidrivercalculator.ui.fragments
+package com.example.taxidrivercalculator.ui.fragments.home
 
 import android.app.Activity
 import android.content.Context
