@@ -1,7 +1,5 @@
 package com.example.taxidrivercalculator.ui.fragments
 
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +8,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.FragmentHomeBinding
-import com.example.taxidrivercalculator.helpers.ShiftHelper
 
 class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
@@ -53,8 +49,11 @@ class HomeFragment : Fragment() {
             textGoal.text = shift["goal"]
         }
         viewModel.calculateShift(requireContext())
-
         binding.buttonNewShift.setOnClickListener { newShift() }
+    }
+    override fun onResume() {
+        super.onResume()
+        viewModel.calculateShift(requireContext())
     }
 
     private fun bindItems ()
