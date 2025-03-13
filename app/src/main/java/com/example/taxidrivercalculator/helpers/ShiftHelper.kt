@@ -34,6 +34,7 @@ object ShiftHelper {
             i++
         } while (cursor.moveToNext())
         cursor.close()
+        db.close()
         return shifts
     }
     fun calculateDayProgress(currentDate: String = getDayToday(), dbHelper: DBHelper): Double
@@ -46,6 +47,7 @@ object ShiftHelper {
 
     fun calculateWeekProgress(currentDate: String = getDayToday(), dbHelper: DBHelper): Double {
         val shifts = makeArray(dbHelper)
+        if (shifts.isEmpty()) return 0.0
         var thisWeekSum = 0.0
 
         val currentWeek = getCurrentWeek(currentDate)
@@ -72,6 +74,7 @@ object ShiftHelper {
     fun calculateMonthProgress(currentDate: String = getDayToday(), dbHelper: DBHelper): Double
     {
         val shifts = makeArray(dbHelper)
+        if (shifts.isEmpty()) return 0.0
         var i = 0
         var thisMonthSum = 0.0
         do {

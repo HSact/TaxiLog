@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.taxidrivercalculator.ui.fragments.GoalsFragment"
+        android:name="com.example.taxidrivercalculator.ui.fragments.goals.GoalsFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_goals" />
 
