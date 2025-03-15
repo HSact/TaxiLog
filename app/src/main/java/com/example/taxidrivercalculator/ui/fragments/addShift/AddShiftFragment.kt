@@ -1,8 +1,7 @@
-package com.example.taxidrivercalculator.ui.fragments
+package com.example.taxidrivercalculator.ui.fragments.addShift
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -23,6 +22,8 @@ import com.example.taxidrivercalculator.helpers.ShiftHelper
 import com.example.taxidrivercalculator.helpers.ShiftHelper.convertLongToTime
 import com.example.taxidrivercalculator.helpers.ShiftHelper.convertTimeToLong
 import com.example.taxidrivercalculator.ui.activities.MainActivity
+import com.example.taxidrivercalculator.ui.fragments.DatePickerFragment
+import com.example.taxidrivercalculator.ui.fragments.TimePickerFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -31,6 +32,10 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     object CalcShift {
         var date: String =""
+        var timeBegin: String =""
+        var timeEnd: String =""
+        var breakBegin: String =""
+        var breakEnd: String =""
         var onlineTime: Long = 0
         var breakTime: Long = 0
         var totalTime: Long = 0
@@ -40,6 +45,8 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         var mileage: Double = 0.0
         var profit: Double = 0.0
     }
+
+    private val viewModel = AddShiftViewModel()
 
     private lateinit var currentShift: CalcShift
     private lateinit var editDate: EditText
@@ -85,10 +92,13 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         /*editDate.setOnClickListener() {
             pickDate()
         }*/
+        viewModel.shiftData.observe (viewLifecycleOwner)
+        {
+            //TODO: update UI
+        }
         editDate.setOnClickListener { pickDate(editDate) }
         editStart.setOnClickListener { pickTime(editStart) }
         editEnd.setOnClickListener { pickTime(editEnd) }
@@ -111,7 +121,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         editMileage = binding.editTextMileage
         buttonSubmit = binding.buttonSubmit
     }
-    @SuppressLint("SimpleDateFormat")
+
     private fun loadGuess() {
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         val timeFormatter = DateTimeFormatter.ofPattern("H:mm")
