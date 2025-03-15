@@ -9,6 +9,8 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TableLayout
 import android.widget.TextView
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.taxidrivercalculator.R
@@ -120,9 +122,11 @@ class GoalsFragment : Fragment() {
         if (goalMonthString.isNullOrEmpty())
         {
             textAssignedGoal.text = getString(R.string.you_haven_t_set_goal_yet)
+            tableProgress.isGone = true
             return
         }
         textAssignedGoal.text = getString(R.string.your_goal_per_month, goalMonthString)
+        tableProgress.isVisible = true
     }
 
     @SuppressLint("SetTextI18n")
