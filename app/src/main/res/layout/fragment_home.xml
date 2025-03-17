@@ -206,6 +206,7 @@
         android:contentDescription="@string/new_shift"
         android:layout_gravity="bottom|end"
         app:backgroundTint="@color/yellow_4"
+        app:tint="?attr/colorAccent"
         android:translationY="-100dp"
 
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"/>
