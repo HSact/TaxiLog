@@ -1,13 +1,19 @@
 package com.example.taxidrivercalculator.ui.fragments.addShift
 
+import android.content.Context
 import android.content.SharedPreferences
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.findNavController
 import com.example.taxidrivercalculator.R
+import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.helpers.ShiftHelper
 import com.example.taxidrivercalculator.helpers.ShiftHelper.convertLongToTime
 import com.example.taxidrivercalculator.helpers.ShiftHelper.convertTimeToLong
+import com.example.taxidrivercalculator.ui.activities.MainActivity
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -96,6 +102,21 @@ class AddShiftViewModel: ViewModel() {
         }
         currentShift.profit = currentShift.earnings - currentShift.wash - currentShift.fuelCost
         _shiftData.value = currentShift
+    }
+
+    private fun submit(context: Context)
+    {
+        val currentShift = _shiftData.value ?: return
+        val db = DBHelper(context, null)
+        db.addShift(
+            currentShift.date,
+            ShiftHelper.msToHours(currentShift.totalTime),
+            currentShift.earnings,
+            currentShift.wash,
+            currentShift.fuelCost,
+            currentShift.mileage,
+            currentShift.profit
+        )
     }
 
     private fun hoursToMs (hours: Int): Long
