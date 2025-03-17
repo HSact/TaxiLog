@@ -180,24 +180,11 @@
             </TableRow>
         </TableLayout>
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp">
-
-            <Button
-                android:id="@+id/buttonNewShift"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|fill_horizontal|center_vertical"
-                android:text="@string/new_shift" />
-        </LinearLayout>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/fabNewShift"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -205,7 +192,7 @@
         android:src="@drawable/add_2_24px"
         android:contentDescription="@string/new_shift"
         android:layout_gravity="bottom|end"
-        app:backgroundTint="@color/yellow_4"
+        app:backgroundTint="?attr/colorPrimary"
         app:tint="?attr/colorAccent"
         android:translationY="-100dp"
 

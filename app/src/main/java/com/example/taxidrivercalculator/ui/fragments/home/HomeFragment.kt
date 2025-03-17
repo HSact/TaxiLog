@@ -49,7 +49,7 @@ class HomeFragment : Fragment() {
             textGoal.text = shift["goal"]
         }
         viewModel.calculateShift(requireContext())
-        binding.buttonNewShift.setOnClickListener { newShift() }
+        binding.fabNewShift.setOnClickListener { newShift() }
     }
     override fun onResume() {
         super.onResume()
