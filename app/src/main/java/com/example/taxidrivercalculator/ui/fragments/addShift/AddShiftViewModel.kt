@@ -2,18 +2,13 @@ package com.example.taxidrivercalculator.ui.fragments.addShift
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.fragment.findNavController
-import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.helpers.ShiftHelper
 import com.example.taxidrivercalculator.helpers.ShiftHelper.convertLongToTime
 import com.example.taxidrivercalculator.helpers.ShiftHelper.convertTimeToLong
-import com.example.taxidrivercalculator.ui.activities.MainActivity
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -33,10 +28,9 @@ data class CalcShift
      var profit: Double = 0.0)
 
 class AddShiftViewModel: ViewModel() {
-    init { loadGuess() }
-
     private val _shiftData = MutableLiveData<CalcShift>()
     val shiftData: LiveData<CalcShift> get() = _shiftData
+    init { loadGuess() }
 
     private fun loadGuess() {
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
@@ -104,7 +98,7 @@ class AddShiftViewModel: ViewModel() {
         _shiftData.value = currentShift
     }
 
-    private fun submit(context: Context)
+    fun submit(context: Context)
     {
         val currentShift = _shiftData.value ?: return
         val db = DBHelper(context, null)
