@@ -55,7 +55,7 @@ class AddShiftViewModel: ViewModel() {
         _shiftData.value = currentShift
     }
 
-    private fun guessFuelCost (settings: SharedPreferences)
+    fun guessFuelCost (settings: SharedPreferences)
     {
         var currentShift = _shiftData.value ?: return
         val fuelPrice: Double = settings.getString("Fuel_price", "0")?.toDoubleOrNull() ?: 0.0
@@ -72,7 +72,12 @@ class AddShiftViewModel: ViewModel() {
             fuelPrice * currentShift.mileage * consumption / 100))
         _shiftData.value = currentShift
     }
-    private fun calculateShift ()
+
+    fun updateShift(shift: CalcShift) {
+        _shiftData.value = shift
+    }
+
+    fun calculateShift ()
     {
         var currentShift = _shiftData.value ?: return
         currentShift = currentShift.copy(onlineTime = convertTimeToLong(currentShift.timeEnd) - convertTimeToLong(currentShift.timeBegin))

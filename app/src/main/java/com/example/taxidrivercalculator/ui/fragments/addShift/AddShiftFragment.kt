@@ -81,7 +81,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         editMileage.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?)
             {
-                    guessFuelCost()
+                viewModel.guessFuelCost(requireContext().getSharedPreferences("Settings", Activity.MODE_PRIVATE))
             }
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -95,8 +95,8 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
             pickDate()
         }*/
         viewModel.shiftData.observe (viewLifecycleOwner)
-        { shift -> updateUI(shift)
-        }
+        { shift -> updateUI(shift) }
+
         editDate.setOnClickListener { pickDate(editDate) }
         editStart.setOnClickListener { pickTime(editStart) }
         editEnd.setOnClickListener { pickTime(editEnd) }
@@ -104,7 +104,29 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         editBreakEnd.setOnClickListener { pickTime(editBreakEnd) }
         checkBreak.setOnClickListener { switchBrake() }
         buttonSubmit.setOnClickListener {calculateShift()}
+//TODO: add text watchers
+        /*editDate.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                updateShiftField { it.date = s.toString() }
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+        editEarnings.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                updateShiftField { it.earnings = s.toString().toDouble() }
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })*/
     }
+
+    private fun updateShiftField(fieldSetter: (CalcShift) -> Unit) {
+        val currentShift = viewModel.shiftData.value ?: return
+        fieldSetter(currentShift)
+        viewModel.updateShift(currentShift)
+    }
+
 
     private fun updateUI(shift: CalcShift) {
         editDate.setText(shift.date)
@@ -143,7 +165,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         buttonSubmit = binding.buttonSubmit
     }
 
-    private fun loadGuess() {
+    /*private fun loadGuess() {
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         val timeFormatter = DateTimeFormatter.ofPattern("H:mm")
 
@@ -164,7 +186,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         {
             editDate.setText(endDate.format(formatter))
         }
-    }
+    }*/
 
     private fun hoursToMs (hours: Int): Long
     {
@@ -208,7 +230,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         timePickerFragment.show(supportFragmentManager, "TimePickerFragment")
     }
 
-    @SuppressLint("SetTextI18n")
+    /*@SuppressLint("SetTextI18n")
     private fun guessFuelCost ()
     {
         val settings = requireContext().getSharedPreferences("Settings", Activity.MODE_PRIVATE)
@@ -228,20 +250,19 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
             fuelPrice * editMileage.text.toString().toDouble() * consumption / 100
         )
         editFuelCost.setText(n.toString())
-    }
+    }*/
 
     private fun calculateShift ()
     {
-
         if (editEarnings.text.isEmpty())
         {
             showErrorMessage(getString(R.string.earnings_is_empty))
             return
         }
-        if (editWash.text.isEmpty())
+        /*if (editWash.text.isEmpty())
         {
             editWash.setText("0")
-        }
+        }*/
         if (editFuelCost.text.isEmpty())
         {
             showErrorMessage(getString(R.string.fuel_cost_is_empty))
@@ -252,6 +273,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
             showErrorMessage(getString(R.string.mileage_is_empty))
             return
         }
+        viewModel.calculateShift()
 
         showSubmitMessage(
             getString(
@@ -270,6 +292,9 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         alert.show()
 
     }
+
+
+
     /*private fun showWarningMessage (warningCode: String)
     {
         val alert = AlertDialog.Builder(activity)
