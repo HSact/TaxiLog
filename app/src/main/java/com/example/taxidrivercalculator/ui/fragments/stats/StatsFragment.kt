@@ -1,4 +1,4 @@
-package com.example.taxidrivercalculator.ui.fragments
+package com.example.taxidrivercalculator.ui.fragments.stats
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -13,6 +13,7 @@ import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.helpers.Shift
 import com.example.taxidrivercalculator.databinding.FragmentStatsBinding
 import androidx.fragment.app.viewModels
+import com.example.taxidrivercalculator.ui.fragments.DatePickerFragment
 
 class StatsFragment : Fragment() {
 

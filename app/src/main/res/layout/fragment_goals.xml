@@ -12,7 +12,7 @@
         android:minHeight="500dp"
         android:orientation="vertical"
         android:padding="10dp"
-        tools:context=".ui.fragments.GoalsFragment">
+        tools:context=".ui.fragments.goals.GoalsFragment">
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.example.taxidrivercalculator.ui.fragments
+package com.example.taxidrivercalculator.ui.fragments.stats
 
 import androidx.lifecycle.ViewModel
 import com.example.taxidrivercalculator.helpers.DBHelper

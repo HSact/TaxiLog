@@ -1,16 +1,25 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+
     android:id="@+id/scroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="55dp">
+    android:paddingBottom="55dp"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="10dp"
-        tools:context=".ui.fragments.HomeFragment">
+        tools:context=".ui.fragments.home.HomeFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -171,20 +180,22 @@
             </TableRow>
         </TableLayout>
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp">
-
-            <Button
-                android:id="@+id/buttonNewShift"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|fill_horizontal|center_vertical"
-                android:text="@string/new_shift" />
-        </LinearLayout>
 
     </LinearLayout>
+</androidx.core.widget.NestedScrollView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabNewShift"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_marginBottom="80dp"
+        android:src="@drawable/add_2_24px"
+        android:contentDescription="@string/new_shift"
+        android:layout_gravity="bottom|end"
+        app:backgroundTint="?attr/colorPrimary"
+        app:tint="?attr/colorAccent"
+        android:translationY="-100dp"
 
-</ScrollView>
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

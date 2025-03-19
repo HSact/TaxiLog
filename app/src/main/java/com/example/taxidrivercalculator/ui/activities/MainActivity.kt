@@ -16,6 +16,7 @@ import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.ActivityMainBinding
 import com.example.taxidrivercalculator.helpers.LocaleHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.navigation.findNavController
 
 
 class MainActivity : AppCompatActivity() {
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val navView: BottomNavigationView = binding.navView
-        val navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main)
+        val navController = this.findNavController(R.id.nav_host_fragment_activity_main)
         botNav = navView
         loadSettings()
         val appBarConfiguration = AppBarConfiguration(
