@@ -177,19 +177,25 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     private fun calculateShift ()
     {
-        if (editEarnings.text.isEmpty())
+        if (editEarnings.text.isEmpty() || editWash.text.isEmpty() ||
+            editFuelCost.text.isEmpty() || editMileage.text.isEmpty())
         {
-            showErrorMessage(getString(R.string.earnings_is_empty))
-            return
-        }
-        if (editFuelCost.text.isEmpty())
-        {
-            showErrorMessage(getString(R.string.fuel_cost_is_empty))
-            return
-        }
-        if (editMileage.text.isEmpty())
-        {
-            showErrorMessage(getString(R.string.mileage_is_empty))
+            if (editFuelCost.text.isEmpty())
+            {
+                editFuelCost.setError(getString(R.string.fuel_cost_is_empty), null)
+
+                editFuelCost.requestFocus()
+            }
+            if (editMileage.text.isEmpty())
+            {
+                editMileage.setError(getString(R.string.mileage_is_empty), null)
+                editMileage.requestFocus()
+            }
+            if (editEarnings.text.isEmpty())
+            {
+                editEarnings.setError(getString(R.string.earnings_is_empty), null)
+                editEarnings.requestFocus()
+            }
             return
         }
 
@@ -208,15 +214,14 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
             ))
     }
 
-    private fun showErrorMessage(errorCode: String)
+    /*private fun showErrorMessage(errorCode: String)
     {
         val alert = MaterialAlertDialogBuilder(requireContext())
         alert.setTitle(getString(R.string.error))
         alert.setPositiveButton(R.string.ok, null)
         alert.setMessage(errorCode)
         alert.show()
-
-    }
+    }*/
 
     private fun showSubmitMessage (warningCode: String)
     {
