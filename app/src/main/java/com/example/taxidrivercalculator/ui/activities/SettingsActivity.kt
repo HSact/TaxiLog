@@ -161,7 +161,7 @@ class SettingsActivity : AppCompatActivity() {
         switchService.isChecked = settings.getBoolean("Service", false)
         textServiceCost.setText(settings.getString("Service_cost", ""))
         textGoalPerMonth.setText(settings.getString("Goal_per_month", ""))
-        radioSchedule.check(settings.getInt("Schedule", 0))
+        radioSchedule.check(getScheduleId(settings.getString("Schedule", ""))) //TODO: сделать график нормально
         switchTaxes.isChecked = settings.getBoolean("Taxes", false)
         textTaxRate.setText(settings.getString("Tax_rate", ""))
     }
@@ -264,7 +264,7 @@ class SettingsActivity : AppCompatActivity() {
         settings.putBoolean("Service", switchService.isChecked)
         settings.putString("Service_cost", textServiceCost.text.toString())
         settings.putString("Goal_per_month", textGoalPerMonth.text.toString())
-        settings.putInt("Schedule", radioSchedule.checkedRadioButtonId) //TODO: сделать график нормально
+        settings.putString("Schedule", getSchedule())
         settings.putBoolean("Taxes", switchTaxes.isChecked)
         settings.putString("Tax_rate", textTaxRate.text.toString())
 
@@ -274,7 +274,7 @@ class SettingsActivity : AppCompatActivity() {
             R.id.radio52 -> radio52.text
             else -> {"0"}
         }
-        settings.putString("Schedule_text", radioScheduleText.toString())
+        //settings.putString("Schedule_text", radioScheduleText.toString())
         settings.apply()
     }
 
@@ -306,6 +306,24 @@ class SettingsActivity : AppCompatActivity() {
             1 -> return "ru"
         }
            return ""
+    }
+    private fun getSchedule(): String
+    {
+        return when (radioSchedule.checkedRadioButtonId) {
+            R.id.radio70 -> "7/0"
+            R.id.radio61 -> "6/1"
+            R.id.radio52 -> "5/2"
+            else -> "0"
+        }
+    }
+    private fun getScheduleId(schedule: String?): Int
+    {
+        return when (schedule) {
+            "7/0" -> R.id.radio70
+            "6/1" -> R.id.radio61
+            "5/2" -> R.id.radio52
+            else -> -1
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

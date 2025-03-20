@@ -28,7 +28,7 @@ class SettingsHelper private constructor(context: Context) {
         private set
     var goalPerMonth: String? = null
         private set
-    var schedule: Int = 0
+    var schedule: String? = null
         private set
     var taxes: Boolean = false
         private set
@@ -58,7 +58,7 @@ class SettingsHelper private constructor(context: Context) {
         service = sharedPreferences.getBoolean("Service", false)
         serviceCost = sharedPreferences.getString("Service_cost", "")
         goalPerMonth = sharedPreferences.getString("Goal_per_month", "")
-        schedule = sharedPreferences.getInt("Schedule", 0)
+        schedule = sharedPreferences.getString("Schedule", "")
         taxes = sharedPreferences.getBoolean("Taxes", false)
         taxRate = sharedPreferences.getString("Tax_rate", "")
     }

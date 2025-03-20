@@ -1,11 +1,11 @@
 package com.example.taxidrivercalculator.ui.fragments.goals
 
-import android.app.Activity
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.taxidrivercalculator.helpers.DBHelper
+import com.example.taxidrivercalculator.helpers.SettingsHelper
 import com.example.taxidrivercalculator.helpers.ShiftHelper
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -23,8 +23,9 @@ class GoalsViewModel: ViewModel() {
 
     fun defineGoals(date: String, context: Context)
     {
-        val settings = context.getSharedPreferences("Settings", Activity.MODE_PRIVATE)
-        goalMonthString = settings?.getString("Goal_per_month", "")
+        //val settings = context.getSharedPreferences("Settings", Activity.MODE_PRIVATE)
+        val settings = SettingsHelper.getInstance(context)
+        goalMonthString = settings.goalPerMonth
         if (goalMonthString.isNullOrEmpty() || goalMonthString == "-1")
         {
             goalMonthString = ""
@@ -36,14 +37,12 @@ class GoalsViewModel: ViewModel() {
             pickedDate = date
         }
         goalMonth = goalMonthString!!.toDouble()
-        val schedule = settings.getString("Schedule_text", "")
         val denominatorWeek = 4.5
         goalWeek = goalMonth / denominatorWeek
-        val denominatorDay = when (schedule) {
+        val denominatorDay = when (settings.schedule) {
             "7/0" -> 30.0
             "6/1" -> 25.7
             "5/2" -> 21.4
-            "0" -> 30.0
             else -> 30.0
         }
         goalDay = goalMonth / denominatorDay
