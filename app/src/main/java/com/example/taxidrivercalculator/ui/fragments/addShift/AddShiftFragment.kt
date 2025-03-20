@@ -63,7 +63,6 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddShiftBinding.inflate(inflater, container, false)
-
         bindItems()
         return binding.root
     }
@@ -81,7 +80,6 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
                 binding.tableBreak.visibility = View.GONE
             }
         }*/
-
 
         editDate.setOnClickListener {
             pickDate(editDate) }

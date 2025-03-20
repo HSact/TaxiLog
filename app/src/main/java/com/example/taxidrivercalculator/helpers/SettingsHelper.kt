@@ -12,6 +12,8 @@ class SettingsHelper private constructor(context: Context) {
         private set
     var theme: String = "default"
         private set
+    var language: String? = null
+        private set
     var kmMi: Boolean = false
         private set
     var consumption: String? = null
@@ -50,6 +52,7 @@ class SettingsHelper private constructor(context: Context) {
         seted_up = sharedPreferences.getBoolean("Seted_up", false)
         //if (!seted_up) return
         theme = sharedPreferences.getString("Theme", "")?: getCurrentTheme()
+        language = sharedPreferences.getString("My_Lang", "")
         kmMi = sharedPreferences.getBoolean("KmMi", false)
         consumption = sharedPreferences.getString("Consumption", "")
         rented = sharedPreferences.getBoolean("Rented", false)

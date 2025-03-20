@@ -2,7 +2,6 @@ package com.example.taxidrivercalculator.ui.activities
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,8 +12,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
-
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taxidrivercalculator.helpers.CustomRecyclerAdapter
@@ -234,5 +231,4 @@ class LogActivity : AppCompatActivity() {
         }
         datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
     }
-
 }
