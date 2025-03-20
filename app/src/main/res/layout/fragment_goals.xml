@@ -43,6 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center|fill_vertical"
+                android:hint="@string/date"
                 android:minWidth="120dp">
 
                 <com.google.android.material.textfield.TextInputEditText
