@@ -107,8 +107,8 @@
     <string name="hint_money">₽/$ и т.п.</string>
     <string name="start">Начало</string>
     <string name="end">Конец</string>
-    <string name="start_date">С даты</string>
-    <string name="end_date">По дату</string>
+    <string name="start_date">От</string>
+    <string name="end_date">До</string>
     <string name="settings_consumption_hint">л/100 км</string>
     <string name="settings_fuel_price_hint">л/$</string>
     <string name="hint_money_per_week">₽/$ и т.п. в неделю</string>
