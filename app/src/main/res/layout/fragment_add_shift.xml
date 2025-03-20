@@ -50,6 +50,7 @@
                 android:text="@string/addshift_date" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/buttonDatePickL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="120dp">
@@ -82,6 +83,7 @@
                 android:text="@string/addshift_online" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/buttonTimeStartL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="110dp"
@@ -99,6 +101,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/buttonTimeEndL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -214,6 +217,7 @@
                 android:text="@string/earnings" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editTextEarningsL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_money">
@@ -244,6 +248,7 @@
                 android:text="@string/wash" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editTextWashL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_money">
@@ -273,6 +278,7 @@
                 android:text="@string/mileage" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editTextMileageL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/settings_km">
@@ -303,6 +309,7 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editTextFuelCostL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_money">

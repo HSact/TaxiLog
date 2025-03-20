@@ -193,7 +193,7 @@
         android:contentDescription="@string/new_shift"
         android:layout_gravity="bottom|end"
         app:backgroundTint="?attr/colorPrimary"
-        app:tint="?attr/colorAccent"
+        app:tint="?attr/colorOnPrimary"
         android:translationY="-100dp"
 
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"/>
