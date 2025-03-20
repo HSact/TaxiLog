@@ -25,6 +25,7 @@ import com.example.taxidrivercalculator.databinding.DialogShiftEditBinding
 import com.example.taxidrivercalculator.databinding.RecyclerviewItemBinding
 import com.example.taxidrivercalculator.ui.fragments.DatePickerFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import androidx.appcompat.widget.Toolbar
 
 
 class LogActivity : AppCompatActivity() {
@@ -40,6 +41,11 @@ class LogActivity : AppCompatActivity() {
         binding = ActivityLogBinding.inflate(layoutInflater)
         bindingR = RecyclerviewItemBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_log)
+        //supportActionBar?.title = getString(R.string.title_my_shifts)
+        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
         supportActionBar?.title = getString(R.string.title_my_shifts)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 

@@ -62,8 +62,8 @@ class SettingsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)*/
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
-        supportActionBar?.title = getString(R.string.title_settings)
         setSupportActionBar(toolbar)
+        supportActionBar?.title = getString(R.string.title_settings)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         bindItems()
