@@ -226,8 +226,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="@dimen/table_row_padding_regular"
-            android:visibility="gone">
+            android:paddingTop="@dimen/table_row_padding_regular">
 
             <TextView
                 android:id="@+id/textFuelPrice"
