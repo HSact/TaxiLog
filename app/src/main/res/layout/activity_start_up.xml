@@ -86,7 +86,7 @@
                         android:layout_height="wrap_content"
                         android:height="48dp"
                         android:elegantTextHeight="true"
-                        android:gravity="center|top"
+                        android:gravity="center"
                         android:minWidth="120dp"
                         android:minHeight="48dp"
                         android:text="@string/ok" />
@@ -98,7 +98,7 @@
                         android:layout_marginTop="10dp"
                         android:height="48dp"
                         android:elegantTextHeight="true"
-                        android:gravity="center|top"
+                        android:gravity="center"
                         android:minWidth="120dp"
                         android:minHeight="48dp"
                         android:text="@string/nope" />
