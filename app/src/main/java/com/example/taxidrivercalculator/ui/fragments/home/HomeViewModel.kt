@@ -7,13 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.helpers.DBHelper
+import com.example.taxidrivercalculator.helpers.SettingsHelper
 import com.example.taxidrivercalculator.helpers.ShiftHelper
 
 class HomeViewModel: ViewModel() {
     private val _shiftData = MutableLiveData<Map<String, String>>()
     val shiftData: LiveData<Map<String, String>> get() = _shiftData
-
-
 
     fun calculateShift (context: Context)
     {
@@ -36,8 +35,8 @@ class HomeViewModel: ViewModel() {
         val textTime = cursor.getString(cursor.getColumnIndex(DBHelper.TIME_COL)+0) + " " + context.getString(R.string.hours)
         val textTotal = cursor.getString(cursor.getColumnIndex(DBHelper.PROFIT_COL)+0)
         val textPerHour = ShiftHelper.calcAverageEarningsPerHour(shifts.last()).toString()
-        val settings = context.getSharedPreferences("Settings", Activity.MODE_PRIVATE)
-        val goalMonthString = settings?.getString("Goal_per_month", "")
+        val settings = SettingsHelper.getInstance(context)
+        val goalMonthString = settings.goalPerMonth
 
         val textGoal =
             if (goalMonthString.isNullOrEmpty())

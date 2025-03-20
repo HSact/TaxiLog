@@ -13,6 +13,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import com.example.taxidrivercalculator.helpers.LocaleHelper
 import com.example.taxidrivercalculator.R
 
@@ -21,6 +22,8 @@ class AboutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
         supportActionBar?.title = getString(R.string.title_about)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val textAbout = findViewById<TextView>(R.id.textAbout)
@@ -41,7 +44,6 @@ class AboutActivity : AppCompatActivity() {
         textAbout.text = spannableString
         textAbout.movementMethod = LinkMovementMethod.getInstance()
         textAbout.highlightColor = Color.TRANSPARENT
-
     }
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(

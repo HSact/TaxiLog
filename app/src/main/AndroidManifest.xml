@@ -10,9 +10,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TaxiDriverCalculator">
+        android:theme="@style/Theme.TaxiLog">
         <activity
             android:name=".ui.activities.LogActivity"
+            android:windowTranslucentStatus="true"
+            android:fitsSystemWindows="true"
             android:exported="false" />
         <activity
             android:name=".ui.activities.StartUpActivity"
@@ -24,15 +26,20 @@
         </activity>
         <activity
             android:name=".ui.activities.AboutActivity"
+            android:windowTranslucentStatus="true"
+            android:fitsSystemWindows="true"
             android:exported="false" />
         <activity
             android:name=".ui.activities.SettingsActivity"
             android:exported="false"
+            android:windowTranslucentStatus="true"
+            android:fitsSystemWindows="true"
             android:label="@string/title_settings" />
         <activity
             android:name=".ui.activities.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
+            android:windowTranslucentStatus="true"
+            android:fitsSystemWindows="true"
             android:launchMode="singleTop" />
     </application>
 

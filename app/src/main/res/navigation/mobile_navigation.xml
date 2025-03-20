@@ -20,13 +20,13 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_goals"
         android:name="com.example.taxidrivercalculator.ui.fragments.goals.GoalsFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_goals" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_stats"
         android:name="com.example.taxidrivercalculator.ui.fragments.stats.StatsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_stats" />

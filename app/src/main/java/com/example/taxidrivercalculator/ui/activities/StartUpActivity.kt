@@ -1,6 +1,5 @@
 package com.example.taxidrivercalculator.ui.activities
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +8,7 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import com.example.taxidrivercalculator.databinding.ActivityStartUpBinding
+import com.example.taxidrivercalculator.helpers.SettingsHelper
 import kotlin.system.exitProcess
 
 class StartUpActivity : AppCompatActivity() {
@@ -25,8 +25,10 @@ class StartUpActivity : AppCompatActivity() {
         binding.textLogo.alpha = 0f
         binding.buttonOkay.setOnClickListener{startActivity(Intent(this, SettingsActivity::class.java))}
         binding.buttonNope.setOnClickListener{startActivity(Intent(this, MainActivity::class.java))}
-        val settings = getSharedPreferences("Settings", Activity.MODE_PRIVATE)
-        val theme: String = settings.getString("Theme", "").toString()
+        val settings = SettingsHelper.getInstance(this)
+        //val settings = getSharedPreferences("Settings", Activity.MODE_PRIVATE)
+        val theme: String = settings.theme
+        //val theme: String = settings.getString("Theme", "").toString()
         if (theme=="dark")
         {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -39,7 +41,8 @@ class StartUpActivity : AppCompatActivity() {
         }
         binding.imageLogo.animate().setDuration(logoDuration).alpha(1f)
         binding.textLogo.animate().setDuration(logoDuration).alpha(1f)
-        if (settings.getBoolean("Seted_up", false))
+        //if (settings.getBoolean("Seted_up", false))
+        if(settings.seted_up)
         {
             Handler(Looper.getMainLooper()).postDelayed({
                 startActivity(Intent (this, MainActivity::class.java))}, logoDuration)

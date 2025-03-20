@@ -5,7 +5,6 @@ import android.content.res.Configuration
 import java.util.Locale
 
 object LocaleHelper {
-    private const val PREFS_NAME = "Settings"
     private const val KEY_LANGUAGE = "My_Lang"
 
     fun setLocale(context: Context, lang: String): Context {
@@ -22,12 +21,18 @@ object LocaleHelper {
     }
 
     fun getSavedLanguage(context: Context): String {
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        return prefs.getString(KEY_LANGUAGE, Locale.getDefault().language) ?: "en"
+        val settings = SettingsHelper.getInstance(context)
+        return settings.language ?: "en"
     }
 
     private fun saveLanguage(context: Context, lang: String) {
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        prefs.edit().putString(KEY_LANGUAGE, lang).apply()
+        val settings = SettingsHelper.getInstance(context)
+        settings.updateSetting(KEY_LANGUAGE, lang)
+    }
+
+    fun getDefault (): String
+    {
+        val currentLocale: Locale = Locale.getDefault()
+        return currentLocale.language
     }
 }

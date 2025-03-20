@@ -1,7 +1,5 @@
 package com.example.taxidrivercalculator.ui.activities
 
-import android.animation.ValueAnimator
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -15,8 +13,9 @@ import androidx.core.view.isVisible
 import com.example.taxidrivercalculator.helpers.LocaleHelper
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.SettingsActivityBinding
+import com.example.taxidrivercalculator.helpers.SettingsHelper
 import com.google.android.material.materialswitch.MaterialSwitch
-import com.google.android.material.switchmaterial.SwitchMaterial
+import androidx.appcompat.widget.Toolbar
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -50,6 +49,8 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var textTaxRate: EditText
     private lateinit var buttonApply: Button
 
+    private val settings = SettingsHelper.getInstance(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LocaleHelper.setLocale(this, LocaleHelper.getSavedLanguage(this))
@@ -57,6 +58,11 @@ class SettingsActivity : AppCompatActivity() {
         binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        /*supportActionBar?.title = getString(R.string.title_settings)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)*/
+
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
         supportActionBar?.title = getString(R.string.title_settings)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -149,27 +155,25 @@ class SettingsActivity : AppCompatActivity() {
     private fun loadSettings()
     {
         loadLangSpinner()
-        val settings = getSharedPreferences("Settings", Activity.MODE_PRIVATE)
-        if (!(settings.getBoolean("Seted_up", false)))
-        {
+        if (!(settings.seted_up)) {
             return
         }
         loadThemeSelection()
         loadKmMiSelection()
-        textConsumption.setText(settings.getString("Consumption", ""))
-        switchRent.isChecked = settings.getBoolean("Rented", false)
-        textRentCost.setText(settings.getString("Rent_cost", ""))
-        textFuelCost.setText(settings.getString("Fuel_price", ""))
-        switchService.isChecked = settings.getBoolean("Service", false)
-        textServiceCost.setText(settings.getString("Service_cost", ""))
-        textGoalPerMonth.setText(settings.getString("Goal_per_month", ""))
-        radioSchedule.check(settings.getInt("Schedule", 0))
-        switchTaxes.isChecked = settings.getBoolean("Taxes", false)
-        textTaxRate.setText(settings.getString("Tax_rate", ""))
+        textConsumption.setText(settings.consumption)
+        switchRent.isChecked = settings.rented
+        textRentCost.setText(settings.rentCost)
+        textFuelCost.setText(settings.fuelPrice)
+        switchService.isChecked = settings.service
+        textServiceCost.setText(settings.serviceCost)
+        textGoalPerMonth.setText(settings.goalPerMonth)
+        radioSchedule.check(getScheduleId(settings.schedule))
+        switchTaxes.isChecked = settings.taxes
+        textTaxRate.setText(settings.taxRate)
     }
     private fun loadLangSpinner()
     {
-        val currentLang: String = getLocate()
+        val currentLang: String = settings.language?: LocaleHelper.getDefault()
         if (currentLang=="en")
         {
             spinnerLang.setSelection(0)
@@ -205,9 +209,7 @@ class SettingsActivity : AppCompatActivity() {
     }
     private fun loadKmMiSelection()
     {
-        val settings = getSharedPreferences("Settings", Activity.MODE_PRIVATE)
-        val kmMi: Boolean = settings.getBoolean("KmMi", false)
-        if (kmMi)
+        if (settings.kmMi)
         {
             radioKm.isChecked=true
             radioMi.isChecked=false
@@ -230,11 +232,6 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun getLocate(): String
-    {
-        val sharedPreferences = getSharedPreferences("Settings", Activity.MODE_PRIVATE)
-        return sharedPreferences.getString("My_Lang", "").toString()
-    }
     private fun getSelectedTheme(): String
     {
         if (radioDark.isChecked)
@@ -254,30 +251,21 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun saveSettings()
     {
-        val settings = getSharedPreferences("Settings", Context.MODE_PRIVATE).edit()
-        settings.putBoolean("Seted_up", true)
-        settings.putString("My_Lang", injectLangSpinner())
-        settings.putString("Theme", getSelectedTheme())
-        settings.putBoolean("KmMi", getKmMi())
-        settings.putString("Consumption", textConsumption.text.toString())
-        settings.putString("Fuel_price", textFuelCost.text.toString())
-        settings.putBoolean("Rented", switchRent.isChecked)
-        settings.putString("Rent_cost", textRentCost.text.toString())
-        settings.putBoolean("Service", switchService.isChecked)
-        settings.putString("Service_cost", textServiceCost.text.toString())
-        settings.putString("Goal_per_month", textGoalPerMonth.text.toString())
-        settings.putInt("Schedule", radioSchedule.checkedRadioButtonId)
-        settings.putBoolean("Taxes", switchTaxes.isChecked)
-        settings.putString("Tax_rate", textTaxRate.text.toString())
-
-        val radioScheduleText = when (radioSchedule.checkedRadioButtonId) {
-            R.id.radio70 -> radio70.text
-            R.id.radio61 -> radio61.text
-            R.id.radio52 -> radio52.text
-            else -> {"0"}
-        }
-        settings.putString("Schedule_text", radioScheduleText.toString())
-        settings.apply()
+        settings.updateSetting("Seted_up", true)
+        settings.updateSetting("My_Lang", injectLangSpinner())
+        settings.updateSetting("Theme", getSelectedTheme())
+        settings.updateSetting("KmMi", getKmMi())
+        settings.updateSetting("KmMi", getKmMi())
+        settings.updateSetting("Consumption", textConsumption.text.toString())
+        settings.updateSetting("Fuel_price", textFuelCost.text.toString())
+        settings.updateSetting("Rented", switchRent.isChecked)
+        settings.updateSetting("Rent_cost", textRentCost.text.toString())
+        settings.updateSetting("Service", switchService.isChecked)
+        settings.updateSetting("Service_cost", textServiceCost.text.toString())
+        settings.updateSetting("Goal_per_month", textGoalPerMonth.text.toString())
+        settings.updateSetting("Schedule", getSchedule())
+        settings.updateSetting("Taxes", switchTaxes.isChecked)
+        settings.updateSetting("Tax_rate", textTaxRate.text.toString())
     }
 
     private fun switchVisualize(switch: MaterialSwitch)
@@ -308,6 +296,24 @@ class SettingsActivity : AppCompatActivity() {
             1 -> return "ru"
         }
            return ""
+    }
+    private fun getSchedule(): String
+    {
+        return when (radioSchedule.checkedRadioButtonId) {
+            R.id.radio70 -> "7/0"
+            R.id.radio61 -> "6/1"
+            R.id.radio52 -> "5/2"
+            else -> "0"
+        }
+    }
+    private fun getScheduleId(schedule: String?): Int
+    {
+        return when (schedule) {
+            "7/0" -> R.id.radio70
+            "6/1" -> R.id.radio61
+            "5/2" -> R.id.radio52
+            else -> -1
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

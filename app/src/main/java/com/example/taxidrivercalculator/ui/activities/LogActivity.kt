@@ -2,7 +2,6 @@ package com.example.taxidrivercalculator.ui.activities
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,8 +12,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
-
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taxidrivercalculator.helpers.CustomRecyclerAdapter
@@ -28,6 +25,7 @@ import com.example.taxidrivercalculator.databinding.DialogShiftEditBinding
 import com.example.taxidrivercalculator.databinding.RecyclerviewItemBinding
 import com.example.taxidrivercalculator.ui.fragments.DatePickerFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import androidx.appcompat.widget.Toolbar
 
 
 class LogActivity : AppCompatActivity() {
@@ -43,6 +41,11 @@ class LogActivity : AppCompatActivity() {
         binding = ActivityLogBinding.inflate(layoutInflater)
         bindingR = RecyclerviewItemBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_log)
+        //supportActionBar?.title = getString(R.string.title_my_shifts)
+        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
         supportActionBar?.title = getString(R.string.title_my_shifts)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -234,5 +237,4 @@ class LogActivity : AppCompatActivity() {
         }
         datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
     }
-
 }

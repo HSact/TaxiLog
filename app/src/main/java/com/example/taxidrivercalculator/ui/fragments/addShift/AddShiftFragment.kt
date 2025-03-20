@@ -1,10 +1,10 @@
 package com.example.taxidrivercalculator.ui.fragments.addShift
 
 import android.app.Activity
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +12,6 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -22,7 +21,6 @@ import com.example.taxidrivercalculator.helpers.ShiftHelper
 import com.example.taxidrivercalculator.ui.activities.MainActivity
 import com.example.taxidrivercalculator.ui.fragments.DatePickerFragment
 import com.example.taxidrivercalculator.ui.fragments.TimePickerFragment
-import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 
@@ -65,7 +63,6 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddShiftBinding.inflate(inflater, container, false)
-
         bindItems()
         return binding.root
     }
@@ -76,7 +73,13 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         { shift -> updateUI(shift) }
         //editDateL.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.teal_200)
         //MaterialColors.getColor(editDateL, com.google.android.material.R.attr.colorPrimary)
-
+        /*if (savedInstanceState != null) {
+            if (savedInstanceState.getBoolean("IS_VISIBLE_TABLE_BREAK", true)) {
+                binding.tableBreak.visibility = View.VISIBLE
+            } else {
+                binding.tableBreak.visibility = View.GONE
+            }
+        }*/
 
         editDate.setOnClickListener {
             pickDate(editDate) }
@@ -281,8 +284,19 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     private fun switchBrake()
     {
-        val check1: CheckBox = binding.checkBreak
-        val row = binding.tableBreak
-        row.isVisible = check1.isChecked
+        //row.isVisible = check1.isChecked
+        animateHeightChange(binding.tableBreak)
     }
+
+    private fun animateHeightChange(view: View) {
+        val parentLayout = view.parent as ViewGroup
+        val visibility = if (view.isVisible) View.GONE else View.VISIBLE
+        TransitionManager.beginDelayedTransition(parentLayout)
+        view.visibility = visibility
+    }
+
+    /*override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("IS_VISIBLE_TABLE_BREAK", binding.tableBreak.visibility == View.VISIBLE)
+    }*/
 }
