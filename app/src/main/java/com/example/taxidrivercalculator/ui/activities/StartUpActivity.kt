@@ -25,9 +25,9 @@ class StartUpActivity : AppCompatActivity() {
         binding.textLogo.alpha = 0f
         binding.buttonOkay.setOnClickListener{startActivity(Intent(this, SettingsActivity::class.java))}
         binding.buttonNope.setOnClickListener{startActivity(Intent(this, MainActivity::class.java))}
-        val settingsHelper = SettingsHelper.getInstance(this)
+        val settings = SettingsHelper.getInstance(this)
         //val settings = getSharedPreferences("Settings", Activity.MODE_PRIVATE)
-        val theme: String = settingsHelper.theme
+        val theme: String = settings.theme
         //val theme: String = settings.getString("Theme", "").toString()
         if (theme=="dark")
         {
@@ -42,7 +42,7 @@ class StartUpActivity : AppCompatActivity() {
         binding.imageLogo.animate().setDuration(logoDuration).alpha(1f)
         binding.textLogo.animate().setDuration(logoDuration).alpha(1f)
         //if (settings.getBoolean("Seted_up", false))
-        if(settingsHelper.seted_up)
+        if(settings.seted_up)
         {
             Handler(Looper.getMainLooper()).postDelayed({
                 startActivity(Intent (this, MainActivity::class.java))}, logoDuration)

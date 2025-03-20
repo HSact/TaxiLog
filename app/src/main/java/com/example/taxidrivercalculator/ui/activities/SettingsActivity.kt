@@ -1,6 +1,5 @@
 package com.example.taxidrivercalculator.ui.activities
 
-import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -16,7 +15,6 @@ import com.example.taxidrivercalculator.helpers.LocaleHelper
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.SettingsActivityBinding
 import com.google.android.material.materialswitch.MaterialSwitch
-import com.google.android.material.switchmaterial.SwitchMaterial
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -266,7 +264,7 @@ class SettingsActivity : AppCompatActivity() {
         settings.putBoolean("Service", switchService.isChecked)
         settings.putString("Service_cost", textServiceCost.text.toString())
         settings.putString("Goal_per_month", textGoalPerMonth.text.toString())
-        settings.putInt("Schedule", radioSchedule.checkedRadioButtonId)
+        settings.putInt("Schedule", radioSchedule.checkedRadioButtonId) //TODO: сделать график нормально
         settings.putBoolean("Taxes", switchTaxes.isChecked)
         settings.putString("Tax_rate", textTaxRate.text.toString())
 
