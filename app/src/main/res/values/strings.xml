@@ -26,12 +26,12 @@
     <string name="settings_rented_car">Rented car</string>
     <string name="settings_rent_cost">Rent cost</string>
     <string name="settings_calculate_service">Consider car service</string>
-    <string name="settings_service_cost_per_km">Service cost per km</string>
+    <string name="settings_service_cost_per_km">Service cost</string>
     <string name="settings_plan">Goal</string>
     <string name="settings_goal_per_month">Goal per month</string>
     <string name="settings_schedule">Schedule</string>
     <string name="settings_calculate_taxes">Calculate taxes</string>
-    <string name="settings_tax_rate">Tax rate %</string>
+    <string name="settings_tax_rate">Tax rate</string>
     <string name="apply">Apply</string>
     <string name="addshift_date_and_time">Date and time</string>
     <string name="addshift_date">Date:</string>
@@ -112,6 +112,11 @@
     <string name="end">End</string>
     <string name="start_date">Start date</string>
     <string name="end_date">End date</string>
+    <string name="settings_consumption_hint">l/100 km</string>
+    <string name="settings_fuel_price_hint">l/$</string>
+    <string name="hint_money_per_week">$/€/₽ etc. per week</string>
+    <string name="hint_money_per_km_mi">$/€/₽ etc. per km</string>
+    <string name="percent">%</string>
 
 
     <string-array name="languages">

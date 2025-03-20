@@ -20,16 +20,16 @@
     <string name="settings_km">Км</string>
     <string name="settings_mi">Мили</string>
     <string name="settings_car">Авто</string>
-    <string name="settings_consumption">Расход топлива (л/100км)</string>
+    <string name="settings_consumption">Расход топлива</string>
     <string name="settings_rented_car">Арендованное авто</string>
     <string name="settings_rent_cost">Стоимость аренды</string>
     <string name="settings_calculate_service">Учитывать стоимость обслуживания авто</string>
-    <string name="settings_service_cost_per_km">Стоимость обслуживания за 1 Км пробега</string>
+    <string name="settings_service_cost_per_km">Стоимость обслуживания</string>
     <string name="settings_plan">План</string>
     <string name="settings_goal_per_month">Цель заработка в месяц</string>
     <string name="settings_schedule">График</string>
     <string name="settings_calculate_taxes">Расчитывать налоги</string>
-    <string name="settings_tax_rate">Налоговая ставка %</string>
+    <string name="settings_tax_rate">Налоговая ставка</string>
     <string name="apply">Применить</string>
     <string name="addshift_date_and_time">Дата и время</string>
     <string name="addshift_date">Дата:</string>
@@ -109,6 +109,11 @@
     <string name="end">Конец</string>
     <string name="start_date">С даты</string>
     <string name="end_date">По дату</string>
+    <string name="settings_consumption_hint">л/100 км</string>
+    <string name="settings_fuel_price_hint">л/$</string>
+    <string name="hint_money_per_week">₽/$ и т.п. в неделю</string>
+    <string name="hint_money_per_km_mi">₽/$ и т.п. за км</string>
+    <string name="percent">%</string>
 
 
     <string-array name="languages">

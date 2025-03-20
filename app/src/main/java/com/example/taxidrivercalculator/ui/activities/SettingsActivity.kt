@@ -1,9 +1,13 @@
 package com.example.taxidrivercalculator.ui.activities
 
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.transition.TransitionManager
+import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -63,12 +67,29 @@ class SettingsActivity : AppCompatActivity() {
         switchVisualize(switchService)
         switchVisualize(switchTaxes)
 
+        if (savedInstanceState != null) {
+            if (savedInstanceState.getBoolean("IS_VISIBLE_RENT", true)) {
+                binding.TableRent.visibility = View.VISIBLE
+            } else {
+                binding.TableRent.visibility = View.GONE
+            }
+
+            if (savedInstanceState.getBoolean("IS_VISIBLE_SERVICE", true)) {
+                binding.TableService.visibility = View.VISIBLE
+            } else {
+                binding.TableService.visibility = View.GONE
+            }
+
+            if (savedInstanceState.getBoolean("IS_VISIBLE_TAXES", true)) {
+                binding.TableTaxes.visibility = View.VISIBLE
+            } else {
+                binding.TableTaxes.visibility = View.GONE
+            }
+        }
+
         switchRent.setOnClickListener {switchVisualize(switchRent)}
         switchService.setOnClickListener {switchVisualize(switchService)}
         switchTaxes.setOnClickListener {switchVisualize(switchTaxes)}
-
-        //radioDark.setOnClickListener {switchTheme()}
-        //radioLight.setOnClickListener {switchTheme()}
 
         buttonApply.setOnClickListener{
             applySettings()
@@ -77,19 +98,6 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(intent)
             finishAffinity()
         }
-
-        /*if (savedInstanceState == null) {
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.settings, SettingsFragment())
-                .commit()
-        }*/
-
-        /*but.setOnClickListener{
-            val homeIntent = Intent(this, HomeFragment::class.java)
-            startActivity(homeIntent)
-        }*/
-
     }
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(
@@ -215,42 +223,12 @@ class SettingsActivity : AppCompatActivity() {
         when {
             radioDark.isChecked -> {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                //return
-                //var a = AppCompatDelegate.getDefaultNightMode()
             }
             radioLight.isChecked -> {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                //return
             }
         }
-        /*val settings = getSharedPreferences("Settings", Context.MODE_PRIVATE).edit()
-        settings.putString("Theme", getSelectedTheme())
-        settings.apply()*/
     }
-    /*private fun setLocate(lang: String)
-    {
-        if (lang != "en" && lang != "ru")
-        {
-            return
-        }
-        val locale = Locale(lang)
-        Locale.setDefault(locale)
-        val config = Configuration()
-        config.setLocale(locale)
-        baseContext.resources.updateConfiguration(config, baseContext.resources.displayMetrics)
-        val editor = getSharedPreferences("Settings", Context.MODE_PRIVATE).edit()
-        editor.putString("My_Lang", lang)
-        editor.apply()
-        startActivity(Intent (this, MainActivity::class.java))
-    }*/
-
-    /*fun loadLocate() {
-        val sharedPref = getPreferences(Context.MODE_PRIVATE) ?: return
-
-        val sharedPreferences = getSharedPreferences("Settings", Activity.MODE_PRIVATE)
-        val language: String = sharedPreferences.getString("My_Lang", "").toString()
-        setLocate(language)
-    }*/
 
     private fun getLocate(): String
     {
@@ -273,7 +251,6 @@ class SettingsActivity : AppCompatActivity() {
     {
         return radioKm.isChecked
     }
-
 
     private fun saveSettings()
     {
@@ -303,7 +280,6 @@ class SettingsActivity : AppCompatActivity() {
         settings.apply()
     }
 
-
     private fun switchVisualize(switch: MaterialSwitch)
     {
         val table: TableRow
@@ -313,8 +289,15 @@ class SettingsActivity : AppCompatActivity() {
             binding.switchTaxes -> {table = binding.TableTaxes}
             else -> return
         }
-        table.isVisible = switch.isChecked
+        //table.isVisible = switch.isChecked
+        animateHeightChange(table)
+    }
 
+    private fun animateHeightChange(view: View) {
+        val parentLayout = view.parent as ViewGroup
+        val visibility = if (view.isVisible) View.GONE else View.VISIBLE
+        TransitionManager.beginDelayedTransition(parentLayout)
+        view.visibility = visibility
     }
 
     private fun injectLangSpinner(): String
@@ -327,9 +310,16 @@ class SettingsActivity : AppCompatActivity() {
            return ""
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("IS_VISIBLE_RENT", binding.TableRent.visibility == View.VISIBLE)
+        outState.putBoolean("IS_VISIBLE_SERVICE", binding.TableService.visibility == View.VISIBLE)
+        outState.putBoolean("IS_VISIBLE_TAXES", binding.TableTaxes.visibility == View.VISIBLE)
+    }
+
     override fun onSupportNavigateUp(): Boolean
     {
-        onBackPressed()
+        onBackPressedDispatcher.onBackPressed()
         return super.onSupportNavigateUp()
     }
 

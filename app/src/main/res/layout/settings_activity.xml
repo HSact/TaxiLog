@@ -175,6 +175,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:paddingTop="@dimen/table_row_padding_first"
             android:visibility="visible">
 
             <TextView
@@ -186,14 +187,19 @@
                 android:minHeight="50dp"
                 android:text="@string/settings_consumption" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextConsumption"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:autofillHints=""
-                android:ems="10"
-                android:hint="10"
-                android:inputType="numberDecimal" />
+                android:layout_height="wrap_content"
+                android:hint="@string/settings_consumption_hint">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextConsumption"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="numberDecimal"
+                    android:maxLength="8"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </TableRow>
 
@@ -201,7 +207,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:paddingTop="@dimen/table_row_padding_regular"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/textFuelPrice"
@@ -212,14 +219,19 @@
                 android:minHeight="50dp"
                 android:text="@string/settings_fuel_price" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextFuelPrice"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:autofillHints=""
-                android:ems="10"
-                android:hint="30"
-                android:inputType="numberDecimal" />
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_money">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextFuelPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="numberDecimal"
+                    android:maxLength="8"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </TableRow>
 
@@ -227,6 +239,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="end"
+            android:paddingTop="@dimen/table_row_padding_regular"
             android:orientation="horizontal">
 
             <com.google.android.material.materialswitch.MaterialSwitch
@@ -236,7 +249,8 @@
                 android:checked="false"
                 android:gravity="center_vertical"
                 android:minHeight="50dp"
-                android:text="@string/settings_rented_car" />
+                android:text="@string/settings_rented_car"
+                tools:ignore="TouchTargetSizeCheck" />
 
         </LinearLayout>
 
@@ -245,7 +259,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:paddingTop="@dimen/table_row_padding_regular"
+            android:visibility="visible">
 
             <TextView
                 android:id="@+id/textRentCost"
@@ -255,14 +270,19 @@
                 android:maxWidth="1dp"
                 android:text="@string/settings_rent_cost" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextRentCost"
-                android:layout_width="36dp"
-                android:layout_height="50dp"
-                android:autofillHints=""
-                android:ems="10"
-                android:hint="20000"
-                android:inputType="numberDecimal" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_money_per_week">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextRentCost"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="numberDecimal"
+                    android:maxLength="8"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </TableRow>
 
@@ -270,6 +290,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="end"
+            android:paddingTop="@dimen/table_row_padding_regular"
             android:orientation="vertical">
 
 
@@ -289,7 +310,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:paddingTop="@dimen/table_row_padding_regular"
+            android:visibility="visible">
 
             <TextView
                 android:id="@+id/textServiceCost"
@@ -299,14 +321,19 @@
                 android:maxWidth="1dp"
                 android:text="@string/settings_service_cost_per_km" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextServiceCost"
-                android:layout_width="36dp"
-                android:layout_height="50dp"
-                android:autofillHints=""
-                android:ems="10"
-                android:hint="2"
-                android:inputType="numberDecimal" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_money_per_km_mi">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextServiceCost"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="numberDecimal"
+                    android:maxLength="8"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </TableRow>
 
@@ -329,6 +356,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingTop="@dimen/table_row_padding_first"
             android:orientation="horizontal">
 
             <TextView
@@ -340,14 +368,19 @@
                 android:maxWidth="1dp"
                 android:text="@string/settings_goal_per_month" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextGoalPerMonth"
-                android:layout_width="36dp"
-                android:layout_height="50dp"
-                android:autofillHints=""
-                android:ems="10"
-                android:hint="100000"
-                android:inputType="numberDecimal" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_money">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextGoalPerMonth"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="numberDecimal"
+                    android:maxLength="8"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </TableRow>
 
@@ -355,6 +388,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:minHeight="48dp"
+            android:paddingTop="@dimen/table_row_padding_regular"
             android:orientation="horizontal">
 
             <TextView
@@ -378,7 +412,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
-                    android:text="7/0" />
+                    android:text="7/0"
+                    tools:ignore="HardcodedText" />
 
                 <RadioButton
                     android:id="@+id/radio61"
@@ -386,14 +421,15 @@
                     android:layout_height="match_parent"
                     android:minHeight="48dp"
                     android:paddingRight="10dp"
-                    android:text="6/1" />
+                    android:text="6/1"
+                    tools:ignore="HardcodedText" />
 
                 <RadioButton
                     android:id="@+id/radio52"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="5/2" />
-
+                    android:text="5/2"
+                    tools:ignore="HardcodedText" />
             </RadioGroup>
 
 
@@ -403,8 +439,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
+            android:paddingTop="@dimen/table_row_padding_regular"
             android:orientation="horizontal">
-
 
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/switchTaxes"
@@ -412,7 +448,6 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:checked="false"
-
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:text="@string/settings_calculate_taxes" />
@@ -424,7 +459,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:paddingTop="@dimen/table_row_padding_regular"
+            android:visibility="visible">
 
             <TextView
                 android:id="@+id/textTaxRate"
@@ -435,21 +471,26 @@
                 android:maxWidth="1dp"
                 android:text="@string/settings_tax_rate" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextTaxRate"
-                android:layout_width="36dp"
-                android:layout_height="50dp"
-                android:autofillHints=""
-                android:ems="10"
-                android:hint="6"
-                android:inputType="numberDecimal"
-                android:maxLength="4" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/percent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextTaxRate"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="numberDecimal"
+                    android:maxLength="5"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingTop="@dimen/table_row_padding_regular"
             android:orientation="horizontal">
 
             <Button
