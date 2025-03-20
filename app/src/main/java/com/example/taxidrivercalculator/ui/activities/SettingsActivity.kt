@@ -15,6 +15,7 @@ import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.SettingsActivityBinding
 import com.example.taxidrivercalculator.helpers.SettingsHelper
 import com.google.android.material.materialswitch.MaterialSwitch
+import androidx.appcompat.widget.Toolbar
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -57,7 +58,12 @@ class SettingsActivity : AppCompatActivity() {
         binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        /*supportActionBar?.title = getString(R.string.title_settings)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)*/
+
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
         supportActionBar?.title = getString(R.string.title_settings)
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         bindItems()
