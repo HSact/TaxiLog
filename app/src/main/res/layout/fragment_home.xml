@@ -195,7 +195,5 @@
         app:backgroundTint="?attr/colorPrimary"
         app:tint="?attr/colorOnPrimary"
         android:translationY="-100dp"
-
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"/>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

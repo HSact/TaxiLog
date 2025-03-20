@@ -23,6 +23,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="@dimen/table_row_padding_first"
             android:orientation="horizontal">
 
             <TextView
@@ -101,7 +102,7 @@
             android:id="@+id/table_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:paddingTop="@dimen/table_row_padding_first"
             android:stretchColumns="0"
             android:visibility="visible">
 
