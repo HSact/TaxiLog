@@ -1,14 +1,11 @@
 package com.example.taxidrivercalculator.ui.activities
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
@@ -17,7 +14,7 @@ import com.example.taxidrivercalculator.databinding.ActivityMainBinding
 import com.example.taxidrivercalculator.helpers.LocaleHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.findNavController
-
+import androidx.appcompat.widget.Toolbar
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,12 +29,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val navView: BottomNavigationView = binding.navView
-        val navController = this.findNavController(R.id.nav_host_fragment_activity_main)
+        //val navController = this.findNavController(R.id.nav_host_fragment_activity_main)
         botNav = navView
         loadSettings()
+
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
+                R.id.navigation_home, R.id.navigation_goals, R.id.navigation_stats
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -82,7 +86,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
+        //onBackPressed()
+        onBackPressedDispatcher.onBackPressed()
         return super.onSupportNavigateUp()
     }
 
@@ -117,7 +122,7 @@ class MainActivity : AppCompatActivity() {
         LocaleHelper.setLocale(this, LocaleHelper.getSavedLanguage(this))
     }
 
-    private fun loadTheme()
+    /*private fun loadTheme()
     {
         val sharedPreferences = getSharedPreferences("Settings", Activity.MODE_PRIVATE)
         val theme: String = sharedPreferences.getString("Theme", "").toString()
@@ -138,5 +143,5 @@ class MainActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("Settings", Activity.MODE_PRIVATE)
         val language: String = sharedPreferences.getString("My_Lang", "").toString()
         LocaleHelper.setLocale(this, language)
-    }
+    }*/
 }
