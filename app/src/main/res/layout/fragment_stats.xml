@@ -23,6 +23,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="@dimen/table_row_padding_first"
             android:orientation="horizontal">
 
             <TextView
@@ -33,24 +34,26 @@
                 android:text="@string/period"
                 android:textSize="20sp" />
 
-            <EditText
-                android:id="@+id/buttonDatePickBegin"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/buttonDatePickBeginL"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
+                android:layout_height="wrap_content"
+                android:gravity="center|fill_vertical"
+                android:hint="@string/start_date"
                 android:layout_marginStart="20dp"
-                android:autofillHints=""
-                android:clickable="true"
-                android:focusable="false"
-                android:hint="@string/addshift_date"
-                android:inputType="none"
-                android:maxWidth="10dp"
-                android:maxEms="0"
-                android:maxLength="10"
-                android:minWidth="100dp"
-                android:minHeight="48dp"
-                android:textSize="16sp"
-                tools:ignore="TextFields" />
+                android:minWidth="120dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/buttonDatePickBegin"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/dash"
@@ -63,24 +66,26 @@
                 tools:ignore="HardcodedText" />
 
 
-            <EditText
-                android:id="@+id/buttonDatePickEnd"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/buttonDatePickEndL"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|fill_vertical"
+                android:hint="@string/end_date"
                 android:layout_marginStart="10dp"
-                android:layout_gravity="end"
-                android:autofillHints=""
-                android:clickable="true"
-                android:focusable="false"
-                android:hint="@string/addshift_date"
-                android:inputType="none"
-                android:maxWidth="150dp"
-                android:maxEms="0"
-                android:maxLength="10"
-                android:minWidth="100dp"
-                android:minHeight="48dp"
-                android:textSize="16sp"
-                tools:ignore="TextFields" />
+                android:minWidth="120dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/buttonDatePickEnd"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
         <TextView
@@ -97,7 +102,7 @@
             android:id="@+id/table_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:paddingTop="@dimen/table_row_padding_first"
             android:stretchColumns="0"
             android:visibility="visible">
 

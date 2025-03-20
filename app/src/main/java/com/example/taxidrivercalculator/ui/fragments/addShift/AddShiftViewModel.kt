@@ -81,7 +81,6 @@ class AddShiftViewModel: ViewModel() {
     {
         var currentShift = _shiftData.value ?: return
         currentShift = currentShift.copy(onlineTime = convertTimeToLong(currentShift.timeEnd) - convertTimeToLong(currentShift.timeBegin))
-        //AddShiftFragment.CalcShift.onlineTime = convertTimeToLong(editEnd.text.toString()) - convertTimeToLong(editStart.text.toString())
         if (currentShift.onlineTime <0)
         {
             currentShift.onlineTime += hoursToMs(24)

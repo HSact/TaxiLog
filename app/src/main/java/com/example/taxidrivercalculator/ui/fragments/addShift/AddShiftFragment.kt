@@ -1,6 +1,7 @@
 package com.example.taxidrivercalculator.ui.fragments.addShift
 
 import android.app.Activity
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,6 +12,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -20,7 +22,9 @@ import com.example.taxidrivercalculator.helpers.ShiftHelper
 import com.example.taxidrivercalculator.ui.activities.MainActivity
 import com.example.taxidrivercalculator.ui.fragments.DatePickerFragment
 import com.example.taxidrivercalculator.ui.fragments.TimePickerFragment
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputLayout
 
 class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
@@ -37,6 +41,16 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
     private lateinit var editFuelCost: EditText
     private lateinit var editMileage: EditText
     private lateinit var buttonSubmit: Button
+
+    private lateinit var editDateL: TextInputLayout
+    private lateinit var editStartL: TextInputLayout
+    private lateinit var editEndL: TextInputLayout
+    private lateinit var editBreakStartL: TextInputLayout
+    private lateinit var editBreakEndL: TextInputLayout
+    private lateinit var editEarningsL: TextInputLayout
+    private lateinit var editWashL: TextInputLayout
+    private lateinit var editFuelCostL: TextInputLayout
+    private lateinit var editMileageL: TextInputLayout
 
     private var _binding: FragmentAddShiftBinding? = null
     private val binding get() = _binding!!
@@ -60,9 +74,14 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.shiftData.observe (viewLifecycleOwner)
         { shift -> updateUI(shift) }
+        //editDateL.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.teal_200)
+        //MaterialColors.getColor(editDateL, com.google.android.material.R.attr.colorPrimary)
 
-        editDate.setOnClickListener { pickDate(editDate) }
-        editStart.setOnClickListener { pickTime(editStart) }
+
+        editDate.setOnClickListener {
+            pickDate(editDate) }
+        editStart.setOnClickListener {it.requestFocus()
+            pickTime(editStart) }
         editEnd.setOnClickListener { pickTime(editEnd) }
         editBreakStart.setOnClickListener { pickTime(editBreakStart) }
         editBreakEnd.setOnClickListener { pickTime(editBreakEnd) }
@@ -137,6 +156,16 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         editFuelCost = binding.editTextFuelCost
         editMileage = binding.editTextMileage
         buttonSubmit = binding.buttonSubmit
+
+        editDateL = binding.buttonDatePickL
+        editStartL = binding.buttonTimeStartL
+        editEndL = binding.buttonTimeEndL
+        editBreakStartL = binding.buttonTimeStartL
+        editBreakEndL = binding.buttonTimeEndL
+        editEarningsL = binding.editTextEarningsL
+        editWashL = binding.editTextWashL
+        editFuelCostL = binding.editTextFuelCostL
+        editMileageL = binding.editTextMileageL
     }
 
     private fun pickDate(editObj: EditText)
@@ -177,8 +206,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     private fun calculateShift ()
     {
-        if (editEarnings.text.isEmpty() || editWash.text.isEmpty() ||
-            editFuelCost.text.isEmpty() || editMileage.text.isEmpty())
+        if (editEarnings.text.isEmpty() || editFuelCost.text.isEmpty() || editMileage.text.isEmpty())
         {
             if (editFuelCost.text.isEmpty())
             {

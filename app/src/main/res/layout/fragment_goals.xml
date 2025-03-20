@@ -37,21 +37,25 @@
             android:orientation="horizontal"
             android:paddingTop="50dp">
 
-            <EditText
-                android:id="@+id/buttonDatePick"
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/buttonDatePickL"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:focusable="false"
-                android:clickable="true"
-                android:inputType="none"
-                android:autofillHints=""
+                android:layout_height="wrap_content"
                 android:gravity="center|fill_vertical"
-                android:hint="@string/addshift_date"
-                android:maxEms="0"
-                android:maxLength="10"
-                android:minWidth="100dp"
-                android:minHeight="48dp"
-                android:textSize="16sp" />
+                android:hint="@string/date"
+                android:minWidth="120dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/buttonDatePick"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:inputType="none"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
         </LinearLayout>

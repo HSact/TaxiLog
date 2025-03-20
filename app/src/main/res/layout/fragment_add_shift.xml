@@ -39,6 +39,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:minHeight="50dp"
+            android:paddingTop="20dp"
             android:orientation="horizontal">
 
             <TextView
@@ -50,19 +51,22 @@
                 android:text="@string/addshift_date" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/buttonDatePickL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:hint="@string/date"
                 android:minWidth="120dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/buttonDatePick"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:focusable="false"
                     android:clickable="true"
+                    android:focusable="false"
                     android:inputType="none"
                     android:paddingTop="10dp"
-                    android:paddingBottom="10dp" />
+                    android:paddingBottom="10dp"
+                    tools:ignore="TouchTargetSizeCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </TableRow>
@@ -70,6 +74,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="10dp"
             android:minHeight="50dp"
             android:orientation="horizontal">
 
@@ -82,38 +87,42 @@
                 android:text="@string/addshift_online" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/buttonTimeStartL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="110dp"
-                android:hint="Start">
+                android:hint="@string/start">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/buttonTimeStart"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:focusable="false"
                     android:clickable="true"
+                    android:focusable="false"
                     android:inputType="none"
                     android:paddingTop="10dp"
-                    android:paddingBottom="10dp" />
+                    android:paddingBottom="10dp"
+                    tools:ignore="TouchTargetSizeCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/buttonTimeEndL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:minWidth="120dp"
-                android:hint="End">
+                android:hint="@string/end">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/buttonTimeEnd"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:focusable="false"
                     android:clickable="true"
+                    android:focusable="false"
                     android:inputType="none"
                     android:paddingTop="10dp"
-                    android:paddingBottom="10dp" />
+                    android:paddingBottom="10dp"
+                    tools:ignore="TouchTargetSizeCheck" />
             </com.google.android.material.textfield.TextInputLayout>
         </TableRow>
 
@@ -135,6 +144,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:paddingTop="10dp"
             android:visibility="gone">
 
             <TextView
@@ -149,7 +159,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="110dp"
-                android:hint="Start">
+                android:hint="@string/start">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/buttonTimeStartBrake"
@@ -167,7 +177,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:minWidth="120dp"
-                android:hint="End">
+                android:hint="@string/end">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/buttonTimeEndBrake"
@@ -203,6 +213,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:minHeight="50dp"
+            android:paddingTop="20dp"
             android:weightSum="100">
 
             <TextView
@@ -214,6 +225,7 @@
                 android:text="@string/earnings" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editTextEarningsL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_money">
@@ -223,9 +235,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="numberDecimal"
+                    android:maxLength="8"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:maxLength="8" />
+                    tools:ignore="TouchTargetSizeCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </TableRow>
@@ -234,16 +247,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:paddingTop="10dp"
             android:weightSum="100">
 
             <TextView
                 android:id="@+id/TextWash"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="100"
                 android:text="@string/wash" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editTextWashL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_money">
@@ -253,9 +269,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="numberDecimal"
+                    android:maxLength="8"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:maxLength="8" />
+                    tools:ignore="TouchTargetSizeCheck" />
             </com.google.android.material.textfield.TextInputLayout>
         </TableRow>
 
@@ -263,16 +280,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:paddingTop="10dp"
             android:weightSum="100">
 
             <TextView
                 android:id="@+id/textMileage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="100"
                 android:text="@string/mileage" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editTextMileageL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/settings_km">
@@ -282,9 +302,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="numberDecimal"
+                    android:maxLength="8"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:maxLength="8" />
+                    tools:ignore="TouchTargetSizeCheck" />
             </com.google.android.material.textfield.TextInputLayout>
         </TableRow>
 
@@ -292,17 +313,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:paddingTop="10dp"
             android:weightSum="100">
 
             <TextView
                 android:id="@+id/textFuelCost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="100"
                 android:text="@string/fuel_cost" />
 
-
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editTextFuelCostL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_money">
@@ -312,28 +335,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="numberDecimal"
+                    android:maxLength="8"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:maxLength="8" />
+                    tools:ignore="TouchTargetSizeCheck" />
             </com.google.android.material.textfield.TextInputLayout>
         </TableRow>
-
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:paddingTop="30dp">
+            android:paddingTop="50dp">
 
             <Button
                 android:id="@+id/buttonSubmit"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center_horizontal"
                 android:layout_weight="1"
                 android:text="@string/addshift_submit" />
         </TableRow>
-
 
     </TableLayout>
 
