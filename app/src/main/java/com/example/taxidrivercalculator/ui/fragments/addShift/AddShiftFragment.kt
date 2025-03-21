@@ -80,6 +80,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
                 binding.tableBreak.visibility = View.GONE
             }
         }*/
+        //putDateAndTimeToVM()
 
         editDate.setOnClickListener {
             pickDate(editDate) }
@@ -183,6 +184,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
             if (resultKey == "REQUEST_KEY") {
                 val date = bundle.getString("SELECTED_DATE")
                 editObj.setText(date.toString())
+                putDateAndTimeToVM()
             }
         }
         datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
@@ -202,6 +204,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
             if (resultKey == "REQUEST_KEY") {
                 val time = bundle.getString("SELECTED_TIME")
                 editObj.setText(time.toString())
+                putDateAndTimeToVM()
             }
         }
         timePickerFragment.show(supportFragmentManager, "TimePickerFragment")
@@ -229,11 +232,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
             }
             return
         }
-        viewModel.shiftData.value?.date = editDate.text.toString()
-        viewModel.shiftData.value?.timeBegin = editStart.text.toString()
-        viewModel.shiftData.value?.timeEnd = editEnd.text.toString()
-        viewModel.shiftData.value?.breakBegin = editBreakStart.text.toString()
-        viewModel.shiftData.value?.breakEnd = editBreakEnd.text.toString()
+        putDateAndTimeToVM()
         viewModel.shiftData.value?.earnings = editEarnings.text.toString().toDoubleOrNull() ?: 0.0
         viewModel.shiftData.value?.wash = editWash.text.toString().toDoubleOrNull() ?: 0.0
         viewModel.shiftData.value?.fuelCost = editFuelCost.text.toString().toDoubleOrNull() ?: 0.0
@@ -247,6 +246,14 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
                 viewModel.shiftData.value?.profit.toString(),
                 ShiftHelper.msToHours(viewModel.shiftData.value?.totalTime ?: 0).toString()
             ))
+    }
+
+    private fun putDateAndTimeToVM() {
+        viewModel.shiftData.value?.date = editDate.text.toString()
+        viewModel.shiftData.value?.timeBegin = editStart.text.toString()
+        viewModel.shiftData.value?.timeEnd = editEnd.text.toString()
+        viewModel.shiftData.value?.breakBegin = editBreakStart.text.toString()
+        viewModel.shiftData.value?.breakEnd = editBreakEnd.text.toString()
     }
 
     /*private fun showErrorMessage(errorCode: String)
