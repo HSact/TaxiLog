@@ -82,7 +82,8 @@
                     android:gravity="center"
                     android:maxWidth="1dp"
                     android:text="0%"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/textWeekPercent"
@@ -92,7 +93,8 @@
                     android:gravity="center"
                     android:maxWidth="1dp"
                     android:text="0%"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/textMontPercent"
@@ -102,7 +104,8 @@
                     android:gravity="center"
                     android:maxWidth="1dp"
                     android:text="0%"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    tools:ignore="HardcodedText" />
             </TableRow>
 
             <TableRow
