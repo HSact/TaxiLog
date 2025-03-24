@@ -240,7 +240,7 @@
                     android:maxLength="8"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </TableRow>
