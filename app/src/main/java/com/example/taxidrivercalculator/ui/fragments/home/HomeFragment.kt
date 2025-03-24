@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.FragmentHomeBinding
+import com.example.taxidrivercalculator.ui.cards.CardLastShift
 
 class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
@@ -33,6 +35,10 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        val card1: ComposeView = binding.card1
+        card1.setContent {
+            CardLastShift().drawLastShiftCard()
+        }
         return root
     }
 

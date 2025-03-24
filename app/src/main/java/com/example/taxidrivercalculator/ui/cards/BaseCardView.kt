@@ -30,6 +30,9 @@ fun BaseCard(
 @Composable
 fun BaseCardPreview() {
     BaseCard {
-        Text(text = "Card Example")
+        Column {
+            Text(text = "Card Example")
+            Text(text = "Card Example2")
+        }
     }
 }
