@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.widget.DatePicker
+import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import java.text.SimpleDateFormat
@@ -17,18 +18,15 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
     var minDate = ""
     var maxDate = ""
 
-
     @SuppressLint("SimpleDateFormat")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         var minDateLong: Long = 0
         var maxDateLong: Long = Long.MAX_VALUE
         val sdf = SimpleDateFormat("dd.MM.yyyy")
-        if (minDate.isNotEmpty())
-        {
+        if (minDate.isNotEmpty()) {
             minDateLong = sdf.parse(minDate)?.time ?: 0
         }
-        if (maxDate.isNotEmpty())
-        {
+        if (maxDate.isNotEmpty()) {
             maxDateLong = sdf.parse(maxDate)?.time ?: Long.MAX_VALUE
         }
         try {
@@ -59,5 +57,33 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
         selectedDateBundle.putString("SELECTED_DATE", selectedDate)
 
         setFragmentResult("REQUEST_KEY", selectedDateBundle)
+    }
+
+    companion object {
+        fun pickDate(
+            fragment: androidx.fragment.app.Fragment,
+            editObj: EditText,
+            minDate: String = "",
+            maxDate: String = "",
+            onDatePicked: (() -> Unit)? = null
+        ) {
+            val datePickerFragment = DatePickerFragment().apply {
+                this.minDate = minDate
+                this.maxDate = maxDate
+                arguments = Bundle().apply {
+                    putString("SELECTED_DATE", editObj.text.toString())
+                }
+            }
+
+            fragment.parentFragmentManager.setFragmentResultListener(
+                "REQUEST_KEY", fragment.viewLifecycleOwner
+            ) { resultKey, bundle ->
+                if (resultKey == "REQUEST_KEY") {
+                    editObj.setText(bundle.getString("SELECTED_DATE"))
+                    onDatePicked?.invoke()
+                }
+            }
+            datePickerFragment.show(fragment.parentFragmentManager, "DatePickerFragment")
+        }
     }
 }
