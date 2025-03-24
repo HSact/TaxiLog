@@ -10,7 +10,6 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import java.text.SimpleDateFormat
@@ -19,7 +18,7 @@ import java.util.Locale
 
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
     private val calendar = Calendar.getInstance()
-    lateinit var selectedDate: String
+    private lateinit var selectedDate: String
     var minDate = ""
     var maxDate = ""
 
