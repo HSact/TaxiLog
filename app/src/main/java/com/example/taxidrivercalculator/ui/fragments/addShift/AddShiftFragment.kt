@@ -22,6 +22,7 @@ import com.example.taxidrivercalculator.ui.activities.MainActivity
 import com.example.taxidrivercalculator.ui.fragments.DatePickerFragment
 import com.example.taxidrivercalculator.ui.fragments.TimePickerFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputLayout
 
 class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
@@ -31,7 +32,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
     private lateinit var editDate: EditText
     private lateinit var editStart: EditText
     private lateinit var editEnd: EditText
-    private lateinit var checkBreak: CheckBox
+    private lateinit var switchBreak: MaterialSwitch
     private lateinit var editBreakStart: EditText
     private lateinit var editBreakEnd: EditText
     private lateinit var editEarnings: EditText
@@ -89,7 +90,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         editEnd.setOnClickListener { pickTime(editEnd) }
         editBreakStart.setOnClickListener { pickTime(editBreakStart) }
         editBreakEnd.setOnClickListener { pickTime(editBreakEnd) }
-        checkBreak.setOnClickListener { switchBrake() }
+        switchBreak.setOnClickListener { switchBrake() }
         buttonSubmit.setOnClickListener {calculateShift()}
 
         editMileage.addTextChangedListener(object : TextWatcher {
@@ -107,13 +108,13 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         })
     }
 
-    private fun updateShiftField(fieldSetter: (CalcShift) -> Unit) {
+    private fun updateShiftField(fieldSetter: (AddShiftData) -> Unit) {
         val currentShift = viewModel.shiftData.value ?: return
         fieldSetter(currentShift)
         viewModel.updateShift(currentShift)
     }
 
-    private fun updateUI(shift: CalcShift) {
+    private fun updateUI(shift: AddShiftData) {
         editDate.setText(shift.date)
         editStart.setText(shift.timeBegin)
         editEnd.setText(shift.timeEnd)
@@ -137,12 +138,12 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         }*/
         if (editBreakStart.text.isNotEmpty() || editBreakEnd.text.isNotEmpty())
         {
-            checkBreak.isChecked = true
+            switchBreak.isChecked = true
             binding.tableBreak.isVisible = true
         }
         else
         {
-            checkBreak.isChecked = false
+            switchBreak.isChecked = false
             binding.tableBreak.isVisible = false
         }
     }
@@ -152,7 +153,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         editDate = binding.buttonDatePick
         editStart = binding.buttonTimeStart
         editEnd = binding.buttonTimeEnd
-        checkBreak = binding.checkBreak
+        switchBreak = binding.switchBrake
         editBreakStart = binding.buttonTimeStartBrake
         editBreakEnd = binding.buttonTimeEndBrake
         editEarnings = binding.editTextEarnings
