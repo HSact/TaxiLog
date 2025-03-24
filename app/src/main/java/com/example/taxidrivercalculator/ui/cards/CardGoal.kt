@@ -1,6 +1,5 @@
 package com.example.taxidrivercalculator.ui.cards
 
-import android.widget.ProgressBar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +23,7 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlin.math.roundToInt
 
 
 class CardGoal{
@@ -33,7 +33,8 @@ class CardGoal{
         val shiftState by shiftData.collectAsStateWithLifecycle()
         val goal = shiftState["goal"]?:""
         val goalCurrent = shiftState["goalCurrent"]?:""
-        val progress = goalCurrent.toFloat()/goal.toFloat()
+        var progress = goalCurrent.toFloat() / goal.toFloat()
+        progress = (progress * 1000).roundToInt() / 1000f
         BaseCard {
             CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
                 Text(
@@ -46,14 +47,16 @@ class CardGoal{
                     modifier = Modifier.fillMaxWidth().padding(top = 30.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Column {
+                    Column(modifier = Modifier.padding(top = 0.dp)) {
                         Text(text = goalCurrent)
                     }
                     Column {
                         LinearProgressIndicator(
+                            modifier = Modifier.height(20.dp),
                             progress = progress,
                             color = MaterialTheme.colorScheme.background
                         )
+                        Text(text = (progress*100).toString() + "%")
                     }
                     Column {
                         Text(text = goal)
