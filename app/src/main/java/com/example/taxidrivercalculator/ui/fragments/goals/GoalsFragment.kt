@@ -80,24 +80,11 @@ class GoalsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    private fun pickDate(editObj: EditText)
-    {
-        val datePickerFragment = DatePickerFragment()
-        datePickerFragment.selectedDate = editObj.text.toString()
-        val supportFragmentManager = requireActivity().supportFragmentManager
-        supportFragmentManager.setFragmentResultListener(
-            "REQUEST_KEY",
-            viewLifecycleOwner)
-        { resultKey, bundle ->
-            if (resultKey == "REQUEST_KEY") {
-                val date = bundle.getString("SELECTED_DATE")
-                editObj.setText(date.toString())
-                //pickedDate = date.toString()
-                viewModel.pickedDate = date.toString()
-                viewModel.defineGoals(viewModel.pickedDate, requireContext())
-            }
+    private fun pickDate(editObj: EditText) {
+        DatePickerFragment.pickDate(context = requireContext(), editObj = editObj) {
+            viewModel.pickedDate = editObj.text.toString()
+            viewModel.defineGoals(viewModel.pickedDate, requireContext())
         }
-        datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
     }
 
     private fun getCurrentDay(): String {

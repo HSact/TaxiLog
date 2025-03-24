@@ -3,11 +3,16 @@ package com.example.taxidrivercalculator.ui.fragments
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.widget.DatePicker
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.LifecycleOwner
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -61,7 +66,7 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
 
     companion object {
         fun pickDate(
-            fragment: androidx.fragment.app.Fragment,
+            context: Context,
             editObj: EditText,
             minDate: String = "",
             maxDate: String = "",
@@ -70,20 +75,25 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
             val datePickerFragment = DatePickerFragment().apply {
                 this.minDate = minDate
                 this.maxDate = maxDate
-                arguments = Bundle().apply {
-                    putString("SELECTED_DATE", editObj.text.toString())
-                }
+                this.selectedDate = editObj.text.toString()
             }
 
-            fragment.parentFragmentManager.setFragmentResultListener(
-                "REQUEST_KEY", fragment.viewLifecycleOwner
+            val fragmentManager = when (context) {
+                is AppCompatActivity -> context.supportFragmentManager
+                is Fragment -> context.parentFragmentManager
+                else -> throw IllegalArgumentException("Context must be an Activity or Fragment")
+            }
+
+            fragmentManager.setFragmentResultListener(
+                "REQUEST_KEY", context as LifecycleOwner
             ) { resultKey, bundle ->
                 if (resultKey == "REQUEST_KEY") {
                     editObj.setText(bundle.getString("SELECTED_DATE"))
                     onDatePicked?.invoke()
                 }
             }
-            datePickerFragment.show(fragment.parentFragmentManager, "DatePickerFragment")
+            datePickerFragment.show(fragmentManager, "DatePickerFragment")
         }
     }
+
 }
