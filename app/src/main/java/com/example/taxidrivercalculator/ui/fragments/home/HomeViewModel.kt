@@ -37,15 +37,15 @@ class HomeViewModel: ViewModel() {
         val textTotal = cursor.getString(cursor.getColumnIndex(DBHelper.PROFIT_COL)+0)
         val textPerHour = ShiftHelper.calcAverageEarningsPerHour(shifts.last()).toString()
         val settings = SettingsHelper.getInstance(context)
-        val goalMonthString = settings.goalPerMonth
+        var goalMonthString = settings.goalPerMonth?:""
 
-        val textGoal =
-            if (goalMonthString.isNullOrEmpty())
+        val goalCurrent =
+            if (goalMonthString.isEmpty())
             { context.getString(R.string.n_a) }
-        else { ShiftHelper.calculateMonthProgress(shifts.last().date, db).toString() +
-                    " " + context.getString(R.string.of) + " " + goalMonthString }
+        /*else { ShiftHelper.calculateMonthProgress(shifts.last().date, db).toString() +
+                    " " + context.getString(R.string.of) + " " + goalMonthString }*/
+            else { ShiftHelper.calculateMonthProgress(shifts.last().date, db).toString()}
         cursor.close()
-
         _shiftData.value = mapOf(
             "date" to textDate,
             "earnings" to textEarnings,
@@ -53,7 +53,8 @@ class HomeViewModel: ViewModel() {
             "time" to textTime,
             "total" to textTotal,
             "perHour" to textPerHour,
-            "goal" to textGoal
+            "goal" to goalMonthString,
+            "goalCurrent" to goalCurrent,
         )
     }
     private fun createEmptyShift(context: Context): Map <String, String>
@@ -66,7 +67,8 @@ class HomeViewModel: ViewModel() {
             "time" to na,
             "total" to na,
             "perHour" to na,
-            "goal" to na
+            "goal" to na,
+            "goalCurrent" to na,
         )
     }
 }

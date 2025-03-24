@@ -8,10 +8,10 @@ import android.widget.TextView
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.FragmentHomeBinding
+import com.example.taxidrivercalculator.ui.cards.CardGoal
 import com.example.taxidrivercalculator.ui.cards.CardLastShift
 
 class HomeFragment : Fragment() {
@@ -21,6 +21,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var card1: ComposeView
+    private lateinit var card2: ComposeView
 
     private lateinit var textDate: TextView
     private lateinit var textEarnings: TextView
@@ -39,15 +40,10 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
         card1 = binding.card1
-        card1.setContent {
-            //CardLastShift().DrawLastShiftCard("12.12.2022")
-        }
-        card1.setContent {
-            // Используем collectAsStateWithLifecycle внутри Compose функции
-            //val shiftState = viewModel.shiftData.collectAsStateWithLifecycle().value
-            //DrawLastShiftCard(shiftState) // Передаем данные во фрагмент
-            CardLastShift().DrawLastShiftCard(viewModel.shiftData)
-        }
+        card2 = binding.card2
+
+        card1.setContent { CardLastShift().DrawLastShiftCard(viewModel.shiftData) }
+        card2.setContent { CardGoal().DrawGoalCard(viewModel.shiftData) }
         return root
     }
 
@@ -80,13 +76,13 @@ class HomeFragment : Fragment() {
 
     private fun bindItems ()
     {
-        textDate = binding.textHomeDateR
+        /*textDate = binding.textHomeDateR
         textEarnings = binding.textHomeEarningsR
         textCosts = binding.textHomeCostsR
         textTime = binding.textHomeTimeR
         textTotal = binding.textHomeTotalR
         textPerHour = binding.textHomePerHourR
-        textGoal = binding.textHomeGoalR
+        textGoal = binding.textHomeGoalR*/
     }
 
     override fun onDestroyView() {
