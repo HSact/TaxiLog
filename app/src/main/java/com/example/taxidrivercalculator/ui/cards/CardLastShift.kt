@@ -17,12 +17,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.taxidrivercalculator.R
+import androidx.compose.runtime.*
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 
 class CardLastShift {
 
     @Composable
-    fun DrawLastShiftCard(date: String) {
+    fun DrawLastShiftCard(shiftData: StateFlow<Map<String, String>>) {
+        val shiftState by shiftData.collectAsStateWithLifecycle()
         BaseCard {
             CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
                 Text(
@@ -44,12 +49,12 @@ class CardLastShift {
                         Text(text = stringResource(R.string.per_hour))
                     }
                     Column {
-                        Text(text = date)
-                        Text(text = "Earnings")
-                        Text(text = "Costs")
-                        Text(text = "Time")
-                        Text(text = "Total")
-                        Text(text = "Per hour")
+                        Text(text = shiftState["date"] ?: "")
+                        Text(text = shiftState["earnings"] ?: "")
+                        Text(text = shiftState["costs"] ?: "")
+                        Text(text = shiftState["time"] ?: "")
+                        Text(text = shiftState["total"] ?: "")
+                        Text(text = shiftState["perHour"] ?: "")
                     }
                 }
             }
@@ -59,6 +64,19 @@ class CardLastShift {
     @Preview(showBackground = true)
     @Composable
     fun BaseCardPreview() {
-        DrawLastShiftCard("12.12.2022")
+        val na = "N/A"
+        val previewData = remember {
+            MutableStateFlow(
+                mapOf(
+                    "date" to na,
+                    "earnings" to na,
+                    "costs" to na,
+                    "time" to na,
+                    "total" to na,
+                    "perHour" to na
+                )
+            )
         }
+        DrawLastShiftCard(previewData)
+    }
 }

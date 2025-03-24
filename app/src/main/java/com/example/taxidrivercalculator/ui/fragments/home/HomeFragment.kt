@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.FragmentHomeBinding
@@ -18,6 +19,8 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var card1: ComposeView
 
     private lateinit var textDate: TextView
     private lateinit var textEarnings: TextView
@@ -35,9 +38,15 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        val card1: ComposeView = binding.card1
+        card1 = binding.card1
         card1.setContent {
-            CardLastShift().DrawLastShiftCard("12.12.2022")
+            //CardLastShift().DrawLastShiftCard("12.12.2022")
+        }
+        card1.setContent {
+            // Используем collectAsStateWithLifecycle внутри Compose функции
+            //val shiftState = viewModel.shiftData.collectAsStateWithLifecycle().value
+            //DrawLastShiftCard(shiftState) // Передаем данные во фрагмент
+            CardLastShift().DrawLastShiftCard(viewModel.shiftData)
         }
         return root
     }
@@ -45,7 +54,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bindItems()
-        viewModel.shiftData.observe(viewLifecycleOwner) { shift ->
+        /*viewModel.shiftData.observe(viewLifecycleOwner) { shift ->
             textDate.text = shift["date"]
             textEarnings.text = shift["earnings"]
             textCosts.text = shift["costs"]
@@ -53,7 +62,14 @@ class HomeFragment : Fragment() {
             textTotal.text = shift["total"]
             textPerHour.text = shift["perHour"]
             textGoal.text = shift["goal"]
-        }
+        }*/
+        /*viewModel.shiftData.observe(viewLifecycleOwner) { shift ->
+            card1.setContent { CardLastShift().DrawLastShiftCard(shift) }
+        }*/
+        /*viewModel.shiftData.collectAsStateWithLifecycle { shift ->
+            card1.setContent { DrawLastShiftCard(shift)
+            }
+        }*/
         viewModel.calculateShift(requireContext())
         binding.fabNewShift.setOnClickListener { newShift() }
     }

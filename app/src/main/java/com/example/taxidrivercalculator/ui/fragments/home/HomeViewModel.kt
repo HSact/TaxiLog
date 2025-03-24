@@ -8,10 +8,12 @@ import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.helpers.SettingsHelper
 import com.example.taxidrivercalculator.helpers.ShiftHelper
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class HomeViewModel: ViewModel() {
-    private val _shiftData = MutableLiveData<Map<String, String>>()
-    val shiftData: LiveData<Map<String, String>> get() = _shiftData
+    private val _shiftData = MutableStateFlow<Map<String, String>>(emptyMap())
+    val shiftData: StateFlow<Map<String, String>> = _shiftData
 
     fun calculateShift (context: Context)
     {
