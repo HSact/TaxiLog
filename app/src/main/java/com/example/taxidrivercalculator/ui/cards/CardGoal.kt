@@ -44,19 +44,22 @@ class CardGoal{
                         .wrapContentWidth(Alignment.CenterHorizontally)
                 )
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(top = 30.dp),
+                    modifier = Modifier.fillMaxWidth().padding(top = 40.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column(modifier = Modifier.padding(top = 0.dp)) {
-                        Text(text = goalCurrent)
+                        Text(modifier = Modifier,
+                            text = goalCurrent)
                     }
                     Column {
                         LinearProgressIndicator(
                             modifier = Modifier.height(20.dp),
                             progress = progress,
-                            color = MaterialTheme.colorScheme.background
+                            color = MaterialTheme.colorScheme.surface
                         )
-                        Text(text = (progress*100).toString() + "%")
+                        Text(
+                            modifier = Modifier,
+                            text = (progress*100).toString() + "%")
                     }
                     Column {
                         Text(text = goal)
