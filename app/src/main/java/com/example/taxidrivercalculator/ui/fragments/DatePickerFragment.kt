@@ -22,22 +22,20 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         var minDateLong: Long = 0
         var maxDateLong: Long = Long.MAX_VALUE
+        val sdf = SimpleDateFormat("dd.MM.yyyy")
         if (minDate.isNotEmpty())
         {
-            minDateLong = SimpleDateFormat("dd.MM.yyyy").parse(minDate)?.time ?: 0
+            minDateLong = sdf.parse(minDate)?.time ?: 0
         }
         if (maxDate.isNotEmpty())
         {
-            maxDateLong = SimpleDateFormat("dd.MM.yyyy").parse(maxDate)?.time ?: Long.MAX_VALUE
+            maxDateLong = sdf.parse(maxDate)?.time ?: Long.MAX_VALUE
         }
-
-        val sdf = SimpleDateFormat("dd.MM.yyyy")
         try {
             val date = sdf.parse(selectedDate)
             if (date != null) {
                 calendar.time = date
             }
-
         } catch (e: Exception) {
             e.printStackTrace()
         }

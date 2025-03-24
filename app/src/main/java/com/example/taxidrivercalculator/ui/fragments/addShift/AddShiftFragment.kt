@@ -192,11 +192,9 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     private fun pickTime(editObj: EditText)
     {
-        // create new instance of DatePickerFragment
         val timePickerFragment = TimePickerFragment()
+        timePickerFragment.selectedTime = editObj.text.toString()
         val supportFragmentManager = requireActivity().supportFragmentManager
-
-        // we have to implement setFragmentResultListener
         supportFragmentManager.setFragmentResultListener(
             "REQUEST_KEY",
             viewLifecycleOwner)
