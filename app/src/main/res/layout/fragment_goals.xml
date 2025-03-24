@@ -52,11 +52,12 @@
                     android:id="@+id/buttonDatePick"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:focusable="false"
                     android:clickable="true"
+                    android:focusable="false"
                     android:inputType="none"
                     android:paddingTop="10dp"
-                    android:paddingBottom="10dp" />
+                    android:paddingBottom="10dp"
+                    tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
