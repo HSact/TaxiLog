@@ -1,6 +1,5 @@
 package com.example.taxidrivercalculator.ui.fragments.home
 
-import android.app.Activity
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

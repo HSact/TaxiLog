@@ -37,7 +37,7 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
         val card1: ComposeView = binding.card1
         card1.setContent {
-            CardLastShift().drawLastShiftCard()
+            CardLastShift().DrawLastShiftCard("12.12.2022")
         }
         return root
     }
