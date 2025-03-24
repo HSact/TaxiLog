@@ -82,13 +82,15 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         }*/
         //putDateAndTimeToVM()
 
-        editDate.setOnClickListener {
-            pickDate(editDate) }
-        editStart.setOnClickListener {it.requestFocus()
-            pickTime(editStart) }
-        editEnd.setOnClickListener { pickTime(editEnd) }
-        editBreakStart.setOnClickListener { pickTime(editBreakStart) }
-        editBreakEnd.setOnClickListener { pickTime(editBreakEnd) }
+        editDate.setOnClickListener { pickDate(editDate) }
+        editStart.setOnClickListener { TimePickerFragment.pickTime(this, editStart)
+            putDateAndTimeToVM() }
+        editEnd.setOnClickListener { TimePickerFragment.pickTime(this, editEnd)
+            putDateAndTimeToVM() }
+        editBreakStart.setOnClickListener { TimePickerFragment.pickTime(this, editBreakStart)
+            putDateAndTimeToVM() }
+        editBreakEnd.setOnClickListener { TimePickerFragment.pickTime(this, editBreakEnd)
+            putDateAndTimeToVM() }
         switchBreak.setOnClickListener { switchBrake() }
         buttonSubmit.setOnClickListener {calculateShift()}
 
@@ -190,24 +192,6 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
     }
 
-    private fun pickTime(editObj: EditText)
-    {
-        val timePickerFragment = TimePickerFragment()
-        timePickerFragment.selectedTime = editObj.text.toString()
-        val supportFragmentManager = requireActivity().supportFragmentManager
-        supportFragmentManager.setFragmentResultListener(
-            "REQUEST_KEY",
-            viewLifecycleOwner)
-        { resultKey, bundle ->
-            if (resultKey == "REQUEST_KEY") {
-                val time = bundle.getString("SELECTED_TIME")
-                editObj.setText(time.toString())
-                putDateAndTimeToVM()
-            }
-        }
-        timePickerFragment.show(supportFragmentManager, "TimePickerFragment")
-    }
-
     private fun calculateShift ()
     {
         if (editEarnings.text.isEmpty() || editFuelCost.text.isEmpty() || editMileage.text.isEmpty())
@@ -253,15 +237,6 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         viewModel.shiftData.value?.breakBegin = editBreakStart.text.toString()
         viewModel.shiftData.value?.breakEnd = editBreakEnd.text.toString()
     }
-
-    /*private fun showErrorMessage(errorCode: String)
-    {
-        val alert = MaterialAlertDialogBuilder(requireContext())
-        alert.setTitle(getString(R.string.error))
-        alert.setPositiveButton(R.string.ok, null)
-        alert.setMessage(errorCode)
-        alert.show()
-    }*/
 
     private fun showSubmitMessage (warningCode: String)
     {
