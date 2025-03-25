@@ -63,7 +63,7 @@ class CardLastShift {
 
     @Preview(showBackground = true)
     @Composable
-    fun BaseCardPreview() {
+    fun CardPreview() {
         val na = "N/A"
         val previewData = remember {
             MutableStateFlow(

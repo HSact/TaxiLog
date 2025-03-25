@@ -12,9 +12,8 @@ import com.example.taxidrivercalculator.ui.CardTheme
 @Composable
 fun BaseCard(
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
-)
-{
+    content: @Composable () -> Unit,
+) {
     CardTheme {
         Card(
             modifier = modifier

@@ -60,6 +60,8 @@ fun CardTheme(
     val cardColorScheme = baseColorScheme.copy(
         primary = colorFromRes(LocalContext.current, if (darkTheme) R.color.dark_gray else R.color.white),
         onPrimary = colorFromRes(LocalContext.current, if (darkTheme) R.color.white else R.color.black),
+        surface = colorFromRes(LocalContext.current, if (darkTheme) R.color.dark_gray else R.color.white),
+        onSurface = colorFromRes(LocalContext.current, if (darkTheme) R.color.hint_night else R.color.hint_day)
     )
 
     MaterialTheme(
