@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -23,14 +22,6 @@ class HomeFragment : Fragment() {
     private lateinit var card1: ComposeView
     private lateinit var card2: ComposeView
 
-    private lateinit var textDate: TextView
-    private lateinit var textEarnings: TextView
-    private lateinit var textCosts: TextView
-    private lateinit var textTime: TextView
-    private lateinit var textTotal: TextView
-    private lateinit var textPerHour: TextView
-    private lateinit var textGoal: TextView
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,48 +32,19 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
         card1 = binding.card1
         card2 = binding.card2
-
-        card1.setContent { CardLastShift().DrawLastShiftCard(viewModel.shiftData) }
-        card2.setContent { CardGoal().DrawGoalCard(viewModel.shiftData) }
+        card1.setContent { CardGoal().DrawGoalCard(viewModel.shiftData) }
+        card2.setContent { CardLastShift().DrawLastShiftCard(viewModel.shiftData) }
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bindItems()
-        /*viewModel.shiftData.observe(viewLifecycleOwner) { shift ->
-            textDate.text = shift["date"]
-            textEarnings.text = shift["earnings"]
-            textCosts.text = shift["costs"]
-            textTime.text = shift["time"]
-            textTotal.text = shift["total"]
-            textPerHour.text = shift["perHour"]
-            textGoal.text = shift["goal"]
-        }*/
-        /*viewModel.shiftData.observe(viewLifecycleOwner) { shift ->
-            card1.setContent { CardLastShift().DrawLastShiftCard(shift) }
-        }*/
-        /*viewModel.shiftData.collectAsStateWithLifecycle { shift ->
-            card1.setContent { DrawLastShiftCard(shift)
-            }
-        }*/
         viewModel.calculateShift(requireContext())
         binding.fabNewShift.setOnClickListener { newShift() }
     }
     override fun onResume() {
         super.onResume()
         viewModel.calculateShift(requireContext())
-    }
-
-    private fun bindItems ()
-    {
-        /*textDate = binding.textHomeDateR
-        textEarnings = binding.textHomeEarningsR
-        textCosts = binding.textHomeCostsR
-        textTime = binding.textHomeTimeR
-        textTotal = binding.textHomeTotalR
-        textPerHour = binding.textHomePerHourR
-        textGoal = binding.textHomeGoalR*/
     }
 
     override fun onDestroyView() {

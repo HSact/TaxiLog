@@ -5,9 +5,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.taxidrivercalculator.ui.CardTheme
 
 @Composable
 fun BaseCard(
@@ -15,15 +15,17 @@ fun BaseCard(
     content: @Composable () -> Unit
 )
 {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = 10.dp),
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
-    ) {
-        Box(modifier = Modifier.padding(16.dp)) {
-            content()
+    CardTheme {
+        Card(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
+        ) {
+            Box(modifier = Modifier.padding(16.dp)) {
+                content()
+            }
         }
     }
 }

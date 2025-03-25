@@ -1,8 +1,6 @@
 package com.example.taxidrivercalculator.ui.fragments.home
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.helpers.DBHelper
