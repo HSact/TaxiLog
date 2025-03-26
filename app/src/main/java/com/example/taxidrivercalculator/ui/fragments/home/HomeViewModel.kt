@@ -25,10 +25,9 @@ class HomeViewModel: ViewModel() {
         cursor!!.moveToLast()
         if (cursor.position==-1)
         {
-            cursor.close()
-            _shiftData.value = createEmptyShift(context)
             return
         }
+        cursor.close()
         val shifts = ShiftHelper.makeArray(db)
         /*var sum = 0.0
         for (shift in shifts)
@@ -43,7 +42,6 @@ class HomeViewModel: ViewModel() {
             }
         }*/
         val tempData = mutableMapOf<Int, Double>()
-
         for (shift in shifts) {
             if (ShiftHelper.getCurrentMonth(shift.date) == ShiftHelper.getCurrentMonth()) {
                 val day = ShiftHelper.getCurrentDay(shift.date)
@@ -83,7 +81,7 @@ class HomeViewModel: ViewModel() {
         val settings = SettingsHelper.getInstance(context)
         var goalMonthString = settings.goalPerMonth?:""
 
-        for (shift in shifts)
+        /*for (shift in shifts)
         {
             if (ShiftHelper.getCurrentMonth(shift.date) == ShiftHelper.getCurrentMonth())
             {
@@ -92,7 +90,7 @@ class HomeViewModel: ViewModel() {
                         this[ShiftHelper.getCurrentMonth(shift.date).toInt()] + shift.profit
                 }
             }
-        }
+        }*/
 
         val goalCurrent =
             if (goalMonthString.isEmpty())
