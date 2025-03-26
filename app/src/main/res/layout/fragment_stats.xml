@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -41,6 +42,7 @@
                 android:gravity="center|fill_vertical"
                 android:hint="@string/start_date"
                 android:layout_marginStart="20dp"
+                app:hintAnimationEnabled="false"
                 android:minWidth="120dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -73,6 +75,7 @@
                 android:gravity="center|fill_vertical"
                 android:hint="@string/end_date"
                 android:layout_marginStart="10dp"
+                app:hintAnimationEnabled="false"
                 android:minWidth="120dp">
 
                 <com.google.android.material.textfield.TextInputEditText

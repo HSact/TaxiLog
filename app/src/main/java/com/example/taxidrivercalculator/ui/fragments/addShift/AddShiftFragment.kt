@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -22,6 +21,7 @@ import com.example.taxidrivercalculator.ui.activities.MainActivity
 import com.example.taxidrivercalculator.ui.fragments.DatePickerFragment
 import com.example.taxidrivercalculator.ui.fragments.TimePickerFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputLayout
 
 class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
@@ -31,7 +31,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
     private lateinit var editDate: EditText
     private lateinit var editStart: EditText
     private lateinit var editEnd: EditText
-    private lateinit var checkBreak: CheckBox
+    private lateinit var switchBreak: MaterialSwitch
     private lateinit var editBreakStart: EditText
     private lateinit var editBreakEnd: EditText
     private lateinit var editEarnings: EditText
@@ -82,14 +82,16 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         }*/
         //putDateAndTimeToVM()
 
-        editDate.setOnClickListener {
-            pickDate(editDate) }
-        editStart.setOnClickListener {it.requestFocus()
-            pickTime(editStart) }
-        editEnd.setOnClickListener { pickTime(editEnd) }
-        editBreakStart.setOnClickListener { pickTime(editBreakStart) }
-        editBreakEnd.setOnClickListener { pickTime(editBreakEnd) }
-        checkBreak.setOnClickListener { switchBrake() }
+        editDate.setOnClickListener { pickDate(editDate) }
+        editStart.setOnClickListener { TimePickerFragment.pickTime(this, editStart)
+            putDateAndTimeToVM() }
+        editEnd.setOnClickListener { TimePickerFragment.pickTime(this, editEnd)
+            putDateAndTimeToVM() }
+        editBreakStart.setOnClickListener { TimePickerFragment.pickTime(this, editBreakStart)
+            putDateAndTimeToVM() }
+        editBreakEnd.setOnClickListener { TimePickerFragment.pickTime(this, editBreakEnd)
+            putDateAndTimeToVM() }
+        switchBreak.setOnClickListener { switchBrake() }
         buttonSubmit.setOnClickListener {calculateShift()}
 
         editMileage.addTextChangedListener(object : TextWatcher {
@@ -107,13 +109,13 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         })
     }
 
-    private fun updateShiftField(fieldSetter: (CalcShift) -> Unit) {
+    private fun updateShiftField(fieldSetter: (AddShiftData) -> Unit) {
         val currentShift = viewModel.shiftData.value ?: return
         fieldSetter(currentShift)
         viewModel.updateShift(currentShift)
     }
 
-    private fun updateUI(shift: CalcShift) {
+    private fun updateUI(shift: AddShiftData) {
         editDate.setText(shift.date)
         editStart.setText(shift.timeBegin)
         editEnd.setText(shift.timeEnd)
@@ -137,12 +139,12 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         }*/
         if (editBreakStart.text.isNotEmpty() || editBreakEnd.text.isNotEmpty())
         {
-            checkBreak.isChecked = true
+            switchBreak.isChecked = true
             binding.tableBreak.isVisible = true
         }
         else
         {
-            checkBreak.isChecked = false
+            switchBreak.isChecked = false
             binding.tableBreak.isVisible = false
         }
     }
@@ -152,7 +154,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         editDate = binding.buttonDatePick
         editStart = binding.buttonTimeStart
         editEnd = binding.buttonTimeEnd
-        checkBreak = binding.checkBreak
+        switchBreak = binding.switchBrake
         editBreakStart = binding.buttonTimeStartBrake
         editBreakEnd = binding.buttonTimeEndBrake
         editEarnings = binding.editTextEarnings
@@ -174,7 +176,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     private fun pickDate(editObj: EditText)
     {
-        val datePickerFragment = DatePickerFragment()
+        /*val datePickerFragment = DatePickerFragment()
         datePickerFragment.selectedDate = editObj.text.toString()
         val supportFragmentManager = requireActivity().supportFragmentManager
         supportFragmentManager.setFragmentResultListener(
@@ -187,27 +189,10 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
                 putDateAndTimeToVM()
             }
         }
-        datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
-    }
-
-    private fun pickTime(editObj: EditText)
-    {
-        // create new instance of DatePickerFragment
-        val timePickerFragment = TimePickerFragment()
-        val supportFragmentManager = requireActivity().supportFragmentManager
-
-        // we have to implement setFragmentResultListener
-        supportFragmentManager.setFragmentResultListener(
-            "REQUEST_KEY",
-            viewLifecycleOwner)
-        { resultKey, bundle ->
-            if (resultKey == "REQUEST_KEY") {
-                val time = bundle.getString("SELECTED_TIME")
-                editObj.setText(time.toString())
-                putDateAndTimeToVM()
-            }
+        datePickerFragment.show(supportFragmentManager, "DatePickerFragment")*/
+        DatePickerFragment.pickDate(requireContext(), editObj) {
+            putDateAndTimeToVM()
         }
-        timePickerFragment.show(supportFragmentManager, "TimePickerFragment")
     }
 
     private fun calculateShift ()
@@ -255,15 +240,6 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         viewModel.shiftData.value?.breakBegin = editBreakStart.text.toString()
         viewModel.shiftData.value?.breakEnd = editBreakEnd.text.toString()
     }
-
-    /*private fun showErrorMessage(errorCode: String)
-    {
-        val alert = MaterialAlertDialogBuilder(requireContext())
-        alert.setTitle(getString(R.string.error))
-        alert.setPositiveButton(R.string.ok, null)
-        alert.setMessage(errorCode)
-        alert.show()
-    }*/
 
     private fun showSubmitMessage (warningCode: String)
     {

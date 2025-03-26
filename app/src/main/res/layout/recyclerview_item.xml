@@ -6,6 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
+    app:strokeWidth="0dp"
+    app:strokeColor="@android:color/transparent"
     app:cardElevation="4dp"
     app:cardBackgroundColor="?attr/colorBackgroundFloating"
     android:orientation="vertical"

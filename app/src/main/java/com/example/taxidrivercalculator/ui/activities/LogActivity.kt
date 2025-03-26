@@ -223,7 +223,7 @@ class LogActivity : AppCompatActivity() {
     }
 
     private fun pickDate(editObj: EditText) {
-        val datePickerFragment = DatePickerFragment()
+        /*val datePickerFragment = DatePickerFragment()
         datePickerFragment.selectedDate = editObj.text.toString()
         val supportFragmentManager = supportFragmentManager
 
@@ -236,5 +236,7 @@ class LogActivity : AppCompatActivity() {
             }
         }
         datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
+    }*/
+        DatePickerFragment.pickDate(context = this, editObj = editObj)
     }
 }

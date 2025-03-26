@@ -449,8 +449,6 @@
                     android:text="5/2"
                     tools:ignore="HardcodedText" />
             </RadioGroup>
-
-
         </TableRow>
 
         <LinearLayout

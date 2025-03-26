@@ -64,23 +64,13 @@ class StatsFragment : Fragment() {
     }
 
     private fun pickDate(editObj: EditText) {
-        val datePickerFragment = DatePickerFragment()
-        datePickerFragment.selectedDate = editObj.text.toString()
-        val supportFragmentManager = requireActivity().supportFragmentManager
-        if (editObj == butDatePickBegin)
-        {
-            datePickerFragment.maxDate = butDatePickEnd.text.toString()
-        }
-        if (editObj == butDatePickEnd)
-        {
-            datePickerFragment.minDate = butDatePickBegin.text.toString()
-        }
-        supportFragmentManager.setFragmentResultListener(
-            "REQUEST_KEY",
-            this) { resultKey, bundle ->
-            if (resultKey == "REQUEST_KEY") {
-                val date = bundle.getString("SELECTED_DATE")
-                editObj.setText(date.toString())
+        DatePickerFragment.pickDate(
+            context = requireContext(),
+            editObj = editObj,
+            minDate = if (editObj == butDatePickEnd) butDatePickBegin.text.toString() else "",
+            maxDate = if (editObj == butDatePickBegin) butDatePickEnd.text.toString() else "",
+            onDatePicked = {
+                val date = editObj.text.toString()
                 if (editObj == butDatePickBegin) {
                     viewModel.startDate = date
                 } else if (editObj == butDatePickEnd) {
@@ -89,8 +79,7 @@ class StatsFragment : Fragment() {
                 viewModel.updateShifts()
                 displayInfo()
             }
-        }
-        datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
+        )
     }
 
     override fun onDestroyView() {

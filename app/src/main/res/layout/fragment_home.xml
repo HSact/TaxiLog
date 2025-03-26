@@ -7,193 +7,51 @@
 
     <androidx.core.widget.NestedScrollView
 
-    android:id="@+id/scroll"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="55dp"
-        android:clipToPadding="false"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-    <LinearLayout
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp"
-        tools:context=".ui.fragments.home.HomeFragment">
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="55dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:ignore="SpeakableTextPresentCheck">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="10dp"
+            tools:context=".ui.fragments.home.HomeFragment">
 
-            <TextView
-                android:id="@+id/textHomeHeader1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/last_shift"
-                android:textSize="34sp" />
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/card_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/card_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/card_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:stretchColumns="0">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal">
-
-                <TextView
-                    android:id="@+id/textHomeDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/date"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/textHomeDateR"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textSize="24sp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal">
-
-                <TextView
-                    android:id="@+id/textHomeEarnings"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/earnings"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/textHomeEarningsR"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="7500"
-                    android:textSize="24sp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/textHomeCosts"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/costs"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/textHomeCostsR"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="2500"
-                    android:textSize="24sp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/textHomeTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/time"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/textHomeTimeR"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="8 hours"
-                    android:textSize="24sp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="1">
-
-                <TextView
-                    android:id="@+id/textHomeTotal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/total"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/textHomeTotalR"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="5000"
-                    android:textSize="24sp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="1">
-
-                <TextView
-                    android:id="@+id/textHomePerHour"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/per_hour"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/textHomePerHourR"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="800"
-                    android:textSize="24sp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="1">
-
-                <TextView
-                    android:id="@+id/textHomeGoal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/settings_plan"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/textHomeGoalR"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="5000 of 100000"
-                    android:textSize="24sp" />
-            </TableRow>
-        </TableLayout>
-
-
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabNewShift"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:layout_marginBottom="80dp"
-        android:src="@drawable/add_2_24px"
         android:contentDescription="@string/new_shift"
-        android:layout_gravity="bottom|end"
-        app:backgroundTint="?attr/colorPrimary"
-        app:tint="?attr/colorOnPrimary"
+        android:src="@drawable/add_2_24px"
         android:translationY="-100dp"
-        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"/>
+        app:backgroundTint="?attr/colorPrimary"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+        app:tint="?attr/colorOnPrimary"
+        tools:ignore="ImageContrastCheck" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
