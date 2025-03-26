@@ -28,6 +28,7 @@ import ir.ehsannarmani.compose_charts.models.HorizontalIndicatorProperties
 import ir.ehsannarmani.compose_charts.models.LabelProperties
 import ir.ehsannarmani.compose_charts.models.Line
 import ir.ehsannarmani.compose_charts.models.LineProperties
+import ir.ehsannarmani.compose_charts.models.PopupProperties
 import ir.ehsannarmani.compose_charts.models.StrokeStyle
 import ir.ehsannarmani.compose_charts.models.VerticalIndicatorProperties
 import ir.ehsannarmani.compose_charts.models.ZeroLineProperties
@@ -43,7 +44,7 @@ class CardMonthGraph {
         val min = chartState.minOrNull() ?: 0.0
 
         val axisProperties = AxisProperties(
-            enabled = true,
+            enabled = false,
             color = SolidColor(Color(0xFFFF0000)),
             /*style = StrokeStyle.Dashed(intervals = floatArrayOf(10f,10f)),
             color = SolidColor(Color(0xFF0000FF)),
@@ -51,7 +52,7 @@ class CardMonthGraph {
             lineCount = 5*/
         )
         val labelProperties = LabelProperties(
-            enabled = true,
+            enabled = false,
             textStyle = TextStyle(color = Color.Blue)
         )
         val gridProperties = GridProperties(
