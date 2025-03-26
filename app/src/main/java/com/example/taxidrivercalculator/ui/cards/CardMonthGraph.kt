@@ -36,6 +36,7 @@ class CardMonthGraph {
     fun DrawMonthGraphCard(chartData: StateFlow<List<Double>>) {
         val chartState by chartData.collectAsStateWithLifecycle()
         val max = chartState.maxOrNull() ?: 0.0
+        val min = chartState.minOrNull() ?: 0.0
 
         val axisProperties = AxisProperties(
             enabled = true
@@ -62,12 +63,12 @@ class CardMonthGraph {
                             label = "Goal reach",
                             values = chartState,
                             color = SolidColor(Color(0xFF23af92)),
-                        ),
-                        Line(
+                        )
+                        /*Line(
                             label = "Zero",
                             values = listOf(0.0, 0.0),
                             color = SolidColor(Color(0xFFFF0000)),
-                        )
+                        )*/
                     )
                 },
                 gridProperties = gridProperties,
@@ -76,8 +77,8 @@ class CardMonthGraph {
                     color = SolidColor(Color(0xFFFFFFFF)),
                 ),
                 labelProperties = labelProperties,
-                minValue = -20.0,
-                maxValue = max*1.5,
+                minValue = min,
+                maxValue = max*1.2,
                 modifier = Modifier.heightIn(max = 300.dp)
             )
         }
