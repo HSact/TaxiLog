@@ -29,31 +29,29 @@ import ir.ehsannarmani.compose_charts.models.StrokeStyle
 import ir.ehsannarmani.compose_charts.models.ZeroLineProperties
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import java.util.stream.DoubleStream.builder
-import kotlin.math.roundToInt
 
 class CardMonthGraph {
 
     @Composable
-    fun DrawMonthGraphCard(shiftData: StateFlow<Map<String, String>>) {
-        val shiftState by shiftData.collectAsStateWithLifecycle()
-        val goal = shiftState["goal"] ?: ""
-        val goalCurrent = shiftState["goalCurrent"] ?: ""
-        var progress = goalCurrent.toFloat() / goal.toFloat()
-        progress = (progress * 1000).roundToInt() / 1000f
+    fun DrawMonthGraphCard(chartData: StateFlow<List<Double>>) {
+        val chartState by chartData.collectAsStateWithLifecycle()
+        val max = chartState.maxOrNull() ?: 0.0
+
         val axisProperties = AxisProperties(
-            enabled = true,
-            style = StrokeStyle.Dashed(intervals = floatArrayOf(10f,10f)),
-            color = SolidColor(Color(0xFFFFFFFF)),
+            enabled = true
+            /*style = StrokeStyle.Dashed(intervals = floatArrayOf(10f,10f)),
+            color = SolidColor(Color(0xFF0000FF)),
             thickness = (.5).dp,
-            lineCount = 5
+            lineCount = 5*/
         )
         val labelProperties = LabelProperties(
-            enabled = true,
-            textStyle = MaterialTheme.typography.labelSmall
+            enabled = false,
+            textStyle = MaterialTheme.typography.labelSmall,
+            labels = listOf("1", "2")
         )
         val gridProperties = GridProperties(
-            enabled = false
+            enabled = false,
+            yAxisProperties = axisProperties
         )
 
         BaseCard {
@@ -62,7 +60,7 @@ class CardMonthGraph {
                     listOf(
                         Line(
                             label = "Goal reach",
-                            values = listOf(28.0, -11.0, 5.0, 10.0, 35.0),
+                            values = chartState,
                             color = SolidColor(Color(0xFF23af92)),
                         ),
                         Line(
@@ -79,7 +77,7 @@ class CardMonthGraph {
                 ),
                 labelProperties = labelProperties,
                 minValue = -20.0,
-                maxValue = 100.0,
+                maxValue = max*1.5,
                 modifier = Modifier.heightIn(max = 300.dp)
             )
         }
@@ -88,14 +86,10 @@ class CardMonthGraph {
     @Preview(showBackground = true)
     @Composable
     fun CardPreview() {
-        val na = "N/A"
-        val goal = "100"
-        val goalCurrent = "50"
+
         val previewData = remember {
             MutableStateFlow(
-                mapOf(
-                    "goal" to goal,
-                    "goalCurrent" to goalCurrent
+                listOf( 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
                 )
             )
         }

@@ -105,6 +105,21 @@ object ShiftHelper {
         return LocalDate.now().format(dateFormatter)
     }
 
+    fun getCurrentDay(dateReceived: String = ""): Int {
+        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
+        val date = if (dateReceived.isNotEmpty()) {
+            try {
+                LocalDate.parse(dateReceived, formatter)
+            } catch (e: DateTimeParseException) {
+                return -1
+            }
+        } else {
+            LocalDate.now()
+        }
+        return date.dayOfMonth-1
+    }
+
     private fun getCurrentWeek(dateReceived: String = ""): Int {
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
@@ -120,7 +135,7 @@ object ShiftHelper {
         return date.get(WeekFields.of(Locale.getDefault()).weekOfYear())
     }
 
-    private fun getCurrentMonth(dateReceived: String = ""): String {
+    fun getCurrentMonth(dateReceived: String = ""): String {
         val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
         val thisDate = try {

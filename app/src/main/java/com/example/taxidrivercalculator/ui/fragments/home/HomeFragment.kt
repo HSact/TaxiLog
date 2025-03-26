@@ -36,13 +36,14 @@ class HomeFragment : Fragment() {
         card3 = binding.card3
         card1.setContent { CardGoal().DrawGoalCard(viewModel.shiftData) }
         card2.setContent { CardLastShift().DrawLastShiftCard(viewModel.shiftData) }
-        card3.setContent { CardMonthGraph().DrawMonthGraphCard(viewModel.shiftData) }
+        card3.setContent { CardMonthGraph().DrawMonthGraphCard(viewModel.chartData) }
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.calculateShift(requireContext())
+        viewModel.calculateChart(requireContext())
         binding.fabNewShift.setOnClickListener { newShift() }
     }
     override fun onResume() {
