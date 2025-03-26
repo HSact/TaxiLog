@@ -2,7 +2,6 @@ package com.example.taxidrivercalculator.ui.cards
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,7 +24,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.math.roundToInt
 
-
 class CardGoal{
 
     @Composable
@@ -44,26 +42,18 @@ class CardGoal{
                         .fillMaxWidth()
                         .wrapContentWidth(Alignment.CenterHorizontally)
                 )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 40.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Column(modifier = Modifier.padding(top = 0.dp).weight(1f)) {
-                        Text(modifier = Modifier,
-                            text = "0")
-                    }
                     Column(
-                        //Modifier.padding(top = 12.dp)
-                        ) {
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 40.dp)
+                    ) {
                         Text(
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally),
                             text = "$goalCurrent of $goal"
                         )
                         LinearProgressIndicator(
-                            modifier = Modifier.height(10.dp),
+                            modifier = Modifier.height(10.dp).fillMaxWidth(),
                             progress = {progress},
                             color = Color(0xFFE8BD00),
                             trackColor = Color(0xFFFFF8D9)
@@ -73,12 +63,6 @@ class CardGoal{
                                 .align(Alignment.CenterHorizontally),
                             text = (progress * 100).toString() + "%")
                     }
-                    Column(modifier = Modifier.padding(top = 0.dp).weight(1f)) {
-                        Text(
-                            modifier = Modifier.align(Alignment.End),
-                            text = goal)
-                    }
-                }
             }
         }
     }
