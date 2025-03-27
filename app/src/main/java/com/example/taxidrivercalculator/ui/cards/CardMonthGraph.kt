@@ -70,46 +70,44 @@ class CardMonthGraph {
         )
 
         BaseCard {
-            CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onBackground) {
-                LineChart(
-                    data = remember {
-                        listOf(
-                            Line(
-                                label = "Goal reach",
-                                values = chartState,
-                                color = SolidColor(Color(0xFF23af92)),
-                                firstGradientFillColor = Color(0xFF2BC0A1).copy(alpha = .5f),
-                                secondGradientFillColor = Color.Transparent,
-                                strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
-                                gradientAnimationDelay = 1000,
-                                drawStyle = ir.ehsannarmani.compose_charts.models.DrawStyle.Stroke(
-                                    width = 2.dp
-                                )
+            LineChart(
+                data = remember {
+                    listOf(
+                        Line(
+                            label = "Goal reach",
+                            values = chartState,
+                            color = SolidColor(Color(0xFF23af92)),
+                            firstGradientFillColor = Color(0xFF2BC0A1).copy(alpha = .5f),
+                            secondGradientFillColor = Color.Transparent,
+                            strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
+                            gradientAnimationDelay = 1000,
+                            drawStyle = ir.ehsannarmani.compose_charts.models.DrawStyle.Stroke(
+                                width = 2.dp
                             )
-                            /*Line(
-                            label = "Goal",
-                            values = listOf(0.0, 0.0),
-                            color = SolidColor(Color(0xFFFF0000)),
-                        )*/
                         )
-                    },
-                    //lineProperties = labelProperties,
-                    animationMode = ir.ehsannarmani.compose_charts.models.AnimationMode.Together(
-                        delayBuilder = {
-                            it * 500L
-                        }),
-                    gridProperties = gridProperties,
-                    zeroLineProperties = ZeroLineProperties(
-                        enabled = false,
-                        //color = SolidColor(Color(0xFFFFFFFF)),
-                    ),
-                    indicatorProperties = indicatorProperties,
-                    labelProperties = labelProperties,
-                    minValue = min,
-                    maxValue = max * 1.2,
-                    modifier = Modifier.heightIn(max = 300.dp)
-                )
-            }
+                        /*Line(
+                        label = "Goal",
+                        values = listOf(0.0, 0.0),
+                        color = SolidColor(Color(0xFFFF0000)),
+                    )*/
+                    )
+                },
+                //lineProperties = labelProperties,
+                animationMode = ir.ehsannarmani.compose_charts.models.AnimationMode.Together(
+                    delayBuilder = {
+                        it * 500L
+                    }),
+                gridProperties = gridProperties,
+                zeroLineProperties = ZeroLineProperties(
+                    enabled = false,
+                    //color = SolidColor(Color(0xFFFFFFFF)),
+                ),
+                indicatorProperties = indicatorProperties,
+                labelProperties = labelProperties,
+                minValue = min,
+                maxValue = max * 1.2,
+                modifier = Modifier.heightIn(max = 300.dp)
+            )
         }
     }
 
@@ -119,7 +117,8 @@ class CardMonthGraph {
 
         val previewData = remember {
             MutableStateFlow(
-                listOf( 0.0, 2.0, 3.0, 7.0, 10.0, 12.0, 18.0, 25.0, 27.0, 30.0
+                listOf(
+                    0.0, 2.0, 3.0, 7.0, 10.0, 12.0, 18.0, 25.0, 27.0, 30.0
                 )
             )
         }
