@@ -17,6 +17,9 @@ class HomeViewModel: ViewModel() {
     private val _chartData = MutableStateFlow(MutableList(31) { 0.0 })
     val chartData: StateFlow<List<Double>> = _chartData
 
+    private var _goalData = MutableStateFlow(0.0)
+    var goalData: StateFlow<Double> = _goalData
+
     fun calculateChart (context: Context)
     {
         val db = DBHelper(context, null)
@@ -29,6 +32,9 @@ class HomeViewModel: ViewModel() {
         }
         cursor.close()
         val shifts = ShiftHelper.makeArray(db)
+
+        val settings = SettingsHelper.getInstance(context)
+        _goalData.value = settings.goalPerMonth?.toDoubleOrNull() ?: 0.0
         /*var sum = 0.0
         for (shift in shifts)
         {
@@ -54,7 +60,6 @@ class HomeViewModel: ViewModel() {
             cumulativeSum += tempData[day] ?: 0.0
             cumulativeSum
         }
-
     }
 
     fun calculateShift (context: Context)
