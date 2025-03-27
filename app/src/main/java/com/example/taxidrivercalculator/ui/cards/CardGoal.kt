@@ -35,9 +35,6 @@ class CardGoal {
     @Composable
     fun DrawGoalCard(shiftData: StateFlow<Map<String, String>>) {
         val shiftState by shiftData.collectAsStateWithLifecycle()
-        /*val goal = shiftState["goal"] ?: ""
-        val goalCurrent = shiftState["goalCurrent"] ?: ""*/
-        //var progress = goalCurrent.toFloat() / goal.toFloat()
         val goal = shiftState["goal"]?.toFloatOrNull() ?: 1f
         val goalCurrent = shiftState["goalCurrent"]?.toFloatOrNull() ?: 0f
         val rawProgress = (goalCurrent / goal).coerceIn(0f, 1f)
