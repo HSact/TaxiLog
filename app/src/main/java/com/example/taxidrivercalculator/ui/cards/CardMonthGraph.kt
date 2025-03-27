@@ -42,6 +42,8 @@ class CardMonthGraph {
     fun DrawMonthGraphCard(chartData: StateFlow<List<Double>>, goalData: StateFlow<Double>) {
         val chartState by chartData.collectAsStateWithLifecycle()
         val goal by goalData.collectAsState()
+        val daysInMonth = LocalDate.now().lengthOfMonth()
+        val trimmedChartState = chartState.take(daysInMonth)
         var max = chartState.maxOrNull() ?: 0.0
         val min = chartState.minOrNull()?.takeIf { it <= 0.0 } ?: 0.0
         val progressName = stringResource(R.string.progress)
@@ -84,7 +86,7 @@ class CardMonthGraph {
                         listOf(
                             Line(
                                 label = progressName,
-                                values = chartState,
+                                values = trimmedChartState,
                                 color = SolidColor(colorGraphLine),
                                 firstGradientFillColor = colorGraphLine.copy(alpha = .5f),
                                 secondGradientFillColor = Color.Transparent,
@@ -97,7 +99,7 @@ class CardMonthGraph {
                             ),
                             Line(
                                 label = goalName,
-                                values = listOf(goal, goal),
+                                values = List(daysInMonth) {goal},
                                 color = SolidColor(Color(0xFFFF0000)),
                             )
                         )

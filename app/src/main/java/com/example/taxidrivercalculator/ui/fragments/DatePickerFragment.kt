@@ -96,5 +96,4 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
             datePickerFragment.show(fragmentManager, "DatePickerFragment")
         }
     }
-
 }

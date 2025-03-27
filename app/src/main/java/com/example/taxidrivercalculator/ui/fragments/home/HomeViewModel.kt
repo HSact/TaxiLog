@@ -8,6 +8,8 @@ import com.example.taxidrivercalculator.helpers.SettingsHelper
 import com.example.taxidrivercalculator.helpers.ShiftHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class HomeViewModel: ViewModel() {
     private val _shiftData = MutableStateFlow<Map<String, String>>(emptyMap())
@@ -74,7 +76,7 @@ class HomeViewModel: ViewModel() {
             return
         }
         val shifts = ShiftHelper.makeArray(db)
-
+        val date = LocalDate.now().withDayOfMonth(1).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
         val textDate = cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COl)+0)
         val textEarnings = cursor.getString(cursor.getColumnIndex(DBHelper.EARNINGS_COL)+0)
         val textCosts = ((cursor.getDouble(cursor.getColumnIndex(DBHelper.WASH_COL)+0))+
@@ -95,13 +97,12 @@ class HomeViewModel: ViewModel() {
                 }
             }
         }*/
-
         val goalCurrent =
             if (goalMonthString.isEmpty())
             { context.getString(R.string.n_a) }
         /*else { ShiftHelper.calculateMonthProgress(shifts.last().date, db).toString() +
                     " " + context.getString(R.string.of) + " " + goalMonthString }*/
-            else { ShiftHelper.calculateMonthProgress(shifts.last().date, db).toString()}
+            else { ShiftHelper.calculateMonthProgress(date, db).toString()}
         cursor.close()
         _shiftData.value = mapOf(
             "date" to textDate,
