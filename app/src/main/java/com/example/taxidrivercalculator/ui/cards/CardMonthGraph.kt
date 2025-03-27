@@ -2,9 +2,11 @@ package com.example.taxidrivercalculator.ui.cards
 
 import androidx.compose.animation.core.EaseInOutCubic
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -42,6 +44,7 @@ class CardMonthGraph {
         val chartState by chartData.collectAsStateWithLifecycle()
         val max = chartState.maxOrNull() ?: 0.0 //TODO: goal
         val min = chartState.minOrNull() ?: 0.0
+        val isDarkTheme = isSystemInDarkTheme()
 
         val axisProperties = AxisProperties(
             enabled = false,
@@ -62,46 +65,51 @@ class CardMonthGraph {
         )
         val indicatorProperties = HorizontalIndicatorProperties(
             enabled = true,
-            textStyle = TextStyle(color = Color.White),
+            textStyle = if (isDarkTheme) TextStyle(color = Color.White)
+            else TextStyle(color = Color.Black),
         )
 
         BaseCard {
-            LineChart(
-                data = remember {
-                    listOf(
-                        Line(
-                            label = "Goal reach",
-                            values = chartState,
-                            color = SolidColor(Color(0xFF23af92)),
-                            firstGradientFillColor = Color(0xFF2BC0A1).copy(alpha = .5f),
-                            secondGradientFillColor = Color.Transparent,
-                            strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
-                            gradientAnimationDelay = 1000,
-                            drawStyle = ir.ehsannarmani.compose_charts.models.DrawStyle.Stroke(width = 2.dp)
-                        )
-                        /*Line(
+            CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onBackground) {
+                LineChart(
+                    data = remember {
+                        listOf(
+                            Line(
+                                label = "Goal reach",
+                                values = chartState,
+                                color = SolidColor(Color(0xFF23af92)),
+                                firstGradientFillColor = Color(0xFF2BC0A1).copy(alpha = .5f),
+                                secondGradientFillColor = Color.Transparent,
+                                strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
+                                gradientAnimationDelay = 1000,
+                                drawStyle = ir.ehsannarmani.compose_charts.models.DrawStyle.Stroke(
+                                    width = 2.dp
+                                )
+                            )
+                            /*Line(
                             label = "Goal",
                             values = listOf(0.0, 0.0),
                             color = SolidColor(Color(0xFFFF0000)),
                         )*/
-                    )
-                },
-                //lineProperties = labelProperties,
-                animationMode = ir.ehsannarmani.compose_charts.models.
-                AnimationMode.Together(delayBuilder = {
-                    it * 500L
-                }),
-                gridProperties = gridProperties,
-                zeroLineProperties = ZeroLineProperties(
-                    enabled = false,
-                    color = SolidColor(Color(0xFFFFFFFF)),
-                ),
-                indicatorProperties = indicatorProperties,
-                labelProperties = labelProperties,
-                minValue = min,
-                maxValue = max*1.2,
-                modifier = Modifier.heightIn(max = 300.dp)
-            )
+                        )
+                    },
+                    //lineProperties = labelProperties,
+                    animationMode = ir.ehsannarmani.compose_charts.models.AnimationMode.Together(
+                        delayBuilder = {
+                            it * 500L
+                        }),
+                    gridProperties = gridProperties,
+                    zeroLineProperties = ZeroLineProperties(
+                        enabled = false,
+                        //color = SolidColor(Color(0xFFFFFFFF)),
+                    ),
+                    indicatorProperties = indicatorProperties,
+                    labelProperties = labelProperties,
+                    minValue = min,
+                    maxValue = max * 1.2,
+                    modifier = Modifier.heightIn(max = 300.dp)
+                )
+            }
         }
     }
 
