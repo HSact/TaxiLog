@@ -9,7 +9,10 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -69,7 +72,6 @@ class CardGoal{
     @Preview(showBackground = true)
     @Composable
     fun CardPreview() {
-        val na = "N/A"
         val goal = "100"
         val goalCurrent = "50"
         val previewData = remember {
