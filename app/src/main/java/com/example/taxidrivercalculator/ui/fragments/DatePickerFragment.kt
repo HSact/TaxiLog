@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 
@@ -68,7 +70,7 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
             context: Context,
             editObj: EditText,
             minDate: String = "",
-            maxDate: String = "",
+            maxDate: String = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
             onDatePicked: (() -> Unit)? = null
         ) {
             val datePickerFragment = DatePickerFragment().apply {
@@ -94,5 +96,4 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
             datePickerFragment.show(fragmentManager, "DatePickerFragment")
         }
     }
-
 }

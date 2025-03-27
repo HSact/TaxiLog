@@ -5,10 +5,11 @@ import androidx.lifecycle.ViewModel
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.helpers.SettingsHelper
-import com.example.taxidrivercalculator.helpers.Shift
 import com.example.taxidrivercalculator.helpers.ShiftHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class HomeViewModel: ViewModel() {
     private val _shiftData = MutableStateFlow<Map<String, String>>(emptyMap())
@@ -16,6 +17,9 @@ class HomeViewModel: ViewModel() {
 
     private val _chartData = MutableStateFlow(MutableList(31) { 0.0 })
     val chartData: StateFlow<List<Double>> = _chartData
+
+    private var _goalData = MutableStateFlow(0.0)
+    var goalData: StateFlow<Double> = _goalData
 
     fun calculateChart (context: Context)
     {
@@ -29,6 +33,9 @@ class HomeViewModel: ViewModel() {
         }
         cursor.close()
         val shifts = ShiftHelper.makeArray(db)
+
+        val settings = SettingsHelper.getInstance(context)
+        _goalData.value = settings.goalPerMonth?.toDoubleOrNull() ?: 0.0
         /*var sum = 0.0
         for (shift in shifts)
         {
@@ -54,7 +61,6 @@ class HomeViewModel: ViewModel() {
             cumulativeSum += tempData[day] ?: 0.0
             cumulativeSum
         }
-
     }
 
     fun calculateShift (context: Context)
@@ -70,7 +76,7 @@ class HomeViewModel: ViewModel() {
             return
         }
         val shifts = ShiftHelper.makeArray(db)
-
+        val date = LocalDate.now().withDayOfMonth(1).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
         val textDate = cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COl)+0)
         val textEarnings = cursor.getString(cursor.getColumnIndex(DBHelper.EARNINGS_COL)+0)
         val textCosts = ((cursor.getDouble(cursor.getColumnIndex(DBHelper.WASH_COL)+0))+
@@ -91,13 +97,12 @@ class HomeViewModel: ViewModel() {
                 }
             }
         }*/
-
         val goalCurrent =
             if (goalMonthString.isEmpty())
             { context.getString(R.string.n_a) }
         /*else { ShiftHelper.calculateMonthProgress(shifts.last().date, db).toString() +
                     " " + context.getString(R.string.of) + " " + goalMonthString }*/
-            else { ShiftHelper.calculateMonthProgress(shifts.last().date, db).toString()}
+            else { ShiftHelper.calculateMonthProgress(date, db).toString()}
         cursor.close()
         _shiftData.value = mapOf(
             "date" to textDate,

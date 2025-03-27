@@ -176,20 +176,6 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     private fun pickDate(editObj: EditText)
     {
-        /*val datePickerFragment = DatePickerFragment()
-        datePickerFragment.selectedDate = editObj.text.toString()
-        val supportFragmentManager = requireActivity().supportFragmentManager
-        supportFragmentManager.setFragmentResultListener(
-            "REQUEST_KEY",
-                viewLifecycleOwner)
-        { resultKey, bundle ->
-            if (resultKey == "REQUEST_KEY") {
-                val date = bundle.getString("SELECTED_DATE")
-                editObj.setText(date.toString())
-                putDateAndTimeToVM()
-            }
-        }
-        datePickerFragment.show(supportFragmentManager, "DatePickerFragment")*/
         DatePickerFragment.pickDate(requireContext(), editObj) {
             putDateAndTimeToVM()
         }

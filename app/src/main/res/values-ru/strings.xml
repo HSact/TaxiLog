@@ -53,7 +53,7 @@
     <string name="id">ID</string>
     <string name="delete_all">Удалить все</string>
     <string name="you_haven_t_set_goal_yet">Вы пока не определили цель</string>
-    <string name="your_goal_per_month">Вы поставили цель %s в месяц</string>
+    <string name="your_goal_per_month">Ваша цель %s в месяц</string>
     <string name="n_a">N/A</string>
     <string name="hours">часов</string>
     <string name="shifts_count">Всего смен</string>
@@ -114,6 +114,9 @@
     <string name="hint_money_per_week">₽/$ и т.п. в неделю</string>
     <string name="hint_money_per_km_mi">₽/$ и т.п. за км</string>
     <string name="percent">%</string>
+    <string name="month_graph">Достижение цели</string>
+    <string name="progress">Прогресс</string>
+    <string name="goal">Цель</string>
 
 
     <string-array name="languages">

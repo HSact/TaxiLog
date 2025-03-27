@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:clipToPadding="false"
+    android:layout_marginBottom="100dp"
     android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
@@ -10,8 +12,10 @@
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="55dp"
+        android:clipToPadding="true"
+
+
+        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:ignore="SpeakableTextPresentCheck">
 
@@ -37,6 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -49,7 +54,6 @@
         android:layout_marginBottom="80dp"
         android:contentDescription="@string/new_shift"
         android:src="@drawable/add_2_24px"
-        android:translationY="-100dp"
         app:backgroundTint="?attr/colorPrimary"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
         app:tint="?attr/colorOnPrimary"
