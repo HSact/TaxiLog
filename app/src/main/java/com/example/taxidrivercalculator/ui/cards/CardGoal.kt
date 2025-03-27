@@ -1,8 +1,6 @@
 package com.example.taxidrivercalculator.ui.cards
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -32,6 +30,7 @@ class CardGoal{
         val goal = shiftState["goal"]?:""
         val goalCurrent = shiftState["goalCurrent"]?:""
         var progress = goalCurrent.toFloat() / goal.toFloat()
+        val stringOf = stringResource(R.string.of)
         progress = (progress * 1000).roundToInt() / 1000f
         BaseCard {
             CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
@@ -50,7 +49,7 @@ class CardGoal{
                         Text(
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally),
-                            text = "$goalCurrent of $goal"
+                            text = "$goalCurrent $stringOf $goal"
                         )
                         LinearProgressIndicator(
                             modifier = Modifier.height(10.dp).fillMaxWidth(),
