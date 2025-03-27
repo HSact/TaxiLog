@@ -118,6 +118,8 @@
     <string name="hint_money_per_km_mi">$/€/₽ etc. per km</string>
     <string name="percent">%</string>
     <string name="month_graph">Goal progress</string>
+    <string name="progress">Progress</string>
+    <string name="goal">Goal</string>
 
 
     <string-array name="languages">

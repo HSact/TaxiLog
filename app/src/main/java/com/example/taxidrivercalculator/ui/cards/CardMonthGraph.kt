@@ -44,6 +44,8 @@ class CardMonthGraph {
         val goal by goalData.collectAsState()
         var max = chartState.maxOrNull() ?: 0.0 //TODO: goal
         val min = chartState.minOrNull()?.takeIf { it <= 0.0 } ?: 0.0
+        val progressName = stringResource(R.string.progress)
+        val goalName = stringResource(R.string.goal)
         val isDarkTheme = isSystemInDarkTheme()
         val textStyle: TextStyle = if (isDarkTheme) TextStyle(color = Color.White)
         else TextStyle(color = Color.Black)
@@ -99,7 +101,7 @@ class CardMonthGraph {
                     data = remember {
                         listOf(
                             Line(
-                                label = "Goal reach",
+                                label = progressName,
                                 values = chartState,
                                 color = SolidColor(colorGraphLine),
                                 firstGradientFillColor = colorGraphLine.copy(alpha = .5f),
@@ -112,7 +114,7 @@ class CardMonthGraph {
                                 viewRange = viewRange
                             ),
                             Line(
-                                label = "Goal",
+                                label = goalName,
                                 values = listOf(goal, goal),
                                 color = SolidColor(Color(0xFFFF0000)),
                                 //popupProperties = PopupProperties(enabled = false, duration = 0)
