@@ -100,7 +100,7 @@ class CardMonthGraph {
                             Line(
                                 label = goalName,
                                 values = List(daysInMonth) {goal},
-                                color = SolidColor(Color(0xFFFF0000)),
+                                color = SolidColor(Color.Red),
                             )
                         )
                     },
@@ -128,7 +128,6 @@ class CardMonthGraph {
     @Preview(showBackground = true)
     @Composable
     fun CardPreview() {
-
         val previewData = remember {
             MutableStateFlow(
                 listOf(
