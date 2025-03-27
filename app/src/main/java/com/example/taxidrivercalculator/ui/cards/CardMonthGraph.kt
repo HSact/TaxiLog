@@ -33,9 +33,11 @@ import ir.ehsannarmani.compose_charts.models.LineProperties
 import ir.ehsannarmani.compose_charts.models.PopupProperties
 import ir.ehsannarmani.compose_charts.models.StrokeStyle
 import ir.ehsannarmani.compose_charts.models.VerticalIndicatorProperties
+import ir.ehsannarmani.compose_charts.models.ViewRange
 import ir.ehsannarmani.compose_charts.models.ZeroLineProperties
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.time.LocalDate
 
 class CardMonthGraph {
 
@@ -43,7 +45,7 @@ class CardMonthGraph {
     fun DrawMonthGraphCard(chartData: StateFlow<List<Double>>) {
         val chartState by chartData.collectAsStateWithLifecycle()
         val max = chartState.maxOrNull() ?: 0.0 //TODO: goal
-        val min = chartState.minOrNull() ?: 0.0
+        val min = chartState.minOrNull()?.takeIf { it <= 0.0 } ?: 0.0
         val isDarkTheme = isSystemInDarkTheme()
 
         val axisProperties = AxisProperties(
@@ -68,6 +70,7 @@ class CardMonthGraph {
             textStyle = if (isDarkTheme) TextStyle(color = Color.White)
             else TextStyle(color = Color.Black),
         )
+        val viewRange = ViewRange(0, LocalDate.now().dayOfMonth-1)
 
         BaseCard {
             LineChart(
@@ -83,7 +86,9 @@ class CardMonthGraph {
                             gradientAnimationDelay = 1000,
                             drawStyle = ir.ehsannarmani.compose_charts.models.DrawStyle.Stroke(
                                 width = 2.dp
-                            )
+                            ),
+                            viewRange = viewRange
+
                         )
                         /*Line(
                         label = "Goal",

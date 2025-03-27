@@ -61,7 +61,7 @@ class CardGoal{
                         Text(
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally),
-                            text = (progress * 100).toString() + "%")
+                            text = ("${"%.1f".format(progress * 100)}%"))
                     }
             }
         }
