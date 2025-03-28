@@ -9,12 +9,17 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TableLayout
 import android.widget.TextView
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.FragmentGoalsBinding
+import com.example.taxidrivercalculator.ui.cards.CardDayGoal
+import com.example.taxidrivercalculator.ui.cards.CardGoal
+import com.example.taxidrivercalculator.ui.cards.CardLastShift
+import com.example.taxidrivercalculator.ui.cards.CardMonthGraph
 import com.example.taxidrivercalculator.ui.fragments.DatePickerFragment
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -29,6 +34,10 @@ class GoalsFragment : Fragment() {
     private val viewModel: GoalsViewModel by viewModels()
 
     private lateinit var tableProgress: TableLayout
+
+    private lateinit var card1: ComposeView
+    private lateinit var card2: ComposeView
+    private lateinit var card3: ComposeView
 
     private lateinit var progressDay: ProgressBar
     private lateinit var progressWeek: ProgressBar
@@ -55,6 +64,8 @@ class GoalsFragment : Fragment() {
         _binding = FragmentGoalsBinding.inflate(inflater, container, false)
         val root: View = binding.root
         bindItems()
+        card1 = binding.card1
+        card1.setContent { CardDayGoal().DrawDayGoalCard(viewModel.daysData) }
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         val now = LocalDateTime.now()
         val currentDate = now.toLocalDate()
@@ -67,6 +78,7 @@ class GoalsFragment : Fragment() {
             pickDate(buttonDatePicker)
         }
         viewModel.defineGoals(viewModel.pickedDate, requireContext())
+        viewModel.calculateDaysData(viewModel.pickedDate, requireContext())
         return root
     }
 

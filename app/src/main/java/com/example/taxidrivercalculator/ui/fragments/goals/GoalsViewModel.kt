@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.helpers.SettingsHelper
 import com.example.taxidrivercalculator.helpers.ShiftHelper
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -17,9 +19,29 @@ class GoalsViewModel: ViewModel() {
     var pickedDate: String = ""
     var goalMonthString: String? = ""
 
+    private val _daysData = MutableStateFlow(MutableList(31) { 0.0 })
+    val daysData: StateFlow<List<Double>> = _daysData
+
     private var goalMonth: Double = -1.0
     private var goalWeek: Double = -1.0
     private var goalDay: Double = -1.0
+
+    fun calculateDaysData(date: String, context: Context) {
+        if (pickedDate.isEmpty()) {
+            pickedDate = date
+        }
+        val db = DBHelper(context, null)
+        val parts = date.split(".")
+        if (parts.size != 3) return
+        val month = parts[1]
+        val year = parts[2]
+        val newData = MutableList(31) { day ->
+            val dayString = String.format("%02d", day + 1)
+            val formattedDate = "$dayString.$month.$year"
+            ShiftHelper.calculateDayProgress(formattedDate, db)
+        }
+        _daysData.value = newData
+    }
 
     fun defineGoals(date: String, context: Context)
     {
