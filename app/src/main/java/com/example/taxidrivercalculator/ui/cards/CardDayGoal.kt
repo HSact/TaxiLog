@@ -1,7 +1,5 @@
 package com.example.taxidrivercalculator.ui.cards
 
-import androidx.compose.animation.core.EaseInOutCubic
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -12,7 +10,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -26,30 +23,23 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.taxidrivercalculator.R
 import ir.ehsannarmani.compose_charts.ColumnChart
-import ir.ehsannarmani.compose_charts.LineChart
 import ir.ehsannarmani.compose_charts.models.BarProperties
 import ir.ehsannarmani.compose_charts.models.Bars
 import ir.ehsannarmani.compose_charts.models.GridProperties
 import ir.ehsannarmani.compose_charts.models.HorizontalIndicatorProperties
 import ir.ehsannarmani.compose_charts.models.LabelHelperProperties
-import ir.ehsannarmani.compose_charts.models.Line
-import ir.ehsannarmani.compose_charts.models.ViewRange
-import ir.ehsannarmani.compose_charts.models.ZeroLineProperties
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class CardDayGoal {
 
     @Composable
     fun DrawDayGoalCard(daysData: StateFlow<List<Double>>
     /*chartData: StateFlow<List<Double>>, goalData: StateFlow<Double>*/) {
-        /*val chartState by chartData.collectAsStateWithLifecycle()
-        val goal by goalData.collectAsState()
-        val daysInMonth = LocalDate.now().lengthOfMonth()
-        val trimmedChartState = chartState.take(daysInMonth)
-        var max = chartState.maxOrNull() ?: 0.0
-        val min = chartState.minOrNull()?.takeIf { it <= 0.0 } ?: 0.0*/
+
         val days by daysData.collectAsStateWithLifecycle()
         val progressName = stringResource(R.string.progress)
         val goalName = stringResource(R.string.goal)
@@ -59,12 +49,6 @@ class CardDayGoal {
 
         val colorGraphLine = Color(0xFFFBD323)
 
-        /*val bars = listOf<Bars>().size
-        for (bar in bars)
-        {
-            bar.label = index.toString()
-        }*/
-
         val bars = List(31) { index ->
             Bars(
                 label = (index + 1).toString(),
@@ -73,16 +57,10 @@ class CardDayGoal {
                 )
             )
         }
-
-        /*if (max < goal) {
-            max = goal
-        }*/
-
         val labelHelperProperties = LabelHelperProperties(
             enabled = false,
             textStyle = textStyle
         )
-
         val gridProperties = GridProperties(
             enabled = false,
         )
@@ -90,12 +68,16 @@ class CardDayGoal {
             enabled = true,
             textStyle = textStyle,
         )
-        val viewRange = ViewRange(0, LocalDate.now().dayOfMonth - 1)
-
+        val locale = Locale.getDefault()
+        val formatter = DateTimeFormatter.ofPattern("LLLL", locale)
+        var currentMonth = LocalDate.now().format(formatter)
+        if (locale.language == "ru") {
+            currentMonth = currentMonth.replaceFirstChar { it.uppercase(locale) }
+        }
         BaseCard {
             CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
                 Text(
-                    text = stringResource(R.string.month_graph),
+                    text = currentMonth,
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -147,30 +129,9 @@ class CardDayGoal {
                         .padding(top = 50.dp),
                     data = remember {
                         bars
-                        /*listOf(
-                            Bars(
-                                label = "1",
-                                values = listOf(
-                                    Bars.Data(value = 10.0, color = SolidColor(colorGraphLine))
-                                )
-                            ),
-                            Bars(
-                                label = "2",
-                                values = listOf(
-                                    Bars.Data(value = 20.0, color = SolidColor(colorGraphLine))
-                                )
-                            ),
-                            Bars(
-                                label = "3",
-                                values = listOf(
-                                    Bars.Data(value = 30.0, color = SolidColor(colorGraphLine))
-                                )
-                            ),
-                        )*/
                     },
                     barProperties = BarProperties(
                         spacing = 1.dp,
-
                         //strokeWidth = 10.dp,
                     ),
                     indicatorProperties = indicatorProperties,
@@ -191,6 +152,6 @@ class CardDayGoal {
                 )
             )
         }
-        //DrawDayGoalCard(/*previewData, MutableStateFlow(0.0)*/)
+        DrawDayGoalCard(previewData)
     }
 }
