@@ -16,12 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.taxidrivercalculator.R
 import ir.ehsannarmani.compose_charts.ColumnChart
 import ir.ehsannarmani.compose_charts.models.BarProperties
 import ir.ehsannarmani.compose_charts.models.Bars
@@ -41,8 +39,6 @@ class CardDayGoal {
     /*chartData: StateFlow<List<Double>>, goalData: StateFlow<Double>*/) {
 
         val days by daysData.collectAsStateWithLifecycle()
-        val progressName = stringResource(R.string.progress)
-        val goalName = stringResource(R.string.goal)
         val isDarkTheme = isSystemInDarkTheme()
         val textStyle: TextStyle = if (isDarkTheme) TextStyle(color = Color.White)
         else TextStyle(color = Color.Black)
