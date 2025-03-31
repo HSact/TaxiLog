@@ -70,9 +70,9 @@ class GoalsViewModel: ViewModel() {
         goalDay = goalMonth / denominatorDay
         val db = DBHelper (context, null)
         _goalData.value = mapOf(
-            "monthGoal" to goalMonth,
-            "weekGoal" to goalWeek,
-            "dayGoal" to goalDay,
+            "monthGoal" to roundTo2(goalMonth),
+            "weekGoal" to roundTo2(goalWeek),
+            "dayGoal" to roundTo2(goalDay),
             "dayProgress" to (roundTo2(ShiftHelper.calculateDayProgress(date, db))),
             "weekProgress" to (roundTo2(ShiftHelper.calculateWeekProgress(date, db))),
             "monthProgress" to (roundTo2(ShiftHelper.calculateMonthProgress(date, db))),
