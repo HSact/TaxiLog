@@ -20,6 +20,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.taxidrivercalculator.ui.fragments.goals.GoalsViewModel
 import ir.ehsannarmani.compose_charts.ColumnChart
 import ir.ehsannarmani.compose_charts.models.BarProperties
 import ir.ehsannarmani.compose_charts.models.Bars
@@ -35,8 +36,7 @@ import java.util.Locale
 class CardDayGoal {
 
     @Composable
-    fun DrawDayGoalCard(daysData: StateFlow<List<Double>>
-    /*chartData: StateFlow<List<Double>>, goalData: StateFlow<Double>*/) {
+    fun DrawDayGoalCard(daysData: StateFlow<List<Double>>, pickedDate: String = "") {
 
         val days by daysData.collectAsStateWithLifecycle()
         val isDarkTheme = isSystemInDarkTheme()
@@ -47,7 +47,7 @@ class CardDayGoal {
 
         val bars = List(31) { index ->
             Bars(
-                label = (index + 1).toString(),
+                label = if (index % 2 ==0) (index + 1).toString() else " ",
                 values = listOf(
                     Bars.Data(value = days[index], color = SolidColor(colorGraphLine))
                 )
@@ -66,7 +66,9 @@ class CardDayGoal {
         )
         val locale = Locale.getDefault()
         val formatter = DateTimeFormatter.ofPattern("LLLL", locale)
-        var currentMonth = LocalDate.now().format(formatter)
+        val inputFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.getDefault())
+        val parsedDate = LocalDate.parse(pickedDate, inputFormatter)
+        var currentMonth = parsedDate.format(formatter)
         if (locale.language == "ru") {
             currentMonth = currentMonth.replaceFirstChar { it.uppercase(locale) }
         }
