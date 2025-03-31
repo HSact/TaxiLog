@@ -28,6 +28,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.taxidrivercalculator.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.text.NumberFormat
+import java.util.Locale
 import kotlin.math.roundToInt
 
 class CardGoal {
@@ -39,6 +41,7 @@ class CardGoal {
         val goalCurrent = shiftState["goalCurrent"]?.toFloatOrNull() ?: 0f
         val rawProgress = (goalCurrent / goal).coerceIn(0f, 1f)
         var progress by remember { mutableFloatStateOf(0f) }
+        val formattedGoal = NumberFormat.getNumberInstance(Locale.getDefault()).format(goal)
         LaunchedEffect(rawProgress) {
             progress = rawProgress
         }
@@ -52,7 +55,7 @@ class CardGoal {
         BaseCard {
             CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
                 Text(
-                    text = stringResource(R.string.your_goal_per_month, goal),
+                    text = stringResource(R.string.your_goal_per_month, formattedGoal),
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier
                         .fillMaxWidth()

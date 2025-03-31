@@ -17,507 +17,506 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorSurface"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
     </com.google.android.material.appbar.AppBarLayout>
 
 
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/scroll">
-
-    <TableLayout
-        android:id="@+id/layout_settings"
+    <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:isScrollContainer="false"
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:stretchColumns="0"
-        tools:context=".ui.activities.SettingsActivity">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
+        <TableLayout
+            android:id="@+id/layout_settings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:minHeight="30dp"
-            android:orientation="horizontal">
+            android:clipToPadding="false"
+            android:isScrollContainer="false"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:stretchColumns="0"
+            tools:context=".ui.activities.SettingsActivity">
 
-            <TextView
-                android:id="@+id/settingsHeaderInterface"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/settings_interface"
-                android:textSize="24sp" />
-        </LinearLayout>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            android:minHeight="50dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textSelectLanguage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:text="@string/settings_language" />
-
-            <Spinner
-                android:id="@+id/spinnerLang"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
-                android:dropDownWidth="wrap_content"
-                android:entries="@array/languages"
-                android:gravity="center_vertical"
-                android:labelFor="@id/textSelectLanguage"
-                android:minWidth="190dp"
-                android:minHeight="40dp" />
-
-        </TableRow>
-
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:orientation="horizontal"
-            android:weightSum="100">
-
-            <TextView
-                android:id="@+id/textSelectTheme"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="@string/settings_theme" />
-
-            <RadioGroup
-                android:id="@+id/radioTheme"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:checkedButton="@id/radioDefault"
-                android:minHeight="48dp"
+                android:minHeight="30dp"
                 android:orientation="horizontal">
 
-                <RadioButton
-                    android:id="@+id/radioDefault"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="60dp"
-                    android:text="@string/settings_auto" />
-
-                <RadioButton
-                    android:id="@+id/radioLight"
-                    android:layout_height="wrap_content"
-                    android:minWidth="60dp"
-                    android:layout_marginLeft="10dp"
-                    android:text="@string/settings_light"
-                    android:layout_width="wrap_content"/>
-
-                <RadioButton
-                    android:id="@+id/radioDark"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/settingsHeaderInterface"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:layout_marginLeft="10dp"
-                    android:text="@string/settings_dark" />
 
-            </RadioGroup>
+                    android:gravity="center"
+                    android:text="@string/settings_interface"
+                    android:textSize="24sp" />
+            </LinearLayout>
 
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:weightSum="100">
-
-            <TextView
-                android:id="@+id/textMiKm"
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="@string/settings_km_mi" />
-
-            <RadioGroup
-                android:id="@+id/radioMiKm"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:checkedButton="@id/radioKm"
-                android:minHeight="48dp"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:minHeight="50dp"
                 android:orientation="horizontal">
 
-                <RadioButton
-                    android:id="@+id/radioKm"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:minWidth="70dp"
-                    android:text="@string/settings_km" />
-
-                <RadioButton
-                    android:id="@+id/radioMi"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:text="@string/settings_mi" />
-
-            </RadioGroup>
-
-        </TableRow>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/settingsHeaderCar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="@string/settings_car"
-                android:textSize="24sp" />
-        </LinearLayout>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="@dimen/table_row_padding_first"
-            android:visibility="visible">
-
-            <TextView
-                android:id="@+id/textConsumption"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:maxWidth="1dp"
-                android:minHeight="50dp"
-                android:text="@string/settings_consumption" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/settings_consumption_hint">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextConsumption"
+                <TextView
+                    android:id="@+id/textSelectLanguage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="numberDecimal"
-                    android:maxLength="8"
-                    tools:ignore="TouchTargetSizeCheck" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:text="@string/settings_language" />
 
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="@dimen/table_row_padding_regular">
-
-            <TextView
-                android:id="@+id/textFuelPrice"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:maxWidth="1dp"
-                android:minHeight="50dp"
-                android:text="@string/settings_fuel_price" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_money">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextFuelPrice"
+                <Spinner
+                    android:id="@+id/spinnerLang"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="numberDecimal"
-                    android:maxLength="8"
-                    tools:ignore="TouchTargetSizeCheck" />
-            </com.google.android.material.textfield.TextInputLayout>
 
-        </TableRow>
+                    android:dropDownWidth="wrap_content"
+                    android:entries="@array/languages"
+                    android:gravity="center_vertical"
+                    android:labelFor="@id/textSelectLanguage"
+                    android:minWidth="190dp"
+                    android:minHeight="40dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="end"
-            android:paddingTop="@dimen/table_row_padding_regular"
-            android:orientation="horizontal">
-
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/switchRent"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:checked="false"
-                android:gravity="center_vertical"
-                android:minHeight="50dp"
-                android:text="@string/settings_rented_car"
-                tools:ignore="TouchTargetSizeCheck" />
-
-        </LinearLayout>
-
-        <TableRow
-            android:id="@+id/TableRent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="@dimen/table_row_padding_regular"
-            android:visibility="visible">
-
-            <TextView
-                android:id="@+id/textRentCost"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:maxWidth="1dp"
-                android:text="@string/settings_rent_cost" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_money_per_week">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextRentCost"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="numberDecimal"
-                    android:maxLength="8"
-                    tools:ignore="TouchTargetSizeCheck" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </TableRow>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="end"
-            android:paddingTop="@dimen/table_row_padding_regular"
-            android:orientation="vertical">
+            </TableRow>
 
 
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/switchService"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:checked="false"
-                android:gravity="center_vertical"
-                android:minHeight="50dp"
-                android:text="@string/settings_calculate_service" />
-
-        </LinearLayout>
-
-        <TableRow
-            android:id="@+id/TableService"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingTop="@dimen/table_row_padding_regular"
-            android:visibility="visible">
-
-            <TextView
-                android:id="@+id/textServiceCost"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:maxWidth="1dp"
-                android:text="@string/settings_service_cost_per_km" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_money_per_km_mi">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextServiceCost"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="numberDecimal"
-                    android:maxLength="8"
-                    tools:ignore="TouchTargetSizeCheck" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </TableRow>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="30dp"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/settingsHeaderPlan"
+            <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="@string/settings_plan"
-                android:textSize="24sp" />
-        </LinearLayout>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="@dimen/table_row_padding_first"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textGoalPerMonth"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:maxWidth="1dp"
-                android:text="@string/settings_goal_per_month" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_money">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextGoalPerMonth"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="numberDecimal"
-                    android:maxLength="8"
-                    tools:ignore="TouchTargetSizeCheck" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:minHeight="48dp"
-            android:paddingTop="@dimen/table_row_padding_regular"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textSchedule"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:text="@string/settings_schedule" />
-
-            <RadioGroup
-                android:id="@+id/radioSchedule"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:checkedButton="@id/radio61"
                 android:minHeight="48dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="100">
 
-                <RadioButton
-                    android:id="@+id/radio70"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="10dp"
-                    android:text="7/0"
-                    tools:ignore="HardcodedText" />
-
-                <RadioButton
-                    android:id="@+id/radio61"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/textSelectTheme"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/settings_theme" />
+
+                <RadioGroup
+                    android:id="@+id/radioTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:checkedButton="@id/radioDefault"
                     android:minHeight="48dp"
-                    android:paddingRight="10dp"
-                    android:text="6/1"
-                    tools:ignore="HardcodedText" />
+                    android:orientation="horizontal">
 
-                <RadioButton
-                    android:id="@+id/radio52"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="5/2"
-                    tools:ignore="HardcodedText" />
-            </RadioGroup>
-        </TableRow>
+                    <RadioButton
+                        android:id="@+id/radioDefault"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="60dp"
+                        android:text="@string/settings_auto" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:paddingTop="@dimen/table_row_padding_regular"
-            android:orientation="horizontal">
+                    <RadioButton
+                        android:id="@+id/radioLight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:minWidth="60dp"
+                        android:text="@string/settings_light" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/switchTaxes"
+                    <RadioButton
+                        android:id="@+id/radioDark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/settings_dark" />
+
+                </RadioGroup>
+
+            </TableRow>
+
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:checked="false"
-                android:minWidth="48dp"
+                android:layout_height="wrap_content"
                 android:minHeight="48dp"
-                android:text="@string/settings_calculate_taxes" />
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:weightSum="100">
 
-        </LinearLayout>
-
-        <TableRow
-            android:id="@+id/TableTaxes"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingTop="@dimen/table_row_padding_regular"
-            android:visibility="visible">
-
-            <TextView
-                android:id="@+id/textTaxRate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="start"
-                android:maxWidth="1dp"
-                android:text="@string/settings_tax_rate" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/percent">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextTaxRate"
+                <TextView
+                    android:id="@+id/textMiKm"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="numberDecimal"
-                    android:maxLength="5"
-                    tools:ignore="TouchTargetSizeCheck" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:gravity="center_vertical"
+                    android:text="@string/settings_km_mi" />
 
-        </TableRow>
+                <RadioGroup
+                    android:id="@+id/radioMiKm"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:checkedButton="@id/radioKm"
+                    android:minHeight="48dp"
+                    android:orientation="horizontal">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="@dimen/table_row_padding_regular"
-            android:orientation="horizontal">
+                    <RadioButton
+                        android:id="@+id/radioKm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:minWidth="70dp"
+                        android:text="@string/settings_km" />
 
-            <Button
-                android:id="@+id/buttonApply"
-                android:layout_width="0dp"
+                    <RadioButton
+                        android:id="@+id/radioMi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end"
+                        android:text="@string/settings_mi" />
+
+                </RadioGroup>
+
+            </TableRow>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_weight="1"
-                android:text="@string/apply" />
-        </TableRow>
+                android:layout_marginTop="30dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
 
-    </TableLayout>
+                <TextView
+                    android:id="@+id/settingsHeaderCar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/settings_car"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/table_row_padding_first"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/textConsumption"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:maxWidth="1dp"
+                    android:minHeight="50dp"
+                    android:text="@string/settings_consumption" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/settings_consumption_hint">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextConsumption"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="numberDecimal"
+                        android:maxLength="8"
+                        tools:ignore="TouchTargetSizeCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/table_row_padding_regular">
+
+                <TextView
+                    android:id="@+id/textFuelPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:maxWidth="1dp"
+                    android:minHeight="50dp"
+                    android:text="@string/settings_fuel_price" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_money">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextFuelPrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="numberDecimal"
+                        android:maxLength="8"
+                        tools:ignore="TouchTargetSizeCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="end"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/table_row_padding_regular">
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switchRent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:checked="false"
+                    android:gravity="center_vertical"
+                    android:minHeight="50dp"
+                    android:text="@string/settings_rented_car"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+            </LinearLayout>
+
+            <TableRow
+                android:id="@+id/TableRent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/table_row_padding_regular"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/textRentCost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:maxWidth="1dp"
+                    android:text="@string/settings_rent_cost" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_money_per_week">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextRentCost"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="numberDecimal"
+                        android:maxLength="8"
+                        tools:ignore="TouchTargetSizeCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="end"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/table_row_padding_regular">
+
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switchService"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:checked="false"
+                    android:gravity="center_vertical"
+                    android:minHeight="50dp"
+                    android:text="@string/settings_calculate_service" />
+
+            </LinearLayout>
+
+            <TableRow
+                android:id="@+id/TableService"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/table_row_padding_regular"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/textServiceCost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:maxWidth="1dp"
+                    android:text="@string/settings_service_cost_per_km" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_money_per_km_mi">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextServiceCost"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="numberDecimal"
+                        android:maxLength="8"
+                        tools:ignore="TouchTargetSizeCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/settingsHeaderPlan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/settings_plan"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/table_row_padding_first">
+
+                <TextView
+                    android:id="@+id/textGoalPerMonth"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:maxWidth="1dp"
+                    android:text="@string/settings_goal_per_month" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_money">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextGoalPerMonth"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="numberDecimal"
+                        android:maxLength="8"
+                        tools:ignore="TouchTargetSizeCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="48dp"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/table_row_padding_regular">
+
+                <TextView
+                    android:id="@+id/textSchedule"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:text="@string/settings_schedule" />
+
+                <RadioGroup
+                    android:id="@+id/radioSchedule"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:checkedButton="@id/radio61"
+                    android:minHeight="48dp"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radio70"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="10dp"
+                        android:text="7/0"
+                        tools:ignore="HardcodedText" />
+
+                    <RadioButton
+                        android:id="@+id/radio61"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:minHeight="48dp"
+                        android:paddingRight="10dp"
+                        android:text="6/1"
+                        tools:ignore="HardcodedText" />
+
+                    <RadioButton
+                        android:id="@+id/radio52"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5/2"
+                        tools:ignore="HardcodedText" />
+                </RadioGroup>
+            </TableRow>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/table_row_padding_regular">
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switchTaxes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:checked="false"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    android:text="@string/settings_calculate_taxes" />
+
+            </LinearLayout>
+
+            <TableRow
+                android:id="@+id/TableTaxes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/table_row_padding_regular"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/textTaxRate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="start"
+                    android:maxWidth="1dp"
+                    android:text="@string/settings_tax_rate" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/percent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextTaxRate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
+                        tools:ignore="TouchTargetSizeCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/table_row_padding_regular">
+
+                <Button
+                    android:id="@+id/buttonApply"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_weight="1"
+                    android:text="@string/apply" />
+            </TableRow>
+        </TableLayout>
     </ScrollView>
 </LinearLayout>

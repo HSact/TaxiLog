@@ -89,17 +89,36 @@ class CardDayWeekMonthProgress {
 
         BaseCard {
             CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
-                Text(
-                    text = stringResource(R.string.month_graph, goalMonth),
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                )
                 Column {
-                    ProgressColumn(stringDay, goalDay, animatedProgressDay.value, progressDay, progressDayP)
-                    ProgressColumn(stringWeek, goalWeek, animatedProgressWeek.value, progressWeek, progressWeekP)
-                    ProgressColumn(stringMonth, goalMonth, animatedProgressMonth.value, progressMonth, progressMonthP)
+                    Text(
+                        text = stringResource(R.string.month_graph, goalMonth),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(Alignment.CenterHorizontally)
+                            .padding(bottom = 5.dp)
+                    )
+                    ProgressColumn(
+                        stringDay,
+                        goalDay,
+                        animatedProgressDay.value,
+                        progressDay,
+                        progressDayP
+                    )
+                    ProgressColumn(
+                        stringWeek,
+                        goalWeek,
+                        animatedProgressWeek.value,
+                        progressWeek,
+                        progressWeekP
+                    )
+                    ProgressColumn(
+                        stringMonth,
+                        goalMonth,
+                        animatedProgressMonth.value,
+                        progressMonth,
+                        progressMonthP
+                    )
                 }
             }
         }
@@ -111,12 +130,12 @@ class CardDayWeekMonthProgress {
         goal: Float,
         animatedProgress: Float,
         progress: Float,
-        progressP: Float
+        progressP: Float,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 40.dp)
+                .padding(top = 0.dp)
         ) {
             Text(
                 modifier = Modifier
@@ -132,7 +151,7 @@ class CardDayWeekMonthProgress {
                 modifier = Modifier
                     .height(10.dp)
                     .fillMaxWidth(),
-                progress = {animatedProgress},
+                progress = { animatedProgress },
                 color = Color(0xFFE8BD00),
                 trackColor = Color(0xFFFFF8D9)
             )

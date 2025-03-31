@@ -50,7 +50,6 @@ class SettingsHelper private constructor(context: Context) {
 
     private fun loadSettings() {
         seted_up = sharedPreferences.getBoolean("Seted_up", false)
-        //if (!seted_up) return
         theme = sharedPreferences.getString("Theme", "")?: getCurrentTheme()
         language = sharedPreferences.getString("My_Lang", "")
         kmMi = sharedPreferences.getBoolean("KmMi", false)
