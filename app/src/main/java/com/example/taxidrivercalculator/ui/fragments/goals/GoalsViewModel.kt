@@ -1,8 +1,7 @@
 package com.example.taxidrivercalculator.ui.fragments.goals
 
+import android.annotation.SuppressLint
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.helpers.SettingsHelper
@@ -26,6 +25,7 @@ class GoalsViewModel: ViewModel() {
     private var goalWeek: Double = -1.0
     private var goalDay: Double = -1.0
 
+    @SuppressLint("DefaultLocale")
     fun calculateDaysData(date: String, context: Context) {
         if (pickedDate.isEmpty()) {
             pickedDate = date
@@ -45,7 +45,6 @@ class GoalsViewModel: ViewModel() {
 
     fun defineGoals(date: String, context: Context)
     {
-        //val settings = context.getSharedPreferences("Settings", Activity.MODE_PRIVATE)
         val settings = SettingsHelper.getInstance(context)
         goalMonthString = settings.goalPerMonth
         if (goalMonthString.isNullOrEmpty() || goalMonthString == "-1")
