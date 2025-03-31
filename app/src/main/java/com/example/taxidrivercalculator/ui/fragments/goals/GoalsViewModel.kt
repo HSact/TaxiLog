@@ -7,19 +7,41 @@ import androidx.lifecycle.ViewModel
 import com.example.taxidrivercalculator.helpers.DBHelper
 import com.example.taxidrivercalculator.helpers.SettingsHelper
 import com.example.taxidrivercalculator.helpers.ShiftHelper
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 class GoalsViewModel: ViewModel() {
-    private val _goalData = MutableLiveData<Map<String, Double>>()
-    val goalData: LiveData<Map<String, Double>> get() = _goalData
+    private val _goalData = MutableStateFlow<Map<String, Double>>(emptyMap())
+    val goalData: StateFlow<Map<String, Double>> = _goalData
 
     var pickedDate: String = ""
     var goalMonthString: String? = ""
 
+    private val _daysData = MutableStateFlow(MutableList(31) { 0.0 })
+    val daysData: StateFlow<List<Double>> = _daysData
+
     private var goalMonth: Double = -1.0
     private var goalWeek: Double = -1.0
     private var goalDay: Double = -1.0
+
+    fun calculateDaysData(date: String, context: Context) {
+        if (pickedDate.isEmpty()) {
+            pickedDate = date
+        }
+        val db = DBHelper(context, null)
+        val parts = date.split(".")
+        if (parts.size != 3) return
+        val month = parts[1]
+        val year = parts[2]
+        val newData = MutableList(31) { day ->
+            val dayString = String.format("%02d", day + 1)
+            val formattedDate = "$dayString.$month.$year"
+            ShiftHelper.calculateDayProgress(formattedDate, db)
+        }
+        _daysData.value = newData
+    }
 
     fun defineGoals(date: String, context: Context)
     {
@@ -48,6 +70,12 @@ class GoalsViewModel: ViewModel() {
         goalDay = goalMonth / denominatorDay
         val db = DBHelper (context, null)
         _goalData.value = mapOf(
+            "monthGoal" to goalMonth,
+            "weekGoal" to goalWeek,
+            "dayGoal" to goalDay,
+            "dayProgress" to (roundTo2(ShiftHelper.calculateDayProgress(date, db))),
+            "weekProgress" to (roundTo2(ShiftHelper.calculateWeekProgress(date, db))),
+            "monthProgress" to (roundTo2(ShiftHelper.calculateMonthProgress(date, db))),
             "todayPercent" to (roundTo2(ShiftHelper.calculateDayProgress(date, db) * 100 / goalDay)),
             "weekPercent" to (roundTo2(ShiftHelper.calculateWeekProgress(date, db) * 100 / goalWeek)),
             "monthPercent" to (roundTo2(ShiftHelper.calculateMonthProgress(date, db) * 100 / goalMonth))

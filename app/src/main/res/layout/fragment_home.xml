@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:clipToPadding="false"
-    android:layout_marginBottom="100dp"
+    android:layout_marginBottom="95dp"
     android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
@@ -13,8 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="true"
-
-
         android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:ignore="SpeakableTextPresentCheck">
