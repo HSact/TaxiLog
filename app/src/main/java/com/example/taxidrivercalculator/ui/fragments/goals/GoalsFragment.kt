@@ -1,12 +1,10 @@
 package com.example.taxidrivercalculator.ui.fragments.goals
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.ProgressBar
 import android.widget.TableLayout
 import android.widget.TextView
 import androidx.compose.ui.platform.ComposeView
@@ -17,6 +15,7 @@ import androidx.fragment.app.viewModels
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.FragmentGoalsBinding
 import com.example.taxidrivercalculator.ui.cards.CardDayGoal
+import com.example.taxidrivercalculator.ui.cards.CardDayWeekMonthProgress
 import com.example.taxidrivercalculator.ui.fragments.DatePickerFragment
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -30,26 +29,12 @@ class GoalsFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: GoalsViewModel by viewModels()
 
-    private lateinit var tableProgress: TableLayout
-
     private lateinit var card1: ComposeView
     private lateinit var card2: ComposeView
-    private lateinit var card3: ComposeView
-
-    private lateinit var progressDay: ProgressBar
-    private lateinit var progressWeek: ProgressBar
-    private lateinit var progressMonth: ProgressBar
 
     private lateinit var buttonDatePicker: EditText
 
-    private lateinit var todayPercent: TextView
-    private lateinit var weekPercent: TextView
-    private lateinit var monthPercent: TextView
     private lateinit var textAssignedGoal: TextView
-
-    private lateinit var dayName: TextView
-    private lateinit var weekName: TextView
-    private lateinit var monthName: TextView
 
 
     override fun onCreateView(
@@ -62,7 +47,9 @@ class GoalsFragment : Fragment() {
         val root: View = binding.root
         bindItems()
         card1 = binding.card1
-        card1.setContent { CardDayGoal().DrawDaysInMonthCard(viewModel.daysData, viewModel.pickedDate) }
+        card2 = binding.card2
+        card1.setContent { CardDayWeekMonthProgress().DrawDayWeekMonthProgressCard(viewModel.goalData) }
+        card2.setContent { CardDayGoal().DrawDaysInMonthCard(viewModel.daysData, viewModel.pickedDate) }
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         val now = LocalDateTime.now()
         val currentDate = now.toLocalDate()
@@ -80,11 +67,6 @@ class GoalsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.goalData.observe(viewLifecycleOwner) {
-            setTodayProgress(it["todayPercent"])
-            setWeekProgress(it["weekPercent"])
-            setMonthProgress(it["monthPercent"])
-        }
         displayMonthGoal(viewModel.goalMonthString)
         super.onViewCreated(view, savedInstanceState)
     }
@@ -94,7 +76,8 @@ class GoalsFragment : Fragment() {
             viewModel.pickedDate = editObj.text.toString()
             viewModel.calculateDaysData(viewModel.pickedDate, requireContext())
             viewModel.defineGoals(viewModel.pickedDate, requireContext())
-            card1.setContent { CardDayGoal().DrawDaysInMonthCard(viewModel.daysData, viewModel.pickedDate) }
+            card1.setContent { CardDayWeekMonthProgress().DrawDayWeekMonthProgressCard(viewModel.goalData) }
+            card2.setContent { CardDayGoal().DrawDaysInMonthCard(viewModel.daysData, viewModel.pickedDate) }
         }
     }
 
@@ -119,65 +102,21 @@ class GoalsFragment : Fragment() {
         if (goalMonthString.isNullOrEmpty())
         {
             textAssignedGoal.text = getString(R.string.you_haven_t_set_goal_yet)
-            tableProgress.isGone = true
+            //tableProgress.isGone = true
+            card1.isGone = true
+            card2.isGone = true
             return
         }
-        textAssignedGoal.text = getString(R.string.your_goal_per_month, goalMonthString)
-        tableProgress.isVisible = true
-    }
-
-    @SuppressLint("SetTextI18n")
-    fun setTodayProgress(progress: Double?) {
-        if (progress == null)
-        {
-            progressDay.progress = 0
-            todayPercent.text = "0%"
-            return
-        }
-        todayPercent.text = "$progress%"
-        progressDay.progress = progress.toInt()
-        //dayName.text=getCurrentDay()
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun setWeekProgress(progress: Double?) {
-        if (progress == null)
-        {
-            progressWeek.progress = 0
-            weekPercent.text = "0%"
-            return
-        }
-        weekPercent.text = "$progress%"
-        progressWeek.progress = progress.toInt()
-        //weekName.text=getCurrentWeek().toString()
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun setMonthProgress(progress: Double?) {
-        if (progress == null)
-        {
-            progressMonth.progress = 0
-            monthPercent.text = "0%"
-            return
-        }
-        monthPercent.text = "$progress%"
-        progressMonth.progress = progress.toInt()
-        //monthName.text=getCurrentMonth()
+        //textAssignedGoal.text = getString(R.string.your_goal_per_month, goalMonthString)
+        textAssignedGoal.isGone = true
+        //tableProgress.isVisible = true
+        card1.isVisible = true
+        card2.isVisible = true
     }
 
     private fun bindItems()
     {
-        tableProgress = binding.tableProgress
-        progressDay = binding.progressDay
-        progressWeek = binding.progressWeek
-        progressMonth = binding.progressMonth
-        dayName = binding.textGoalPerDay
-        weekName = binding.textGoalPerWeek
-        monthName = binding.textGoalPerMonth
         buttonDatePicker = binding.buttonDatePick
-        todayPercent = binding.textTodayPercent
-        weekPercent = binding.textWeekPercent
-        monthPercent = binding.textMontPercent
         textAssignedGoal = binding.textAssignedGoal
     }
     override fun onDestroyView() {

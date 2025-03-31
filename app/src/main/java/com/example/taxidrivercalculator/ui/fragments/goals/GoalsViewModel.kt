@@ -13,8 +13,8 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 class GoalsViewModel: ViewModel() {
-    private val _goalData = MutableLiveData<Map<String, Double>>()
-    val goalData: LiveData<Map<String, Double>> get() = _goalData
+    private val _goalData = MutableStateFlow<Map<String, Double>>(emptyMap())
+    val goalData: StateFlow<Map<String, Double>> = _goalData
 
     var pickedDate: String = ""
     var goalMonthString: String? = ""
@@ -70,6 +70,12 @@ class GoalsViewModel: ViewModel() {
         goalDay = goalMonth / denominatorDay
         val db = DBHelper (context, null)
         _goalData.value = mapOf(
+            "monthGoal" to goalMonth,
+            "weekGoal" to goalWeek,
+            "dayGoal" to goalDay,
+            "dayProgress" to (roundTo2(ShiftHelper.calculateDayProgress(date, db))),
+            "weekProgress" to (roundTo2(ShiftHelper.calculateWeekProgress(date, db))),
+            "monthProgress" to (roundTo2(ShiftHelper.calculateMonthProgress(date, db))),
             "todayPercent" to (roundTo2(ShiftHelper.calculateDayProgress(date, db) * 100 / goalDay)),
             "weekPercent" to (roundTo2(ShiftHelper.calculateWeekProgress(date, db) * 100 / goalWeek)),
             "monthPercent" to (roundTo2(ShiftHelper.calculateMonthProgress(date, db) * 100 / goalMonth))
