@@ -47,14 +47,7 @@ class CardDayGoal {
 
         val colorGraphLine = Color(0xFFFBD323)
 
-        val bars = List(31) { index ->
-            Bars(
-                label = if (index % 2 ==0) (index + 1).toString() else " ",
-                values = listOf(
-                    Bars.Data(value = days[index], color = SolidColor(colorGraphLine))
-                )
-            )
-        }
+
         val labelProperties = LabelProperties(
             enabled = true,
             textStyle = textStyle,
@@ -79,6 +72,16 @@ class CardDayGoal {
         if (locale.language == "ru") {
             currentMonth = currentMonth.replaceFirstChar { it.uppercase(locale) }
         }
+
+        val bars = List(parsedDate.lengthOfMonth()) { index ->
+            Bars(
+                label = if (index % 2 ==0) (index + 1).toString() else " ",
+                values = listOf(
+                    Bars.Data(value = days[index], color = SolidColor(colorGraphLine))
+                )
+            )
+        }
+
         BaseCard {
             CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
                 Text(
@@ -136,6 +139,7 @@ class CardDayGoal {
                         bars,
                     labelProperties = labelProperties,
                     barProperties = BarProperties(
+                        thickness = 5.dp,
                         cornerRadius = Bars.Data.Radius.Rectangle(topRight = 6.dp, topLeft = 6.dp),
                         spacing = 1.dp,
                         //strokeWidth = 10.dp,
