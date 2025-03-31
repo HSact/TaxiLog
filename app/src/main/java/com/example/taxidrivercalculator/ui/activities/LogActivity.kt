@@ -41,8 +41,6 @@ class LogActivity : AppCompatActivity() {
         binding = ActivityLogBinding.inflate(layoutInflater)
         bindingR = RecyclerviewItemBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_log)
-        //supportActionBar?.title = getString(R.string.title_my_shifts)
-        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -63,7 +61,6 @@ class LogActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_log, menu)
         return true
     }
@@ -77,13 +74,9 @@ class LogActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
         return when (item.itemId) {
             R.id.action_delete_all -> {
-                val alert = AlertDialog.Builder(this)
+                val alert = MaterialAlertDialogBuilder(this)
                 alert.setTitle(R.string.delete)
                 alert.setPositiveButton(getString(R.string.yes)) { dialog, id -> deleteAll()}
                 alert.setNegativeButton(getString(R.string.cancel), null)
@@ -110,9 +103,6 @@ class LogActivity : AppCompatActivity() {
     {
         val items = arrayOf(getString(R.string.edit), getString(R.string.delete))
         val alert = MaterialAlertDialogBuilder(this)
-        /*alert.setPositiveButton("YES") {dialog, id -> deleteShift(view.id)}
-        alert.setNegativeButton("CANCEL", null)
-        alert.setMessage("Delete shift ID " + view.id + "?")*/
         alert.setTitle(getString(R.string.edit_or_delete_shift) + " " + view.id + "?")
         with(alert)
         {
@@ -223,20 +213,6 @@ class LogActivity : AppCompatActivity() {
     }
 
     private fun pickDate(editObj: EditText) {
-        /*val datePickerFragment = DatePickerFragment()
-        datePickerFragment.selectedDate = editObj.text.toString()
-        val supportFragmentManager = supportFragmentManager
-
-        supportFragmentManager.setFragmentResultListener(
-            "REQUEST_KEY",
-            this) { resultKey, bundle ->
-            if (resultKey == "REQUEST_KEY") {
-                val date = bundle.getString("SELECTED_DATE")
-                editObj.setText(date.toString())
-            }
-        }
-        datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
-    }*/
         DatePickerFragment.pickDate(context = this, editObj = editObj)
     }
 }
