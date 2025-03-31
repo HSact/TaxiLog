@@ -1,15 +1,15 @@
-##🚖 TaxiLog
+🚖 TaxiLog
 
 TaxiLog is an app for taxi drivers that helps track shifts and analyze earnings.
 
-## Скриншоты
+## Screenshots
 
-
-### Главный экран
-<img src="screenshots/home_screen.png" alt="Главный экран" width="300"/>
-
-### Статистика
-<img src="screenshots/stats_screen.png" alt="Статистика" width="300"/>
+<div>
+  <img src="screenshots/home_screen.png" alt="Home screen" width="250"/>
+  <img src="screenshots/goal_screen.png" alt="Goal screen" width="250"/>
+  <img src="screenshots/stats_screen.png" alt="Stats screen" width="250"/>
+  <img src="screenshots/settings_screen.png" alt="Settings" width="250"/>
+</div>
 
 
 
