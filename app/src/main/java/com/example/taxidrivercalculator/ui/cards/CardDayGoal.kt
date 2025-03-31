@@ -68,7 +68,6 @@ class CardDayGoal {
         if (locale.language == "ru") {
             currentMonth = currentMonth.replaceFirstChar { it.uppercase(locale) }
         }
-
         val bars = List(parsedDate.lengthOfMonth()) { index ->
             Bars(
                 label = if (index % 2 ==0) (index + 1).toString() else " ",
@@ -98,7 +97,6 @@ class CardDayGoal {
                         thickness = 5.dp,
                         cornerRadius = Bars.Data.Radius.Rectangle(topRight = 6.dp, topLeft = 6.dp),
                         spacing = 1.dp,
-                        //strokeWidth = 10.dp,
                     ),
                     indicatorProperties = indicatorProperties,
                     gridProperties = gridProperties,
