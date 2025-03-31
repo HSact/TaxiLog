@@ -14,19 +14,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.vector.VectorProperty
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.taxidrivercalculator.ui.fragments.goals.GoalsViewModel
 import ir.ehsannarmani.compose_charts.ColumnChart
 import ir.ehsannarmani.compose_charts.models.BarProperties
 import ir.ehsannarmani.compose_charts.models.Bars
 import ir.ehsannarmani.compose_charts.models.GridProperties
 import ir.ehsannarmani.compose_charts.models.HorizontalIndicatorProperties
 import ir.ehsannarmani.compose_charts.models.LabelHelperProperties
+import ir.ehsannarmani.compose_charts.models.LabelProperties
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
@@ -53,6 +55,11 @@ class CardDayGoal {
                 )
             )
         }
+        val labelProperties = LabelProperties(
+            enabled = true,
+            textStyle = textStyle,
+            rotation = LabelProperties.Rotation(degree = 0f)
+        )
         val labelHelperProperties = LabelHelperProperties(
             enabled = false,
             textStyle = textStyle
@@ -125,10 +132,11 @@ class CardDayGoal {
                     modifier = Modifier
                         .heightIn(max = 300.dp)
                         .padding(top = 50.dp),
-                    data = remember {
-                        bars
-                    },
+                    data =
+                        bars,
+                    labelProperties = labelProperties,
                     barProperties = BarProperties(
+                        cornerRadius = Bars.Data.Radius.Rectangle(topRight = 6.dp, topLeft = 6.dp),
                         spacing = 1.dp,
                         //strokeWidth = 10.dp,
                     ),
