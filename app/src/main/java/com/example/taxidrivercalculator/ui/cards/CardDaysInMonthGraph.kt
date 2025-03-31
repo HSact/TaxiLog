@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 
-class CardMonthGraph {
+class CardDaysInMonthGraph {
 
     @Composable
     fun DrawMonthGraphCard(chartData: StateFlow<List<Double>>, goalData: StateFlow<Double>) {

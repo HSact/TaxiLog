@@ -36,7 +36,7 @@ import java.util.Locale
 class CardDayGoal {
 
     @Composable
-    fun DrawDayGoalCard(daysData: StateFlow<List<Double>>, pickedDate: String = "") {
+    fun DrawDaysInMonthCard(daysData: StateFlow<List<Double>>, pickedDate: String = "") {
 
         val days by daysData.collectAsStateWithLifecycle()
         val isDarkTheme = isSystemInDarkTheme()
@@ -116,6 +116,6 @@ class CardDayGoal {
                 )
             )
         }
-        DrawDayGoalCard(previewData)
+        DrawDaysInMonthCard(previewData)
     }
 }

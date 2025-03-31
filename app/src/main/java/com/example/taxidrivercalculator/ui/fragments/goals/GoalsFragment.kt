@@ -62,7 +62,7 @@ class GoalsFragment : Fragment() {
         val root: View = binding.root
         bindItems()
         card1 = binding.card1
-        card1.setContent { CardDayGoal().DrawDayGoalCard(viewModel.daysData, viewModel.pickedDate) }
+        card1.setContent { CardDayGoal().DrawDaysInMonthCard(viewModel.daysData, viewModel.pickedDate) }
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         val now = LocalDateTime.now()
         val currentDate = now.toLocalDate()
@@ -94,7 +94,7 @@ class GoalsFragment : Fragment() {
             viewModel.pickedDate = editObj.text.toString()
             viewModel.calculateDaysData(viewModel.pickedDate, requireContext())
             viewModel.defineGoals(viewModel.pickedDate, requireContext())
-            card1.setContent { CardDayGoal().DrawDayGoalCard(viewModel.daysData, viewModel.pickedDate) }
+            card1.setContent { CardDayGoal().DrawDaysInMonthCard(viewModel.daysData, viewModel.pickedDate) }
         }
     }
 

@@ -12,7 +12,7 @@ import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.FragmentHomeBinding
 import com.example.taxidrivercalculator.ui.cards.CardGoal
 import com.example.taxidrivercalculator.ui.cards.CardLastShift
-import com.example.taxidrivercalculator.ui.cards.CardMonthGraph
+import com.example.taxidrivercalculator.ui.cards.CardDaysInMonthGraph
 
 class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
@@ -36,7 +36,7 @@ class HomeFragment : Fragment() {
         card3 = binding.card3
         card1.setContent { CardGoal().DrawGoalCard(viewModel.shiftData) }
         card2.setContent { CardLastShift().DrawLastShiftCard(viewModel.shiftData) }
-        card3.setContent { CardMonthGraph().DrawMonthGraphCard(viewModel.chartData, viewModel.goalData) }
+        card3.setContent { CardDaysInMonthGraph().DrawMonthGraphCard(viewModel.chartData, viewModel.goalData) }
         return root
     }
 
