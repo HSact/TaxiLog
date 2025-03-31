@@ -36,7 +36,7 @@ Obtainium is an app that allows automatic APK updates from GitHub. If you have O
 
 ---
 
-🚖 **TaxiLog**  
+<h1 align="center">🚖 TaxiLog</h1> 
 
 TaxiLog – это приложение для водителей такси, которое помогает отслеживать смены и анализировать заработок.  
 
