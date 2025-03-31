@@ -2,6 +2,14 @@
 
 TaxiLog is an app for taxi drivers that helps track shifts and analyze earnings.
 
+## Скриншоты
+
+### Главный экран
+![Главный экран](screenshots/home_screen.png)
+
+### Статистика
+![Статистика](screenshots/stats_screen.png)
+
 📌 Main Features:
 
 ✅ Shift log: track income, mileage, and working hours.
