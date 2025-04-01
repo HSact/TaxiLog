@@ -54,21 +54,21 @@ class CardGoal {
         progress = (progress * 1000).roundToInt() / 1000f
         BaseCard {
             CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
-                Text(
-                    text = stringResource(R.string.your_goal_per_month, formattedGoal),
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                )
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 40.dp)
                 ) {
                     Text(
+                        text = stringResource(R.string.your_goal_per_month, formattedGoal),
+                        style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier
-                            .align(Alignment.CenterHorizontally),
+                            .fillMaxWidth()
+                            .wrapContentWidth(Alignment.CenterHorizontally)
+                    )
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                        .padding(top = 20.dp),
                         text = "$goalCurrent $stringOf $goal"
                     )
                     LinearProgressIndicator(
