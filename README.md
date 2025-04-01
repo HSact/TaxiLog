@@ -47,19 +47,6 @@ TaxiLog – это приложение для водителей такси, к
 ✅ Графики и аналитика для удобного просмотра динамики доходов.  
 ✅ Удобное управление записями.  
 
-## Скриншоты  
-
-<table>
-  <tr>
-    <td><img src="screenshots/home_screen.png" alt="Главный экран" width="250"/></td>
-    <td><img src="screenshots/goal_screen.png" alt="Цели" width="250"/></td>
-  </tr>
-  <tr>
-    <td><img src="screenshots/stats_screen.png" alt="Статистика" width="250"/></td>
-    <td><img src="screenshots/settings_screen.png" alt="Настройки" width="250"/></td>
-  </tr>
-</table>
-
 📥 **Установка**  
 
 🔹 **Через [Obtainium](https://github.com/ImranR98/Obtainium)**  
