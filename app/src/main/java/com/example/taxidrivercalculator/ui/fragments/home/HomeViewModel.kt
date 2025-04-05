@@ -24,7 +24,6 @@ class HomeViewModel: ViewModel() {
     fun calculateChart (context: Context)
     {
         val db = DBHelper(context, null)
-        //db.addShift("1.01.1001", 8.0, 1337.0, 228.0, 1488.0, 30.0, 300.0)
         val cursor = db.getShift()
         cursor!!.moveToLast()
         if (cursor.position==-1)
@@ -36,18 +35,6 @@ class HomeViewModel: ViewModel() {
 
         val settings = SettingsHelper.getInstance(context)
         _goalData.value = settings.goalPerMonth?.toDoubleOrNull() ?: 0.0
-        /*var sum = 0.0
-        for (shift in shifts)
-        {
-            if (ShiftHelper.getCurrentMonth(shift.date) == ShiftHelper.getCurrentMonth())
-            {
-                sum = sum + shift.profit
-                _chartData.value = _chartData.value.toMutableList().apply {
-                    this[ShiftHelper.getCurrentDay(shift.date)] =
-                        this[ShiftHelper.getCurrentDay(shift.date)] + sum
-                }
-            }
-        }*/
         val tempData = mutableMapOf<Int, Double>()
         for (shift in shifts) {
             if (ShiftHelper.getCurrentMonth(shift.date) == ShiftHelper.getCurrentMonth()) {
@@ -66,7 +53,6 @@ class HomeViewModel: ViewModel() {
     fun calculateShift (context: Context)
     {
         val db = DBHelper(context, null)
-        //db.addShift("1.01.1001", 8.0, 1337.0, 228.0, 1488.0, 30.0, 300.0)
         val cursor = db.getShift()
         cursor!!.moveToLast()
         if (cursor.position==-1)
@@ -87,21 +73,9 @@ class HomeViewModel: ViewModel() {
         val settings = SettingsHelper.getInstance(context)
         var goalMonthString = settings.goalPerMonth?:""
 
-        /*for (shift in shifts)
-        {
-            if (ShiftHelper.getCurrentMonth(shift.date) == ShiftHelper.getCurrentMonth())
-            {
-                _chartData.value = _chartData.value.toMutableList().apply {
-                    this[ShiftHelper.getCurrentMonth(shift.date).toInt()] =
-                        this[ShiftHelper.getCurrentMonth(shift.date).toInt()] + shift.profit
-                }
-            }
-        }*/
         val goalCurrent =
             if (goalMonthString.isEmpty())
             { context.getString(R.string.n_a) }
-        /*else { ShiftHelper.calculateMonthProgress(shifts.last().date, db).toString() +
-                    " " + context.getString(R.string.of) + " " + goalMonthString }*/
             else { ShiftHelper.calculateMonthProgress(date, db).toString()}
         cursor.close()
         _shiftData.value = mapOf(

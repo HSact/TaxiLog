@@ -71,19 +71,18 @@ object ShiftHelper {
         }
         return thisWeekSum
     }
-    fun calculateMonthProgress(currentDate: String = getDayToday(), dbHelper: DBHelper): Double
-    {
+    fun calculateMonthProgress(currentDate: String = getDayToday(), dbHelper: DBHelper): Double {
         val shifts = makeArray(dbHelper)
         if (shifts.isEmpty()) return 0.0
-        var i = 0
+        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        val current = LocalDate.parse(currentDate, formatter)
         var thisMonthSum = 0.0
-        do {
-            val thisDateText = shifts[i].date
-            if (thisDateText.indexOf(getCurrentMonth(currentDate)) == 3 && thisDateText.contains(getCurrentYear())) {
-                thisMonthSum += shifts[i].profit
+        for (shift in shifts) {
+            val shiftDate = LocalDate.parse(shift.date, formatter)
+            if (shiftDate.month == current.month && shiftDate.year == current.year) {
+                thisMonthSum += shift.profit
             }
-            i++
-        } while (i < shifts.size)
+        }
         return thisMonthSum
     }
     fun filterShiftsByDatePeriod(shifts: List<Shift>, date1: String? = null, date2: String? = null): List<Shift> {
