@@ -9,10 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper
 class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
 
-    // below is the method for creating a database by a sqlite query
     override fun onCreate(db: SQLiteDatabase) {
-        // below is a sqlite query, where column names
-        // along with their data types is given
         val query = ("CREATE TABLE " + TABLE_NAME + " ("
                 + ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 DATE_COl + " TEXT," +
@@ -22,9 +19,6 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 FUEL_COL + " REAL," +
                 MILEAGE_COL + " REAL," +
                 PROFIT_COL + " REAL" + ")")
-
-        // we are calling sqlite
-        // method for executing our query
         db.execSQL(query)
     }
 
@@ -51,11 +45,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         values.put(FUEL_COL, fuel)
         values.put(MILEAGE_COL, mileage)
         values.put(PROFIT_COL, profit)
-
-        // here we are creating a
-        // writable variable of
-        // our database as we want to
-        // insert value in our database
+        
         val db = this.writableDatabase
 
         // all values are inserted into database
@@ -63,9 +53,8 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.close()
     }
     fun recreateDB(shifts: MutableList<Shift>) {
-        deleteAll()
+        clearTable()
         val db = this.writableDatabase
-        db.execSQL("DELETE FROM sqlite_sequence WHERE name='$TABLE_NAME'")
         db.beginTransaction()
         try {
             for (currentShift in shifts) {
@@ -87,20 +76,17 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         }
     }
 
-    // below method is to get
-    // all data from our database
-    fun getShift(): Cursor {
-
-        // here we are creating a readable
-        // variable of our database
-        // as we want to read value from it
-        val db = this.readableDatabase
-
-        // below code returns a cursor to
-        // read data from the database
-        return db.rawQuery("SELECT * FROM " + TABLE_NAME, null)
+    private fun clearTable() {
+        val db = this.writableDatabase
+        db.execSQL("DELETE FROM $TABLE_NAME")
+        db.execSQL("DELETE FROM sqlite_sequence WHERE name='$TABLE_NAME'")
+        db.close()
     }
 
+    fun getShift(): Cursor {
+        val db = this.readableDatabase
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME, null)
+    }
 
     fun deleteShift(index: Int) {
         val db = this.writableDatabase
@@ -111,26 +97,13 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     fun deleteAll() {
-        val db = this.writableDatabase
-        db.execSQL("DELETE FROM "+ TABLE_NAME)
-        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
-        //onCreate(db)
-        db.close()
+        recreateDB(mutableListOf())
     }
 
     companion object {
-        // here we have defined variables for our database
-
-        // below is variable for database name
         private val DATABASE_NAME = "SHIFTS"
-
-        // below is the variable for database version
         private val DATABASE_VERSION = 1
-
-        // below is the variable for table name
         val TABLE_NAME = "shifts_table"
-
-        // below is the variable for id column
         val ID_COL = "_id"
         val DATE_COl = "date"
         val TIME_COL = "time"

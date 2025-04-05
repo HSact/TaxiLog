@@ -121,22 +121,10 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         editEnd.setText(shift.timeEnd)
         editBreakStart.setText(shift.breakBegin)
         editBreakEnd.setText(shift.breakEnd)
-        /*if (viewModel.shiftData.value?.earnings != 0.0)
-        {
-            editEarnings.setText(shift.earnings.toString())
-        }
-        if (viewModel.shiftData.value?.wash != 0.0)
-        {
-            editWash.setText(shift.wash.toString())
-        }*/
         if (viewModel.shiftData.value?.fuelCost != 0.0)
         {
             editFuelCost.setText(shift.fuelCost.toString())
         }
-        /*if (viewModel.shiftData.value?.mileage != 0.0)
-        {
-            editMileage.setText(shift.mileage.toString())
-        }*/
         if (editBreakStart.text.isNotEmpty() || editBreakEnd.text.isNotEmpty())
         {
             switchBreak.isChecked = true
