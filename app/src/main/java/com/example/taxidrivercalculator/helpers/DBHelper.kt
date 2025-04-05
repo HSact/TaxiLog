@@ -45,7 +45,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         values.put(FUEL_COL, fuel)
         values.put(MILEAGE_COL, mileage)
         values.put(PROFIT_COL, profit)
-        
+
         val db = this.writableDatabase
 
         // all values are inserted into database
