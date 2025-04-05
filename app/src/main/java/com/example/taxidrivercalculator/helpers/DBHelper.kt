@@ -101,17 +101,16 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     companion object {
-        private val DATABASE_NAME = "SHIFTS"
-        private val DATABASE_VERSION = 1
-        val TABLE_NAME = "shifts_table"
-        val ID_COL = "_id"
-        val DATE_COl = "date"
-        val TIME_COL = "time"
-        val EARNINGS_COL = "earnings"
-        val WASH_COL = "wash"
-        val FUEL_COL = "fuel"
-        val MILEAGE_COL = "mileage"
-        val PROFIT_COL = "profit"
-        var DELETE_INDEX = 0
+        private const val DATABASE_NAME = "SHIFTS"
+        private const val DATABASE_VERSION = 1
+        const val TABLE_NAME = "shifts_table"
+        const val ID_COL = "_id"
+        const val DATE_COl = "date"
+        const val TIME_COL = "time"
+        const val EARNINGS_COL = "earnings"
+        const val WASH_COL = "wash"
+        const val FUEL_COL = "fuel"
+        const val MILEAGE_COL = "mileage"
+        const val PROFIT_COL = "profit"
     }
 }
