@@ -2,7 +2,6 @@ package com.example.taxidrivercalculator.helpers
 
 import android.annotation.SuppressLint
 import com.example.taxidrivercalculator.data.model.Shift
-import com.example.taxidrivercalculator.data.db.DBHelper
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
