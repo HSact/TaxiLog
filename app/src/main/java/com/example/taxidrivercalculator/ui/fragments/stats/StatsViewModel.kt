@@ -3,6 +3,7 @@ package com.example.taxidrivercalculator.ui.fragments.stats
 import androidx.lifecycle.ViewModel
 import com.example.taxidrivercalculator.data.db.DBHelper
 import com.example.taxidrivercalculator.data.model.Shift
+import com.example.taxidrivercalculator.data.repository.ShiftRepository
 import com.example.taxidrivercalculator.helpers.ShiftHelper
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -35,7 +36,7 @@ class StatsViewModel : ViewModel() {
     }
 
     fun defineShifts(db: DBHelper) {
-        shiftsOrigin = ShiftHelper.getAllShifts(db)
+        shiftsOrigin = ShiftRepository(db).getAllShifts()
         shifts = shiftsOrigin.toMutableList()
     }
 
