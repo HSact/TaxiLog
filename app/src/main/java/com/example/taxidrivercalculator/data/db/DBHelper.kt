@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.taxidrivercalculator.data.model.Shift
 import com.example.taxidrivercalculator.data.repository.ShiftRepository
-import com.example.taxidrivercalculator.helpers.ShiftHelper
 
 class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
@@ -89,14 +88,6 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun getShift(): Cursor {
         val db = this.readableDatabase
         return db.rawQuery("SELECT * FROM " + TABLE_NAME, null)
-    }
-
-    fun deleteShift(index: Int) {
-        val db = this.writableDatabase
-        val shifts = ShiftRepository(this).getAllShifts()
-        shifts.removeAt(index-1)
-        recreateDB(shifts)
-        db.close()
     }
 
     fun deleteAll() {

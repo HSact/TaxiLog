@@ -129,9 +129,8 @@ class LogActivity : AppCompatActivity() {
 
     private fun deleteShift(index: Int)
     {
-        val db = DBHelper(this, null)
-        db.deleteShift(index)
-        db.close()
+        val shiftRepository = ShiftRepository(DBHelper(this, null))
+        shiftRepository.deleteShift(index)
         Toast.makeText(applicationContext,
             getString(R.string.shift_deleted_successfully, index.toString()), Toast.LENGTH_SHORT).show()
         recreate()

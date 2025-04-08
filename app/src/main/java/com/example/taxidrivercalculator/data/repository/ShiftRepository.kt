@@ -30,4 +30,10 @@ class ShiftRepository (private val db: DBHelper) {
         db.close()
         return shifts
     }
+    fun deleteShift(index: Int) {
+        val shifts = getAllShifts()
+        shifts.removeAt(index-1)
+        db.recreateDB(shifts)
+        db.close()
+    }
 }
