@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.taxidrivercalculator.data.db.DBHelper
+import com.example.taxidrivercalculator.data.repository.ShiftRepository
 import com.example.taxidrivercalculator.helpers.SettingsHelper
 import com.example.taxidrivercalculator.helpers.ShiftHelper
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,11 +28,11 @@ class GoalsViewModel: ViewModel() {
 
     @SuppressLint("DefaultLocale")
     fun calculateDaysData(date: String, context: Context) {
+        var shiftRepository = ShiftRepository(DBHelper(context, null))
         if (pickedDate.isEmpty()) {
             pickedDate = date
         }
-        val db = DBHelper(context, null)
-        val shifts = ShiftHelper.getAllShifts(db)
+        val shifts = shiftRepository.getAllShifts()
         val parts = date.split(".")
         if (parts.size != 3) return
         val month = parts[1]
@@ -46,6 +47,7 @@ class GoalsViewModel: ViewModel() {
 
     fun defineGoals(date: String, context: Context)
     {
+        var shiftRepository = ShiftRepository(DBHelper(context, null))
         val settings = SettingsHelper.getInstance(context)
         goalMonthString = settings.goalPerMonth
         if (goalMonthString.isNullOrEmpty() || goalMonthString == "-1")
@@ -68,8 +70,7 @@ class GoalsViewModel: ViewModel() {
             else -> 30.0
         }
         goalDay = goalMonth / denominatorDay
-        val db = DBHelper (context, null)
-        val shifts = ShiftHelper.getAllShifts(db)
+        val shifts = shiftRepository.getAllShifts()
         _goalData.value = mapOf(
             "monthGoal" to roundTo2(goalMonth),
             "weekGoal" to roundTo2(goalWeek),

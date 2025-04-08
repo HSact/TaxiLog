@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.taxidrivercalculator.data.model.Shift
+import com.example.taxidrivercalculator.data.repository.ShiftRepository
 import com.example.taxidrivercalculator.helpers.ShiftHelper
 
 class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
@@ -92,7 +93,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     fun deleteShift(index: Int) {
         val db = this.writableDatabase
-        val shifts = ShiftHelper.getAllShifts(this)
+        val shifts = ShiftRepository(this).getAllShifts()
         shifts.removeAt(index-1)
         recreateDB(shifts)
         db.close()

@@ -25,11 +25,13 @@ import com.example.taxidrivercalculator.databinding.RecyclerviewItemBinding
 import com.example.taxidrivercalculator.ui.fragments.DatePickerFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.widget.Toolbar
+import com.example.taxidrivercalculator.data.repository.ShiftRepository
 
 
 class LogActivity : AppCompatActivity() {
 
     private var shifts = mutableListOf<Shift>()
+    private var shiftRepository = ShiftRepository(DBHelper(this, null))
 
     private lateinit var binding: ActivityLogBinding
     private lateinit var bindingR: RecyclerviewItemBinding
@@ -46,7 +48,7 @@ class LogActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.title_my_shifts)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        shifts= ShiftHelper.getAllShifts(DBHelper(this, null))
+        shifts = shiftRepository.getAllShifts()
         if (shifts.isEmpty())
         {
             Toast.makeText(applicationContext,
