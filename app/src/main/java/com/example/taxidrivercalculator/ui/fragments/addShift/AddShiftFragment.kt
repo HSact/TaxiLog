@@ -94,7 +94,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
                     return
                 }
                 updateShiftField { it.mileage = s.toString().toDoubleOrNull() ?: 0.0 }
-                viewModel.guessFuelCost(requireContext().getSharedPreferences("Settings", Activity.MODE_PRIVATE))
+                viewModel.guessFuelCost(requireContext())
             }
         })
     }
