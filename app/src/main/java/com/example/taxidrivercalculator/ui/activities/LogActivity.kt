@@ -137,9 +137,8 @@ class LogActivity : AppCompatActivity() {
     }
     private fun deleteAll()
     {
-        val db = DBHelper(this, null)
-        db.deleteAll()
-        db.close()
+        val shiftRepository = ShiftRepository(DBHelper(this, null))
+        shiftRepository.deleteAllShifts()
         Toast.makeText(applicationContext,
             getString(R.string.all_shifts_have_been_deleted_successfully), Toast.LENGTH_SHORT).show()
         recreate()

@@ -36,4 +36,9 @@ class ShiftRepository (private val db: DBHelper) {
         db.recreateDB(shifts)
         db.close()
     }
+    fun deleteAllShifts()
+    {
+        db.recreateDB(mutableListOf())
+        db.close()
+    }
 }
