@@ -1,7 +1,6 @@
 package com.example.taxidrivercalculator.ui.activities
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -47,7 +46,7 @@ class LogActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.title_my_shifts)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        shifts= ShiftHelper.makeArray(DBHelper(this, null))
+        shifts= ShiftHelper.getAllShifts(DBHelper(this, null))
         if (shifts.isEmpty())
         {
             Toast.makeText(applicationContext,

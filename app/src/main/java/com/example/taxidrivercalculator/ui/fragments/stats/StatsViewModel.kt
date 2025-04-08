@@ -35,7 +35,7 @@ class StatsViewModel : ViewModel() {
     }
 
     fun defineShifts(db: DBHelper) {
-        shiftsOrigin = ShiftHelper.makeArray(db)
+        shiftsOrigin = ShiftHelper.getAllShifts(db)
         shifts = shiftsOrigin.toMutableList()
     }
 

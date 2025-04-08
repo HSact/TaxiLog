@@ -12,7 +12,7 @@ import java.util.Date
 import java.util.Locale
 
 object ShiftHelper {
-    fun makeArray(db: DBHelper): MutableList<Shift> {
+    fun getAllShifts(db: DBHelper): MutableList<Shift> {
         val shifts = mutableListOf<Shift>()
         val cursor = db.getShift()
 

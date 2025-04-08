@@ -31,7 +31,7 @@ class HomeViewModel: ViewModel() {
             return
         }
         cursor.close()
-        val shifts = ShiftHelper.makeArray(db)
+        val shifts = ShiftHelper.getAllShifts(db)
 
         val settings = SettingsHelper.getInstance(context)
         _goalData.value = settings.goalPerMonth?.toDoubleOrNull() ?: 0.0
@@ -61,7 +61,7 @@ class HomeViewModel: ViewModel() {
             _shiftData.value = createEmptyShift(context)
             return
         }
-        val shifts = ShiftHelper.makeArray(db)
+        val shifts = ShiftHelper.getAllShifts(db)
         val date = LocalDate.now().withDayOfMonth(1).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
         val textDate = cursor.getString(cursor.getColumnIndex(DBHelper.DATE_COl)+0)
         val textEarnings = cursor.getString(cursor.getColumnIndex(DBHelper.EARNINGS_COL)+0)

@@ -31,7 +31,7 @@ class GoalsViewModel: ViewModel() {
             pickedDate = date
         }
         val db = DBHelper(context, null)
-        val shifts = ShiftHelper.makeArray(db)
+        val shifts = ShiftHelper.getAllShifts(db)
         val parts = date.split(".")
         if (parts.size != 3) return
         val month = parts[1]
@@ -69,7 +69,7 @@ class GoalsViewModel: ViewModel() {
         }
         goalDay = goalMonth / denominatorDay
         val db = DBHelper (context, null)
-        val shifts = ShiftHelper.makeArray(db)
+        val shifts = ShiftHelper.getAllShifts(db)
         _goalData.value = mapOf(
             "monthGoal" to roundTo2(goalMonth),
             "weekGoal" to roundTo2(goalWeek),
