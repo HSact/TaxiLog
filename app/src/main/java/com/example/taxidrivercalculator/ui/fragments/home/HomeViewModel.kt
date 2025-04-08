@@ -76,7 +76,7 @@ class HomeViewModel: ViewModel() {
         val goalCurrent =
             if (goalMonthString.isEmpty())
             { context.getString(R.string.n_a) }
-            else { ShiftHelper.calculateMonthProgress(date, db).toString()}
+            else { ShiftHelper.calculateMonthProgress(date, shifts).toString()}
         cursor.close()
         _shiftData.value = mapOf(
             "date" to textDate,

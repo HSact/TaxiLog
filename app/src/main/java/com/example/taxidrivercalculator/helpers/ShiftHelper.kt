@@ -37,16 +37,14 @@ object ShiftHelper {
         db.close()
         return shifts
     }
-    fun calculateDayProgress(currentDate: String = getDayToday(), dbHelper: DBHelper): Double
-    {
-        val shifts = makeArray(dbHelper)
+
+    fun calculateDayProgress(currentDate: String = getDayToday(), shifts: List<Shift>): Double {
         if (shifts.isEmpty()) return 0.0
         val shift = shifts.find { it.date == currentDate } ?: return 0.0
         return shift.profit
     }
 
-    fun calculateWeekProgress(currentDate: String = getDayToday(), dbHelper: DBHelper): Double {
-        val shifts = makeArray(dbHelper)
+    fun calculateWeekProgress(currentDate: String = getDayToday(), shifts: List<Shift>): Double {
         if (shifts.isEmpty()) return 0.0
         var thisWeekSum = 0.0
 
@@ -54,14 +52,10 @@ object ShiftHelper {
         val currentYear = LocalDate.now().year
         val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
-        for (shift in shifts)
-        {
-            val thisDate = try
-            {
+        for (shift in shifts) {
+            val thisDate = try {
                 LocalDate.parse(shift.date, dateFormatter)
-            }
-            catch (e: DateTimeParseException)
-            {
+            } catch (e: DateTimeParseException) {
                 continue
             }
             val shiftWeek = thisDate.get(WeekFields.of(Locale.getDefault()).weekOfYear())
@@ -71,8 +65,8 @@ object ShiftHelper {
         }
         return thisWeekSum
     }
-    fun calculateMonthProgress(currentDate: String = getDayToday(), dbHelper: DBHelper): Double {
-        val shifts = makeArray(dbHelper)
+
+    fun calculateMonthProgress(currentDate: String = getDayToday(), shifts: List<Shift>): Double {
         if (shifts.isEmpty()) return 0.0
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         val current = LocalDate.parse(currentDate, formatter)
@@ -85,7 +79,12 @@ object ShiftHelper {
         }
         return thisMonthSum
     }
-    fun filterShiftsByDatePeriod(shifts: List<Shift>, date1: String? = null, date2: String? = null): List<Shift> {
+
+    fun filterShiftsByDatePeriod(
+        shifts: List<Shift>,
+        date1: String? = null,
+        date2: String? = null,
+    ): List<Shift> {
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
         val startDate = date1?.let { LocalDate.parse(it, formatter) }
@@ -98,8 +97,7 @@ object ShiftHelper {
         }
     }
 
-    private fun getDayToday(): String
-    {
+    private fun getDayToday(): String {
         val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         return LocalDate.now().format(dateFormatter)
     }
@@ -116,7 +114,7 @@ object ShiftHelper {
         } else {
             LocalDate.now()
         }
-        return date.dayOfMonth-1
+        return date.dayOfMonth - 1
     }
 
     private fun getCurrentWeek(dateReceived: String = ""): Int {
@@ -147,8 +145,7 @@ object ShiftHelper {
         return thisDate.monthValue.toString().padStart(2, '0')
     }
 
-    private fun getCurrentYear(dateReceived: String = ""): String
-    {
+    private fun getCurrentYear(dateReceived: String = ""): String {
         val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
         val thisDate = try {
@@ -164,106 +161,105 @@ object ShiftHelper {
     fun calcAverageEarningsPerHour(shift: Shift): Double {
         return if (shift.time.toDouble() > 0.0) centsRound(shift.earnings / shift.time.toDouble()) else 0.0
     }
-    fun calcAverageEarningsPerHour (shifts: List<Shift>): Double
-    {
+
+    fun calcAverageEarningsPerHour(shifts: List<Shift>): Double {
         var sum = 0.0
         var totalHours = 0.0
-        shifts.indices.forEach {
-                i -> sum+=shifts[i].earnings
-                totalHours+=shifts[i].time.toDouble()
+        shifts.indices.forEach { i ->
+            sum += shifts[i].earnings
+            totalHours += shifts[i].time.toDouble()
         }
-        return centsRound( sum/totalHours)
+        return centsRound(sum / totalHours)
     }
 
-    fun calcAverageProfitPerHour (shifts: List<Shift>): Double
-    {
+    fun calcAverageProfitPerHour(shifts: List<Shift>): Double {
         var sum = 0.0
         var totalHours = 0.0
-        shifts.indices.forEach {
-                i -> sum+=shifts[i].profit
-            totalHours+=shifts[i].time.toDouble()
+        shifts.indices.forEach { i ->
+            sum += shifts[i].profit
+            totalHours += shifts[i].time.toDouble()
         }
-        return centsRound(sum/totalHours)
+        return centsRound(sum / totalHours)
     }
-    fun calcAverageShiftDuration (shifts: List<Shift>): Double
-    {
+
+    fun calcAverageShiftDuration(shifts: List<Shift>): Double {
         var totalHours = 0.0
-        shifts.indices.forEach {
-                i -> totalHours+=shifts[i].time.toDouble()
+        shifts.indices.forEach { i ->
+            totalHours += shifts[i].time.toDouble()
         }
-        return oneRound( totalHours/shifts.size)
+        return oneRound(totalHours / shifts.size)
     }
-    fun calcAverageMileage (shifts: List<Shift>): Double
-    {
+
+    fun calcAverageMileage(shifts: List<Shift>): Double {
         var totalMileage = 0.0
-        shifts.indices.forEach {
-                i -> totalMileage+=shifts[i].mileage
+        shifts.indices.forEach { i ->
+            totalMileage += shifts[i].mileage
         }
-        return oneRound( totalMileage/shifts.size)
+        return oneRound(totalMileage / shifts.size)
     }
-    fun calcAverageFuelCost (shifts: List<Shift>): Double
-    {
+
+    fun calcAverageFuelCost(shifts: List<Shift>): Double {
         var totalFuelCost = 0.0
-        shifts.indices.forEach {
-                i -> totalFuelCost+=shifts[i].fuelCost
+        shifts.indices.forEach { i ->
+            totalFuelCost += shifts[i].fuelCost
         }
-        return centsRound( totalFuelCost/shifts.size)
+        return centsRound(totalFuelCost / shifts.size)
     }
-    fun calcTotalShiftDuration (shifts: List<Shift>): Double
-    {
+
+    fun calcTotalShiftDuration(shifts: List<Shift>): Double {
         var totalHours = 0.0
-        shifts.indices.forEach {
-                i -> totalHours+=shifts[i].time.toDouble()
+        shifts.indices.forEach { i ->
+            totalHours += shifts[i].time.toDouble()
         }
         return totalHours
     }
-    fun calcTotalMileage (shifts: List<Shift>): Double
-    {
+
+    fun calcTotalMileage(shifts: List<Shift>): Double {
         var totalMileage = 0.0
-        shifts.indices.forEach {
-                i -> totalMileage+=shifts[i].mileage
+        shifts.indices.forEach { i ->
+            totalMileage += shifts[i].mileage
         }
         return totalMileage
     }
-    fun calcTotalFuelCost (shifts: List<Shift>): Double
-    {
+
+    fun calcTotalFuelCost(shifts: List<Shift>): Double {
         var totalFuel = 0.0
-        shifts.indices.forEach {
-                i -> totalFuel+=shifts[i].fuelCost
+        shifts.indices.forEach { i ->
+            totalFuel += shifts[i].fuelCost
         }
         return totalFuel
     }
-    fun calcTotalWash (shifts: List<Shift>): Double
-    {
+
+    fun calcTotalWash(shifts: List<Shift>): Double {
         var totalWash = 0.0
-        shifts.indices.forEach {
-                i -> totalWash+=shifts[i].wash
+        shifts.indices.forEach { i ->
+            totalWash += shifts[i].wash
         }
         return totalWash
     }
-    fun calcTotalEarnings (shifts: List<Shift>): Double
-    {
+
+    fun calcTotalEarnings(shifts: List<Shift>): Double {
         var totalEarnings = 0.0
-        shifts.indices.forEach {
-                i -> totalEarnings+=shifts[i].earnings
+        shifts.indices.forEach { i ->
+            totalEarnings += shifts[i].earnings
         }
         return totalEarnings
     }
-    fun calcTotalProfit (shifts: List<Shift>): Double
-    {
+
+    fun calcTotalProfit(shifts: List<Shift>): Double {
         var totalProfit = 0.0
-        shifts.indices.forEach {
-                i -> totalProfit+=shifts[i].profit
+        shifts.indices.forEach { i ->
+            totalProfit += shifts[i].profit
         }
         return totalProfit
     }
-    fun centsRound (n: Double): Double
-    {
-        return Math.round(n*100)/100.toDouble()
+
+    fun centsRound(n: Double): Double {
+        return Math.round(n * 100) / 100.toDouble()
     }
-    private fun oneRound (n: Double): Double
-    {
-        return Math.round(n*10)/10.toDouble()
+
+    private fun oneRound(n: Double): Double {
+        return Math.round(n * 10) / 10.toDouble()
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -279,8 +275,7 @@ object ShiftHelper {
         return df.parse(date)!!.time
     }
 
-    fun msToHours (ms: Long) : Double
-    {
-        return ((ms/60.0/60.0/1000.0)*100.0).toInt()/100.0
+    fun msToHours(ms: Long): Double {
+        return ((ms / 60.0 / 60.0 / 1000.0) * 100.0).toInt() / 100.0
     }
 }
