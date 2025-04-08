@@ -1,6 +1,5 @@
 package com.example.taxidrivercalculator.ui.fragments.addShift
 
-import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -60,7 +59,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentAddShiftBinding.inflate(inflater, container, false)
         bindItems()
@@ -69,76 +68,86 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.shiftData.observe (viewLifecycleOwner)
+        viewModel.shiftData.observe(viewLifecycleOwner)
         { shift -> updateUI(shift) }
-        //editDateL.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.teal_200)
-        //MaterialColors.getColor(editDateL, com.google.android.material.R.attr.colorPrimary)
-        /*if (savedInstanceState != null) {
-            if (savedInstanceState.getBoolean("IS_VISIBLE_TABLE_BREAK", true)) {
-                binding.tableBreak.visibility = View.VISIBLE
-            } else {
-                binding.tableBreak.visibility = View.GONE
-            }
-        }*/
-        //putDateAndTimeToVM()
 
-        editDate.setOnClickListener { pickDate(editDate) }
-        editStart.setOnClickListener { TimePickerFragment.pickTime(this, editStart)
-            putDateAndTimeToVM() }
-        editEnd.setOnClickListener { TimePickerFragment.pickTime(this, editEnd)
-            putDateAndTimeToVM() }
-        editBreakStart.setOnClickListener { TimePickerFragment.pickTime(this, editBreakStart)
-            putDateAndTimeToVM() }
-        editBreakEnd.setOnClickListener { TimePickerFragment.pickTime(this, editBreakEnd)
-            putDateAndTimeToVM() }
+        editDate.setOnClickListener {
+            DatePickerFragment.pickDate(
+                requireContext(),
+                editDate,
+                onDatePicked = { viewModel.shiftData.value?.date = editDate.text.toString() }
+            )
+        }
+        editStart.setOnClickListener {
+            TimePickerFragment.pickTime(
+                this, editStart,
+                onTimePicked = { viewModel.shiftData.value?.timeBegin = editStart.text.toString() }
+            )
+        }
+        editEnd.setOnClickListener {
+            TimePickerFragment.pickTime(
+                this, editEnd,
+                onTimePicked = { viewModel.shiftData.value?.timeEnd = editEnd.text.toString() }
+            )
+        }
+        editBreakStart.setOnClickListener {
+            TimePickerFragment.pickTime(
+                this, editBreakStart,
+                onTimePicked = {
+                    viewModel.shiftData.value?.breakBegin = editBreakStart.text.toString()
+                }
+            )
+        }
+        editBreakEnd.setOnClickListener {
+            TimePickerFragment.pickTime(
+                this, editBreakEnd,
+                onTimePicked = {
+                    viewModel.shiftData.value?.breakEnd = editBreakEnd.text.toString()
+                }
+            )
+        }
         switchBreak.setOnClickListener { switchBrake() }
-        buttonSubmit.setOnClickListener {calculateShift()}
+        buttonSubmit.setOnClickListener { calculateShift() }
 
         editMileage.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                if (s.isNullOrEmpty())
-                {
+                if (s.isNullOrEmpty()) {
                     editFuelCost.setText("")
                     return
                 }
                 updateShiftField { it.mileage = s.toString().toDoubleOrNull() ?: 0.0 }
-                viewModel.guessFuelCost(requireContext().getSharedPreferences("Settings", Activity.MODE_PRIVATE))
+                viewModel.guessFuelCost(requireContext())
             }
         })
     }
 
-    private fun updateShiftField(fieldSetter: (AddShiftData) -> Unit) {
+    private fun updateShiftField(fieldSetter: (AddShiftState) -> Unit) {
         val currentShift = viewModel.shiftData.value ?: return
         fieldSetter(currentShift)
         viewModel.updateShift(currentShift)
     }
 
-    private fun updateUI(shift: AddShiftData) {
+    private fun updateUI(shift: AddShiftState) {
         editDate.setText(shift.date)
         editStart.setText(shift.timeBegin)
         editEnd.setText(shift.timeEnd)
         editBreakStart.setText(shift.breakBegin)
         editBreakEnd.setText(shift.breakEnd)
-        if (viewModel.shiftData.value?.fuelCost != 0.0)
-        {
+        if (viewModel.shiftData.value?.fuelCost != 0.0) {
             editFuelCost.setText(shift.fuelCost.toString())
         }
-        if (editBreakStart.text.isNotEmpty() || editBreakEnd.text.isNotEmpty())
-        {
+        if (editBreakStart.text.isNotEmpty() || editBreakEnd.text.isNotEmpty()) {
             switchBreak.isChecked = true
             binding.tableBreak.isVisible = true
-        }
-        else
-        {
+        } else {
             switchBreak.isChecked = false
             binding.tableBreak.isVisible = false
         }
     }
 
-    private fun bindItems ()
-    {
+    private fun bindItems() {
         editDate = binding.buttonDatePick
         editStart = binding.buttonTimeStart
         editEnd = binding.buttonTimeEnd
@@ -162,36 +171,23 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         editMileageL = binding.editTextMileageL
     }
 
-    private fun pickDate(editObj: EditText)
-    {
-        DatePickerFragment.pickDate(requireContext(), editObj) {
-            putDateAndTimeToVM()
-        }
-    }
-
-    private fun calculateShift ()
-    {
-        if (editEarnings.text.isEmpty() || editFuelCost.text.isEmpty() || editMileage.text.isEmpty())
-        {
-            if (editFuelCost.text.isEmpty())
-            {
+    private fun calculateShift() {
+        if (editEarnings.text.isEmpty() || editFuelCost.text.isEmpty() || editMileage.text.isEmpty()) {
+            if (editFuelCost.text.isEmpty()) {
                 editFuelCost.setError(getString(R.string.fuel_cost_is_empty), null)
 
                 editFuelCost.requestFocus()
             }
-            if (editMileage.text.isEmpty())
-            {
+            if (editMileage.text.isEmpty()) {
                 editMileage.setError(getString(R.string.mileage_is_empty), null)
                 editMileage.requestFocus()
             }
-            if (editEarnings.text.isEmpty())
-            {
+            if (editEarnings.text.isEmpty()) {
                 editEarnings.setError(getString(R.string.earnings_is_empty), null)
                 editEarnings.requestFocus()
             }
             return
         }
-        putDateAndTimeToVM()
         viewModel.shiftData.value?.earnings = editEarnings.text.toString().toDoubleOrNull() ?: 0.0
         viewModel.shiftData.value?.wash = editWash.text.toString().toDoubleOrNull() ?: 0.0
         viewModel.shiftData.value?.fuelCost = editFuelCost.text.toString().toDoubleOrNull() ?: 0.0
@@ -204,30 +200,22 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
                 R.string.you_earn_in_hours,
                 viewModel.shiftData.value?.profit.toString(),
                 ShiftHelper.msToHours(viewModel.shiftData.value?.totalTime ?: 0).toString()
-            ))
+            )
+        )
     }
 
-    private fun putDateAndTimeToVM() {
-        viewModel.shiftData.value?.date = editDate.text.toString()
-        viewModel.shiftData.value?.timeBegin = editStart.text.toString()
-        viewModel.shiftData.value?.timeEnd = editEnd.text.toString()
-        viewModel.shiftData.value?.breakBegin = editBreakStart.text.toString()
-        viewModel.shiftData.value?.breakEnd = editBreakEnd.text.toString()
-    }
-
-    private fun showSubmitMessage (warningCode: String)
-    {
+    private fun showSubmitMessage(warningCode: String) {
         val alert = MaterialAlertDialogBuilder(requireContext())
         alert.setTitle(getString(R.string.submit))
-        alert.setPositiveButton(R.string.ok) {dialog, id -> submit()}
+        alert.setPositiveButton(R.string.ok) { dialog, id -> submit() }
         alert.setNegativeButton(R.string.cancel, null)
         alert.setMessage(warningCode)
         alert.show()
     }
 
-    private fun submit()
-    {
-        Toast.makeText(activity, getString(R.string.shift_added_successfully),Toast.LENGTH_SHORT).show()
+    private fun submit() {
+        Toast.makeText(activity, getString(R.string.shift_added_successfully), Toast.LENGTH_SHORT)
+            .show()
         viewModel.submit(requireContext())
         findNavController().navigate(R.id.action_addShift_to_home_fragment)
         MainActivity.botNav.isVisible = true
@@ -243,9 +231,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         super.onDestroy()
     }
 
-    private fun switchBrake()
-    {
-        //row.isVisible = check1.isChecked
+    private fun switchBrake() {
         animateHeightChange(binding.tableBreak)
     }
 

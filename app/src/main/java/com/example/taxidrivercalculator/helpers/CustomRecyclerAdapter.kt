@@ -7,12 +7,12 @@ import android.widget.TableLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taxidrivercalculator.R
+import com.example.taxidrivercalculator.data.model.Shift
 
 
 class CustomRecyclerAdapter(private val shifts: List<Shift>) :
     RecyclerView.Adapter<CustomRecyclerAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         val shiftTable: TableLayout = itemView.findViewById(R.id.tableShift)
 
         val textId: TextView = itemView.findViewById(R.id.textId1)
@@ -26,8 +26,6 @@ class CustomRecyclerAdapter(private val shifts: List<Shift>) :
         val textProfit: TextView = itemView.findViewById(R.id.textProfit1)
     }
 
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView =
             LayoutInflater.from(parent.context)
@@ -36,7 +34,6 @@ class CustomRecyclerAdapter(private val shifts: List<Shift>) :
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-
         holder.textId.text = shifts[position].id.toString()
         holder.textDate.text = shifts[position].date
         holder.textTime.text = shifts[position].time
@@ -44,10 +41,10 @@ class CustomRecyclerAdapter(private val shifts: List<Shift>) :
         holder.textWash.text = shifts[position].wash.toString()
         holder.textFuel.text = shifts[position].fuelCost.toString()
         holder.textMileage.text = shifts[position].mileage.toString()
-        holder.textPerHour.text = ShiftHelper.calcAverageEarningsPerHour(shifts[position]).toString()
+        holder.textPerHour.text =
+            ShiftHelper.calcAverageEarningsPerHour(shifts[position]).toString()
         holder.textProfit.text = shifts[position].profit.toString()
         holder.shiftTable.id = shifts[position].id
-
     }
 
     /*override fun getItemId(position: Int): Long {

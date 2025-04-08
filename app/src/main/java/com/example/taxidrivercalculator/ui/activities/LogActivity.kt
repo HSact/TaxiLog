@@ -1,7 +1,6 @@
 package com.example.taxidrivercalculator.ui.activities
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,10 +14,10 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taxidrivercalculator.helpers.CustomRecyclerAdapter
-import com.example.taxidrivercalculator.helpers.DBHelper
+import com.example.taxidrivercalculator.data.db.DBHelper
 import com.example.taxidrivercalculator.helpers.LocaleHelper
 import com.example.taxidrivercalculator.R
-import com.example.taxidrivercalculator.helpers.Shift
+import com.example.taxidrivercalculator.data.model.Shift
 import com.example.taxidrivercalculator.helpers.ShiftHelper
 import com.example.taxidrivercalculator.databinding.ActivityLogBinding
 import com.example.taxidrivercalculator.databinding.DialogShiftEditBinding
@@ -26,11 +25,13 @@ import com.example.taxidrivercalculator.databinding.RecyclerviewItemBinding
 import com.example.taxidrivercalculator.ui.fragments.DatePickerFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.widget.Toolbar
+import com.example.taxidrivercalculator.data.repository.ShiftRepository
 
 
 class LogActivity : AppCompatActivity() {
 
     private var shifts = mutableListOf<Shift>()
+    private var shiftRepository = ShiftRepository(DBHelper(this, null))
 
     private lateinit var binding: ActivityLogBinding
     private lateinit var bindingR: RecyclerviewItemBinding
@@ -47,7 +48,7 @@ class LogActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.title_my_shifts)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        shifts= ShiftHelper.makeArray(DBHelper(this, null))
+        shifts = shiftRepository.getAllShifts()
         if (shifts.isEmpty())
         {
             Toast.makeText(applicationContext,
@@ -128,18 +129,16 @@ class LogActivity : AppCompatActivity() {
 
     private fun deleteShift(index: Int)
     {
-        val db = DBHelper(this, null)
-        db.deleteShift(index)
-        db.close()
+        val shiftRepository = ShiftRepository(DBHelper(this, null))
+        shiftRepository.deleteShift(index)
         Toast.makeText(applicationContext,
             getString(R.string.shift_deleted_successfully, index.toString()), Toast.LENGTH_SHORT).show()
         recreate()
     }
     private fun deleteAll()
     {
-        val db = DBHelper(this, null)
-        db.deleteAll()
-        db.close()
+        val shiftRepository = ShiftRepository(DBHelper(this, null))
+        shiftRepository.deleteAllShifts()
         Toast.makeText(applicationContext,
             getString(R.string.all_shifts_have_been_deleted_successfully), Toast.LENGTH_SHORT).show()
         recreate()

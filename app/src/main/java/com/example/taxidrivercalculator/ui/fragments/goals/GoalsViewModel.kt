@@ -3,7 +3,8 @@ package com.example.taxidrivercalculator.ui.fragments.goals
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.example.taxidrivercalculator.helpers.DBHelper
+import com.example.taxidrivercalculator.data.db.DBHelper
+import com.example.taxidrivercalculator.data.repository.ShiftRepository
 import com.example.taxidrivercalculator.helpers.SettingsHelper
 import com.example.taxidrivercalculator.helpers.ShiftHelper
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,10 +28,11 @@ class GoalsViewModel: ViewModel() {
 
     @SuppressLint("DefaultLocale")
     fun calculateDaysData(date: String, context: Context) {
+        var shiftRepository = ShiftRepository(DBHelper(context, null))
         if (pickedDate.isEmpty()) {
             pickedDate = date
         }
-        val db = DBHelper(context, null)
+        val shifts = shiftRepository.getAllShifts()
         val parts = date.split(".")
         if (parts.size != 3) return
         val month = parts[1]
@@ -38,13 +40,14 @@ class GoalsViewModel: ViewModel() {
         val newData = MutableList(31) { day ->
             val dayString = String.format("%02d", day + 1)
             val formattedDate = "$dayString.$month.$year"
-            ShiftHelper.calculateDayProgress(formattedDate, db)
+            ShiftHelper.calculateDayProgress(formattedDate, shifts)
         }
         _daysData.value = newData
     }
 
     fun defineGoals(date: String, context: Context)
     {
+        var shiftRepository = ShiftRepository(DBHelper(context, null))
         val settings = SettingsHelper.getInstance(context)
         goalMonthString = settings.goalPerMonth
         if (goalMonthString.isNullOrEmpty() || goalMonthString == "-1")
@@ -67,17 +70,17 @@ class GoalsViewModel: ViewModel() {
             else -> 30.0
         }
         goalDay = goalMonth / denominatorDay
-        val db = DBHelper (context, null)
+        val shifts = shiftRepository.getAllShifts()
         _goalData.value = mapOf(
             "monthGoal" to roundTo2(goalMonth),
             "weekGoal" to roundTo2(goalWeek),
             "dayGoal" to roundTo2(goalDay),
-            "dayProgress" to (roundTo2(ShiftHelper.calculateDayProgress(date, db))),
-            "weekProgress" to (roundTo2(ShiftHelper.calculateWeekProgress(date, db))),
-            "monthProgress" to (roundTo2(ShiftHelper.calculateMonthProgress(date, db))),
-            "todayPercent" to (roundTo2(ShiftHelper.calculateDayProgress(date, db) * 100 / goalDay)),
-            "weekPercent" to (roundTo2(ShiftHelper.calculateWeekProgress(date, db) * 100 / goalWeek)),
-            "monthPercent" to (roundTo2(ShiftHelper.calculateMonthProgress(date, db) * 100 / goalMonth))
+            "dayProgress" to (roundTo2(ShiftHelper.calculateDayProgress(date, shifts))),
+            "weekProgress" to (roundTo2(ShiftHelper.calculateWeekProgress(date, shifts))),
+            "monthProgress" to (roundTo2(ShiftHelper.calculateMonthProgress(date, shifts))),
+            "todayPercent" to (roundTo2(ShiftHelper.calculateDayProgress(date, shifts) * 100 / goalDay)),
+            "weekPercent" to (roundTo2(ShiftHelper.calculateWeekProgress(date, shifts) * 100 / goalWeek)),
+            "monthPercent" to (roundTo2(ShiftHelper.calculateMonthProgress(date, shifts) * 100 / goalMonth))
         )
     }
 
