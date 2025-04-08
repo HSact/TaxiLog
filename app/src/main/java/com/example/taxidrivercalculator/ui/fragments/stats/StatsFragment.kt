@@ -9,8 +9,8 @@ import android.widget.EditText
 import android.widget.TableLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.example.taxidrivercalculator.helpers.DBHelper
-import com.example.taxidrivercalculator.data.Shift
+import com.example.taxidrivercalculator.data.db.DBHelper
+import com.example.taxidrivercalculator.data.model.Shift
 import com.example.taxidrivercalculator.databinding.FragmentStatsBinding
 import androidx.fragment.app.viewModels
 import com.example.taxidrivercalculator.ui.fragments.DatePickerFragment

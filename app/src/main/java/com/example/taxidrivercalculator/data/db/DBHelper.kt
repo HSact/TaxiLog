@@ -1,11 +1,12 @@
-package com.example.taxidrivercalculator.helpers
+package com.example.taxidrivercalculator.data.db
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.example.taxidrivercalculator.data.Shift
+import com.example.taxidrivercalculator.data.model.Shift
+import com.example.taxidrivercalculator.helpers.ShiftHelper
 
 class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {

@@ -15,10 +15,10 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taxidrivercalculator.helpers.CustomRecyclerAdapter
-import com.example.taxidrivercalculator.helpers.DBHelper
+import com.example.taxidrivercalculator.data.db.DBHelper
 import com.example.taxidrivercalculator.helpers.LocaleHelper
 import com.example.taxidrivercalculator.R
-import com.example.taxidrivercalculator.data.Shift
+import com.example.taxidrivercalculator.data.model.Shift
 import com.example.taxidrivercalculator.helpers.ShiftHelper
 import com.example.taxidrivercalculator.databinding.ActivityLogBinding
 import com.example.taxidrivercalculator.databinding.DialogShiftEditBinding

@@ -1,4 +1,4 @@
-package com.example.taxidrivercalculator.data
+package com.example.taxidrivercalculator.data.model
 
 data class Shift(
     var id: Int,

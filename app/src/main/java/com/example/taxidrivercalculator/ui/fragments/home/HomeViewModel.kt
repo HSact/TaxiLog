@@ -3,7 +3,7 @@ package com.example.taxidrivercalculator.ui.fragments.home
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.taxidrivercalculator.R
-import com.example.taxidrivercalculator.helpers.DBHelper
+import com.example.taxidrivercalculator.data.db.DBHelper
 import com.example.taxidrivercalculator.helpers.SettingsHelper
 import com.example.taxidrivercalculator.helpers.ShiftHelper
 import kotlinx.coroutines.flow.MutableStateFlow
