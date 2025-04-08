@@ -205,7 +205,7 @@ object ShiftHelper {
     {
         var totalFuelCost = 0.0
         shifts.indices.forEach {
-                i -> totalFuelCost+=shifts[i].mileage
+                i -> totalFuelCost+=shifts[i].fuelCost
         }
         return centsRound( totalFuelCost/shifts.size)
     }
