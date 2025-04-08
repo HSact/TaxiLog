@@ -30,6 +30,11 @@ class ShiftRepository (private val db: DBHelper) {
         db.close()
         return shifts
     }
+    fun addShift(shift: Shift) {
+        db.addShift(shift.date, shift.time.toDouble(), shift.earnings,
+            shift.wash, shift.fuelCost, shift.mileage, shift.profit)
+        db.close()
+    }
     fun deleteShift(index: Int) {
         val shifts = getAllShifts()
         shifts.removeAt(index-1)

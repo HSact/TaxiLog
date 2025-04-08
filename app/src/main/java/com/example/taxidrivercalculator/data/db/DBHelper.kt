@@ -89,10 +89,6 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         return db.rawQuery("SELECT * FROM " + TABLE_NAME, null)
     }
 
-    fun deleteAll() {
-        recreateDB(mutableListOf())
-    }
-
     companion object {
         private const val DATABASE_NAME = "SHIFTS"
         private const val DATABASE_VERSION = 1
