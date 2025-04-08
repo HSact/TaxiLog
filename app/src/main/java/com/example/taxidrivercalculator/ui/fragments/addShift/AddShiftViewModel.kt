@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.taxidrivercalculator.helpers.DBHelper
+import com.example.taxidrivercalculator.helpers.SettingsHelper
 import com.example.taxidrivercalculator.helpers.ShiftHelper
 import com.example.taxidrivercalculator.helpers.ShiftHelper.convertLongToTime
 import com.example.taxidrivercalculator.helpers.ShiftHelper.convertTimeToLong
@@ -55,12 +56,13 @@ class AddShiftViewModel: ViewModel() {
         _shiftData.value = currentShift
     }
 
-    fun guessFuelCost (settings: SharedPreferences)
+    fun guessFuelCost (context: Context)
     {
+        val settings = SettingsHelper.getInstance(context)
         var currentShift = _shiftData.value ?: return
-        val fuelPrice: Double = settings.getString("Fuel_price", "0")?.toDoubleOrNull() ?: 0.0
-        val consumption: Double = settings.getString("Consumption", "0")?.toDoubleOrNull() ?: 0.0
-        if (!(settings.getBoolean("Seted_up", false)) || fuelPrice == 0.0 || consumption == 0.0)
+        val fuelPrice: Double = (settings.fuelPrice ?: 0.0.toString()).toDouble()
+        val consumption = (settings.consumption ?: 0.0.toString()).toDouble()
+        if (!settings.seted_up || fuelPrice == 0.0 || consumption == 0.0)
         {
             return
         }

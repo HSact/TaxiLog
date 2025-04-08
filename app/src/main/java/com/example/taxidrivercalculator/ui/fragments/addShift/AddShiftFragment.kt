@@ -71,16 +71,6 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.shiftData.observe (viewLifecycleOwner)
         { shift -> updateUI(shift) }
-        //editDateL.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.teal_200)
-        //MaterialColors.getColor(editDateL, com.google.android.material.R.attr.colorPrimary)
-        /*if (savedInstanceState != null) {
-            if (savedInstanceState.getBoolean("IS_VISIBLE_TABLE_BREAK", true)) {
-                binding.tableBreak.visibility = View.VISIBLE
-            } else {
-                binding.tableBreak.visibility = View.GONE
-            }
-        }*/
-        //putDateAndTimeToVM()
 
         editDate.setOnClickListener { pickDate(editDate) }
         editStart.setOnClickListener { TimePickerFragment.pickTime(this, editStart)
