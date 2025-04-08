@@ -7,6 +7,7 @@ import android.widget.TableLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taxidrivercalculator.R
+import com.example.taxidrivercalculator.data.Shift
 
 
 class CustomRecyclerAdapter(private val shifts: List<Shift>) :

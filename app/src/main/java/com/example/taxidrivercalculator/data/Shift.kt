@@ -1,6 +1,4 @@
-package com.example.taxidrivercalculator.helpers
-
-
+package com.example.taxidrivercalculator.data
 
 data class Shift(
     var id: Int,
@@ -26,7 +24,6 @@ data class Shift(
     private fun isValidDate(date: String): Boolean
     {
         return date.matches(Regex("\\d{2}\\.\\d{2}\\.\\d{4}"))
-        //return date.isNotEmpty()
     }
 
     private fun isValidTime(time: String): Boolean
