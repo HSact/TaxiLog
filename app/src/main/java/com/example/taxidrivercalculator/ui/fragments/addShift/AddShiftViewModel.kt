@@ -12,7 +12,7 @@ import com.example.taxidrivercalculator.helpers.ShiftHelper.convertTimeToLong
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-data class AddShiftData
+data class AddShiftState
     (var date: String ="",
      var timeBegin: String ="",
      var timeEnd: String ="",
@@ -28,8 +28,8 @@ data class AddShiftData
      var profit: Double = 0.0)
 
 class AddShiftViewModel: ViewModel() {
-    private val _shiftData = MutableLiveData<AddShiftData>()
-    val shiftData: LiveData<AddShiftData> get() = _shiftData
+    private val _shiftData = MutableLiveData<AddShiftState>()
+    val shiftData: LiveData<AddShiftState> get() = _shiftData
     init { loadGuess() }
 
     private fun loadGuess() {
@@ -43,7 +43,7 @@ class AddShiftViewModel: ViewModel() {
         val beginTime = convertLongToTime(convertTimeToLong(endTime) - hoursToMs(10))
         val beginDate = endDate.minusDays(1)
 
-        var currentShift = AddShiftData().copy(timeBegin = beginTime, timeEnd = endTime)
+        var currentShift = AddShiftState().copy(timeBegin = beginTime, timeEnd = endTime)
 
         if (convertTimeToLong(beginTime) > convertTimeToLong(endTime)) {
             currentShift = currentShift.copy(date = beginDate.format(formatter))
@@ -74,7 +74,7 @@ class AddShiftViewModel: ViewModel() {
         _shiftData.value = currentShift
     }
 
-    fun updateShift(shift: AddShiftData) {
+    fun updateShift(shift: AddShiftState) {
         _shiftData.value = shift
     }
 

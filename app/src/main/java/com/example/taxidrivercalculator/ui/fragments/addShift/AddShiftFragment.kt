@@ -123,13 +123,13 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         })
     }
 
-    private fun updateShiftField(fieldSetter: (AddShiftData) -> Unit) {
+    private fun updateShiftField(fieldSetter: (AddShiftState) -> Unit) {
         val currentShift = viewModel.shiftData.value ?: return
         fieldSetter(currentShift)
         viewModel.updateShift(currentShift)
     }
 
-    private fun updateUI(shift: AddShiftData) {
+    private fun updateUI(shift: AddShiftState) {
         editDate.setText(shift.date)
         editStart.setText(shift.timeBegin)
         editEnd.setText(shift.timeEnd)
