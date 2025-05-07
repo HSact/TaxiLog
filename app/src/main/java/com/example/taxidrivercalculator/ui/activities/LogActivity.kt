@@ -18,7 +18,6 @@ import com.example.taxidrivercalculator.data.db.DBHelper
 import com.example.taxidrivercalculator.helpers.LocaleHelper
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.data.model.Shift
-import com.example.taxidrivercalculator.data.utils.ShiftHelper
 import com.example.taxidrivercalculator.databinding.ActivityLogBinding
 import com.example.taxidrivercalculator.databinding.DialogShiftEditBinding
 import com.example.taxidrivercalculator.databinding.RecyclerviewItemBinding

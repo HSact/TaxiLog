@@ -2,6 +2,8 @@ package com.example.taxidrivercalculator.data.repository
 
 import com.example.taxidrivercalculator.data.db.DBHelper
 import com.example.taxidrivercalculator.data.model.Shift
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class ShiftRepository (private val db: DBHelper) {
     fun getAllShifts(): MutableList<Shift> {
@@ -29,6 +31,20 @@ class ShiftRepository (private val db: DBHelper) {
         cursor.close()
         db.close()
         return shifts
+    }
+    fun getShiftsInDateRange(
+        date1: String? = null,
+        date2: String? = null,
+    ): List<Shift> {
+        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        val startDate = date1?.let { LocalDate.parse(it, formatter) }
+        val endDate = date2?.let { LocalDate.parse(it, formatter) }
+        val shifts = getAllShifts()
+        return shifts.filter { shift ->
+            val shiftDate = LocalDate.parse(shift.date, formatter)
+            (startDate == null || shiftDate >= startDate) &&
+                    (endDate == null || shiftDate <= endDate)
+        }
     }
     fun addShift(shift: Shift) {
         db.addShift(shift.date, shift.time.toDouble(), shift.earnings,

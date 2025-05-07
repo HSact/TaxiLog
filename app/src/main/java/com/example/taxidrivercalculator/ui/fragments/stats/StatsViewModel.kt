@@ -40,8 +40,8 @@ class StatsViewModel : ViewModel() {
         shifts = shiftsOrigin.toMutableList()
     }
 
-    fun updateShifts() {
-        shifts = ShiftHelper.filterShiftsByDatePeriod(shiftsOrigin.toMutableList(), startDate,
+    fun updateShifts(db: DBHelper) {
+        shifts = ShiftRepository(db).getShiftsInDateRange(startDate,
             endDate).toMutableList()
     }
 }

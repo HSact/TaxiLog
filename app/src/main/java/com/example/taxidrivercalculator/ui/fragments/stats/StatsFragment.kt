@@ -56,7 +56,7 @@ class StatsFragment : Fragment() {
         }
         butDatePickBegin.setText(viewModel.startDate)
         butDatePickEnd.setText(viewModel.endDate)
-        viewModel.updateShifts()
+        viewModel.updateShifts(DBHelper(requireContext(), null))
         displayInfo()
         butDatePickBegin.setOnClickListener {pickDate(butDatePickBegin)}
         butDatePickEnd.setOnClickListener {pickDate(butDatePickEnd)}
@@ -76,7 +76,7 @@ class StatsFragment : Fragment() {
                 } else if (editObj == butDatePickEnd) {
                     viewModel.endDate = date
                 }
-                viewModel.updateShifts()
+                viewModel.updateShifts(DBHelper(requireContext(), null))
                 displayInfo()
             }
         )
