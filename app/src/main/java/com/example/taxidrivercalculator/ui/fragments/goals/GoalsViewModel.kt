@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.taxidrivercalculator.data.db.DBHelper
 import com.example.taxidrivercalculator.data.repository.ShiftRepository
 import com.example.taxidrivercalculator.helpers.SettingsHelper
-import com.example.taxidrivercalculator.data.utils.ShiftHelper
+import com.example.taxidrivercalculator.data.utils.ShiftStatsUtil
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
@@ -40,7 +40,7 @@ class GoalsViewModel: ViewModel() {
         val newData = MutableList(31) { day ->
             val dayString = String.format("%02d", day + 1)
             val formattedDate = "$dayString.$month.$year"
-            ShiftHelper.calculateDayProgress(formattedDate, shifts)
+            ShiftStatsUtil.calculateDayProgress(formattedDate, shifts)
         }
         _daysData.value = newData
     }
@@ -75,12 +75,12 @@ class GoalsViewModel: ViewModel() {
             "monthGoal" to roundTo2(goalMonth),
             "weekGoal" to roundTo2(goalWeek),
             "dayGoal" to roundTo2(goalDay),
-            "dayProgress" to (roundTo2(ShiftHelper.calculateDayProgress(date, shifts))),
-            "weekProgress" to (roundTo2(ShiftHelper.calculateWeekProgress(date, shifts))),
-            "monthProgress" to (roundTo2(ShiftHelper.calculateMonthProgress(date, shifts))),
-            "todayPercent" to (roundTo2(ShiftHelper.calculateDayProgress(date, shifts) * 100 / goalDay)),
-            "weekPercent" to (roundTo2(ShiftHelper.calculateWeekProgress(date, shifts) * 100 / goalWeek)),
-            "monthPercent" to (roundTo2(ShiftHelper.calculateMonthProgress(date, shifts) * 100 / goalMonth))
+            "dayProgress" to (roundTo2(ShiftStatsUtil.calculateDayProgress(date, shifts))),
+            "weekProgress" to (roundTo2(ShiftStatsUtil.calculateWeekProgress(date, shifts))),
+            "monthProgress" to (roundTo2(ShiftStatsUtil.calculateMonthProgress(date, shifts))),
+            "todayPercent" to (roundTo2(ShiftStatsUtil.calculateDayProgress(date, shifts) * 100 / goalDay)),
+            "weekPercent" to (roundTo2(ShiftStatsUtil.calculateWeekProgress(date, shifts) * 100 / goalWeek)),
+            "monthPercent" to (roundTo2(ShiftStatsUtil.calculateMonthProgress(date, shifts) * 100 / goalMonth))
         )
     }
 

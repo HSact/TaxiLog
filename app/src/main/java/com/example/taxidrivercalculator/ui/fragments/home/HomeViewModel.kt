@@ -7,7 +7,7 @@ import com.example.taxidrivercalculator.data.db.DBHelper
 import com.example.taxidrivercalculator.data.repository.ShiftRepository
 import com.example.taxidrivercalculator.data.utils.DateUtils
 import com.example.taxidrivercalculator.helpers.SettingsHelper
-import com.example.taxidrivercalculator.data.utils.ShiftHelper
+import com.example.taxidrivercalculator.data.utils.ShiftStatsUtil
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
@@ -62,7 +62,7 @@ class HomeViewModel : ViewModel() {
         val textCosts = (shift.wash + shift.fuelCost).toString()
         val textTime = shift.time + " " + context.getString(R.string.hours)
         val textTotal = shift.profit.toString()
-        val textPerHour = ShiftHelper.calcAverageEarningsPerHour(shifts.last()).toString()
+        val textPerHour = ShiftStatsUtil.calcAverageEarningsPerHour(shifts.last()).toString()
         val settings = SettingsHelper.getInstance(context)
         var goalMonthString = settings.goalPerMonth ?: ""
 
@@ -70,7 +70,7 @@ class HomeViewModel : ViewModel() {
             if (goalMonthString.isEmpty()) {
                 context.getString(R.string.n_a)
             } else {
-                ShiftHelper.calculateMonthProgress(date, shifts).toString()
+                ShiftStatsUtil.calculateMonthProgress(date, shifts).toString()
             }
 
         _shiftData.value = mapOf(

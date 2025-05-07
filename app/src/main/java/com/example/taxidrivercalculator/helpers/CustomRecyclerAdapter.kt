@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.data.model.Shift
-import com.example.taxidrivercalculator.data.utils.ShiftHelper
+import com.example.taxidrivercalculator.data.utils.ShiftStatsUtil
 
 
 class CustomRecyclerAdapter(private val shifts: List<Shift>) :
@@ -43,7 +43,7 @@ class CustomRecyclerAdapter(private val shifts: List<Shift>) :
         holder.textFuel.text = shifts[position].fuelCost.toString()
         holder.textMileage.text = shifts[position].mileage.toString()
         holder.textPerHour.text =
-            ShiftHelper.calcAverageEarningsPerHour(shifts[position]).toString()
+            ShiftStatsUtil.calcAverageEarningsPerHour(shifts[position]).toString()
         holder.textProfit.text = shifts[position].profit.toString()
         holder.shiftTable.id = shifts[position].id
     }

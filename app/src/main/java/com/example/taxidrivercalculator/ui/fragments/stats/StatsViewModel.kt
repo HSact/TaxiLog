@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.example.taxidrivercalculator.data.db.DBHelper
 import com.example.taxidrivercalculator.data.model.Shift
 import com.example.taxidrivercalculator.data.repository.ShiftRepository
-import com.example.taxidrivercalculator.data.utils.ShiftHelper
+import com.example.taxidrivercalculator.data.utils.ShiftStatsUtil
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -15,17 +15,17 @@ class StatsViewModel : ViewModel() {
     var startDate: String? = null
     var endDate: String? = null
     val shiftsCount: String get() = shifts.size.toString()
-    val avErPh: String get() = ShiftHelper.calcAverageEarningsPerHour(shifts).toString()
-    val avProfitPh: String get() = ShiftHelper.calcAverageProfitPerHour(shifts).toString()
-    val avDuration: String get() = ShiftHelper.calcAverageShiftDuration(shifts).toString()
-    val avMileage: String get() = ShiftHelper.calcAverageMileage(shifts).toString()
-    val totalDuration: String get() = ShiftHelper.calcTotalShiftDuration(shifts).toString()
-    val totalMileage: String get() = ShiftHelper.calcTotalMileage(shifts).toString()
-    val totalWash: String get() = ShiftHelper.calcTotalWash(shifts).toString()
-    val totalEarnings: String get() = ShiftHelper.calcTotalEarnings(shifts).toString()
-    val totalProfit: String get() = ShiftHelper.calcTotalProfit(shifts).toString()
-    val avFuel: String get() = ShiftHelper.calcAverageFuelCost(shifts).toString()
-    val totalFuel: String get() = ShiftHelper.calcTotalFuelCost(shifts).toString()
+    val avErPh: String get() = ShiftStatsUtil.calcAverageEarningsPerHour(shifts).toString()
+    val avProfitPh: String get() = ShiftStatsUtil.calcAverageProfitPerHour(shifts).toString()
+    val avDuration: String get() = ShiftStatsUtil.calcAverageShiftDuration(shifts).toString()
+    val avMileage: String get() = ShiftStatsUtil.calcAverageMileage(shifts).toString()
+    val totalDuration: String get() = ShiftStatsUtil.calcTotalShiftDuration(shifts).toString()
+    val totalMileage: String get() = ShiftStatsUtil.calcTotalMileage(shifts).toString()
+    val totalWash: String get() = ShiftStatsUtil.calcTotalWash(shifts).toString()
+    val totalEarnings: String get() = ShiftStatsUtil.calcTotalEarnings(shifts).toString()
+    val totalProfit: String get() = ShiftStatsUtil.calcTotalProfit(shifts).toString()
+    val avFuel: String get() = ShiftStatsUtil.calcAverageFuelCost(shifts).toString()
+    val totalFuel: String get() = ShiftStatsUtil.calcTotalFuelCost(shifts).toString()
 
     fun defineDates() {
         val now = LocalDateTime.now()

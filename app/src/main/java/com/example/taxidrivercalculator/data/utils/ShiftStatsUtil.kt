@@ -13,7 +13,7 @@ import java.util.Date
 import java.util.Locale
 import kotlin.math.roundToInt
 
-object ShiftHelper {
+object ShiftStatsUtil {
 
     fun calculateDayProgress(currentDate: String = getDayToday(), shifts: List<Shift>): Double {
         if (shifts.isEmpty()) return 0.0
@@ -56,23 +56,6 @@ object ShiftHelper {
             }
         }
         return thisMonthSum
-    }
-
-    fun filterShiftsByDatePeriod(
-        shifts: List<Shift>,
-        date1: String? = null,
-        date2: String? = null,
-    ): List<Shift> {
-        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-
-        val startDate = date1?.let { LocalDate.parse(it, formatter) }
-        val endDate = date2?.let { LocalDate.parse(it, formatter) }
-
-        return shifts.filter { shift ->
-            val shiftDate = LocalDate.parse(shift.date, formatter)
-            (startDate == null || shiftDate >= startDate) &&
-                    (endDate == null || shiftDate <= endDate)
-        }
     }
 
     fun calcAverageEarningsPerHour(shift: Shift): Double {
@@ -128,7 +111,7 @@ object ShiftHelper {
         shifts.indices.forEach { i ->
             totalHours += shifts[i].time.toDouble()
         }
-        return totalHours
+        return oneRound(totalHours)
     }
 
     fun calcTotalMileage(shifts: List<Shift>): Double {
@@ -136,7 +119,7 @@ object ShiftHelper {
         shifts.indices.forEach { i ->
             totalMileage += shifts[i].mileage
         }
-        return totalMileage
+        return oneRound(totalMileage)
     }
 
     fun calcTotalFuelCost(shifts: List<Shift>): Double {
@@ -144,7 +127,7 @@ object ShiftHelper {
         shifts.indices.forEach { i ->
             totalFuel += shifts[i].fuelCost
         }
-        return totalFuel
+        return centsRound(totalFuel)
     }
 
     fun calcTotalWash(shifts: List<Shift>): Double {
@@ -152,7 +135,7 @@ object ShiftHelper {
         shifts.indices.forEach { i ->
             totalWash += shifts[i].wash
         }
-        return totalWash
+        return centsRound(totalWash)
     }
 
     fun calcTotalEarnings(shifts: List<Shift>): Double {
@@ -160,7 +143,7 @@ object ShiftHelper {
         shifts.indices.forEach { i ->
             totalEarnings += shifts[i].earnings
         }
-        return totalEarnings
+        return centsRound(totalEarnings)
     }
 
     fun calcTotalProfit(shifts: List<Shift>): Double {
@@ -168,7 +151,7 @@ object ShiftHelper {
         shifts.indices.forEach { i ->
             totalProfit += shifts[i].profit
         }
-        return totalProfit
+        return centsRound(totalProfit)
     }
 
     fun centsRound(n: Double): Double {

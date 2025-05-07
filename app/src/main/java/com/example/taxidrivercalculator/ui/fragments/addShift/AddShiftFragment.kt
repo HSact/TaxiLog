@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.FragmentAddShiftBinding
-import com.example.taxidrivercalculator.data.utils.ShiftHelper
+import com.example.taxidrivercalculator.data.utils.ShiftStatsUtil
 import com.example.taxidrivercalculator.ui.activities.MainActivity
 import com.example.taxidrivercalculator.ui.fragments.DatePickerFragment
 import com.example.taxidrivercalculator.ui.fragments.TimePickerFragment
@@ -199,7 +199,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
             getString(
                 R.string.you_earn_in_hours,
                 viewModel.shiftData.value?.profit.toString(),
-                ShiftHelper.msToHours(viewModel.shiftData.value?.totalTime ?: 0).toString()
+                ShiftStatsUtil.msToHours(viewModel.shiftData.value?.totalTime ?: 0).toString()
             )
         )
     }
