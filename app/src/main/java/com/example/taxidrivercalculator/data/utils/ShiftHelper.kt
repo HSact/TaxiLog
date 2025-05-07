@@ -1,7 +1,9 @@
-package com.example.taxidrivercalculator.helpers
+package com.example.taxidrivercalculator.data.utils
 
 import android.annotation.SuppressLint
 import com.example.taxidrivercalculator.data.model.Shift
+import com.example.taxidrivercalculator.data.utils.DateUtils.getCurrentWeek
+import com.example.taxidrivercalculator.data.utils.DateUtils.getDayToday
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -9,6 +11,7 @@ import java.time.format.DateTimeParseException
 import java.time.temporal.WeekFields
 import java.util.Date
 import java.util.Locale
+import kotlin.math.roundToInt
 
 object ShiftHelper {
 
@@ -30,6 +33,7 @@ object ShiftHelper {
             val thisDate = try {
                 LocalDate.parse(shift.date, dateFormatter)
             } catch (e: DateTimeParseException) {
+                throw IllegalArgumentException("Invalid date format in shift: ${shift.date}", e)
                 continue
             }
             val shiftWeek = thisDate.get(WeekFields.of(Locale.getDefault()).weekOfYear())
@@ -69,67 +73,6 @@ object ShiftHelper {
             (startDate == null || shiftDate >= startDate) &&
                     (endDate == null || shiftDate <= endDate)
         }
-    }
-
-    private fun getDayToday(): String {
-        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-        return LocalDate.now().format(dateFormatter)
-    }
-
-    fun getCurrentDay(dateReceived: String = ""): Int {
-        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-
-        val date = if (dateReceived.isNotEmpty()) {
-            try {
-                LocalDate.parse(dateReceived, formatter)
-            } catch (e: DateTimeParseException) {
-                return -1
-            }
-        } else {
-            LocalDate.now()
-        }
-        return date.dayOfMonth - 1
-    }
-
-    private fun getCurrentWeek(dateReceived: String = ""): Int {
-        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-
-        val date = if (dateReceived.isNotEmpty()) {
-            try {
-                LocalDate.parse(dateReceived, formatter)
-            } catch (e: DateTimeParseException) {
-                return -1
-            }
-        } else {
-            LocalDate.now()
-        }
-        return date.get(WeekFields.of(Locale.getDefault()).weekOfYear())
-    }
-
-    fun getCurrentMonth(dateReceived: String = ""): String {
-        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-
-        val thisDate = try {
-            dateReceived.takeIf { it.isNotEmpty() }?.let {
-                LocalDate.parse(it, dateFormatter)
-            } ?: LocalDate.now()
-        } catch (e: DateTimeParseException) {
-            return "0"
-        }
-        return thisDate.monthValue.toString().padStart(2, '0')
-    }
-
-    private fun getCurrentYear(dateReceived: String = ""): String {
-        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-
-        val thisDate = try {
-            dateReceived.takeIf { it.isNotEmpty() }?.let {
-                LocalDate.parse(it, dateFormatter)
-            } ?: LocalDate.now()
-        } catch (e: DateTimeParseException) {
-            return "0"
-        }
-        return thisDate.year.toString()
     }
 
     fun calcAverageEarningsPerHour(shift: Shift): Double {
@@ -229,11 +172,11 @@ object ShiftHelper {
     }
 
     fun centsRound(n: Double): Double {
-        return Math.round(n * 100) / 100.toDouble()
+        return (n * 100).roundToInt() / 100.toDouble()
     }
 
     private fun oneRound(n: Double): Double {
-        return Math.round(n * 10) / 10.toDouble()
+        return (n * 10).roundToInt() / 10.toDouble()
     }
 
     @SuppressLint("SimpleDateFormat")

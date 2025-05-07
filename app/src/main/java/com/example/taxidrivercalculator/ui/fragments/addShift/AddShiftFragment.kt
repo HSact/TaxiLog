@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.databinding.FragmentAddShiftBinding
-import com.example.taxidrivercalculator.helpers.ShiftHelper
+import com.example.taxidrivercalculator.data.utils.ShiftHelper
 import com.example.taxidrivercalculator.ui.activities.MainActivity
 import com.example.taxidrivercalculator.ui.fragments.DatePickerFragment
 import com.example.taxidrivercalculator.ui.fragments.TimePickerFragment

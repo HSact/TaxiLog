@@ -8,9 +8,9 @@ import com.example.taxidrivercalculator.data.db.DBHelper
 import com.example.taxidrivercalculator.data.model.Shift
 import com.example.taxidrivercalculator.data.repository.ShiftRepository
 import com.example.taxidrivercalculator.helpers.SettingsHelper
-import com.example.taxidrivercalculator.helpers.ShiftHelper
-import com.example.taxidrivercalculator.helpers.ShiftHelper.convertLongToTime
-import com.example.taxidrivercalculator.helpers.ShiftHelper.convertTimeToLong
+import com.example.taxidrivercalculator.data.utils.ShiftHelper
+import com.example.taxidrivercalculator.data.utils.ShiftHelper.convertLongToTime
+import com.example.taxidrivercalculator.data.utils.ShiftHelper.convertTimeToLong
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 

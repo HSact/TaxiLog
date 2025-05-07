@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.data.model.Shift
+import com.example.taxidrivercalculator.data.utils.ShiftHelper
 
 
 class CustomRecyclerAdapter(private val shifts: List<Shift>) :

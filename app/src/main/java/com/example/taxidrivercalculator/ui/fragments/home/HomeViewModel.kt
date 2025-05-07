@@ -5,8 +5,9 @@ import androidx.lifecycle.ViewModel
 import com.example.taxidrivercalculator.R
 import com.example.taxidrivercalculator.data.db.DBHelper
 import com.example.taxidrivercalculator.data.repository.ShiftRepository
+import com.example.taxidrivercalculator.data.utils.DateUtils
 import com.example.taxidrivercalculator.helpers.SettingsHelper
-import com.example.taxidrivercalculator.helpers.ShiftHelper
+import com.example.taxidrivercalculator.data.utils.ShiftHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
@@ -33,8 +34,8 @@ class HomeViewModel : ViewModel() {
         _goalData.value = settings.goalPerMonth?.toDoubleOrNull() ?: 0.0
         val tempData = mutableMapOf<Int, Double>()
         for (shift in shifts) {
-            if (ShiftHelper.getCurrentMonth(shift.date) == ShiftHelper.getCurrentMonth()) {
-                val day = ShiftHelper.getCurrentDay(shift.date)
+            if (DateUtils.getCurrentMonth(shift.date) == DateUtils.getCurrentMonth()) {
+                val day = DateUtils.getCurrentDay(shift.date)
                 tempData[day] = (tempData[day] ?: 0.0) + shift.profit
             }
         }
