@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.taxidrivercalculator.ui.fragments.home.HomeFragment"
+        android:name="com.hsact.taxilog.ui.fragments.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home">
 
@@ -21,18 +21,18 @@
 
     <fragment
         android:id="@+id/navigation_goals"
-        android:name="com.example.taxidrivercalculator.ui.fragments.goals.GoalsFragment"
+        android:name="com.hsact.taxilog.ui.fragments.goals.GoalsFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_goals" />
 
     <fragment
         android:id="@+id/navigation_stats"
-        android:name="com.example.taxidrivercalculator.ui.fragments.stats.StatsFragment"
+        android:name="com.hsact.taxilog.ui.fragments.stats.StatsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_stats" />
     <fragment
         android:id="@+id/addShift"
-        android:name="com.example.taxidrivercalculator.ui.fragments.addShift.AddShiftFragment"
+        android:name="com.hsact.taxilog.ui.fragments.addShift.AddShiftFragment"
         android:label="@string/title_new_shift"
         tools:layout="@layout/fragment_add_shift">
         <action
@@ -44,12 +44,12 @@
         app:destination="@id/navigation_home" />
     <activity
         android:id="@+id/settingsActivity"
-        android:name="com.example.taxidrivercalculator.ui.activities.SettingsActivity"
+        android:name="com.hsact.taxilog.ui.activities.SettingsActivity"
         android:label="settings_activity"
         tools:layout="@layout/settings_activity" />
     <activity
         android:id="@+id/logActivity"
-        android:name="com.example.taxidrivercalculator.ui.activities.LogActivity"
+        android:name="com.hsact.taxilog.ui.activities.LogActivity"
         android:label="activity_log"
         app:action="log_to_addshift"
         tools:layout="@layout/activity_log"
