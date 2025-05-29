@@ -101,14 +101,13 @@ class GoalsFragment : Fragment() {
         if (goalMonthString.isNullOrEmpty())
         {
             textAssignedGoal.text = getString(R.string.you_haven_t_set_goal_yet)
-            //tableProgress.isGone = true
+            buttonDatePicker.isGone = true
             card1.isGone = true
             card2.isGone = true
             return
         }
-        //textAssignedGoal.text = getString(R.string.your_goal_per_month, goalMonthString)
         textAssignedGoal.isGone = true
-        //tableProgress.isVisible = true
+        buttonDatePicker.isVisible = true
         card1.isVisible = true
         card2.isVisible = true
     }
