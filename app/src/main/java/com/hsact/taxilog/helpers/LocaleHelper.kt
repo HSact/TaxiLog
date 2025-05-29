@@ -22,7 +22,7 @@ object LocaleHelper {
 
     fun getSavedLanguage(context: Context): String {
         val settings = SettingsHelper.getInstance(context)
-        return settings.language ?: "en"
+        return settings.language ?: Locale.getDefault().language
     }
 
     private fun saveLanguage(context: Context, lang: String) {

@@ -82,10 +82,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun attachBaseContext(newBase: Context) {
+        var newLocale = LocaleHelper.getSavedLanguage(newBase)
+        if (newLocale == "") {
+            newLocale = LocaleHelper.getDefault()
+        }
         super.attachBaseContext(
             LocaleHelper.updateLocale(
                 newBase,
-                LocaleHelper.getSavedLanguage(newBase)
+                newLocale
             )
         )
     }
