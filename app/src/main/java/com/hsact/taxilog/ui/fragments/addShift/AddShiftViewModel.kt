@@ -62,9 +62,12 @@ class AddShiftViewModel : ViewModel() {
 
     fun guessFuelCost(context: Context) {
         val settings = SettingsHelper.getInstance(context)
+        if (!settings.seted_up) return
+        if (_shiftData.value?.mileage == 0.0) return
+        if (settings.fuelPrice.isNullOrEmpty() || settings.consumption.isNullOrEmpty()) return
         var currentShift = _shiftData.value ?: return
-        val fuelPrice: Double = (settings.fuelPrice ?: 0.0.toString()).toDouble()
-        val consumption = (settings.consumption ?: 0.0.toString()).toDouble()
+        val fuelPrice: Double = (settings.fuelPrice ?: return).toDouble()
+        val consumption = (settings.consumption ?: return).toDouble()
         if (!settings.seted_up || fuelPrice == 0.0 || consumption == 0.0) {
             return
         }

@@ -41,7 +41,10 @@ class CardGoal {
         val goalCurrent = shiftState["goalCurrent"]?.toFloatOrNull() ?: 0f
         val rawProgress = (goalCurrent / goal).coerceIn(0f, 1f)
         var progress by remember { mutableFloatStateOf(0f) }
-        val formattedGoal = NumberFormat.getNumberInstance(Locale.getDefault()).format(goal)
+        var formattedGoal = NumberFormat.getNumberInstance(Locale.getDefault()).format(goal)
+        if (goal == 1f){
+            formattedGoal = "N/A"
+        }
         LaunchedEffect(rawProgress) {
             progress = rawProgress
         }
@@ -69,7 +72,7 @@ class CardGoal {
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                         .padding(top = 20.dp),
-                        text = "$goalCurrent $stringOf $goal"
+                        text = "$goalCurrent $stringOf $formattedGoal"
                     )
                     LinearProgressIndicator(
                         modifier = Modifier

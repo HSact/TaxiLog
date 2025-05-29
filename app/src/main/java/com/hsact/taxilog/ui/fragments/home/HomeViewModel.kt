@@ -66,12 +66,7 @@ class HomeViewModel : ViewModel() {
         val settings = SettingsHelper.getInstance(context)
         var goalMonthString = settings.goalPerMonth ?: ""
 
-        val goalCurrent =
-            if (goalMonthString.isEmpty()) {
-                context.getString(R.string.n_a)
-            } else {
-                ShiftStatsUtil.calculateMonthProgress(date, shifts).toString()
-            }
+        val goalCurrent = ShiftStatsUtil.calculateMonthProgress(date, shifts).toString()
 
         _shiftData.value = mapOf(
             "date" to textDate,
