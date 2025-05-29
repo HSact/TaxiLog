@@ -20,9 +20,6 @@ import androidx.appcompat.widget.Toolbar
 
 class SettingsActivity : AppCompatActivity() {
 
-    /*private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!*/
-    //val but = findViewById<Button>(R.id.buttonApply)
     private lateinit var binding: SettingsActivityBinding
 
     private lateinit var switchRent: MaterialSwitch
@@ -57,9 +54,6 @@ class SettingsActivity : AppCompatActivity() {
 
         binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        /*supportActionBar?.title = getString(R.string.title_settings)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)*/
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -147,7 +141,6 @@ class SettingsActivity : AppCompatActivity() {
     }
     private fun applySettings()
     {
-        //setLocate(injectLangSpinner())
         LocaleHelper.setLocale(this, injectLangSpinner())
         saveSettings()
         switchTheme()
@@ -277,7 +270,6 @@ class SettingsActivity : AppCompatActivity() {
             binding.switchTaxes -> {table = binding.TableTaxes}
             else -> return
         }
-        //table.isVisible = switch.isChecked
         animateHeightChange(table)
     }
 
@@ -328,9 +320,4 @@ class SettingsActivity : AppCompatActivity() {
         onBackPressedDispatcher.onBackPressed()
         return super.onSupportNavigateUp()
     }
-
-    /*override fun onPause() {
-        super.onPause()
-        saveSettings()
-    }*/
 }

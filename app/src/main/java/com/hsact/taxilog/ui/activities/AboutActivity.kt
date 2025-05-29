@@ -17,7 +17,6 @@ import androidx.appcompat.widget.Toolbar
 import com.hsact.taxilog.helpers.LocaleHelper
 import com.hsact.taxilog.R
 
-
 class AboutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,24 +53,8 @@ class AboutActivity : AppCompatActivity() {
         )
     }
 
-    /*override fun onContextItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.closeButton ->{
-
-                val text = findViewById<TextView>(R.id.textAbout)
-                text.text = "xyu"
-
-
-                val homeIntent = Intent (this,MainActivity::class.java)
-                startActivity(homeIntent)
-            }
-        }
-        return super.onContextItemSelected(item)
-    }*/
-
-
     override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
+        onBackPressedDispatcher.onBackPressed()
         return super.onSupportNavigateUp()
     }
 }
