@@ -48,7 +48,7 @@ android {
     buildFeatures {
         viewBinding true
     }
-    namespace 'com.example.taxidrivercalculator'
+    namespace 'com.hsact.taxilog'
 }
 
 dependencies {
