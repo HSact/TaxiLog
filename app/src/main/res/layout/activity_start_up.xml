@@ -32,16 +32,6 @@
                 android:layout_weight="2"
                 android:contentDescription="Logo"
                 app:srcCompat="@mipmap/ic_launcher" />
-
-            <TextView
-                android:id="@+id/textLogo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:fontFamily="sans-serif-black"
-                android:text="@string/logo_text"
-                android:textSize="34sp" />
         </LinearLayout>
 
     </LinearLayout>

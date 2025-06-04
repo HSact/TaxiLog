@@ -121,11 +121,9 @@
     <string name="progress">Progress</string>
     <string name="goal">Goal</string>
 
-
     <string-array name="languages">
         <item>English</item>
-        <item>Russian</item>
+        <item>Русский</item>
     </string-array>
-
 
 </resources>

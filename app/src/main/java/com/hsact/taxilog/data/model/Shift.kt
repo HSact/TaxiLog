@@ -1,5 +1,5 @@
 package com.hsact.taxilog.data.model
-
+@Deprecated("Use ShiftV2 instead")
 data class Shift(
     var id: Int,
     var date: String,
