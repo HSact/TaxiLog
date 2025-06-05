@@ -4,7 +4,6 @@ import com.hsact.taxilog.data.db.DBHelper
 import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.data.utils.DeprecatedDateFormatter
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class ShiftRepository (private val db: DBHelper) {
     fun getAllShifts(): MutableList<Shift> {
@@ -37,7 +36,7 @@ class ShiftRepository (private val db: DBHelper) {
         date1: String? = null,
         date2: String? = null,
     ): List<Shift> {
-        val formatter = DeprecatedDateFormatter.formatter
+        val formatter = DeprecatedDateFormatter
         val startDate = date1?.let { LocalDate.parse(it, formatter) }
         val endDate = date2?.let { LocalDate.parse(it, formatter) }
         val shifts = getAllShifts()
