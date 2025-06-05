@@ -35,11 +35,13 @@ data class ShiftTime(
                 errors += TimeValidationError.BreakStartAfterEnd
             }
             if (breakStart.isBefore(start) || breakEnd.isAfter(end)
-                || breakStart.isAfter(end) || breakEnd.isBefore(start)) {
+                || breakStart.isAfter(end) || breakEnd.isBefore(start)
+            ) {
                 errors += TimeValidationError.BreakOutsideShift
             }
         }
         return errors
     }
+
     fun isValid(): Boolean = validate().isEmpty()
 }

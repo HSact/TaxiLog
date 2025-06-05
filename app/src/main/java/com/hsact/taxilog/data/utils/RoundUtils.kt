@@ -12,6 +12,7 @@ fun Double.toCentsLong(): Long {
         .setScale(0, RoundingMode.HALF_UP)
         .longValueExact()
 }
+
 fun Double.round(decimals: Int = 2): Double {
     return BigDecimal(this)
         .setScale(decimals, RoundingMode.HALF_UP)

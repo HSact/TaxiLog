@@ -14,18 +14,18 @@ data class ShiftV2(
     val time: ShiftTime,
     val money: ShiftMoney,
     val mileage: Long,
-    val note: String? = null
-){
+    val note: String? = null,
+) {
     fun toShift(): Shift {
-        return  Shift(
+        return Shift(
             id = id,
             date = time.start.toLocalDate().format(DeprecatedDateFormatter),
             time = time.totalDuration.toHours().toString(),
             earnings = money.earnings.centsToDollars(),
             wash = money.wash.centsToDollars(),
             fuelCost = money.fuelCost.centsToDollars(),
-            mileage = (mileage.toDouble()/1000).round(),
+            mileage = (mileage.toDouble() / 1000).round(),
             profit = money.profit.centsToDollars()
-            )
+        )
     }
 }

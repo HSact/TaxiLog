@@ -1,4 +1,5 @@
 package com.hsact.taxilog.data.model
+
 @Deprecated("Use ShiftV2 instead")
 data class Shift(
     var id: Int,
@@ -8,9 +9,8 @@ data class Shift(
     var wash: Double,
     var fuelCost: Double,
     var mileage: Double,
-    var profit: Double
-)
-{
+    var profit: Double,
+) {
     fun isValid(): Boolean {
         return earnings >= 0.0 &&
                 wash >= 0.0 &&
@@ -21,13 +21,11 @@ data class Shift(
                 isValidTime(time)
     }
 
-    private fun isValidDate(date: String): Boolean
-    {
+    private fun isValidDate(date: String): Boolean {
         return date.matches(Regex("\\d{2}\\.\\d{2}\\.\\d{4}"))
     }
 
-    private fun isValidTime(time: String): Boolean
-    {
-        return (time.toDouble()>0.0)
+    private fun isValidTime(time: String): Boolean {
+        return (time.toDouble() > 0.0)
     }
 }

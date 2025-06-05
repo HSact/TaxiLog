@@ -5,5 +5,5 @@ data class CarSnapshot(
     val startMileage: Long,
     val endMileage: Long,
     val fuelConsumption: Long,
-    val serviceCost: Long = 0
+    val serviceCost: Long = 0,
 )
