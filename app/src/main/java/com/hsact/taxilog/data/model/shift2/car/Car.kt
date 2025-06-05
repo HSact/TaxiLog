@@ -1,4 +1,4 @@
-package com.hsact.taxilog.data.model.shift2
+package com.hsact.taxilog.data.model.shift2.car
 
 data class Car(
     val id: Int,
