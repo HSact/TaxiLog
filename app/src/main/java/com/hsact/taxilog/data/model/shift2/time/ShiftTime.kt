@@ -1,42 +1,31 @@
 package com.hsact.taxilog.data.model.shift2.time
 
-import java.time.LocalDateTime
 import java.time.Duration
 
 data class ShiftTime(
-    val start: LocalDateTime,
-    val end: LocalDateTime,
-    val breakStart: LocalDateTime? = null,
-    val breakEnd: LocalDateTime? = null,
+    val period: DateTimePeriod,
+    val rest: DateTimePeriod? = null,
 ) {
     val totalDuration: Duration
         get() {
-            val breakDuration = if (breakStart != null && breakEnd != null) {
-                Duration.between(breakStart, breakEnd)
+            val breakDuration = if (rest != null) {
+                Duration.between(rest.start, rest.end)
             } else {
                 Duration.ZERO
             }
-            return Duration.between(start, end).minus(breakDuration)
+            return Duration.between(period.start, period.end).minus(breakDuration)
         }
 
     fun validate(): List<TimeValidationError> {
         val errors = mutableListOf<TimeValidationError>()
-        if (start.isAfter(end)) {
+        if (period.start.isAfter(period.end)) {
             errors += TimeValidationError.StartAfterEnd
         }
-        if (breakStart != null && breakEnd == null) {
-            errors += TimeValidationError.BreakEndMissing
-        }
-        if (breakStart == null && breakEnd != null) {
-            errors += TimeValidationError.BreakStartMissing
-        }
-        if (breakStart != null && breakEnd != null) {
-            if (breakStart.isAfter(breakEnd)) {
+        if (rest != null) {
+            if (!rest.isValid()) {
                 errors += TimeValidationError.BreakStartAfterEnd
             }
-            if (breakStart.isBefore(start) || breakEnd.isAfter(end)
-                || breakStart.isAfter(end) || breakEnd.isBefore(start)
-            ) {
+            if (rest.start.isBefore(period.start) || rest.end.isAfter(period.end)) {
                 errors += TimeValidationError.BreakOutsideShift
             }
         }

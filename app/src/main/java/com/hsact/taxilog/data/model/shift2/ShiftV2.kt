@@ -19,7 +19,7 @@ data class ShiftV2(
     fun toShift(): Shift {
         return Shift(
             id = id,
-            date = time.start.toLocalDate().format(DeprecatedDateFormatter),
+            date = time.period.start.toLocalDate().format(DeprecatedDateFormatter),
             time = time.totalDuration.toHours().toString(),
             earnings = money.earnings.centsToDollars(),
             wash = money.wash.centsToDollars(),
