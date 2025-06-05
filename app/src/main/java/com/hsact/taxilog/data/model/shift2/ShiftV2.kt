@@ -16,6 +16,9 @@ data class ShiftV2(
     val mileage: Long,
     val note: String? = null,
 ) {
+    init {
+        require(mileage >= 0) { "Mileage must be non-negative" }
+    }
     fun toShift(): Shift {
         return Shift(
             id = id,

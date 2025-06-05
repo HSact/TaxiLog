@@ -8,12 +8,8 @@ data class ShiftTime(
 ) {
     val totalDuration: Duration
         get() {
-            val breakDuration = if (rest != null) {
-                Duration.between(rest.start, rest.end)
-            } else {
-                Duration.ZERO
-            }
-            return Duration.between(period.start, period.end).minus(breakDuration)
+            return if (rest != null) period.duration.minus(rest.duration)
+            else period.duration
         }
 
     fun validate(): List<TimeValidationError> {
