@@ -6,19 +6,12 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.hsact.taxilog.data.db.converters.Converters
-import com.hsact.taxilog.data.db.entities.CarSnapshotEntity
-import com.hsact.taxilog.data.db.entities.DateTimePeriodEntity
 import com.hsact.taxilog.data.db.entities.ShiftEntity
-import com.hsact.taxilog.data.db.entities.ShiftMoneyEntity
-import com.hsact.taxilog.data.db.entities.ShiftTimeEntity
 
 @Database(
     entities = [
         ShiftEntity::class,
-        CarSnapshotEntity::class,
-        ShiftTimeEntity::class,
-        ShiftMoneyEntity::class,
-        DateTimePeriodEntity::class],
+    ],
     version = 1,
     exportSchema = false
 )
@@ -28,7 +21,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun shiftDao(): ShiftDao
 
     companion object {
-        @Volatile private var INSTANCE: AppDatabase? = null
+        @Volatile
+        private var INSTANCE: AppDatabase? = null
 
         fun getInstance(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
