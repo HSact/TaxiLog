@@ -12,6 +12,5 @@ data class ShiftEntity(
     @Embedded(prefix = "period_") val period: DateTimePeriodEntity,
     @Embedded(prefix = "rest_") val rest: DateTimePeriodEntity? = null,
     @Embedded val money: ShiftMoneyEntity,
-    val mileage: Long,
     val note: String?
 )

@@ -13,12 +13,8 @@ data class ShiftV2(
     val carSnapshot: CarSnapshot,
     val time: ShiftTime,
     val money: ShiftMoney,
-    val mileage: Long,
     val note: String? = null,
 ) {
-    init {
-        require(mileage >= 0) { "Mileage must be non-negative" }
-    }
     fun toShift(): Shift {
         return Shift(
             id = id,
@@ -27,7 +23,7 @@ data class ShiftV2(
             earnings = money.earnings.centsToDollars(),
             wash = money.wash.centsToDollars(),
             fuelCost = money.fuelCost.centsToDollars(),
-            mileage = (mileage.toDouble() / 1000).round(),
+            mileage = (carSnapshot.mileage.toDouble() / 1000).round(),
             profit = money.profit.centsToDollars()
         )
     }
