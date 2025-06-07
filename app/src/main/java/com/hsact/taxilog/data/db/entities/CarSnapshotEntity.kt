@@ -1,9 +1,9 @@
-package com.hsact.taxilog.data.model.shift2.car
+package com.hsact.taxilog.data.db.entities
 
-data class CarSnapshot(
+data class CarSnapshotEntity(
     val name: String,
     val startMileage: Long,
     val endMileage: Long,
     val fuelConsumption: Long,
-    val serviceCost: Long = 0,
+    val serviceCost: Long
 )

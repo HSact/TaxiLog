@@ -1,4 +1,4 @@
-package com.hsact.taxilog.data.model.shift2.time
+package com.hsact.taxilog.domain.shift2.time
 
 import java.time.Duration
 
