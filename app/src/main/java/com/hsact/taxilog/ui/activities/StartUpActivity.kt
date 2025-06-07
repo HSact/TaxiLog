@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import com.hsact.taxilog.databinding.ActivityStartUpBinding
 import com.hsact.taxilog.helpers.SettingsHelper
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.system.exitProcess
 
 class StartUpActivity : AppCompatActivity() {
