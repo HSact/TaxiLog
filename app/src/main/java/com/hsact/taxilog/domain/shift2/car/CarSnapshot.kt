@@ -1,7 +1,7 @@
 package com.hsact.taxilog.domain.shift2.car
 
 data class CarSnapshot(
-    val name: String,
+    val name: String = "",
     val mileage: Long, //in meters in this shift
     val fuelConsumption: Long, //in milliliters per 100km
     val rentCost: Long = 0, //in cents per shift

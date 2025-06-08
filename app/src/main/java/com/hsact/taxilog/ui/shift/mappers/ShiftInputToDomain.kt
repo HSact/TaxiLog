@@ -12,11 +12,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToLong
 
-fun ShiftInputModel.toDomain(
-    carId: Int,
-    carSnapshot: CarSnapshot,
-    taxRate: Int
-): ShiftV2 {
+fun ShiftInputModel.toDomain(): ShiftV2 {
     val formatterDate = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     val formatterTime = DateTimeFormatter.ofPattern("H:mm")
 
@@ -47,9 +43,13 @@ fun ShiftInputModel.toDomain(
 
     return ShiftV2(
         id = 0,
-        carId = carId,
-        carSnapshot = carSnapshot.copy(
-            mileage = ((mileage.toDoubleOrNull() ?: (0.0 * 1000))).toLong()
+        carId = carId.toInt(),
+        carSnapshot = CarSnapshot(
+            name = carName,
+            mileage = ((mileage.toDoubleOrNull() ?: 0.0) * 1000).toLong(),
+            fuelConsumption = ((consumption.toDoubleOrNull() ?: 0.0) * 1000).toLong(),
+            rentCost = ((rentCost.toDoubleOrNull() ?: 0.0) * 100).toLong(),
+            serviceCost = ((serviceCost.toDoubleOrNull() ?: 0.0) * 100).toLong(),
         ),
         time = ShiftTime(
             period = DateTimePeriod(startDateTime, endDateTime),
@@ -60,7 +60,7 @@ fun ShiftInputModel.toDomain(
             tips = rubToCents(tips),
             wash = rubToCents(wash),
             fuelCost = rubToCents(fuelCost),
-            taxRate = taxRate
+            taxRate = ((taxRate.toDoubleOrNull() ?: 0.0) * 100).toInt()
         ),
         note = note
     )

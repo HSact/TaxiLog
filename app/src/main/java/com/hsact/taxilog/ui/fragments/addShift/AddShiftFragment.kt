@@ -26,7 +26,6 @@ import com.google.android.material.textfield.TextInputLayout
 
 class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
-    //private val viewModel = AddShiftViewModel()
     private val viewModel: AddShiftViewModel by viewModels()
 
     private lateinit var editDate: EditText
