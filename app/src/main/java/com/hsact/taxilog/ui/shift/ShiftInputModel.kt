@@ -1,15 +1,15 @@
 package com.hsact.taxilog.ui.shift
 
 data class ShiftInputModel(
-    val date: String = "",
-    val timeStart: String = "",
-    val timeEnd: String = "",
-    val breakStart: String = "",
-    val breakEnd: String = "",
-    val earnings: String = "",
-    val tips: String = "",
-    val wash: String = "",
-    val fuelCost: String = "",
-    val mileage: String = "",
-    val note: String? = null
+    var date: String = "",
+    var timeStart: String = "",
+    var timeEnd: String = "",
+    var breakStart: String = "",
+    var breakEnd: String = "",
+    var earnings: String = "",
+    var tips: String = "",
+    var wash: String = "",
+    var fuelCost: String = "",
+    var mileage: String = "",
+    var note: String? = null
 )

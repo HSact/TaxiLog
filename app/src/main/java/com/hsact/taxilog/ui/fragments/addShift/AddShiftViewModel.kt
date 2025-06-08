@@ -11,10 +11,13 @@ import com.hsact.taxilog.helpers.SettingsHelper
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertLongToTime
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertTimeToLong
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
-class AddShiftViewModel : ViewModel() {
+@HiltViewModel
+class AddShiftViewModel @Inject constructor() : ViewModel() {
     private val _shiftData = MutableLiveData<UiState>()
     val shiftData: LiveData<UiState> get() = _shiftData
 

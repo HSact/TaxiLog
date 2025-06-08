@@ -1,6 +1,9 @@
 package com.hsact.taxilog.ui.fragments.addShift
 
+import com.hsact.taxilog.ui.shift.ShiftInputModel
+
 data class UiState(
+    val shiftInput: ShiftInputModel = ShiftInputModel(),
     var date: String = "",
     var timeBegin: String = "",
     var timeEnd: String = "",

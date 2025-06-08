@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentAddShiftBinding
@@ -25,7 +26,8 @@ import com.google.android.material.textfield.TextInputLayout
 
 class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
-    private val viewModel = AddShiftViewModel()
+    //private val viewModel = AddShiftViewModel()
+    private val viewModel: AddShiftViewModel by viewModels()
 
     private lateinit var editDate: EditText
     private lateinit var editStart: EditText
