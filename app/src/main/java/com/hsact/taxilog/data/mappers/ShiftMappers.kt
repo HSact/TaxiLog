@@ -3,8 +3,8 @@ package com.hsact.taxilog.data.mappers
 import com.hsact.taxilog.data.db.entities.CarSnapshotEntity
 import com.hsact.taxilog.data.db.entities.DateTimePeriodEntity
 import com.hsact.taxilog.data.db.entities.ShiftEntity
-import com.hsact.taxilog.data.db.entities.ShiftMoneyEntity
-import com.hsact.taxilog.domain.shift2.ShiftMoney
+import com.hsact.taxilog.data.db.entities.ShiftFinanceInputEntity
+import com.hsact.taxilog.domain.shift2.ShiftFinanceInput
 import com.hsact.taxilog.domain.shift2.ShiftV2
 import com.hsact.taxilog.domain.shift2.car.CarSnapshot
 import com.hsact.taxilog.domain.shift2.time.DateTimePeriod
@@ -40,8 +40,8 @@ fun DateTimePeriodEntity.toDomain(): DateTimePeriod {
     )
 }
 
-fun ShiftMoneyEntity.toDomain(): ShiftMoney {
-    return ShiftMoney(
+fun ShiftFinanceInputEntity.toDomain(): ShiftFinanceInput {
+    return ShiftFinanceInput(
         earnings = earnings,
         wash = wash,
         fuelCost = fuelCost
@@ -62,6 +62,7 @@ fun CarSnapshot.toEntity(): CarSnapshotEntity = CarSnapshotEntity(
     name = name,
     mileage = mileage,
     fuelConsumption = fuelConsumption,
+    rentCost = rentCost,
     serviceCost = serviceCost
 )
 
@@ -70,7 +71,7 @@ fun DateTimePeriod.toEntity(): DateTimePeriodEntity = DateTimePeriodEntity(
     end = end
 )
 
-fun ShiftMoney.toEntity(): ShiftMoneyEntity = ShiftMoneyEntity(
+fun ShiftFinanceInput.toEntity(): ShiftFinanceInputEntity = ShiftFinanceInputEntity(
     earnings = earnings,
     wash = wash,
     fuelCost = fuelCost

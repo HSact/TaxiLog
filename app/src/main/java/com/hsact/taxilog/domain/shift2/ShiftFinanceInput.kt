@@ -2,7 +2,7 @@ package com.hsact.taxilog.domain.shift2
 
 import kotlin.math.roundToLong
 
-data class ShiftMoney(
+data class ShiftFinanceInput(
     val earnings: Long, //in cents
     val tips: Long = 0, //in cents
     val taxRate: Int = 0, //0.00-100.00% * 100

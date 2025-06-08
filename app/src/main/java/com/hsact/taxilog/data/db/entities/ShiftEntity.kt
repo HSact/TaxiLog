@@ -11,6 +11,6 @@ data class ShiftEntity(
     @Embedded val carSnapshot: CarSnapshotEntity,
     @Embedded(prefix = "period_") val period: DateTimePeriodEntity,
     @Embedded(prefix = "rest_") val rest: DateTimePeriodEntity? = null,
-    @Embedded val money: ShiftMoneyEntity,
+    @Embedded val money: ShiftFinanceInputEntity,
     val note: String?
 )

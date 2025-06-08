@@ -1,6 +1,6 @@
 package com.hsact.taxilog.data.db.entities
 
-data class ShiftMoneyEntity(
+data class ShiftFinanceInputEntity(
     val earnings: Long, //in cents
     val tips: Long = 0, //in cents
     val taxRate: Int = 0, //0.00-100.00% * 100

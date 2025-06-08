@@ -12,9 +12,15 @@ data class ShiftV2(
     val carId: Int,
     val carSnapshot: CarSnapshot,
     val time: ShiftTime,
-    val money: ShiftMoney,
+    val money: ShiftFinanceInput,
     val note: String? = null,
 ) {
+    val totalCarExpenses: Long
+        get() = carSnapshot.rentCost + carSnapshot.serviceCost
+
+    val profit: Long
+        get() = money.earnings + money.tips - money.tax - money.wash - money.fuelCost - totalCarExpenses
+
     fun toShift(): Shift {
         return Shift(
             id = id,
