@@ -19,7 +19,7 @@ fun ShiftEntity.toDomain(): ShiftV2 {
             period = period.toDomain(),
             rest = rest?.toDomain()
         ),
-        money = money.toDomain(),
+        financeInput = financeInput.toDomain(),
         note = note
     )
 }
@@ -54,7 +54,7 @@ fun ShiftV2.toEntity(): ShiftEntity = ShiftEntity(
     carSnapshot = carSnapshot.toEntity(),
     period = time.period.toEntity(),
     rest = time.rest?.toEntity(),
-    money = money.toEntity(),
+    financeInput = financeInput.toEntity(),
     note = note
 )
 

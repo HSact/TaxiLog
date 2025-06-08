@@ -12,25 +12,25 @@ data class ShiftV2(
     val carId: Int,
     val carSnapshot: CarSnapshot,
     val time: ShiftTime,
-    val money: ShiftFinanceInput,
+    val financeInput: ShiftFinanceInput,
     val note: String? = null,
 ) {
     val totalCarExpenses: Long
         get() = carSnapshot.rentCost + carSnapshot.serviceCost
 
     val profit: Long
-        get() = money.earnings + money.tips - money.tax - money.wash - money.fuelCost - totalCarExpenses
+        get() = financeInput.earnings + financeInput.tips - financeInput.tax - financeInput.wash - financeInput.fuelCost - totalCarExpenses
 
     fun toShift(): Shift {
         return Shift(
             id = id,
             date = time.period.start.toLocalDate().format(DeprecatedDateFormatter),
             time = time.totalDuration.toHours().toString(),
-            earnings = money.earnings.centsToDollars(),
-            wash = money.wash.centsToDollars(),
-            fuelCost = money.fuelCost.centsToDollars(),
+            earnings = financeInput.earnings.centsToDollars(),
+            wash = financeInput.wash.centsToDollars(),
+            fuelCost = financeInput.fuelCost.centsToDollars(),
             mileage = (carSnapshot.mileage.toDouble() / 1000).round(),
-            profit = money.profit.centsToDollars()
+            profit = financeInput.profit.centsToDollars()
         )
     }
 }
