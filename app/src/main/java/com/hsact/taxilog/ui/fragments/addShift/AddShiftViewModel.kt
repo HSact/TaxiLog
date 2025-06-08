@@ -14,26 +14,9 @@ import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertTimeToLong
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-data class AddShiftState
-    (
-    var date: String = "",
-    var timeBegin: String = "",
-    var timeEnd: String = "",
-    var breakBegin: String = "",
-    var breakEnd: String = "",
-    var onlineTime: Long = 0,
-    var breakTime: Long = 0,
-    var totalTime: Long = 0,
-    var earnings: Double = 0.0,
-    var wash: Double = 0.0,
-    var fuelCost: Double = 0.0,
-    var mileage: Double = 0.0,
-    var profit: Double = 0.0,
-)
-
 class AddShiftViewModel : ViewModel() {
-    private val _shiftData = MutableLiveData<AddShiftState>()
-    val shiftData: LiveData<AddShiftState> get() = _shiftData
+    private val _shiftData = MutableLiveData<UiState>()
+    val shiftData: LiveData<UiState> get() = _shiftData
 
     init {
         loadGuess()
@@ -50,7 +33,7 @@ class AddShiftViewModel : ViewModel() {
         val beginTime = convertLongToTime(convertTimeToLong(endTime) - hoursToMs(10))
         val beginDate = endDate.minusDays(1)
 
-        var currentShift = AddShiftState().copy(timeBegin = beginTime, timeEnd = endTime)
+        var currentShift = UiState().copy(timeBegin = beginTime, timeEnd = endTime)
 
         if (convertTimeToLong(beginTime) > convertTimeToLong(endTime)) {
             currentShift = currentShift.copy(date = beginDate.format(formatter))
@@ -82,7 +65,7 @@ class AddShiftViewModel : ViewModel() {
         _shiftData.value = currentShift
     }
 
-    fun updateShift(shift: AddShiftState) {
+    fun updateShift(shift: UiState) {
         _shiftData.value = shift
     }
 
