@@ -13,9 +13,9 @@ data class ShiftMoney(
         get() = ((earnings * taxRate).toDouble() / 10000).roundToLong()
 
     val profit: Long    //in cents
-        get() = earnings + tips - tax - wash - fuelCost
+        get() = earnings + tips - tax - fuelCost
 
     init {
-        require(taxRate in 0..10000) { "Tax rate must be between 0 and 100" }
+        require(taxRate in 0..10000) { "Tax rate must be between 0 and 10000" }
     }
 }

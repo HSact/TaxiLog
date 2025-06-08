@@ -4,6 +4,7 @@ data class CarSnapshot(
     val name: String,
     val mileage: Long, //in meters
     val fuelConsumption: Long, //in milliliters per 100km
+    val rentCost: Long = 0, //in cents per shift
     val serviceCost: Long = 0, //in cents per 1000 meters
 ) {
     init {
