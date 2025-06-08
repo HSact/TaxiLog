@@ -12,6 +12,7 @@ import com.hsact.taxilog.helpers.SettingsHelper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.system.exitProcess
 
+@AndroidEntryPoint
 class StartUpActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityStartUpBinding

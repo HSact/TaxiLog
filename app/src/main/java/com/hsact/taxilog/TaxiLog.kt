@@ -4,7 +4,7 @@ import android.app.Application
 import com.hsact.taxilog.data.db.AppDatabase
 import dagger.hilt.android.HiltAndroidApp
 
-//@HiltAndroidApp
+@HiltAndroidApp
 class TaxiLog : Application() {
 
     lateinit var database: AppDatabase

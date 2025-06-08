@@ -3,9 +3,12 @@ import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'com.google.devtools.ksp' version '2.1.20-2.0.0'
+    id 'com.google.devtools.ksp' version '2.0.21-1.0.27'
     id 'com.google.dagger.hilt.android' version '2.51'
-    id ("org.jetbrains.kotlin.plugin.compose") version "2.1.20"
+    id ("org.jetbrains.kotlin.plugin.compose") version "2.0.21"
+}
+hilt {
+    enableAggregatingTask = false
 }
 
 android {
