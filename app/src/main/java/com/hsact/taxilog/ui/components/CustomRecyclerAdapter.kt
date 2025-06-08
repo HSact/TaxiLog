@@ -1,4 +1,4 @@
-package com.hsact.taxilog.ui
+package com.hsact.taxilog.ui.components
 
 import android.view.LayoutInflater
 import android.view.View

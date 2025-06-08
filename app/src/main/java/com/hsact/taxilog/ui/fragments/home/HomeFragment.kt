@@ -10,9 +10,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentHomeBinding
-import com.hsact.taxilog.ui.cards.CardGoal
-import com.hsact.taxilog.ui.cards.CardLastShift
-import com.hsact.taxilog.ui.cards.CardDaysInMonthGraph
+import com.hsact.taxilog.ui.cards.DrawGoalCard
+import com.hsact.taxilog.ui.cards.DrawLastShiftCard
+import com.hsact.taxilog.ui.cards.DrawMonthGraphCard
 
 class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
@@ -34,9 +34,9 @@ class HomeFragment : Fragment() {
         card1 = binding.card1
         card2 = binding.card2
         card3 = binding.card3
-        card1.setContent { CardGoal().DrawGoalCard(viewModel.shiftData) }
-        card2.setContent { CardLastShift().DrawLastShiftCard(viewModel.shiftData) }
-        card3.setContent { CardDaysInMonthGraph().DrawMonthGraphCard(viewModel.chartData, viewModel.goalData) }
+        card1.setContent { DrawGoalCard(viewModel.shiftData) }
+        card2.setContent { DrawLastShiftCard(viewModel.shiftData) }
+        card3.setContent { DrawMonthGraphCard(viewModel.chartData, viewModel.goalData) }
         return root
     }
 

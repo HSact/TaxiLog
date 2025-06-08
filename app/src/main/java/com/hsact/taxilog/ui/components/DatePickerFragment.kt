@@ -1,4 +1,4 @@
-package com.hsact.taxilog.ui.fragments
+package com.hsact.taxilog.ui.components
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog

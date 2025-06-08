@@ -13,9 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentGoalsBinding
-import com.hsact.taxilog.ui.cards.CardDayGoal
-import com.hsact.taxilog.ui.cards.CardDayWeekMonthProgress
-import com.hsact.taxilog.ui.fragments.DatePickerFragment
+import com.hsact.taxilog.ui.cards.DrawDayWeekMonthProgressCard
+import com.hsact.taxilog.ui.cards.DrawDaysInMonthCard
+import com.hsact.taxilog.ui.components.DatePickerFragment
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -47,8 +47,8 @@ class GoalsFragment : Fragment() {
         bindItems()
         card1 = binding.card1
         card2 = binding.card2
-        card1.setContent { CardDayWeekMonthProgress().DrawDayWeekMonthProgressCard(viewModel.goalData) }
-        card2.setContent { CardDayGoal().DrawDaysInMonthCard(viewModel.daysData, viewModel.pickedDate) }
+        card1.setContent { DrawDayWeekMonthProgressCard(viewModel.goalData) }
+        card2.setContent { DrawDaysInMonthCard(viewModel.daysData, viewModel.pickedDate) }
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         val now = LocalDateTime.now()
         val currentDate = now.toLocalDate()
@@ -75,8 +75,8 @@ class GoalsFragment : Fragment() {
             viewModel.pickedDate = editObj.text.toString()
             viewModel.calculateDaysData(viewModel.pickedDate, requireContext())
             viewModel.defineGoals(viewModel.pickedDate, requireContext())
-            card1.setContent { CardDayWeekMonthProgress().DrawDayWeekMonthProgressCard(viewModel.goalData) }
-            card2.setContent { CardDayGoal().DrawDaysInMonthCard(viewModel.daysData, viewModel.pickedDate) }
+            card1.setContent { DrawDayWeekMonthProgressCard(viewModel.goalData) }
+            card2.setContent { DrawDaysInMonthCard(viewModel.daysData, viewModel.pickedDate) }
         }
     }
 

@@ -18,8 +18,8 @@ import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentAddShiftBinding
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import com.hsact.taxilog.ui.activities.MainActivity
-import com.hsact.taxilog.ui.fragments.DatePickerFragment
-import com.hsact.taxilog.ui.fragments.TimePickerFragment
+import com.hsact.taxilog.ui.components.DatePickerFragment
+import com.hsact.taxilog.ui.components.TimePickerFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputLayout

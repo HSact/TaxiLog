@@ -32,8 +32,6 @@ import java.text.NumberFormat
 import java.util.Locale
 import kotlin.math.roundToInt
 
-class CardGoal {
-
     @Composable
     fun DrawGoalCard(shiftData: StateFlow<Map<String, String>>) {
         val shiftState by shiftData.collectAsStateWithLifecycle()
@@ -94,7 +92,7 @@ class CardGoal {
 
     @Preview(showBackground = true)
     @Composable
-    fun CardPreview() {
+    private fun CardPreview() {
         val goal = "100"
         val goalCurrent = "50"
         val previewData = remember {
@@ -107,4 +105,3 @@ class CardGoal {
         }
         DrawGoalCard(previewData)
     }
-}

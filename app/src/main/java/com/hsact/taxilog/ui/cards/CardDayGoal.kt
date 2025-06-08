@@ -33,89 +33,87 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-class CardDayGoal {
 
-    @Composable
-    fun DrawDaysInMonthCard(daysData: StateFlow<List<Double>>, pickedDate: String = "") {
+@Composable
+fun DrawDaysInMonthCard(daysData: StateFlow<List<Double>>, pickedDate: String = "") {
 
-        val days by daysData.collectAsStateWithLifecycle()
-        val isDarkTheme = isSystemInDarkTheme()
-        val textStyle: TextStyle = if (isDarkTheme) TextStyle(color = Color.White)
-        else TextStyle(color = Color.Black)
+    val days by daysData.collectAsStateWithLifecycle()
+    val isDarkTheme = isSystemInDarkTheme()
+    val textStyle: TextStyle = if (isDarkTheme) TextStyle(color = Color.White)
+    else TextStyle(color = Color.Black)
 
-        val colorGraphLine = Color(0xFFFBD323)
-        val labelProperties = LabelProperties(
-            enabled = true,
-            textStyle = textStyle,
-            rotation = LabelProperties.Rotation(degree = 0f)
-        )
-        val labelHelperProperties = LabelHelperProperties(
-            enabled = false,
-            textStyle = textStyle
-        )
-        val gridProperties = GridProperties(
-            enabled = false,
-        )
-        val indicatorProperties = HorizontalIndicatorProperties(
-            enabled = true,
-            textStyle = textStyle,
-        )
-        val locale = Locale.getDefault()
-        val formatter = DateTimeFormatter.ofPattern("LLLL", locale)
-        val inputFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.getDefault())
-        val parsedDate = LocalDate.parse(pickedDate, inputFormatter)
-        var currentMonth = parsedDate.format(formatter)
-        if (locale.language == "ru") {
-            currentMonth = currentMonth.replaceFirstChar { it.uppercase(locale) }
-        }
-        val bars = List(parsedDate.lengthOfMonth()) { index ->
-            Bars(
-                label = if (index % 2 ==0) (index + 1).toString() else " ",
-                values = listOf(
-                    Bars.Data(value = days[index], color = SolidColor(colorGraphLine))
-                )
+    val colorGraphLine = Color(0xFFFBD323)
+    val labelProperties = LabelProperties(
+        enabled = true,
+        textStyle = textStyle,
+        rotation = LabelProperties.Rotation(degree = 0f)
+    )
+    val labelHelperProperties = LabelHelperProperties(
+        enabled = false,
+        textStyle = textStyle
+    )
+    val gridProperties = GridProperties(
+        enabled = false,
+    )
+    val indicatorProperties = HorizontalIndicatorProperties(
+        enabled = true,
+        textStyle = textStyle,
+    )
+    val locale = Locale.getDefault()
+    val formatter = DateTimeFormatter.ofPattern("LLLL", locale)
+    val inputFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.getDefault())
+    val parsedDate = LocalDate.parse(pickedDate, inputFormatter)
+    var currentMonth = parsedDate.format(formatter)
+    if (locale.language == "ru") {
+        currentMonth = currentMonth.replaceFirstChar { it.uppercase(locale) }
+    }
+    val bars = List(parsedDate.lengthOfMonth()) { index ->
+        Bars(
+            label = if (index % 2 == 0) (index + 1).toString() else " ",
+            values = listOf(
+                Bars.Data(value = days[index], color = SolidColor(colorGraphLine))
             )
-        }
-
-        BaseCard {
-            CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
-                Text(
-                    text = currentMonth,
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                )
-                ColumnChart(
-                    modifier = Modifier
-                        .heightIn(max = 300.dp)
-                        .padding(top = 50.dp),
-                    data =
-                        bars,
-                    labelProperties = labelProperties,
-                    barProperties = BarProperties(
-                        thickness = 5.dp,
-                        cornerRadius = Bars.Data.Radius.Rectangle(topRight = 6.dp, topLeft = 6.dp),
-                        spacing = 1.dp,
-                    ),
-                    indicatorProperties = indicatorProperties,
-                    gridProperties = gridProperties,
-                    labelHelperProperties = labelHelperProperties,
-                )
-            }
-        }
+        )
     }
 
-    @Preview(showBackground = true)
-    @Composable
-    fun CardPreview() {
-        val previewData = remember {
-            MutableStateFlow(
-                listOf(
-                    0.0, 2.0, 3.0, 7.0, 10.0, 12.0, 18.0, 25.0, 27.0, 30.0
-                )
+    BaseCard {
+        CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
+            Text(
+                text = currentMonth,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth(Alignment.CenterHorizontally)
+            )
+            ColumnChart(
+                modifier = Modifier
+                    .heightIn(max = 300.dp)
+                    .padding(top = 50.dp),
+                data =
+                    bars,
+                labelProperties = labelProperties,
+                barProperties = BarProperties(
+                    thickness = 5.dp,
+                    cornerRadius = Bars.Data.Radius.Rectangle(topRight = 6.dp, topLeft = 6.dp),
+                    spacing = 1.dp,
+                ),
+                indicatorProperties = indicatorProperties,
+                gridProperties = gridProperties,
+                labelHelperProperties = labelHelperProperties,
             )
         }
-        DrawDaysInMonthCard(previewData)
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CardPreview() {
+    val previewData = remember {
+        MutableStateFlow(
+            listOf(
+                0.0, 2.0, 3.0, 7.0, 10.0, 12.0, 18.0, 25.0, 27.0, 30.0
+            )
+        )
+    }
+    DrawDaysInMonthCard(previewData)
 }

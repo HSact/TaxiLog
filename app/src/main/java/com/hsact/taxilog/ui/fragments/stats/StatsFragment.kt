@@ -13,7 +13,7 @@ import com.hsact.taxilog.data.db.DBHelper
 import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.databinding.FragmentStatsBinding
 import androidx.fragment.app.viewModels
-import com.hsact.taxilog.ui.fragments.DatePickerFragment
+import com.hsact.taxilog.ui.components.DatePickerFragment
 
 class StatsFragment : Fragment() {
 

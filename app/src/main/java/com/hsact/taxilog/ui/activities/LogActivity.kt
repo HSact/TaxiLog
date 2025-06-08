@@ -13,7 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.hsact.taxilog.ui.CustomRecyclerAdapter
+import com.hsact.taxilog.ui.components.CustomRecyclerAdapter
 import com.hsact.taxilog.data.db.DBHelper
 import com.hsact.taxilog.helpers.LocaleHelper
 import com.hsact.taxilog.R
@@ -21,7 +21,7 @@ import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.databinding.ActivityLogBinding
 import com.hsact.taxilog.databinding.DialogShiftEditBinding
 import com.hsact.taxilog.databinding.RecyclerviewItemBinding
-import com.hsact.taxilog.ui.fragments.DatePickerFragment
+import com.hsact.taxilog.ui.components.DatePickerFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.widget.Toolbar
 import com.hsact.taxilog.data.repository.ShiftRepository

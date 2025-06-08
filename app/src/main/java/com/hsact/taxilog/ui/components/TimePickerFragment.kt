@@ -1,4 +1,4 @@
-package com.hsact.taxilog.ui.fragments
+package com.hsact.taxilog.ui.components
 
 import android.app.Dialog
 import android.app.TimePickerDialog
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.EditText
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import java.text.SimpleDateFormat
 import java.util.*
@@ -42,7 +43,7 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
     }
 
     companion object {
-        fun pickTime(fragment: androidx.fragment.app.Fragment,
+        fun pickTime(fragment: Fragment,
             editObj: EditText,
             onTimePicked: (() -> Unit)? = null,
         ) {
