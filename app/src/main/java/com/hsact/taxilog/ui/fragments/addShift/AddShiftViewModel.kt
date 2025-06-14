@@ -7,12 +7,11 @@ import androidx.lifecycle.ViewModel
 import com.hsact.taxilog.data.db.DBHelper
 import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.data.repository.ShiftRepository
-import com.hsact.taxilog.helpers.SettingsHelper
+import com.hsact.taxilog.helpers.SettingsRepository
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertLongToTime
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertTimeToLong
 import com.hsact.taxilog.domain.shift2.ShiftV2
-import com.hsact.taxilog.domain.shift2.car.CarSnapshot
 import com.hsact.taxilog.ui.shift.mappers.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDateTime
@@ -20,7 +19,9 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
-class AddShiftViewModel @Inject constructor() : ViewModel() {
+class AddShiftViewModel @Inject constructor(
+    private val settings: SettingsRepository,
+) : ViewModel() {
     private val _shiftData = MutableLiveData<UiState>()
     val shiftData: LiveData<UiState> get() = _shiftData
 
@@ -56,14 +57,13 @@ class AddShiftViewModel @Inject constructor() : ViewModel() {
     }
 
     fun guessFuelCost(context: Context) {
-        val settings = SettingsHelper.getInstance(context)
-        if (!settings.seted_up) return
+        if (!settings.isConfigured) return
         if (_shiftData.value?.mileage == 0.0) return
         if (settings.fuelPrice.isNullOrEmpty() || settings.consumption.isNullOrEmpty()) return
         var currentShift = _shiftData.value ?: return
         val fuelPrice: Double = (settings.fuelPrice ?: return).toDouble()
         val consumption = (settings.consumption ?: return).toDouble()
-        if (!settings.seted_up || fuelPrice == 0.0 || consumption == 0.0) {
+        if (!settings.isConfigured || fuelPrice == 0.0 || consumption == 0.0) {
             return
         }
         if (currentShift.mileage == 0.0) {
@@ -104,7 +104,6 @@ class AddShiftViewModel @Inject constructor() : ViewModel() {
     }
 
     fun submit(context: Context) {
-        val settings = SettingsHelper.getInstance(context)
         val uiState = _shiftData.value ?: return
         val shiftInput = uiState.shiftInput
         shiftInput.date = uiState.date
@@ -122,13 +121,13 @@ class AddShiftViewModel @Inject constructor() : ViewModel() {
         shiftInput.consumption = settings.consumption ?: ""
         _shiftData.value = uiState.copy(shiftInput = shiftInput)
 
-        val carSnapshot = CarSnapshot(
+        /*val carSnapshot = CarSnapshot(
             name = "",
             mileage = 0,
             fuelConsumption = (settings.consumption ?: "").toLongOrNull() ?: 0,
             rentCost = (settings.rentCost ?: "").toLongOrNull() ?: 0,
             serviceCost = (settings.serviceCost ?: "").toLongOrNull() ?: 0,
-        )
+        )*/
         val shiftV2: ShiftV2 = shiftInput.toDomain()
         val shiftRepository = ShiftRepository(DBHelper(context, null))
         val shift =

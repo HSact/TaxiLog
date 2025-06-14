@@ -16,12 +16,13 @@ import com.hsact.taxilog.databinding.FragmentGoalsBinding
 import com.hsact.taxilog.ui.cards.DrawDayWeekMonthProgressCard
 import com.hsact.taxilog.ui.cards.DrawDaysInMonthCard
 import com.hsact.taxilog.ui.components.DatePickerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
-
+@AndroidEntryPoint
 class GoalsFragment : Fragment() {
 
     private var _binding: FragmentGoalsBinding? = null

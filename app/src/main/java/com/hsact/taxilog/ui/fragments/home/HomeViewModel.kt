@@ -6,14 +6,20 @@ import com.hsact.taxilog.R
 import com.hsact.taxilog.data.db.DBHelper
 import com.hsact.taxilog.data.repository.ShiftRepository
 import com.hsact.taxilog.data.utils.DateUtils
-import com.hsact.taxilog.helpers.SettingsHelper
+import com.hsact.taxilog.helpers.SettingsRepository
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val settings: SettingsRepository
+) : ViewModel() {
+
     private val _shiftData = MutableStateFlow<Map<String, String>>(emptyMap())
     val shiftData: StateFlow<Map<String, String>> = _shiftData
 
@@ -30,7 +36,6 @@ class HomeViewModel : ViewModel() {
             return
         }
 
-        val settings = SettingsHelper.getInstance(context)
         _goalData.value = settings.goalPerMonth?.toDoubleOrNull() ?: 0.0
         val tempData = mutableMapOf<Int, Double>()
         for (shift in shifts) {
@@ -63,7 +68,6 @@ class HomeViewModel : ViewModel() {
         val textTime = shift.time + " " + context.getString(R.string.hours)
         val textTotal = shift.profit.toString()
         val textPerHour = ShiftStatsUtil.calcAverageEarningsPerHour(shifts.last()).toString()
-        val settings = SettingsHelper.getInstance(context)
         var goalMonthString = settings.goalPerMonth ?: ""
 
         val goalCurrent = ShiftStatsUtil.calculateMonthProgress(date, shifts).toString()

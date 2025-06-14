@@ -23,7 +23,9 @@ import com.hsact.taxilog.ui.components.TimePickerFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputLayout
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     private val viewModel: AddShiftViewModel by viewModels()

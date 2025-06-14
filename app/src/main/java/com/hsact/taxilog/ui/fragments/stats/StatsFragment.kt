@@ -14,7 +14,9 @@ import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.databinding.FragmentStatsBinding
 import androidx.fragment.app.viewModels
 import com.hsact.taxilog.ui.components.DatePickerFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class StatsFragment : Fragment() {
 
     private val viewModel: StatsViewModel by viewModels()

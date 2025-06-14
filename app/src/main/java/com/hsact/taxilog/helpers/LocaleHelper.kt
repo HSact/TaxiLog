@@ -3,12 +3,15 @@ package com.hsact.taxilog.helpers
 import android.content.Context
 import android.content.res.Configuration
 import java.util.Locale
+import javax.inject.Inject
 
-object LocaleHelper {
-    private const val KEY_LANGUAGE = "My_Lang"
+class LocaleHelper @Inject constructor(
+    private val settings: SettingsRepository
+) {
+    private val languageKey = "My_Lang"
 
     fun setLocale(context: Context, lang: String): Context {
-        saveLanguage(context, lang)
+        saveLanguage(lang)
         return updateLocale(context, lang)
     }
 
@@ -20,18 +23,15 @@ object LocaleHelper {
         return context.createConfigurationContext(config)
     }
 
-    fun getSavedLanguage(context: Context): String {
-        val settings = SettingsHelper.getInstance(context)
+    fun getSavedLanguage(): String {
         return settings.language ?: Locale.getDefault().language
     }
 
-    private fun saveLanguage(context: Context, lang: String) {
-        val settings = SettingsHelper.getInstance(context)
-        settings.updateSetting(KEY_LANGUAGE, lang)
+    private fun saveLanguage(lang: String) {
+        settings.updateSetting(languageKey, lang)
     }
 
-    fun getDefault (): String
-    {
+    fun getDefault(): String {
         val currentLocale: Locale = Locale.getDefault()
         return currentLocale.language
     }

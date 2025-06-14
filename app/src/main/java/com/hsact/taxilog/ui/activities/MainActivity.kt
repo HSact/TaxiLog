@@ -15,8 +15,16 @@ import com.hsact.taxilog.helpers.LocaleHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.findNavController
 import androidx.appcompat.widget.Toolbar
+import com.hsact.taxilog.helpers.LocaleProvider
+import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var localeHelper: LocaleHelper
+
     companion object {
         lateinit var botNav: BottomNavigationView
     }
@@ -82,19 +90,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun attachBaseContext(newBase: Context) {
-        var newLocale = LocaleHelper.getSavedLanguage(newBase)
+        /*var newLocale = localeHelper.getSavedLanguage()
         if (newLocale == "") {
-            newLocale = LocaleHelper.getDefault()
+            newLocale = localeHelper.getDefault()
         }
         super.attachBaseContext(
-            LocaleHelper.updateLocale(
+            localeHelper.updateLocale(
                 newBase,
                 newLocale
             )
-        )
+        )*/
+        val localeProvider = LocaleProvider(newBase)
+        val lang = localeProvider.getSavedLanguage().takeIf { it.isNotEmpty() } ?: Locale.getDefault().language
+        val context = localeProvider.updateLocale(newBase, lang)
+        super.attachBaseContext(context)
     }
 
     private fun loadSettings() {
-        LocaleHelper.setLocale(this, LocaleHelper.getSavedLanguage(this))
+        localeHelper.setLocale(this, localeHelper.getSavedLanguage())
     }
 }

@@ -13,12 +13,20 @@ import androidx.core.view.isVisible
 import com.hsact.taxilog.helpers.LocaleHelper
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.SettingsActivityBinding
-import com.hsact.taxilog.helpers.SettingsHelper
 import com.google.android.material.materialswitch.MaterialSwitch
 import androidx.appcompat.widget.Toolbar
+import com.hsact.taxilog.helpers.LocaleProvider
+import com.hsact.taxilog.helpers.SettingsRepository
+import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
+import javax.inject.Inject
 
-
-class SettingsActivity : AppCompatActivity() {
+@AndroidEntryPoint
+class SettingsActivity: AppCompatActivity() {
+    @Inject
+    lateinit var localeHelper: LocaleHelper
+    @Inject
+    lateinit var settings: SettingsRepository
 
     private lateinit var binding: SettingsActivityBinding
 
@@ -46,11 +54,9 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var textTaxRate: EditText
     private lateinit var buttonApply: Button
 
-    private val settings = SettingsHelper.getInstance(this)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LocaleHelper.setLocale(this, LocaleHelper.getSavedLanguage(this))
+        localeHelper.setLocale(this, localeHelper.getSavedLanguage())
 
         binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -87,11 +93,11 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        switchRent.setOnClickListener {switchVisualize(switchRent)}
-        switchService.setOnClickListener {switchVisualize(switchService)}
-        switchTaxes.setOnClickListener {switchVisualize(switchTaxes)}
+        switchRent.setOnClickListener { switchVisualize(switchRent) }
+        switchService.setOnClickListener { switchVisualize(switchService) }
+        switchTaxes.setOnClickListener { switchVisualize(switchTaxes) }
 
-        buttonApply.setOnClickListener{
+        buttonApply.setOnClickListener {
             applySettings()
             val intent = Intent(this, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -99,13 +105,18 @@ class SettingsActivity : AppCompatActivity() {
             finishAffinity()
         }
     }
+
     override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(
-            LocaleHelper.updateLocale(
+        /*super.attachBaseContext(
+            localeHelper.updateLocale(
                 newBase,
-                LocaleHelper.getSavedLanguage(newBase)
+                localeHelper.getSavedLanguage()
             )
-        )
+        )*/
+        val localeProvider = LocaleProvider(newBase)
+        val lang = localeProvider.getSavedLanguage().takeIf { it.isNotEmpty() } ?: Locale.getDefault().language
+        val context = localeProvider.updateLocale(newBase, lang)
+        super.attachBaseContext(context)
     }
 
     private fun bindItems() {
@@ -139,16 +150,16 @@ class SettingsActivity : AppCompatActivity() {
         textTaxRate = binding.editTextTaxRate
         buttonApply = binding.buttonApply
     }
-    private fun applySettings()
-    {
-        LocaleHelper.setLocale(this, injectLangSpinner())
+
+    private fun applySettings() {
+        localeHelper.setLocale(this, injectLangSpinner())
         saveSettings()
         switchTheme()
     }
-    private fun loadSettings()
-    {
+
+    private fun loadSettings() {
         loadLangSpinner()
-        if (!(settings.seted_up)) {
+        if (!(settings.isConfigured)) {
             return
         }
         loadThemeSelection()
@@ -164,86 +175,75 @@ class SettingsActivity : AppCompatActivity() {
         switchTaxes.isChecked = settings.taxes
         textTaxRate.setText(settings.taxRate)
     }
-    private fun loadLangSpinner()
-    {
-        val currentLang: String = settings.language?: LocaleHelper.getDefault()
-        if (currentLang=="en")
-        {
+
+    private fun loadLangSpinner() {
+        val currentLang: String = settings.language ?: localeHelper.getDefault()
+        if (currentLang == "en") {
             spinnerLang.setSelection(0)
         }
-        if (currentLang=="ru")
-        {
+        if (currentLang == "ru") {
             spinnerLang.setSelection(1)
         }
     }
-    private fun loadThemeSelection()
-    {
+
+    private fun loadThemeSelection() {
         val currentTheme = AppCompatDelegate.getDefaultNightMode()
 
-        if (currentTheme==-100)
-        {
-            radioDefault.isChecked=true
-            radioLight.isChecked=false
-            radioDark.isChecked=false
+        if (currentTheme == -100) {
+            radioDefault.isChecked = true
+            radioLight.isChecked = false
+            radioDark.isChecked = false
         }
 
-        if (currentTheme==1)
-        {
-            radioDefault.isChecked=false
-            radioLight.isChecked=true
-            radioDark.isChecked=false
+        if (currentTheme == 1) {
+            radioDefault.isChecked = false
+            radioLight.isChecked = true
+            radioDark.isChecked = false
         }
-        if (currentTheme==2)
-        {
-            radioDefault.isChecked=false
-            radioLight.isChecked=false
-            radioDark.isChecked=true
+        if (currentTheme == 2) {
+            radioDefault.isChecked = false
+            radioLight.isChecked = false
+            radioDark.isChecked = true
         }
     }
-    private fun loadKmMiSelection()
-    {
-        if (settings.kmMi)
-        {
-            radioKm.isChecked=true
-            radioMi.isChecked=false
-        }
-        else
-        {
-            radioKm.isChecked=false
-            radioMi.isChecked=true
+
+    private fun loadKmMiSelection() {
+        if (settings.kmMi) {
+            radioKm.isChecked = true
+            radioMi.isChecked = false
+        } else {
+            radioKm.isChecked = false
+            radioMi.isChecked = true
         }
     }
-    private fun switchTheme()
-    {
+
+    private fun switchTheme() {
         when {
             radioDark.isChecked -> {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }
+
             radioLight.isChecked -> {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
         }
     }
 
-    private fun getSelectedTheme(): String
-    {
-        if (radioDark.isChecked)
-        {
+    private fun getSelectedTheme(): String {
+        if (radioDark.isChecked) {
             return "dark"
         }
-        if (radioLight.isChecked)
-        {
+        if (radioLight.isChecked) {
             return "light"
         }
         return ""
     }
-    private fun getKmMi(): Boolean
-    {
+
+    private fun getKmMi(): Boolean {
         return radioKm.isChecked
     }
 
-    private fun saveSettings()
-    {
+    private fun saveSettings() {
         settings.updateSetting("Seted_up", true)
         settings.updateSetting("My_Lang", injectLangSpinner())
         settings.updateSetting("Theme", getSelectedTheme())
@@ -261,13 +261,21 @@ class SettingsActivity : AppCompatActivity() {
         settings.updateSetting("Tax_rate", textTaxRate.text.toString())
     }
 
-    private fun switchVisualize(switch: MaterialSwitch)
-    {
+    private fun switchVisualize(switch: MaterialSwitch) {
         val table: TableRow
         when (switch) {
-            binding.switchRent -> {table = binding.TableRent}
-            binding.switchService -> {table = binding.TableService}
-            binding.switchTaxes -> {table = binding.TableTaxes}
+            binding.switchRent -> {
+                table = binding.TableRent
+            }
+
+            binding.switchService -> {
+                table = binding.TableService
+            }
+
+            binding.switchTaxes -> {
+                table = binding.TableTaxes
+            }
+
             else -> return
         }
         animateHeightChange(table)
@@ -280,17 +288,15 @@ class SettingsActivity : AppCompatActivity() {
         view.visibility = visibility
     }
 
-    private fun injectLangSpinner(): String
-    {
-        when (spinnerLang.selectedItemPosition)
-        {
+    private fun injectLangSpinner(): String {
+        when (spinnerLang.selectedItemPosition) {
             0 -> return "en"
             1 -> return "ru"
         }
-           return ""
+        return ""
     }
-    private fun getSchedule(): String
-    {
+
+    private fun getSchedule(): String {
         return when (radioSchedule.checkedRadioButtonId) {
             R.id.radio70 -> "7/0"
             R.id.radio61 -> "6/1"
@@ -298,8 +304,8 @@ class SettingsActivity : AppCompatActivity() {
             else -> "0"
         }
     }
-    private fun getScheduleId(schedule: String?): Int
-    {
+
+    private fun getScheduleId(schedule: String?): Int {
         return when (schedule) {
             "7/0" -> R.id.radio70
             "6/1" -> R.id.radio61
@@ -310,13 +316,12 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean("IS_VISIBLE_RENT", binding.TableRent.visibility == View.VISIBLE)
-        outState.putBoolean("IS_VISIBLE_SERVICE", binding.TableService.visibility == View.VISIBLE)
-        outState.putBoolean("IS_VISIBLE_TAXES", binding.TableTaxes.visibility == View.VISIBLE)
+        outState.putBoolean("IS_VISIBLE_RENT", binding.TableRent.isVisible)
+        outState.putBoolean("IS_VISIBLE_SERVICE", binding.TableService.isVisible)
+        outState.putBoolean("IS_VISIBLE_TAXES", binding.TableTaxes.isVisible)
     }
 
-    override fun onSupportNavigateUp(): Boolean
-    {
+    override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
         return super.onSupportNavigateUp()
     }

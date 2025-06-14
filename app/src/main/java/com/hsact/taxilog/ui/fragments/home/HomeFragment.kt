@@ -13,7 +13,9 @@ import com.hsact.taxilog.databinding.FragmentHomeBinding
 import com.hsact.taxilog.ui.cards.DrawGoalCard
 import com.hsact.taxilog.ui.cards.DrawLastShiftCard
 import com.hsact.taxilog.ui.cards.DrawMonthGraphCard
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
 

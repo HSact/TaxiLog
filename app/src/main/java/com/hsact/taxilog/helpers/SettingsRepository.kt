@@ -3,12 +3,17 @@ package com.hsact.taxilog.helpers
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class SettingsHelper private constructor(context: Context) {
+class SettingsRepository @Inject constructor(
+    @ApplicationContext private val context: Context,
+) {
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("Settings", Context.MODE_PRIVATE)
 
-    var seted_up: Boolean = false
+    var isConfigured: Boolean = false
         private set
     var theme: String = "default"
         private set
@@ -37,20 +42,20 @@ class SettingsHelper private constructor(context: Context) {
     var taxRate: String? = null
         private set
 
-    companion object {
+    /*companion object {
         @Volatile
-        private var instance: SettingsHelper? = null
+        private var instance: SettingsRepository? = null
 
-        fun getInstance(context: Context): SettingsHelper {
+        fun getInstance(context: Context): SettingsRepository {
             return instance ?: synchronized(this) {
-                instance ?: SettingsHelper(context).also { it.loadSettings(); instance = it }
+                instance ?: SettingsRepository(context).also { it.loadSettings(); instance = it }
             }
         }
-    }
+    }*/
 
     private fun loadSettings() {
-        seted_up = sharedPreferences.getBoolean("Seted_up", false)
-        theme = sharedPreferences.getString("Theme", "")?: getCurrentTheme()
+        isConfigured = sharedPreferences.getBoolean("Seted_up", false)
+        theme = sharedPreferences.getString("Theme", "") ?: getCurrentTheme()
         language = sharedPreferences.getString("My_Lang", "")
         kmMi = sharedPreferences.getBoolean("KmMi", false)
         consumption = sharedPreferences.getString("Consumption", "")
@@ -66,7 +71,7 @@ class SettingsHelper private constructor(context: Context) {
     }
 
     fun updateSetting(key: String, value: Any) {
-        with(sharedPreferences.edit()) {
+        sharedPreferences.edit {
             when (value) {
                 is Boolean -> putBoolean(key, value)
                 is String -> putString(key, value)
@@ -75,20 +80,16 @@ class SettingsHelper private constructor(context: Context) {
                 is Long -> putLong(key, value)
                 else -> throw IllegalArgumentException("Unsupported type")
             }
-            apply()
         }
         loadSettings()
     }
 
-    private fun getCurrentTheme(): String
-    {
+    private fun getCurrentTheme(): String {
         val currentTheme = AppCompatDelegate.getDefaultNightMode()
-        if (currentTheme==1)
-        {
+        if (currentTheme == 1) {
             return "light"
         }
-        if (currentTheme==2)
-        {
+        if (currentTheme == 2) {
             return "dark"
         }
         return "default"

@@ -25,9 +25,15 @@ import com.hsact.taxilog.ui.components.DatePickerFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.widget.Toolbar
 import com.hsact.taxilog.data.repository.ShiftRepository
+import com.hsact.taxilog.helpers.LocaleProvider
+import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class LogActivity : AppCompatActivity() {
+    @Inject
+    lateinit var localeHelper: LocaleHelper
 
     private var shifts = mutableListOf<Shift>()
     private var shiftRepository = ShiftRepository(DBHelper(this, null))
@@ -65,12 +71,16 @@ class LogActivity : AppCompatActivity() {
         return true
     }
     override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(
-            LocaleHelper.updateLocale(
+        /*super.attachBaseContext(
+            localeHelper.updateLocale(
                 newBase,
-                LocaleHelper.getSavedLanguage(newBase)
+                localeHelper.getSavedLanguage()
             )
-        )
+        )*/
+        val localeProvider = LocaleProvider(newBase)
+        val lang = localeProvider.getSavedLanguage().takeIf { it.isNotEmpty() } ?: Locale.getDefault().language
+        val context = localeProvider.updateLocale(newBase, lang)
+        super.attachBaseContext(context)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

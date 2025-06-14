@@ -16,8 +16,15 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import com.hsact.taxilog.helpers.LocaleHelper
 import com.hsact.taxilog.R
+import com.hsact.taxilog.helpers.LocaleProvider
+import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
+import javax.inject.Inject
 
-class AboutActivity : AppCompatActivity() {
+@AndroidEntryPoint
+class AboutActivity @Inject constructor(): AppCompatActivity() {
+    @Inject
+    lateinit var localeHelper: LocaleHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
@@ -45,12 +52,16 @@ class AboutActivity : AppCompatActivity() {
         textAbout.highlightColor = Color.TRANSPARENT
     }
     override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(
-            LocaleHelper.updateLocale(
+        /*super.attachBaseContext(
+            localeHelper.updateLocale(
                 newBase,
-                LocaleHelper.getSavedLanguage(newBase)
+                localeHelper.getSavedLanguage()
             )
-        )
+        )*/
+        val localeProvider = LocaleProvider(newBase)
+        val lang = localeProvider.getSavedLanguage().takeIf { it.isNotEmpty() } ?: Locale.getDefault().language
+        val context = localeProvider.updateLocale(newBase, lang)
+        super.attachBaseContext(context)
     }
 
     override fun onSupportNavigateUp(): Boolean {
