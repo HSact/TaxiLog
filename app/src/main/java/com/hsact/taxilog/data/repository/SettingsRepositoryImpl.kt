@@ -56,7 +56,26 @@ class SettingsRepositoryImpl @Inject constructor(
     override val taxRate: String?
         get() = sharedPreferences.getString("Tax_rate", "")
 
-    override fun updateSetting(key: String, value: Any) {
+    override fun getAllSettings(): UserSettings {
+        return UserSettings(
+            isConfigured = isConfigured,
+            language = language,
+            theme = theme,
+            kmMi = kmMi,
+            consumption = consumption,
+            rented = rented,
+            rentCost = rentCost,
+            service = service,
+            serviceCost = serviceCost,
+            goalPerMonth = goalPerMonth,
+            schedule = schedule,
+            taxes = taxes,
+            taxRate = taxRate,
+            fuelPrice = fuelPrice
+        )
+    }
+
+    override fun updateSetting(key: String, value: Any?) {
         sharedPreferences.edit {
             when (value) {
                 is Boolean -> putBoolean(key, value)
@@ -71,7 +90,7 @@ class SettingsRepositoryImpl @Inject constructor(
 
     override fun saveAllSettings(settings: UserSettings) {
         updateSetting("Is_configured", settings.isConfigured)
-        updateSetting("My_Lang", settings.lang)
+        updateSetting("My_Lang", settings.language)
         updateSetting("Theme", settings.theme)
         updateSetting("KmMi", settings.kmMi)
         updateSetting("Consumption", settings.consumption)

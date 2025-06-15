@@ -12,8 +12,8 @@ import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertLongToTime
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertTimeToLong
 import com.hsact.taxilog.domain.model.ShiftV2
-import com.hsact.taxilog.domain.usecase.AddShiftUseCase
-import com.hsact.taxilog.domain.usecase.GetAllShiftsUseCase
+import com.hsact.taxilog.domain.usecase.shift.AddShiftUseCase
+import com.hsact.taxilog.domain.usecase.shift.GetAllShiftsUseCase
 import com.hsact.taxilog.ui.shift.mappers.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDateTime

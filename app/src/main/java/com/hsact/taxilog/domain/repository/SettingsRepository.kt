@@ -19,6 +19,7 @@ interface SettingsRepository {
     val taxes: Boolean
     val taxRate: String?
 
-    fun updateSetting(key: String, value: Any)
+    fun getAllSettings(): UserSettings
+    fun updateSetting(key: String, value: Any?)
     fun saveAllSettings(settings: UserSettings)
 }

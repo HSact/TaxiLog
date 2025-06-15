@@ -180,7 +180,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         editMileageL = binding.editTextMileageL
     }
 
-    private suspend fun calculateShift() {
+    private fun calculateShift() {
         if (editEarnings.text.isEmpty() || editFuelCost.text.isEmpty() || editMileage.text.isEmpty()) {
             if (editFuelCost.text.isEmpty()) {
                 editFuelCost.setError(getString(R.string.fuel_cost_is_empty), null)
@@ -213,7 +213,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         )
     }
 
-    private suspend fun showSubmitMessage(warningCode: String) {
+    private fun showSubmitMessage(warningCode: String) {
             val alert = MaterialAlertDialogBuilder(requireContext())
             alert.setTitle(getString(R.string.submit))
             alert.setPositiveButton(R.string.ok) { dialog, id -> viewLifecycleOwner.lifecycleScope.launch {

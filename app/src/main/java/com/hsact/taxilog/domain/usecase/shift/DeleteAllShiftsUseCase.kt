@@ -1,4 +1,4 @@
-package com.hsact.taxilog.domain.usecase
+package com.hsact.taxilog.domain.usecase.shift
 
 import com.hsact.taxilog.data.repository.ShiftRepository
 import javax.inject.Inject

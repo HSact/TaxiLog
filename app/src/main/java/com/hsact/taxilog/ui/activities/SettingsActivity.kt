@@ -238,7 +238,7 @@ class SettingsActivity: AppCompatActivity() {
     private fun saveSettings() {
         val settingsData = UserSettings(
             isConfigured = true,
-            lang = injectLangSpinner(),
+            language = injectLangSpinner(),
             theme = getSelectedTheme(),
             kmMi = getKmMi(),
             consumption = textConsumption.text.toString(),
