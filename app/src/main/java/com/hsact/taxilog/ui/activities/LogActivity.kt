@@ -13,7 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.hsact.taxilog.ui.components.CustomRecyclerAdapter
+import com.hsact.taxilog.ui.components.ShiftLogRecyclerAdapter
 import com.hsact.taxilog.data.db.DBHelper
 import com.hsact.taxilog.ui.locale.LocaleHelper
 import com.hsact.taxilog.R
@@ -62,7 +62,7 @@ class LogActivity : AppCompatActivity() {
         val recycler: RecyclerView = findViewById(R.id.recyclerView)
         recycler.layoutManager = LinearLayoutManager(this)
 
-        recycler.adapter = CustomRecyclerAdapter(fillList())
+        recycler.adapter = ShiftLogRecyclerAdapter(fillList())
         recycler.hasOnClickListeners()
     }
 

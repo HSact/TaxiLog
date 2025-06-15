@@ -10,9 +10,9 @@ import com.hsact.taxilog.R
 import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
 
-class CustomRecyclerAdapter(private val shifts: List<Shift>) :
-    RecyclerView.Adapter<CustomRecyclerAdapter.MyViewHolder>() {
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class ShiftLogRecyclerAdapter(private val shifts: List<Shift>) :
+    RecyclerView.Adapter<ShiftLogRecyclerAdapter.ShiftViewHolder>() {
+    class ShiftViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val shiftTable: TableLayout = itemView.findViewById(R.id.tableShift)
 
         val textId: TextView = itemView.findViewById(R.id.textId1)
@@ -26,14 +26,14 @@ class CustomRecyclerAdapter(private val shifts: List<Shift>) :
         val textProfit: TextView = itemView.findViewById(R.id.textProfit1)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShiftViewHolder {
         val itemView =
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.recyclerview_item, parent, false)
-        return MyViewHolder(itemView)
+        return ShiftViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ShiftViewHolder, position: Int) {
         holder.textId.text = shifts[position].id.toString()
         holder.textDate.text = shifts[position].date
         holder.textTime.text = shifts[position].time
@@ -46,14 +46,6 @@ class CustomRecyclerAdapter(private val shifts: List<Shift>) :
         holder.textProfit.text = shifts[position].profit.toString()
         holder.shiftTable.id = shifts[position].id
     }
-
-    /*override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return position
-    }*/
 
     override fun getItemCount(): Int {
         return shifts.size

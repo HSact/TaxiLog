@@ -235,7 +235,7 @@ class SettingsActivity: AppCompatActivity() {
     }
 
     private fun saveSettings() {
-        settings.updateSetting("Seted_up", true)
+        settings.updateSetting("Is_configured", true)
         settings.updateSetting("My_Lang", injectLangSpinner())
         settings.updateSetting("Theme", getSelectedTheme())
         settings.updateSetting("KmMi", getKmMi())

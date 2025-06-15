@@ -15,7 +15,7 @@ class SettingsRepositoryImpl @Inject constructor(
         context.getSharedPreferences("Settings", Context.MODE_PRIVATE)
 
     override val isConfigured: Boolean
-        get() = sharedPreferences.getBoolean("Seted_up", false)
+        get() = sharedPreferences.getBoolean("Is_configured", false)
 
     override val theme: String
         get() = sharedPreferences.getString("Theme", "") ?: getCurrentTheme()
