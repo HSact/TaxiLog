@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentAddShiftBinding
@@ -24,6 +25,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
@@ -110,7 +112,11 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
             )
         }
         switchBreak.setOnClickListener { switchBrake() }
-        buttonSubmit.setOnClickListener { calculateShift() }
+        buttonSubmit.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                calculateShift()
+            }
+        }
 
         editMileage.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -174,7 +180,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         editMileageL = binding.editTextMileageL
     }
 
-    private fun calculateShift() {
+    private suspend fun calculateShift() {
         if (editEarnings.text.isEmpty() || editFuelCost.text.isEmpty() || editMileage.text.isEmpty()) {
             if (editFuelCost.text.isEmpty()) {
                 editFuelCost.setError(getString(R.string.fuel_cost_is_empty), null)
@@ -207,16 +213,18 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         )
     }
 
-    private fun showSubmitMessage(warningCode: String) {
-        val alert = MaterialAlertDialogBuilder(requireContext())
-        alert.setTitle(getString(R.string.submit))
-        alert.setPositiveButton(R.string.ok) { dialog, id -> submit() }
-        alert.setNegativeButton(R.string.cancel, null)
-        alert.setMessage(warningCode)
-        alert.show()
+    private suspend fun showSubmitMessage(warningCode: String) {
+            val alert = MaterialAlertDialogBuilder(requireContext())
+            alert.setTitle(getString(R.string.submit))
+            alert.setPositiveButton(R.string.ok) { dialog, id -> viewLifecycleOwner.lifecycleScope.launch {
+                submit()
+            } }
+            alert.setNegativeButton(R.string.cancel, null)
+            alert.setMessage(warningCode)
+            alert.show()
     }
 
-    private fun submit() {
+    private suspend fun submit() {
         Toast.makeText(activity, getString(R.string.shift_added_successfully), Toast.LENGTH_SHORT)
             .show()
         viewModel.submit(requireContext())

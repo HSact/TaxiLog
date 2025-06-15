@@ -12,6 +12,8 @@ import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertLongToTime
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertTimeToLong
 import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.domain.usecase.AddShiftUseCase
+import com.hsact.taxilog.domain.usecase.GetAllShiftsUseCase
 import com.hsact.taxilog.ui.shift.mappers.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDateTime
@@ -21,6 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AddShiftViewModel @Inject constructor(
     private val settings: SettingsRepositoryImpl,
+    private val addShiftUseCase: AddShiftUseCase,
+    private val getAllShiftsUseCase: GetAllShiftsUseCase
 ) : ViewModel() {
     private val _shiftData = MutableLiveData<UiState>()
     val shiftData: LiveData<UiState> get() = _shiftData
@@ -103,7 +107,7 @@ class AddShiftViewModel @Inject constructor(
         _shiftData.value = currentShift
     }
 
-    fun submit(context: Context) {
+    suspend fun submit(context: Context) {
         val uiState = _shiftData.value ?: return
         val shiftInput = uiState.shiftInput
         shiftInput.date = uiState.date
@@ -129,6 +133,8 @@ class AddShiftViewModel @Inject constructor(
             serviceCost = (settings.serviceCost ?: "").toLongOrNull() ?: 0,
         )*/
         val shiftV2: ShiftV2 = shiftInput.toDomain()
+        roomTest(shiftV2)
+
         val shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(context, null))
         val shift =
             Shift(
@@ -137,6 +143,14 @@ class AddShiftViewModel @Inject constructor(
                 uiState.mileage, uiState.profit
             )
         shiftRepositoryLegacy.addShift(shift)
+    }
+
+    private suspend fun roomTest(shiftV2: ShiftV2) {
+        addShiftUseCase(shiftV2)
+        val shiftListNew = getAllShiftsUseCase()
+        shiftListNew.forEach { shift ->
+            println(shift)
+        }
     }
 
     private fun hoursToMs(hours: Int): Long {
