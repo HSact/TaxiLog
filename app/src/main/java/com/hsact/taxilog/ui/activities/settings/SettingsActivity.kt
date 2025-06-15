@@ -21,8 +21,6 @@ import com.google.android.material.materialswitch.MaterialSwitch
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.SettingsActivityBinding
 import com.hsact.taxilog.domain.model.UserSettings
-import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
-import com.hsact.taxilog.domain.usecase.settings.SaveAllSettingsUseCase
 import com.hsact.taxilog.ui.activities.MainActivity
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import com.hsact.taxilog.ui.locale.LocaleHelper
