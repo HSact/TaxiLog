@@ -1,7 +1,6 @@
 package com.hsact.taxilog.helpers
 
 import android.content.Context
-import java.util.Locale
 
 object ContextWrapper {
     fun wrapContext(newBase: Context, defaultLanguage: String): Context {
