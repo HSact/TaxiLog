@@ -31,7 +31,7 @@
             android:fitsSystemWindows="true"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.SettingsActivity"
+            android:name=".ui.activities.settings.SettingsActivity"
             android:exported="false"
             android:windowTranslucentStatus="true"
             android:windowSoftInputMode="adjustResize"

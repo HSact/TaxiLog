@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.hsact.taxilog.domain.model.UserSettings
-import com.hsact.taxilog.domain.repository.SettingsRepository
+import com.hsact.taxilog.data.repository.SettingsRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

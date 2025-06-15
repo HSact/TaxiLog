@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import com.hsact.taxilog.databinding.ActivityStartUpBinding
 import com.hsact.taxilog.data.repository.SettingsRepositoryImpl
+import com.hsact.taxilog.ui.activities.settings.SettingsActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.system.exitProcess

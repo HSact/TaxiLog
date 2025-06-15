@@ -1,4 +1,4 @@
-package com.hsact.taxilog.domain.repository
+package com.hsact.taxilog.data.repository
 
 import com.hsact.taxilog.domain.model.UserSettings
 

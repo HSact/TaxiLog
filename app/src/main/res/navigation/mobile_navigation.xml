@@ -44,7 +44,7 @@
         app:destination="@id/navigation_home" />
     <activity
         android:id="@+id/settingsActivity"
-        android:name="com.hsact.taxilog.ui.activities.SettingsActivity"
+        android:name="com.hsact.taxilog.ui.activities.settings.SettingsActivity"
         android:label="settings_activity"
         tools:layout="@layout/settings_activity" />
     <activity

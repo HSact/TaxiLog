@@ -1,4 +1,4 @@
-package com.hsact.taxilog.ui.activities
+package com.hsact.taxilog.ui.activities.settings
 
 import android.content.Context
 import android.content.Intent
@@ -6,18 +6,26 @@ import android.os.Bundle
 import android.transition.TransitionManager
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.Spinner
+import android.widget.TableRow
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
-import com.hsact.taxilog.ui.locale.LocaleHelper
+import com.google.android.material.materialswitch.MaterialSwitch
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.SettingsActivityBinding
-import com.google.android.material.materialswitch.MaterialSwitch
-import androidx.appcompat.widget.Toolbar
-import com.hsact.taxilog.ui.locale.ContextWrapper
-import com.hsact.taxilog.data.repository.SettingsRepositoryImpl
 import com.hsact.taxilog.domain.model.UserSettings
+import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
+import com.hsact.taxilog.domain.usecase.settings.SaveAllSettingsUseCase
+import com.hsact.taxilog.ui.activities.MainActivity
+import com.hsact.taxilog.ui.locale.ContextWrapper
+import com.hsact.taxilog.ui.locale.LocaleHelper
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
@@ -26,8 +34,8 @@ import javax.inject.Inject
 class SettingsActivity: AppCompatActivity() {
     @Inject
     lateinit var localeHelper: LocaleHelper
-    @Inject
-    lateinit var settings: SettingsRepositoryImpl
+
+    private val viewModel: SettingsViewModel by viewModels()
 
     private lateinit var binding: SettingsActivityBinding
 
@@ -150,12 +158,13 @@ class SettingsActivity: AppCompatActivity() {
     }
 
     private fun loadSettings() {
-        loadLangSpinner()
+        val settings = viewModel.settings.value ?: return
+        loadLangSpinner(settings)
         if (!(settings.isConfigured)) {
             return
         }
         loadThemeSelection()
-        loadKmMiSelection()
+        loadKmMiSelection(settings)
         textConsumption.setText(settings.consumption)
         switchRent.isChecked = settings.rented
         textRentCost.setText(settings.rentCost)
@@ -168,7 +177,7 @@ class SettingsActivity: AppCompatActivity() {
         textTaxRate.setText(settings.taxRate)
     }
 
-    private fun loadLangSpinner() {
+    private fun loadLangSpinner(settings: UserSettings) {
         val currentLang: String = settings.language ?: localeHelper.getDefault()
         if (currentLang == "en") {
             spinnerLang.setSelection(0)
@@ -199,7 +208,7 @@ class SettingsActivity: AppCompatActivity() {
         }
     }
 
-    private fun loadKmMiSelection() {
+    private fun loadKmMiSelection(settings: UserSettings) {
         if (settings.kmMi) {
             radioKm.isChecked = true
             radioMi.isChecked = false
@@ -252,7 +261,7 @@ class SettingsActivity: AppCompatActivity() {
             taxRate = textTaxRate.text.toString(),
             fuelPrice = textFuelCost.text.toString()
         )
-        settings.saveAllSettings(settingsData)
+        viewModel.saveSettings(settingsData)
     }
 
     private fun switchVisualize(switch: MaterialSwitch) {
