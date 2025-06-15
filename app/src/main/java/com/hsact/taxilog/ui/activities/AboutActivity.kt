@@ -14,9 +14,9 @@ import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
-import com.hsact.taxilog.helpers.LocaleHelper
+import com.hsact.taxilog.ui.locale.LocaleHelper
 import com.hsact.taxilog.R
-import com.hsact.taxilog.helpers.ContextWrapper
+import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject

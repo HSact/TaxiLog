@@ -5,7 +5,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.hsact.taxilog.data.db.DBHelper
 import com.hsact.taxilog.data.repository.ShiftRepository
-import com.hsact.taxilog.data.repository.SettingsRepository
+import com.hsact.taxilog.data.repository.SettingsRepositoryImpl
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GoalsViewModel @Inject constructor(
-    private val settings: SettingsRepository
+    private val settings: SettingsRepositoryImpl
 ) : ViewModel() {
 
     private val _goalData = MutableStateFlow<Map<String, Double>>(emptyMap())

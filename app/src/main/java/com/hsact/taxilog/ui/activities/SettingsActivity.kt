@@ -10,13 +10,13 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
-import com.hsact.taxilog.helpers.LocaleHelper
+import com.hsact.taxilog.ui.locale.LocaleHelper
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.SettingsActivityBinding
 import com.google.android.material.materialswitch.MaterialSwitch
 import androidx.appcompat.widget.Toolbar
-import com.hsact.taxilog.helpers.ContextWrapper
-import com.hsact.taxilog.data.repository.SettingsRepository
+import com.hsact.taxilog.ui.locale.ContextWrapper
+import com.hsact.taxilog.data.repository.SettingsRepositoryImpl
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
@@ -26,7 +26,7 @@ class SettingsActivity: AppCompatActivity() {
     @Inject
     lateinit var localeHelper: LocaleHelper
     @Inject
-    lateinit var settings: SettingsRepository
+    lateinit var settings: SettingsRepositoryImpl
 
     private lateinit var binding: SettingsActivityBinding
 

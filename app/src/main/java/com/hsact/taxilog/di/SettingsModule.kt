@@ -1,21 +1,20 @@
 package com.hsact.taxilog.di
 
-import android.content.Context
-import com.hsact.taxilog.data.repository.SettingsRepository
+import com.hsact.taxilog.data.repository.SettingsRepositoryImpl
+import com.hsact.taxilog.domain.repository.SettingsRepository
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object SettingsModule {
+abstract class SettingsModule {
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideSettingsRepository(@ApplicationContext context: Context): SettingsRepository {
-        return SettingsRepository(context)
-    }
+    abstract fun bindSettingsRepository(
+        impl: SettingsRepositoryImpl
+    ): SettingsRepository
 }

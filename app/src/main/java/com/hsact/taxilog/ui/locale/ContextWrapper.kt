@@ -1,4 +1,4 @@
-package com.hsact.taxilog.helpers
+package com.hsact.taxilog.ui.locale
 
 import android.content.Context
 

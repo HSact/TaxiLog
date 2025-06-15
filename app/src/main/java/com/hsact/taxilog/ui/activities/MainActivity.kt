@@ -11,11 +11,11 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.ActivityMainBinding
-import com.hsact.taxilog.helpers.LocaleHelper
+import com.hsact.taxilog.ui.locale.LocaleHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.findNavController
 import androidx.appcompat.widget.Toolbar
-import com.hsact.taxilog.helpers.ContextWrapper
+import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject

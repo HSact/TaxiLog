@@ -1,13 +1,13 @@
-package com.hsact.taxilog.helpers
+package com.hsact.taxilog.ui.locale
 
 import android.content.Context
 import android.content.res.Configuration
-import com.hsact.taxilog.data.repository.SettingsRepository
+import com.hsact.taxilog.data.repository.SettingsRepositoryImpl
 import java.util.Locale
 import javax.inject.Inject
 
 class LocaleHelper @Inject constructor(
-    private val settings: SettingsRepository
+    private val settings: SettingsRepositoryImpl
 ) {
     private val languageKey = "My_Lang"
 

@@ -8,7 +8,7 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import com.hsact.taxilog.databinding.ActivityStartUpBinding
-import com.hsact.taxilog.data.repository.SettingsRepository
+import com.hsact.taxilog.data.repository.SettingsRepositoryImpl
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.system.exitProcess
@@ -16,7 +16,7 @@ import kotlin.system.exitProcess
 @AndroidEntryPoint
 class StartUpActivity : AppCompatActivity() {
     @Inject
-    lateinit var settings: SettingsRepository
+    lateinit var settings: SettingsRepositoryImpl
 
     private lateinit var binding: ActivityStartUpBinding
     private val logoDuration: Long = 1500

@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.hsact.taxilog.data.db.DBHelper
 import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.data.repository.ShiftRepository
-import com.hsact.taxilog.data.repository.SettingsRepository
+import com.hsact.taxilog.data.repository.SettingsRepositoryImpl
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertLongToTime
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertTimeToLong
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddShiftViewModel @Inject constructor(
-    private val settings: SettingsRepository,
+    private val settings: SettingsRepositoryImpl,
 ) : ViewModel() {
     private val _shiftData = MutableLiveData<UiState>()
     val shiftData: LiveData<UiState> get() = _shiftData
