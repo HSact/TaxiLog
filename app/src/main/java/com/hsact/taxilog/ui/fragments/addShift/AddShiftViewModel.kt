@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.hsact.taxilog.data.db.DBHelper
 import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.data.repository.ShiftRepositoryLegacy
+import com.hsact.taxilog.data.utils.DeprecatedDateFormatter
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertLongToTime
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertTimeToLong
@@ -38,7 +39,7 @@ class AddShiftViewModel @Inject constructor(
     }
 
     private fun loadGuess() {
-        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        val formatter = DeprecatedDateFormatter
         val timeFormatter = DateTimeFormatter.ofPattern("H:mm")
 
         val now = LocalDateTime.now()

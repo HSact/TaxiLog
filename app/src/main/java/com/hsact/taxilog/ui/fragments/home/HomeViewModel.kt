@@ -7,12 +7,12 @@ import com.hsact.taxilog.data.db.DBHelper
 import com.hsact.taxilog.data.repository.ShiftRepositoryLegacy
 import com.hsact.taxilog.data.utils.DateUtils
 import com.hsact.taxilog.data.repository.SettingsRepositoryImpl
+import com.hsact.taxilog.data.utils.DeprecatedDateFormatter
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -56,12 +56,12 @@ class HomeViewModel @Inject constructor(
         var shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(context, null))
         val shifts = shiftRepositoryLegacy.getAllShifts()
         if (shifts.isEmpty()) {
-            _shiftData.value = createEmptyShift(context)
+            _shiftData.value = createEmptyShift()
             return
         }
         val shift = shifts.last()
         val date =
-            LocalDate.now().withDayOfMonth(1).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+            LocalDate.now().withDayOfMonth(1).format(DeprecatedDateFormatter)
         val textDate = shift.date
         val textEarnings = shift.earnings.toString()
         val textCosts = (shift.wash + shift.fuelCost).toString()
@@ -84,8 +84,8 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    private fun createEmptyShift(context: Context): Map<String, String> {
-        val na = context.getString(R.string.n_a)
+    private fun createEmptyShift(): Map<String, String> {
+        val na = "N/A"
         return mapOf(
             "date" to na,
             "earnings" to na,
