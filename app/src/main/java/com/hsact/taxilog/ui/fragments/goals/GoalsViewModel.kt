@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.hsact.taxilog.data.db.DBHelper
-import com.hsact.taxilog.data.repository.ShiftRepository
+import com.hsact.taxilog.data.repository.ShiftRepositoryLegacy
 import com.hsact.taxilog.data.repository.SettingsRepositoryImpl
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,11 +34,11 @@ class GoalsViewModel @Inject constructor(
 
     @SuppressLint("DefaultLocale")
     fun calculateDaysData(date: String, context: Context) {
-        var shiftRepository = ShiftRepository(DBHelper(context, null))
+        var shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(context, null))
         if (pickedDate.isEmpty()) {
             pickedDate = date
         }
-        val shifts = shiftRepository.getAllShifts()
+        val shifts = shiftRepositoryLegacy.getAllShifts()
         val parts = date.split(".")
         if (parts.size != 3) return
         val month = parts[1]
@@ -53,7 +53,7 @@ class GoalsViewModel @Inject constructor(
 
     fun defineGoals(date: String, context: Context)
     {
-        var shiftRepository = ShiftRepository(DBHelper(context, null))
+        var shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(context, null))
         goalMonthString = settings.goalPerMonth
         if (goalMonthString.isNullOrEmpty() || goalMonthString == "-1")
         {
@@ -75,7 +75,7 @@ class GoalsViewModel @Inject constructor(
             else -> 30.0
         }
         goalDay = goalMonth / denominatorDay
-        val shifts = shiftRepository.getAllShifts()
+        val shifts = shiftRepositoryLegacy.getAllShifts()
         _goalData.value = mapOf(
             "monthGoal" to roundTo2(goalMonth),
             "weekGoal" to roundTo2(goalWeek),

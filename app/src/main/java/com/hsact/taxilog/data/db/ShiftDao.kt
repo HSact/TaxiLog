@@ -25,4 +25,10 @@ interface ShiftDao {
 
     @Update
     suspend fun updateShift(shift: ShiftEntity)
+
+    @Query("DELETE FROM shiftentity")
+    suspend fun deleteAll()
+
+    @Query("DELETE FROM sqlite_sequence WHERE name='shiftentity'")
+    suspend fun resetPrimaryKey()
 }

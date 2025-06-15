@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.hsact.taxilog.R
 import com.hsact.taxilog.data.db.DBHelper
-import com.hsact.taxilog.data.repository.ShiftRepository
+import com.hsact.taxilog.data.repository.ShiftRepositoryLegacy
 import com.hsact.taxilog.data.utils.DateUtils
 import com.hsact.taxilog.data.repository.SettingsRepositoryImpl
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
@@ -30,8 +30,8 @@ class HomeViewModel @Inject constructor(
     var goalData: StateFlow<Double> = _goalData
 
     fun calculateChart(context: Context) {
-        var shiftRepository = ShiftRepository(DBHelper(context, null))
-        val shifts = shiftRepository.getAllShifts()
+        var shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(context, null))
+        val shifts = shiftRepositoryLegacy.getAllShifts()
         if (shifts.isEmpty()) {
             return
         }
@@ -53,8 +53,8 @@ class HomeViewModel @Inject constructor(
     }
 
     fun calculateShift(context: Context) {
-        var shiftRepository = ShiftRepository(DBHelper(context, null))
-        val shifts = shiftRepository.getAllShifts()
+        var shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(context, null))
+        val shifts = shiftRepositoryLegacy.getAllShifts()
         if (shifts.isEmpty()) {
             _shiftData.value = createEmptyShift(context)
             return

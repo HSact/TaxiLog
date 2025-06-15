@@ -24,7 +24,7 @@ import com.hsact.taxilog.databinding.RecyclerviewItemBinding
 import com.hsact.taxilog.ui.components.DatePickerFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.widget.Toolbar
-import com.hsact.taxilog.data.repository.ShiftRepository
+import com.hsact.taxilog.data.repository.ShiftRepositoryLegacy
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -36,7 +36,7 @@ class LogActivity : AppCompatActivity() {
     lateinit var localeHelper: LocaleHelper
 
     private var shifts = mutableListOf<Shift>()
-    private var shiftRepository = ShiftRepository(DBHelper(this, null))
+    private var shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(this, null))
 
     private lateinit var binding: ActivityLogBinding
     private lateinit var bindingR: RecyclerviewItemBinding
@@ -53,7 +53,7 @@ class LogActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.title_my_shifts)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        shifts = shiftRepository.getAllShifts()
+        shifts = shiftRepositoryLegacy.getAllShifts()
         if (shifts.isEmpty())
         {
             Toast.makeText(applicationContext,
@@ -135,16 +135,16 @@ class LogActivity : AppCompatActivity() {
 
     private fun deleteShift(index: Int)
     {
-        val shiftRepository = ShiftRepository(DBHelper(this, null))
-        shiftRepository.deleteShift(index)
+        val shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(this, null))
+        shiftRepositoryLegacy.deleteShift(index)
         Toast.makeText(applicationContext,
             getString(R.string.shift_deleted_successfully, index.toString()), Toast.LENGTH_SHORT).show()
         recreate()
     }
     private fun deleteAll()
     {
-        val shiftRepository = ShiftRepository(DBHelper(this, null))
-        shiftRepository.deleteAllShifts()
+        val shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(this, null))
+        shiftRepositoryLegacy.deleteAllShifts()
         Toast.makeText(applicationContext,
             getString(R.string.all_shifts_have_been_deleted_successfully), Toast.LENGTH_SHORT).show()
         recreate()

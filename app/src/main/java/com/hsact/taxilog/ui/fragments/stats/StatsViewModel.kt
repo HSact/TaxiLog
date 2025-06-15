@@ -3,7 +3,7 @@ package com.hsact.taxilog.ui.fragments.stats
 import androidx.lifecycle.ViewModel
 import com.hsact.taxilog.data.db.DBHelper
 import com.hsact.taxilog.data.model.Shift
-import com.hsact.taxilog.data.repository.ShiftRepository
+import com.hsact.taxilog.data.repository.ShiftRepositoryLegacy
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -36,12 +36,12 @@ class StatsViewModel : ViewModel() {
     }
 
     fun defineShifts(db: DBHelper) {
-        shiftsOrigin = ShiftRepository(db).getAllShifts()
+        shiftsOrigin = ShiftRepositoryLegacy(db).getAllShifts()
         shifts = shiftsOrigin.toMutableList()
     }
 
     fun updateShifts(db: DBHelper) {
-        shifts = ShiftRepository(db).getShiftsInDateRange(startDate,
+        shifts = ShiftRepositoryLegacy(db).getShiftsInDateRange(startDate,
             endDate).toMutableList()
     }
 }

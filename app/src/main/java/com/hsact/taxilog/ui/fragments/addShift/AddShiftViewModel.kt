@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hsact.taxilog.data.db.DBHelper
 import com.hsact.taxilog.data.model.Shift
-import com.hsact.taxilog.data.repository.ShiftRepository
+import com.hsact.taxilog.data.repository.ShiftRepositoryLegacy
 import com.hsact.taxilog.data.repository.SettingsRepositoryImpl
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertLongToTime
@@ -129,14 +129,14 @@ class AddShiftViewModel @Inject constructor(
             serviceCost = (settings.serviceCost ?: "").toLongOrNull() ?: 0,
         )*/
         val shiftV2: ShiftV2 = shiftInput.toDomain()
-        val shiftRepository = ShiftRepository(DBHelper(context, null))
+        val shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(context, null))
         val shift =
             Shift(
                 0, uiState.date, ShiftStatsUtil.msToHours(uiState.totalTime).toString(),
                 uiState.earnings, uiState.wash, uiState.fuelCost,
                 uiState.mileage, uiState.profit
             )
-        shiftRepository.addShift(shift)
+        shiftRepositoryLegacy.addShift(shift)
     }
 
     private fun hoursToMs(hours: Int): Long {
