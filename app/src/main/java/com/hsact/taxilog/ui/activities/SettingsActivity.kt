@@ -15,6 +15,7 @@ import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.SettingsActivityBinding
 import com.google.android.material.materialswitch.MaterialSwitch
 import androidx.appcompat.widget.Toolbar
+import com.hsact.taxilog.helpers.ContextWrapper
 import com.hsact.taxilog.helpers.LocaleProvider
 import com.hsact.taxilog.helpers.SettingsRepository
 import dagger.hilt.android.AndroidEntryPoint
@@ -107,16 +108,7 @@ class SettingsActivity: AppCompatActivity() {
     }
 
     override fun attachBaseContext(newBase: Context) {
-        /*super.attachBaseContext(
-            localeHelper.updateLocale(
-                newBase,
-                localeHelper.getSavedLanguage()
-            )
-        )*/
-        val localeProvider = LocaleProvider(newBase)
-        val lang = localeProvider.getSavedLanguage().takeIf { it.isNotEmpty() } ?: Locale.getDefault().language
-        val context = localeProvider.updateLocale(newBase, lang)
-        super.attachBaseContext(context)
+        super.attachBaseContext(ContextWrapper.wrapContext(newBase, Locale.getDefault().language))
     }
 
     private fun bindItems() {

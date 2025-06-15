@@ -25,6 +25,7 @@ import com.hsact.taxilog.ui.components.DatePickerFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.widget.Toolbar
 import com.hsact.taxilog.data.repository.ShiftRepository
+import com.hsact.taxilog.helpers.ContextWrapper
 import com.hsact.taxilog.helpers.LocaleProvider
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -77,10 +78,7 @@ class LogActivity : AppCompatActivity() {
                 localeHelper.getSavedLanguage()
             )
         )*/
-        val localeProvider = LocaleProvider(newBase)
-        val lang = localeProvider.getSavedLanguage().takeIf { it.isNotEmpty() } ?: Locale.getDefault().language
-        val context = localeProvider.updateLocale(newBase, lang)
-        super.attachBaseContext(context)
+        super.attachBaseContext(ContextWrapper.wrapContext(newBase, Locale.getDefault().language))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
