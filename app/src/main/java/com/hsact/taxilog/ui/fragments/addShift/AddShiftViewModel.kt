@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import com.hsact.taxilog.data.db.DBHelper
 import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.data.repository.ShiftRepositoryLegacy
-import com.hsact.taxilog.data.repository.SettingsRepositoryImpl
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertLongToTime
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertTimeToLong
@@ -16,6 +15,7 @@ import com.hsact.taxilog.domain.model.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.taxilog.domain.usecase.shift.AddShiftUseCase
 import com.hsact.taxilog.domain.usecase.shift.GetAllShiftsUseCase
+import com.hsact.taxilog.ui.shift.ShiftInputModel
 import com.hsact.taxilog.ui.shift.mappers.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDateTime
@@ -107,7 +107,27 @@ class AddShiftViewModel @Inject constructor(
 
     suspend fun submit(context: Context) {
         val uiState = _shiftData.value ?: return
-        val shiftInput = uiState.shiftInput
+        val shiftInput = buildShiftInputModel(uiState)
+
+        val shiftV2: ShiftV2 = shiftInput.toDomain()
+        addShiftUseCase(shiftV2)
+
+        roomTest()
+
+        val shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(context, null))
+        val shift =
+            Shift(
+                0, uiState.date, ShiftStatsUtil.msToHours(uiState.totalTime).toString(),
+                uiState.earnings, uiState.wash, uiState.fuelCost,
+                uiState.mileage, uiState.profit
+            )
+        shiftRepositoryLegacy.addShift(shift)
+    }
+
+    private fun buildShiftInputModel(
+        uiState: UiState,
+    ): ShiftInputModel {
+        val shiftInput = ShiftInputModel()
         shiftInput.date = uiState.date
         shiftInput.timeStart = uiState.timeBegin
         shiftInput.timeEnd = uiState.timeEnd
@@ -121,30 +141,10 @@ class AddShiftViewModel @Inject constructor(
         shiftInput.rentCost = settings.rentCost ?: ""
         shiftInput.serviceCost = settings.serviceCost ?: ""
         shiftInput.consumption = settings.consumption ?: ""
-        _shiftData.value = uiState.copy(shiftInput = shiftInput)
-
-        /*val carSnapshot = CarSnapshot(
-            name = "",
-            mileage = 0,
-            fuelConsumption = (settings.consumption ?: "").toLongOrNull() ?: 0,
-            rentCost = (settings.rentCost ?: "").toLongOrNull() ?: 0,
-            serviceCost = (settings.serviceCost ?: "").toLongOrNull() ?: 0,
-        )*/
-        val shiftV2: ShiftV2 = shiftInput.toDomain()
-        roomTest(shiftV2)
-
-        val shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(context, null))
-        val shift =
-            Shift(
-                0, uiState.date, ShiftStatsUtil.msToHours(uiState.totalTime).toString(),
-                uiState.earnings, uiState.wash, uiState.fuelCost,
-                uiState.mileage, uiState.profit
-            )
-        shiftRepositoryLegacy.addShift(shift)
+        return shiftInput
     }
 
-    private suspend fun roomTest(shiftV2: ShiftV2) {
-        addShiftUseCase(shiftV2)
+    private suspend fun roomTest() {
         val shiftListNew = getAllShiftsUseCase()
         shiftListNew.forEach { shift ->
             println(shift)

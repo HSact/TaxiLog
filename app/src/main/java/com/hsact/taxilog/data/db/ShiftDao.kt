@@ -14,6 +14,9 @@ interface ShiftDao {
     @Query("SELECT * FROM shiftentity ORDER BY id DESC")
     suspend fun getAllShifts(): List<ShiftEntity>
 
+    @Query("SELECT * FROM ShiftEntity WHERE (:start IS NULL OR period_start >= :start) AND (:end IS NULL OR period_end <= :end)")
+    suspend fun getShiftsInRange(start: String?, end: String?): List<ShiftEntity>
+
     @Query("SELECT * FROM shiftentity WHERE id = :id LIMIT 1")
     suspend fun getShiftById(id: Int): ShiftEntity?
 
