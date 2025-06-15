@@ -2,6 +2,7 @@ package com.hsact.taxilog.helpers
 
 import android.content.Context
 import android.content.res.Configuration
+import com.hsact.taxilog.data.repository.SettingsRepository
 import java.util.Locale
 import javax.inject.Inject
 

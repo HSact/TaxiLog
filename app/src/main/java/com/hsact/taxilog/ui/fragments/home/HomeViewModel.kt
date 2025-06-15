@@ -6,7 +6,7 @@ import com.hsact.taxilog.R
 import com.hsact.taxilog.data.db.DBHelper
 import com.hsact.taxilog.data.repository.ShiftRepository
 import com.hsact.taxilog.data.utils.DateUtils
-import com.hsact.taxilog.helpers.SettingsRepository
+import com.hsact.taxilog.data.repository.SettingsRepository
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

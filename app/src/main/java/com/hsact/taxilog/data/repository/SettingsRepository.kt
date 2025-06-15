@@ -1,4 +1,4 @@
-package com.hsact.taxilog.helpers
+package com.hsact.taxilog.data.repository
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -41,17 +41,6 @@ class SettingsRepository @Inject constructor(
         private set
     var taxRate: String? = null
         private set
-
-    /*companion object {
-        @Volatile
-        private var instance: SettingsRepository? = null
-
-        fun getInstance(context: Context): SettingsRepository {
-            return instance ?: synchronized(this) {
-                instance ?: SettingsRepository(context).also { it.loadSettings(); instance = it }
-            }
-        }
-    }*/
 
     private fun loadSettings() {
         isConfigured = sharedPreferences.getBoolean("Seted_up", false)

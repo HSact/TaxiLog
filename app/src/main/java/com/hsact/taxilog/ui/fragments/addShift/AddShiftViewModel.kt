@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.hsact.taxilog.data.db.DBHelper
 import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.data.repository.ShiftRepository
-import com.hsact.taxilog.helpers.SettingsRepository
+import com.hsact.taxilog.data.repository.SettingsRepository
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertLongToTime
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertTimeToLong
