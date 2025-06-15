@@ -14,6 +14,7 @@ abstract class SettingsModule {
 
     @Binds
     @Singleton
+    @Suppress("unused")
     abstract fun bindSettingsRepository(
         impl: SettingsRepositoryImpl
     ): SettingsRepository
