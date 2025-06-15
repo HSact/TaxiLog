@@ -78,7 +78,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
         editDate.setOnClickListener {
             DatePickerFragment.pickDate(
-                requireContext(),
+                this,
                 editDate,
                 onDatePicked = { viewModel.shiftData.value?.date = editDate.text.toString() }
             )
@@ -127,7 +127,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
                     return
                 }
                 updateShiftField { it.mileage = s.toString().toDoubleOrNull() ?: 0.0 }
-                viewModel.guessFuelCost(requireContext())
+                viewModel.guessFuelCost()
             }
         })
     }
@@ -214,14 +214,16 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
     }
 
     private fun showSubmitMessage(warningCode: String) {
-            val alert = MaterialAlertDialogBuilder(requireContext())
-            alert.setTitle(getString(R.string.submit))
-            alert.setPositiveButton(R.string.ok) { dialog, id -> viewLifecycleOwner.lifecycleScope.launch {
+        val alert = MaterialAlertDialogBuilder(requireContext())
+        alert.setTitle(getString(R.string.submit))
+        alert.setPositiveButton(R.string.ok) { dialog, id ->
+            viewLifecycleOwner.lifecycleScope.launch {
                 submit()
-            } }
-            alert.setNegativeButton(R.string.cancel, null)
-            alert.setMessage(warningCode)
-            alert.show()
+            }
+        }
+        alert.setNegativeButton(R.string.cancel, null)
+        alert.setMessage(warningCode)
+        alert.show()
     }
 
     private suspend fun submit() {

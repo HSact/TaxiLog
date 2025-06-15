@@ -12,6 +12,8 @@ import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertLongToTime
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertTimeToLong
 import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.domain.model.UserSettings
+import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.taxilog.domain.usecase.shift.AddShiftUseCase
 import com.hsact.taxilog.domain.usecase.shift.GetAllShiftsUseCase
 import com.hsact.taxilog.ui.shift.mappers.toDomain
@@ -22,12 +24,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddShiftViewModel @Inject constructor(
-    private val settings: SettingsRepositoryImpl,
+    getAllSettingsUseCase: GetAllSettingsUseCase,
     private val addShiftUseCase: AddShiftUseCase,
     private val getAllShiftsUseCase: GetAllShiftsUseCase
 ) : ViewModel() {
     private val _shiftData = MutableLiveData<UiState>()
     val shiftData: LiveData<UiState> get() = _shiftData
+
+    private val settings: UserSettings = getAllSettingsUseCase.invoke()
 
     init {
         loadGuess()
@@ -52,22 +56,16 @@ class AddShiftViewModel @Inject constructor(
             uiState = uiState.copy(date = endDate.format(formatter))
         }
         _shiftData.value = uiState
-        //----------------------NEW
-//        val shiftInput = uiState.shiftInput
-//        shiftInput.date = uiState.date
-//        shiftInput.timeStart = uiState.timeBegin
-//        shiftInput.timeEnd = uiState.timeEnd
-//        _shiftData.value = uiState.copy(shiftInput = shiftInput)
     }
 
-    fun guessFuelCost(context: Context) {
+    fun guessFuelCost() {
         if (!settings.isConfigured) return
         if (_shiftData.value?.mileage == 0.0) return
         if (settings.fuelPrice.isNullOrEmpty() || settings.consumption.isNullOrEmpty()) return
         var currentShift = _shiftData.value ?: return
-        val fuelPrice: Double = (settings.fuelPrice ?: return).toDouble()
-        val consumption = (settings.consumption ?: return).toDouble()
-        if (!settings.isConfigured || fuelPrice == 0.0 || consumption == 0.0) {
+        val fuelPrice: Double = (settings.fuelPrice).toDouble()
+        val consumption = (settings.consumption).toDouble()
+        if (fuelPrice == 0.0 || consumption == 0.0) {
             return
         }
         if (currentShift.mileage == 0.0) {

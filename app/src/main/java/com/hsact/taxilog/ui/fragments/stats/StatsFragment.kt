@@ -67,7 +67,7 @@ class StatsFragment : Fragment() {
 
     private fun pickDate(editObj: EditText) {
         DatePickerFragment.pickDate(
-            context = requireContext(),
+            context = this,
             editObj = editObj,
             minDate = if (editObj == butDatePickEnd) butDatePickBegin.text.toString() else "",
             maxDate = if (editObj == butDatePickBegin) butDatePickEnd.text.toString() else "",

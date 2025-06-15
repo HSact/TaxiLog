@@ -67,7 +67,7 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
 
     companion object {
         fun pickDate(
-            context: Context,
+            context: Any,
             editObj: EditText,
             minDate: String = "",
             maxDate: String = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),

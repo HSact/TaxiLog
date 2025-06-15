@@ -72,7 +72,7 @@ class GoalsFragment : Fragment() {
     }
 
     private fun pickDate(editObj: EditText) {
-        DatePickerFragment.pickDate(context = requireContext(), editObj = editObj) {
+        DatePickerFragment.pickDate(context = this, editObj = editObj) {
             viewModel.pickedDate = editObj.text.toString()
             viewModel.calculateDaysData(viewModel.pickedDate, requireContext())
             viewModel.defineGoals(viewModel.pickedDate, requireContext())
