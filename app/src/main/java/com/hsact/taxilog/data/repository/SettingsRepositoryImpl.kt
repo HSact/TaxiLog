@@ -2,8 +2,8 @@ package com.hsact.taxilog.data.repository
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
+import com.hsact.taxilog.domain.model.UserSettings
 import com.hsact.taxilog.domain.repository.SettingsRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -17,8 +17,8 @@ class SettingsRepositoryImpl @Inject constructor(
     override val isConfigured: Boolean
         get() = sharedPreferences.getBoolean("Is_configured", false)
 
-    override val theme: String
-        get() = sharedPreferences.getString("Theme", "") ?: getCurrentTheme()
+    override val theme: String?
+        get() = sharedPreferences.getString("Theme", "")
 
     override val language: String?
         get() = sharedPreferences.getString("My_Lang", "")
@@ -69,14 +69,20 @@ class SettingsRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun getCurrentTheme(): String {
-        val currentTheme = AppCompatDelegate.getDefaultNightMode()
-        if (currentTheme == 1) {
-            return "light"
-        }
-        if (currentTheme == 2) {
-            return "dark"
-        }
-        return "default"
+    override fun saveAllSettings(settings: UserSettings) {
+        updateSetting("Is_configured", settings.isConfigured)
+        updateSetting("My_Lang", settings.lang)
+        updateSetting("Theme", settings.theme)
+        updateSetting("KmMi", settings.kmMi)
+        updateSetting("Consumption", settings.consumption)
+        updateSetting("Rented", settings.rented)
+        updateSetting("Rent_cost", settings.rentCost)
+        updateSetting("Service", settings.service)
+        updateSetting("Service_cost", settings.serviceCost)
+        updateSetting("Goal_per_month", settings.goalPerMonth)
+        updateSetting("Schedule", settings.schedule)
+        updateSetting("Taxes", settings.taxes)
+        updateSetting("Tax_rate", settings.taxRate)
+        updateSetting("Fuel_price", settings.fuelPrice)
     }
 }

@@ -1,6 +1,6 @@
 package com.hsact.taxilog.ui.shift.mappers
 
-import com.hsact.taxilog.domain.shift2.*
+import com.hsact.taxilog.domain.model.ShiftV2
 import com.hsact.taxilog.ui.shift.ShiftOutputModel
 import java.time.Duration
 import java.time.format.DateTimeFormatter

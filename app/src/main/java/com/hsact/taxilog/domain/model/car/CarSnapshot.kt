@@ -1,4 +1,4 @@
-package com.hsact.taxilog.domain.shift2.car
+package com.hsact.taxilog.domain.model.car
 
 data class CarSnapshot(
     val name: String = "",

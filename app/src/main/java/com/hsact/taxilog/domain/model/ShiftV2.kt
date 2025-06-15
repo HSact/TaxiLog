@@ -1,8 +1,8 @@
-package com.hsact.taxilog.domain.shift2
+package com.hsact.taxilog.domain.model
 
 import com.hsact.taxilog.data.model.Shift
-import com.hsact.taxilog.domain.shift2.car.CarSnapshot
-import com.hsact.taxilog.domain.shift2.time.ShiftTime
+import com.hsact.taxilog.domain.model.car.CarSnapshot
+import com.hsact.taxilog.domain.model.time.ShiftTime
 import com.hsact.taxilog.data.utils.DeprecatedDateFormatter
 import com.hsact.taxilog.data.utils.centsToDollars
 import com.hsact.taxilog.data.utils.round

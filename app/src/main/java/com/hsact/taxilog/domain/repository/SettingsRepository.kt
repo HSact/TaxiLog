@@ -1,9 +1,11 @@
 package com.hsact.taxilog.domain.repository
 
+import com.hsact.taxilog.domain.model.UserSettings
+
 interface SettingsRepository {
 
     val isConfigured: Boolean
-    val theme: String
+    val theme: String?
     val language: String?
     val kmMi: Boolean
     val consumption: String?
@@ -18,4 +20,5 @@ interface SettingsRepository {
     val taxRate: String?
 
     fun updateSetting(key: String, value: Any)
+    fun saveAllSettings(settings: UserSettings)
 }

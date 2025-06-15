@@ -43,7 +43,7 @@ class StartUpActivity : AppCompatActivity() {
                 )
             )
         }
-        val theme: String = settings.theme
+        val theme: String = settings.theme?: getCurrentTheme()
         if (theme == "dark") {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         }
@@ -66,6 +66,17 @@ class StartUpActivity : AppCompatActivity() {
         super.onRestart()
         moveTaskToBack(true)
         exitProcess(-1)
+    }
+
+    private fun getCurrentTheme(): String {
+        val currentTheme = AppCompatDelegate.getDefaultNightMode()
+        if (currentTheme == 1) {
+            return "light"
+        }
+        if (currentTheme == 2) {
+            return "dark"
+        }
+        return "default"
     }
 
     private fun setUp() {

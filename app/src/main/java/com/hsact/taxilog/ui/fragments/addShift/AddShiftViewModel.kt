@@ -11,7 +11,7 @@ import com.hsact.taxilog.data.repository.SettingsRepositoryImpl
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertLongToTime
 import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertTimeToLong
-import com.hsact.taxilog.domain.shift2.ShiftV2
+import com.hsact.taxilog.domain.model.ShiftV2
 import com.hsact.taxilog.ui.shift.mappers.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDateTime

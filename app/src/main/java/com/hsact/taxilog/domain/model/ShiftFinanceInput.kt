@@ -1,4 +1,4 @@
-package com.hsact.taxilog.domain.shift2
+package com.hsact.taxilog.domain.model
 
 import kotlin.math.roundToLong
 

@@ -1,4 +1,4 @@
-package com.hsact.taxilog.domain.shift2.time
+package com.hsact.taxilog.domain.model.time
 
 sealed class TimeValidationError {
     object StartAfterEnd : TimeValidationError()

@@ -1,10 +1,10 @@
 package com.hsact.taxilog.ui.shift.mappers
 
-import com.hsact.taxilog.domain.shift2.ShiftFinanceInput
-import com.hsact.taxilog.domain.shift2.ShiftV2
-import com.hsact.taxilog.domain.shift2.car.CarSnapshot
-import com.hsact.taxilog.domain.shift2.time.DateTimePeriod
-import com.hsact.taxilog.domain.shift2.time.ShiftTime
+import com.hsact.taxilog.domain.model.ShiftFinanceInput
+import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.domain.model.car.CarSnapshot
+import com.hsact.taxilog.domain.model.time.DateTimePeriod
+import com.hsact.taxilog.domain.model.time.ShiftTime
 import com.hsact.taxilog.ui.shift.ShiftInputModel
 import java.time.LocalDate
 import java.time.LocalDateTime

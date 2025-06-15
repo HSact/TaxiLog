@@ -17,6 +17,7 @@ import com.google.android.material.materialswitch.MaterialSwitch
 import androidx.appcompat.widget.Toolbar
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import com.hsact.taxilog.data.repository.SettingsRepositoryImpl
+import com.hsact.taxilog.domain.model.UserSettings
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
@@ -235,21 +236,23 @@ class SettingsActivity: AppCompatActivity() {
     }
 
     private fun saveSettings() {
-        settings.updateSetting("Is_configured", true)
-        settings.updateSetting("My_Lang", injectLangSpinner())
-        settings.updateSetting("Theme", getSelectedTheme())
-        settings.updateSetting("KmMi", getKmMi())
-        settings.updateSetting("KmMi", getKmMi())
-        settings.updateSetting("Consumption", textConsumption.text.toString())
-        settings.updateSetting("Fuel_price", textFuelCost.text.toString())
-        settings.updateSetting("Rented", switchRent.isChecked)
-        settings.updateSetting("Rent_cost", textRentCost.text.toString())
-        settings.updateSetting("Service", switchService.isChecked)
-        settings.updateSetting("Service_cost", textServiceCost.text.toString())
-        settings.updateSetting("Goal_per_month", textGoalPerMonth.text.toString())
-        settings.updateSetting("Schedule", getSchedule())
-        settings.updateSetting("Taxes", switchTaxes.isChecked)
-        settings.updateSetting("Tax_rate", textTaxRate.text.toString())
+        val settingsData = UserSettings(
+            isConfigured = true,
+            lang = injectLangSpinner(),
+            theme = getSelectedTheme(),
+            kmMi = getKmMi(),
+            consumption = textConsumption.text.toString(),
+            rented = switchRent.isChecked,
+            rentCost = textRentCost.text.toString(),
+            service = switchService.isChecked,
+            serviceCost = textServiceCost.text.toString(),
+            goalPerMonth = textGoalPerMonth.text.toString(),
+            schedule = getSchedule(),
+            taxes = switchTaxes.isChecked,
+            taxRate = textTaxRate.text.toString(),
+            fuelPrice = textFuelCost.text.toString()
+        )
+        settings.saveAllSettings(settingsData)
     }
 
     private fun switchVisualize(switch: MaterialSwitch) {
