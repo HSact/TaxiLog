@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val navView: BottomNavigationView = binding.navView
         botNav = navView
-        localeHelper.setLocale(this, localeHelper.getSavedLanguage())
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)

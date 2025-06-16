@@ -23,15 +23,11 @@ import com.hsact.taxilog.databinding.SettingsActivityBinding
 import com.hsact.taxilog.domain.model.UserSettings
 import com.hsact.taxilog.ui.activities.MainActivity
 import com.hsact.taxilog.ui.locale.ContextWrapper
-import com.hsact.taxilog.ui.locale.LocaleHelper
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsActivity: AppCompatActivity() {
-    @Inject
-    lateinit var localeHelper: LocaleHelper
 
     private val viewModel: SettingsViewModel by viewModels()
 
@@ -63,7 +59,6 @@ class SettingsActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        localeHelper.setLocale(this, localeHelper.getSavedLanguage())
 
         binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -150,7 +145,7 @@ class SettingsActivity: AppCompatActivity() {
     }
 
     private fun applySettings() {
-        localeHelper.setLocale(this, injectLangSpinner())
+        viewModel.localeHelper.setLocale(this, injectLangSpinner())
         saveSettings()
         switchTheme()
     }
@@ -176,7 +171,7 @@ class SettingsActivity: AppCompatActivity() {
     }
 
     private fun loadLangSpinner(settings: UserSettings) {
-        val currentLang: String = settings.language ?: localeHelper.getDefault()
+        val currentLang: String = settings.language ?: Locale.getDefault().language
         if (currentLang == "en") {
             spinnerLang.setSelection(0)
         }
