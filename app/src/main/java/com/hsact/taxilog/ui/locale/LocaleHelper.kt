@@ -2,13 +2,17 @@ package com.hsact.taxilog.ui.locale
 
 import android.content.Context
 import android.content.res.Configuration
-import com.hsact.taxilog.data.repository.SettingsRepositoryImpl
+import com.hsact.taxilog.domain.model.UserSettings
+import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
+import com.hsact.taxilog.domain.usecase.settings.UpdateSettingUseCase
 import java.util.Locale
 import javax.inject.Inject
 
 class LocaleHelper @Inject constructor(
-    private val settings: SettingsRepositoryImpl
+    getAllSettingsUseCase: GetAllSettingsUseCase,
+    private val updateSettingUseCase: UpdateSettingUseCase
 ) {
+    private val settings: UserSettings = getAllSettingsUseCase.invoke()
     private val languageKey = "My_Lang"
 
     fun setLocale(context: Context, lang: String): Context {
@@ -29,7 +33,7 @@ class LocaleHelper @Inject constructor(
     }
 
     private fun saveLanguage(lang: String) {
-        settings.updateSetting(languageKey, lang)
+        updateSettingUseCase(languageKey, lang)
     }
 
     fun getDefault(): String {

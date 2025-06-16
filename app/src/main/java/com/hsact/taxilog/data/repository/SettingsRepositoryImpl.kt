@@ -60,7 +60,7 @@ class SettingsRepositoryImpl @Inject constructor(
             isConfigured = isConfigured,
             language = language,
             theme = theme,
-            kmMi = kmMi,
+            isKmUnit = kmMi,
             consumption = consumption,
             rented = rented,
             rentCost = rentCost,
@@ -91,7 +91,7 @@ class SettingsRepositoryImpl @Inject constructor(
         updateSetting("Is_configured", settings.isConfigured)
         updateSetting("My_Lang", settings.language)
         updateSetting("Theme", settings.theme)
-        updateSetting("KmMi", settings.kmMi)
+        updateSetting("KmMi", settings.isKmUnit)
         updateSetting("Consumption", settings.consumption)
         updateSetting("Rented", settings.rented)
         updateSetting("Rent_cost", settings.rentCost)

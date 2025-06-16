@@ -207,7 +207,7 @@ class SettingsActivity: AppCompatActivity() {
     }
 
     private fun loadKmMiSelection(settings: UserSettings) {
-        if (settings.kmMi) {
+        if (settings.isKmUnit) {
             radioKm.isChecked = true
             radioMi.isChecked = false
         } else {
@@ -247,7 +247,7 @@ class SettingsActivity: AppCompatActivity() {
             isConfigured = true,
             language = injectLangSpinner(),
             theme = getSelectedTheme(),
-            kmMi = getKmMi(),
+            isKmUnit = getKmMi(),
             consumption = textConsumption.text.toString(),
             rented = switchRent.isChecked,
             rentCost = textRentCost.text.toString(),

@@ -6,9 +6,10 @@ import com.hsact.taxilog.R
 import com.hsact.taxilog.data.db.DBHelper
 import com.hsact.taxilog.data.repository.ShiftRepositoryLegacy
 import com.hsact.taxilog.data.utils.DateUtils
-import com.hsact.taxilog.data.repository.SettingsRepositoryImpl
 import com.hsact.taxilog.data.utils.DeprecatedDateFormatter
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
+import com.hsact.taxilog.domain.model.UserSettings
+import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,8 +18,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val settings: SettingsRepositoryImpl
+    getAllSettingsUseCase: GetAllSettingsUseCase
 ) : ViewModel() {
+
+    private val settings: UserSettings = getAllSettingsUseCase.invoke()
 
     private val _shiftData = MutableStateFlow<Map<String, String>>(emptyMap())
     val shiftData: StateFlow<Map<String, String>> = _shiftData
