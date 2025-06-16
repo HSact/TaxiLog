@@ -1,5 +1,6 @@
 package com.hsact.taxilog.ui.activities.startup
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -12,7 +13,9 @@ import com.hsact.taxilog.databinding.ActivityStartUpBinding
 import com.hsact.taxilog.domain.model.UserSettings
 import com.hsact.taxilog.ui.activities.MainActivity
 import com.hsact.taxilog.ui.activities.settings.SettingsActivity
+import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 import kotlin.system.exitProcess
 
 @AndroidEntryPoint
@@ -34,7 +37,6 @@ class StartUpActivity : AppCompatActivity() {
                 this.settings = s
                 val theme: String = s.theme ?: getCurrentTheme()
                 setTheme(theme)
-
                 binding.imageLogo.alpha = 0f
                 binding.buttonOkay.setOnClickListener {
                     startActivity(
@@ -65,6 +67,9 @@ class StartUpActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(ContextWrapper.wrapContext(newBase, Locale.getDefault().language))
     }
 
     private fun setTheme(theme: String) {

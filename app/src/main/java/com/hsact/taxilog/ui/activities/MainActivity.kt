@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val navView: BottomNavigationView = binding.navView
         botNav = navView
-        loadSettings()
+        localeHelper.setLocale(this, localeHelper.getSavedLanguage())
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -92,9 +92,5 @@ class MainActivity : AppCompatActivity() {
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(ContextWrapper.wrapContext(newBase, Locale.getDefault().language))
-    }
-
-    private fun loadSettings() {
-        localeHelper.setLocale(this, localeHelper.getSavedLanguage())
     }
 }
