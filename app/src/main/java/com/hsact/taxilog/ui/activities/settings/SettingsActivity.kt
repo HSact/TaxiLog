@@ -69,11 +69,11 @@ class SettingsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         bindItems()
-        loadSettings()
-        loadThemeSelection()
-        switchVisualize(switchRent)
-        switchVisualize(switchService)
-        switchVisualize(switchTaxes)
+        updateUiWithSettings()
+        updateThemeRadioButtons()
+        toggleTableVisibility(switchRent)
+        toggleTableVisibility(switchService)
+        toggleTableVisibility(switchTaxes)
 
         if (savedInstanceState != null) {
             if (savedInstanceState.getBoolean("IS_VISIBLE_RENT", true)) {
@@ -95,9 +95,9 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        switchRent.setOnClickListener { switchVisualize(switchRent) }
-        switchService.setOnClickListener { switchVisualize(switchService) }
-        switchTaxes.setOnClickListener { switchVisualize(switchTaxes) }
+        switchRent.setOnClickListener { toggleTableVisibility(switchRent) }
+        switchService.setOnClickListener { toggleTableVisibility(switchService) }
+        switchTaxes.setOnClickListener { toggleTableVisibility(switchTaxes) }
 
         buttonApply.setOnClickListener {
             applySettings()
@@ -145,19 +145,19 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun applySettings() {
-        viewModel.localeHelper.setLocale(this, injectLangSpinner())
+        viewModel.localeHelper.setLocale(this, getSelectedLanguage())
         saveSettings()
         switchTheme()
     }
 
-    private fun loadSettings() {
+    private fun updateUiWithSettings() {
         val settings = viewModel.settings.value ?: return
-        loadLangSpinner(settings)
+        setupLanguageSpinner(settings)
         if (!(settings.isConfigured)) {
             return
         }
-        loadThemeSelection()
-        loadKmMiSelection(settings)
+        updateThemeRadioButtons()
+        updateDistanceUnitRadioButtons(settings)
         textConsumption.setText(settings.consumption)
         switchRent.isChecked = settings.rented
         textRentCost.setText(settings.rentCost)
@@ -165,12 +165,12 @@ class SettingsActivity : AppCompatActivity() {
         switchService.isChecked = settings.service
         textServiceCost.setText(settings.serviceCost)
         textGoalPerMonth.setText(settings.goalPerMonth)
-        radioSchedule.check(getScheduleId(settings.schedule))
+        radioSchedule.check(getScheduleRadioButtonId(settings.schedule))
         switchTaxes.isChecked = settings.taxes
         textTaxRate.setText(settings.taxRate)
     }
 
-    private fun loadLangSpinner(settings: UserSettings) {
+    private fun setupLanguageSpinner(settings: UserSettings) {
         var currentLang: String = settings.language ?: Locale.getDefault().language
         if (currentLang.isEmpty()) {
             currentLang = Locale.getDefault().language
@@ -183,7 +183,7 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadThemeSelection() {
+    private fun updateThemeRadioButtons() {
         val currentTheme = AppCompatDelegate.getDefaultNightMode()
 
         if (currentTheme == -100) {
@@ -204,7 +204,7 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadKmMiSelection(settings: UserSettings) {
+    private fun updateDistanceUnitRadioButtons(settings: UserSettings) {
         if (settings.isKmUnit) {
             radioKm.isChecked = true
             radioMi.isChecked = false
@@ -236,23 +236,23 @@ class SettingsActivity : AppCompatActivity() {
         return ""
     }
 
-    private fun getKmMi(): Boolean {
+    private fun isKmUnitSelected(): Boolean {
         return radioKm.isChecked
     }
 
     private fun saveSettings() {
         val settingsData = UserSettings(
             isConfigured = true,
-            language = injectLangSpinner(),
+            language = getSelectedLanguage(),
             theme = getSelectedTheme(),
-            isKmUnit = getKmMi(),
+            isKmUnit = isKmUnitSelected(),
             consumption = textConsumption.text.toString(),
             rented = switchRent.isChecked,
             rentCost = textRentCost.text.toString(),
             service = switchService.isChecked,
             serviceCost = textServiceCost.text.toString(),
             goalPerMonth = textGoalPerMonth.text.toString(),
-            schedule = getSchedule(),
+            schedule = getSelectedSchedule(),
             taxes = switchTaxes.isChecked,
             taxRate = textTaxRate.text.toString(),
             fuelPrice = textFuelCost.text.toString()
@@ -260,7 +260,7 @@ class SettingsActivity : AppCompatActivity() {
         viewModel.saveSettings(settingsData)
     }
 
-    private fun switchVisualize(switch: MaterialSwitch) {
+    private fun toggleTableVisibility(switch: MaterialSwitch) {
         val table: TableRow = when (switch) {
             binding.switchRent -> {
                 binding.TableRent
@@ -286,7 +286,7 @@ class SettingsActivity : AppCompatActivity() {
         view.visibility = visibility
     }
 
-    private fun injectLangSpinner(): String {
+    private fun getSelectedLanguage(): String {
         when (spinnerLang.selectedItemPosition) {
             0 -> return "en"
             1 -> return "ru"
@@ -294,7 +294,7 @@ class SettingsActivity : AppCompatActivity() {
         return ""
     }
 
-    private fun getSchedule(): String {
+    private fun getSelectedSchedule(): String {
         return when (radioSchedule.checkedRadioButtonId) {
             R.id.radio70 -> "7/0"
             R.id.radio61 -> "6/1"
@@ -303,7 +303,7 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun getScheduleId(schedule: String?): Int {
+    private fun getScheduleRadioButtonId(schedule: String?): Int {
         return when (schedule) {
             "7/0" -> R.id.radio70
             "6/1" -> R.id.radio61
