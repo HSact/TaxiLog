@@ -36,7 +36,8 @@ class HomeFragment : Fragment() {
         card1 = binding.card1
         card2 = binding.card2
         card3 = binding.card3
-        card1.setContent { DrawGoalCard(viewModel.shiftData) }
+        card1.setContent { DrawGoalCard(viewModel.settings.goalPerMonth?.toFloatOrNull() ?: 0f,
+            viewModel.shiftListThisMonth) }
         card2.setContent { DrawLastShiftCard(viewModel.shiftList) }
         card3.setContent { DrawMonthGraphCard(viewModel.chartData, viewModel.goalData) }
         return root
