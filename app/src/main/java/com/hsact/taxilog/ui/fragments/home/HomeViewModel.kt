@@ -12,7 +12,7 @@ import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import com.hsact.taxilog.domain.model.ShiftV2
 import com.hsact.taxilog.domain.model.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
-import com.hsact.taxilog.domain.usecase.shift.GetAllShiftsUseCase
+import com.hsact.taxilog.domain.usecase.shift.GetLastShiftUseCase
 import com.hsact.taxilog.domain.usecase.shift.GetShiftsInRangeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,14 +25,17 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     getAllSettingsUseCase: GetAllSettingsUseCase,
-    private val getAllShiftsUseCase: GetAllShiftsUseCase,
+    private val getLastShiftUseCase: GetLastShiftUseCase,
     private val getShiftsInRangeUseCase: GetShiftsInRangeUseCase
 ) : ViewModel() {
 
     val settings: UserSettings = getAllSettingsUseCase.invoke()
 
-    private val _shiftList = MutableStateFlow<List<ShiftV2>>(emptyList())
-    val shiftList: StateFlow<List<ShiftV2>> = _shiftList
+    //private val _shiftList = MutableStateFlow<List<ShiftV2>>(emptyList())
+    //val shiftList: StateFlow<List<ShiftV2>> = _shiftList
+
+    private val _lastShift = MutableStateFlow<ShiftV2?>(null)
+    val lastShift: StateFlow<ShiftV2?> = _lastShift
 
     private val _shiftListThisMonth = MutableStateFlow<List<ShiftV2>>(emptyList())
     val shiftListThisMonth: StateFlow<List<ShiftV2>> = _shiftListThisMonth
@@ -48,7 +51,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _shiftList.value = getAllShiftsUseCase.invoke()
+            _lastShift.value = getLastShiftUseCase.invoke()
             _shiftListThisMonth.value = getShiftsInRangeUseCase.invoke(
                 LocalDateTime.now().withDayOfMonth(1),
                 LocalDateTime.now().withDayOfMonth(LocalDate.now().lengthOfMonth())

@@ -16,7 +16,10 @@ class ShiftRepositoryImpl @Inject constructor(
         shiftDao.getAllShifts()
             .map { it.toDomain() }
 
-    override suspend fun getShiftsInRange(start: LocalDateTime?, end: LocalDateTime?): List<ShiftV2> {
+    override suspend fun getShiftsInRange(
+        start: LocalDateTime?,
+        end: LocalDateTime?,
+    ): List<ShiftV2> {
         val startString = start?.toString() // ISO-8601
         val endString = end?.toString()
         val entities = shiftDao.getShiftsInRange(startString, endString)
@@ -25,6 +28,9 @@ class ShiftRepositoryImpl @Inject constructor(
 
     override suspend fun getShift(id: Int) =
         shiftDao.getShiftById(id)?.toDomain()
+
+    override suspend fun getLastShift() =
+        shiftDao.getLastShift()?.toDomain()
 
     override suspend fun insertShift(shift: ShiftV2) =
         shiftDao.insertShift(shift.toEntity())

@@ -26,12 +26,9 @@ import kotlinx.coroutines.flow.StateFlow
 import java.util.Locale
 
 @Composable
-fun DrawLastShiftCard(shiftList: StateFlow<List<ShiftV2>>) {
-    val shiftList by shiftList.collectAsStateWithLifecycle()
-    val lastShift = shiftList.lastOrNull()
-    val lastShiftUi = remember(lastShift) {
-        lastShift?.toUiModel(Locale.getDefault())
-    }
+fun DrawLastShiftCard(shift: StateFlow<ShiftV2?>) {
+    val lastShift = shift.collectAsStateWithLifecycle()
+    val lastShiftUi = lastShift.value?.toUiModel(Locale.getDefault())
     BaseCard {
         CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
             Text(
@@ -84,8 +81,8 @@ private fun CardPreview() {
             )
         )
     }
-    DrawLastShiftCard(
+    /*DrawLastShiftCard(
         //shiftData = previewData,
         shiftList = MutableStateFlow(emptyList())
-    )
+    )*/
 }

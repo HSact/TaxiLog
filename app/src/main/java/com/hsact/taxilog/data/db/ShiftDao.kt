@@ -20,6 +20,9 @@ interface ShiftDao {
     @Query("SELECT * FROM shiftentity WHERE id = :id LIMIT 1")
     suspend fun getShiftById(id: Int): ShiftEntity?
 
+    @Query("SELECT * FROM shiftentity ORDER BY id DESC LIMIT 1")
+    suspend fun getLastShift(): ShiftEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertShift(shift: ShiftEntity)
 
