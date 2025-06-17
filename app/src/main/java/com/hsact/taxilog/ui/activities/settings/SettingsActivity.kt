@@ -27,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 
 @AndroidEntryPoint
-class SettingsActivity: AppCompatActivity() {
+class SettingsActivity : AppCompatActivity() {
 
     private val viewModel: SettingsViewModel by viewModels()
 
@@ -261,18 +261,17 @@ class SettingsActivity: AppCompatActivity() {
     }
 
     private fun switchVisualize(switch: MaterialSwitch) {
-        val table: TableRow
-        when (switch) {
+        val table: TableRow = when (switch) {
             binding.switchRent -> {
-                table = binding.TableRent
+                binding.TableRent
             }
 
             binding.switchService -> {
-                table = binding.TableService
+                binding.TableService
             }
 
             binding.switchTaxes -> {
-                table = binding.TableTaxes
+                binding.TableTaxes
             }
 
             else -> return
