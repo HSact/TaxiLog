@@ -171,7 +171,10 @@ class SettingsActivity: AppCompatActivity() {
     }
 
     private fun loadLangSpinner(settings: UserSettings) {
-        val currentLang: String = settings.language ?: Locale.getDefault().language
+        var currentLang: String = settings.language ?: Locale.getDefault().language
+        if (currentLang.isEmpty()) {
+            currentLang = Locale.getDefault().language
+        }
         if (currentLang == "en") {
             spinnerLang.setSelection(0)
         }
