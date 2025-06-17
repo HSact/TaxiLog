@@ -12,7 +12,7 @@ class LocaleHelper @Inject constructor(
     private val languageKey = "My_Lang"
 
     fun setLocale(context: Context, lang: String): Context {
-        saveLanguage(lang)
+        updateSettingUseCase(languageKey, lang)
         return updateLocale(context, lang)
     }
 
@@ -22,9 +22,5 @@ class LocaleHelper @Inject constructor(
         val config = Configuration()
         config.setLocale(locale)
         return context.createConfigurationContext(config)
-    }
-
-    private fun saveLanguage(lang: String) {
-        updateSettingUseCase(languageKey, lang)
     }
 }
