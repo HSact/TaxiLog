@@ -27,7 +27,6 @@ import androidx.appcompat.widget.Toolbar
 import com.hsact.taxilog.data.repository.ShiftRepositoryLegacy
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -71,13 +70,7 @@ class LogActivity : AppCompatActivity() {
         return true
     }
     override fun attachBaseContext(newBase: Context) {
-        /*super.attachBaseContext(
-            localeHelper.updateLocale(
-                newBase,
-                localeHelper.getSavedLanguage()
-            )
-        )*/
-        super.attachBaseContext(ContextWrapper.wrapContext(newBase, Locale.getDefault().language))
+        super.attachBaseContext(ContextWrapper.wrapContext(newBase))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

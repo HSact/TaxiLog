@@ -15,7 +15,6 @@ import com.hsact.taxilog.ui.activities.MainActivity
 import com.hsact.taxilog.ui.activities.settings.SettingsActivity
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
 import kotlin.system.exitProcess
 
 @AndroidEntryPoint
@@ -69,7 +68,7 @@ class StartUpActivity : AppCompatActivity() {
         }
     }
     override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(ContextWrapper.wrapContext(newBase, Locale.getDefault().language))
+        super.attachBaseContext(ContextWrapper.wrapContext(newBase))
     }
 
     private fun setTheme(theme: String) {

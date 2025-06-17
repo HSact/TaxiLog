@@ -4,6 +4,7 @@ import com.hsact.taxilog.data.db.ShiftDao
 import com.hsact.taxilog.data.mappers.toDomain
 import com.hsact.taxilog.data.mappers.toEntity
 import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.domain.repository.ShiftRepository
 import java.time.LocalDateTime
 import javax.inject.Inject
 

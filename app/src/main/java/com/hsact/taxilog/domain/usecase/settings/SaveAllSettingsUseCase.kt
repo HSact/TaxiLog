@@ -1,7 +1,7 @@
 package com.hsact.taxilog.domain.usecase.settings
 
 import com.hsact.taxilog.domain.model.UserSettings
-import com.hsact.taxilog.data.repository.SettingsRepository
+import com.hsact.taxilog.domain.repository.SettingsRepository
 import javax.inject.Inject
 
 class SaveAllSettingsUseCase @Inject constructor(

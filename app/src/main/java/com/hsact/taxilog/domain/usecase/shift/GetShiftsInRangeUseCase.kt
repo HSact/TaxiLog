@@ -1,6 +1,6 @@
 package com.hsact.taxilog.domain.usecase.shift
 
-import com.hsact.taxilog.data.repository.ShiftRepository
+import com.hsact.taxilog.domain.repository.ShiftRepository
 import com.hsact.taxilog.domain.model.ShiftV2
 import java.time.LocalDateTime
 import javax.inject.Inject

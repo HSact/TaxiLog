@@ -109,7 +109,7 @@ class SettingsActivity: AppCompatActivity() {
     }
 
     override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(ContextWrapper.wrapContext(newBase, Locale.getDefault().language))
+        super.attachBaseContext(ContextWrapper.wrapContext(newBase))
     }
 
     private fun bindItems() {

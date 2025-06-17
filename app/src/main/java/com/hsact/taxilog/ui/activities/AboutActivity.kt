@@ -18,7 +18,6 @@ import com.hsact.taxilog.ui.locale.LocaleHelper
 import com.hsact.taxilog.R
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -58,7 +57,7 @@ class AboutActivity @Inject constructor(): AppCompatActivity() {
                 localeHelper.getSavedLanguage()
             )
         )*/
-        super.attachBaseContext(ContextWrapper.wrapContext(newBase, Locale.getDefault().language))
+        super.attachBaseContext(ContextWrapper.wrapContext(newBase))
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -1,4 +1,4 @@
-package com.hsact.taxilog.data.repository
+package com.hsact.taxilog.domain.repository
 
 import com.hsact.taxilog.domain.model.ShiftV2
 import java.time.LocalDateTime

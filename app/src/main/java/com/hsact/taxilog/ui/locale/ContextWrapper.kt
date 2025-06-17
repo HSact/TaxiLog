@@ -3,51 +3,33 @@ package com.hsact.taxilog.ui.locale
 import android.content.Context
 
 /**
- * [ContextWrapper] is a utility object that "wraps" a [Context] with a custom [Locale],
- * allowing you to apply a different application-wide language without needing to restart
- * the whole app manually.
+ * A wrapper for applying a custom locale to a given [Context].
  *
- * It performs the following steps:
- * 1. Initializes a [LocaleProvider] to retrieve the previously saved application
- *    language from shared preferences.
- * 2. Falls back to the provided [defaultLanguage] if no custom language is set.
- * 3. Invokes [LocaleProvider.updateLocale] to create a new [Context] with the
- *    updated `Resources.configuration`.
- *
- * The returned [Context] can then be safely attached in [Activity.attachBaseContext]
- * to reflect the proper locale from the start of the activity's lifecycle.
+ * If a preferred language is saved in preferences, it will be applied.
+ * Otherwise, the context will be returned without modifications.
  *
  * Example usage:
  * ```
  * override fun attachBaseContext(newBase: Context) {
- *     super.attachBaseContext(ContextWrapper.wrapContext(newBase, "en"))
+ *     super.attachBaseContext(ContextWrapper.wrapContext(newBase))
  * }
- * ```
- * Example usage:
- * ```
- * override fun attachBaseContext(newBase: Context) {
- *      super.attachBaseContext(ContextWrapper.wrapContext(newBase, Locale.getDefault().language))
- *  }
  * ```
  */
 object ContextWrapper {
     /**
-     * Wraps the given [newBase] context with a new [Context] that uses a custom [Locale].
-     *
-     * It first checks whether a preferred application language is already saved
-     * in [LocaleProvider]. If not, it falls back to [defaultLanguage]. The method then
-     * calls [LocaleProvider.updateLocale] to apply this locale to the base context.
+     * Wraps the base context with the preferred locale if it's available.
+     * If no preferred locale is set, it simply returns the original context.
      *
      * @param newBase The base context to wrap.
-     * @param defaultLanguage The fallback ISO 639-1 code (like "en" or "ru"),
-     *                         in case a preferred language is not set.
-     * @return A new [Context] instance with the updated locale applied.
+     * @return A context with the preferred locale applied, or the original context if none is set.
      */
-    fun wrapContext(newBase: Context, defaultLanguage: String): Context {
+    fun wrapContext(newBase: Context): Context {
         val localeProvider = LocaleProvider(newBase)
-        val lang =
-            localeProvider.getSavedLanguage().takeIf { it.isNotEmpty() } ?: defaultLanguage
-        val context = localeProvider.updateLocale(newBase, lang)
-        return context
+        val lang = localeProvider.getSavedLanguage()
+        return if (lang.isNotEmpty()) {
+            localeProvider.updateLocale(newBase, lang)
+        } else {
+            newBase
+        }
     }
 }

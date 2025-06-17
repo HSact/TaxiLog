@@ -1,6 +1,6 @@
 package com.hsact.taxilog.domain.usecase.shift
 
-import com.hsact.taxilog.data.repository.ShiftRepository
+import com.hsact.taxilog.domain.repository.ShiftRepository
 import javax.inject.Inject
 
 class DeleteAllShiftsUseCase @Inject constructor(
