@@ -19,12 +19,19 @@ import androidx.compose.ui.unit.dp
 import com.hsact.taxilog.R
 import androidx.compose.runtime.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.ui.shift.mappers.toUiModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.util.Locale
 
 @Composable
-fun DrawLastShiftCard(shiftData: StateFlow<Map<String, String>>) {
-    val shiftState by shiftData.collectAsStateWithLifecycle()
+fun DrawLastShiftCard(shiftList: StateFlow<List<ShiftV2>>) {
+    val shiftList by shiftList.collectAsStateWithLifecycle()
+    val lastShift = shiftList.lastOrNull()
+    val lastShiftUi = remember(lastShift) {
+        lastShift?.toUiModel(Locale.getDefault())
+    }
     BaseCard {
         CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
             Text(
@@ -49,12 +56,12 @@ fun DrawLastShiftCard(shiftData: StateFlow<Map<String, String>>) {
                     Text(text = stringResource(R.string.per_hour))
                 }
                 Column {
-                    Text(text = shiftState["date"] ?: "")
-                    Text(text = shiftState["earnings"] ?: "")
-                    Text(text = shiftState["costs"] ?: "")
-                    Text(text = shiftState["time"] ?: "")
-                    Text(text = shiftState["total"] ?: "")
-                    Text(text = shiftState["perHour"] ?: "")
+                    Text(text = lastShiftUi?.date ?: "")
+                    Text(text = lastShiftUi?.earnings ?: "")
+                    Text(text = lastShiftUi?.totalExpenses ?: "")
+                    Text(text = lastShiftUi?.duration ?: "")
+                    Text(text = lastShiftUi?.profit ?: "")
+                    Text(text = lastShiftUi?.earningsPerHour ?: "")
                 }
             }
         }
@@ -77,5 +84,8 @@ private fun CardPreview() {
             )
         )
     }
-    DrawLastShiftCard(previewData)
+    DrawLastShiftCard(
+        //shiftData = previewData,
+        shiftList = MutableStateFlow(emptyList())
+    )
 }

@@ -15,18 +15,22 @@ data class ShiftV2(
     val financeInput: ShiftFinanceInput,
     val note: String? = null,
 ) {
-    val totalCarExpenses: Long
+    val carExpenses: Long
         get() = carSnapshot.rentCost + carSnapshot.serviceCost
+
+    val totalExpenses: Long
+        get() = carExpenses + financeInput.wash + financeInput.fuelCost + financeInput.tax
 
     val earningsPerHour: Long
         get() = financeInput.earnings / time.totalDuration.toHours()
 
     val profit: Long
-        get() = financeInput.earnings + financeInput.tips - financeInput.tax - financeInput.wash - financeInput.fuelCost - totalCarExpenses
+        get() = financeInput.earnings + financeInput.tips - financeInput.tax - financeInput.wash - financeInput.fuelCost - carExpenses
 
     val profitPerHour: Long
         get() = profit / time.totalDuration.toHours()
 
+    @Suppress("DEPRECATION")
     fun toShift(): Shift {
         return Shift(
             id = id,

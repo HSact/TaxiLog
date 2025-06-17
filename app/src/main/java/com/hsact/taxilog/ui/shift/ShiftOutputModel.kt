@@ -14,6 +14,7 @@ data class ShiftOutputModel(
     val fuelCost: String,           // "850 ₽"
     val rent: String,               // "1 000 ₽"
     val serviceCost: String,        // "250 ₽"
+    val totalExpenses: String,      // "100 ₽"
     val profit: String,             // "550 ₽"
     val profitPerHour: String,      // "70 ₽"
     val note: String? = null

@@ -30,6 +30,7 @@ fun ShiftV2.toUiModel(locale: Locale): ShiftOutputModel {
         fuelCost = financeInput.fuelCost.centsToCurrency(locale),
         rent = carSnapshot.rentCost.centsToCurrency(locale),
         serviceCost = carSnapshot.serviceCost.centsToCurrency(locale),
+        totalExpenses = totalExpenses.centsToCurrency(locale),
         profit = profit.centsToCurrency(locale),
         profitPerHour = profitPerHour.centsToCurrency(locale),
         note = note
