@@ -10,6 +10,7 @@ import com.hsact.taxilog.data.utils.DeprecatedDateFormatter
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import com.hsact.taxilog.domain.model.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
+import com.hsact.taxilog.domain.usecase.shift.GetAllShiftsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    getAllSettingsUseCase: GetAllSettingsUseCase
+    getAllSettingsUseCase: GetAllSettingsUseCase,
+    private val getAllShiftsUseCase: GetAllShiftsUseCase
 ) : ViewModel() {
 
     private val settings: UserSettings = getAllSettingsUseCase.invoke()

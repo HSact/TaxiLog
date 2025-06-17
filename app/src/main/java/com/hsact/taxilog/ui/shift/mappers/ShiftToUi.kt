@@ -24,12 +24,14 @@ fun ShiftV2.toUiModel(locale: Locale): ShiftOutputModel {
             else -> "${carSnapshot.mileage / 1000} km"
         },
         earnings = financeInput.earnings.centsToCurrency(locale),
+        earningsPerHour = earningsPerHour.centsToCurrency(locale),
         tips = financeInput.tips.centsToCurrency(locale),
         wash = financeInput.wash.centsToCurrency(locale),
         fuelCost = financeInput.fuelCost.centsToCurrency(locale),
         rent = carSnapshot.rentCost.centsToCurrency(locale),
         serviceCost = carSnapshot.serviceCost.centsToCurrency(locale),
         profit = profit.centsToCurrency(locale),
+        profitPerHour = profitPerHour.centsToCurrency(locale),
         note = note
     )
 }
