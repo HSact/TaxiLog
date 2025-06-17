@@ -20,8 +20,8 @@ fun ShiftV2.toUiModel(locale: Locale): ShiftOutputModel {
         timeRange = "${start.format(formatterTime)} – ${end.format(formatterTime)}",
         duration = formatDuration(time.totalDuration, locale),
         mileageKm = when (locale.language) {
-            "ru" -> "${carSnapshot.mileage / 1000} км"
-            else -> "${carSnapshot.mileage / 1000} km"
+            "ru" -> "${carSnapshot.mileage / 1000}"
+            else -> "${carSnapshot.mileage / 1000}"
         },
         earnings = financeInput.earnings.centsToCurrency(locale),
         earningsPerHour = earningsPerHour.centsToCurrency(locale),
@@ -42,20 +42,20 @@ private fun formatDuration(duration: Duration, locale: Locale): String {
 
     return when (locale.language) {
         "ru" -> buildString {
-            if (hours > 0) append("$hours ч ")
-            if (minutes > 0 || hours == 0L) append("$minutes мин")
+            if (hours > 0) append("$hours")
+            if (minutes > 0 || hours == 0L) append("$minutes")
         }.trim()
         else -> buildString {
             if (hours > 0) append("$hours h ")
-            if (minutes > 0 || hours == 0L) append("$minutes min")
+            if (minutes > 0 || hours == 0L) append("$minutes")
         }.trim()
     }
 }
 
 private fun Long.centsToCurrency(locale: Locale): String {
-    val rubles = this.toDouble() / 100
+    val dollars = this.toDouble() / 100
     return when (locale.language) {
-        "ru" -> String.format(locale, "%,.0f ₽", rubles).replace(',', ' ')
-        else -> String.format(locale, "$%,.0f", rubles)
+        "ru" -> String.format(locale, "%,.0f", dollars).replace(',', ' ')
+        else -> String.format(locale, "$%,.0f", dollars)
     }
 }
