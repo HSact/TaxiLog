@@ -9,12 +9,14 @@ import android.widget.EditText
 import android.widget.TableLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.hsact.taxilog.data.db.DBHelper
-import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.databinding.FragmentStatsBinding
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.hsact.taxilog.ui.components.DatePickerFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class StatsFragment : Fragment() {
@@ -40,28 +42,26 @@ class StatsFragment : Fragment() {
     private lateinit var textAvFuel: TextView
     private lateinit var textTotalFuel: TextView
 
-    private var shifts = mutableListOf<Shift>()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentStatsBinding.inflate(inflater, container, false)
         val root: View = binding.root
         bindItems()
-        if (viewModel.startDate == null || viewModel.endDate == null) {
-            viewModel.defineDates()
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.shifts.collect {
+                    displayInfo()
+                }
+            }
         }
-        if (viewModel.shiftsOrigin.isEmpty() || viewModel.shifts.isEmpty()) {
-            viewModel.defineShifts(DBHelper(requireContext(), null))
-        }
+        viewModel.defineDates()
         butDatePickBegin.setText(viewModel.startDate)
         butDatePickEnd.setText(viewModel.endDate)
-        viewModel.updateShifts(DBHelper(requireContext(), null))
-        displayInfo()
-        butDatePickBegin.setOnClickListener {pickDate(butDatePickBegin)}
-        butDatePickEnd.setOnClickListener {pickDate(butDatePickEnd)}
+        butDatePickBegin.setOnClickListener { pickDate(butDatePickBegin) }
+        butDatePickEnd.setOnClickListener { pickDate(butDatePickEnd) }
         return root
     }
 
@@ -78,8 +78,7 @@ class StatsFragment : Fragment() {
                 } else if (editObj == butDatePickEnd) {
                     viewModel.endDate = date
                 }
-                viewModel.updateShifts(DBHelper(requireContext(), null))
-                displayInfo()
+                viewModel.updateShifts()
             }
         )
     }
@@ -88,12 +87,11 @@ class StatsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     @SuppressLint("SetTextI18n")
-    private fun displayInfo ()
-    {
-        shifts = viewModel.shifts
-        if (shifts.isEmpty())
-        {
+    private fun displayInfo() {
+        val shifts = viewModel.shiftsLegacy
+        if (shifts.isEmpty()) {
             tableLayout.visibility = View.GONE
             textListIsEmpty.visibility = View.VISIBLE
             return
@@ -102,19 +100,19 @@ class StatsFragment : Fragment() {
         tableLayout.visibility = View.VISIBLE
         textShiftsCount.text = viewModel.shiftsCount
         textAvErPh.text = viewModel.avErPh
-        textAvProfitPh.text  = viewModel.avProfitPh
-        textAvDuration.text  = viewModel.avDuration
-        textAvMileage.text  = viewModel.avMileage
-        textTotalDuration.text  = viewModel.totalDuration
-        textTotalMileage.text  = viewModel.totalMileage
-        textTotalWash.text  = viewModel.totalWash
-        textTotalEarnings.text  = viewModel.totalEarnings
-        textTotalProfit.text  = viewModel.totalProfit
-        textAvFuel.text  = viewModel.avFuel
-        textTotalFuel.text  = viewModel.totalFuel
+        textAvProfitPh.text = viewModel.avProfitPh
+        textAvDuration.text = viewModel.avDuration
+        textAvMileage.text = viewModel.avMileage
+        textTotalDuration.text = viewModel.totalDuration
+        textTotalMileage.text = viewModel.totalMileage
+        textTotalWash.text = viewModel.totalWash
+        textTotalEarnings.text = viewModel.totalEarnings
+        textTotalProfit.text = viewModel.totalProfit
+        textAvFuel.text = viewModel.avFuel
+        textTotalFuel.text = viewModel.totalFuel
     }
-    private fun bindItems ()
-    {
+
+    private fun bindItems() {
         tableLayout = binding.tableLayout
         butDatePickBegin = binding.buttonDatePickBegin
         butDatePickEnd = binding.buttonDatePickEnd
