@@ -14,6 +14,7 @@ import com.hsact.taxilog.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.findNavController
 import androidx.appcompat.widget.Toolbar
+import com.hsact.taxilog.ui.activities.log.LogActivity
 import com.hsact.taxilog.ui.activities.settings.SettingsActivity
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint

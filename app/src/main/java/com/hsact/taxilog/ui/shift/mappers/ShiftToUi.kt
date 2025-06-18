@@ -6,7 +6,7 @@ import java.time.Duration
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-fun ShiftV2.toUiModel(locale: Locale): ShiftOutputModel {
+fun ShiftV2.toUi(locale: Locale): ShiftOutputModel {
     val formatterDate = DateTimeFormatter.ofPattern("dd.MM.yyyy", locale)
     val formatterTime = DateTimeFormatter.ofPattern("HH:mm", locale)
 

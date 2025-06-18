@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TaxiLog">
         <activity
-            android:name=".ui.activities.LogActivity"
+            android:name=".ui.activities.log.LogActivity"
             android:windowTranslucentStatus="true"
             android:fitsSystemWindows="true"
             android:exported="false" />

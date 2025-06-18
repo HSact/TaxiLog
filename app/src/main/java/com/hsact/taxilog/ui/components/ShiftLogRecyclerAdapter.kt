@@ -7,10 +7,10 @@ import android.widget.TableLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hsact.taxilog.R
-import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
+import com.hsact.taxilog.ui.shift.ShiftOutputModel
 
-class ShiftLogRecyclerAdapter(private val shifts: List<Shift>) :
+class ShiftLogRecyclerAdapter(private val shifts: List<ShiftOutputModel>) :
     RecyclerView.Adapter<ShiftLogRecyclerAdapter.ShiftViewHolder>() {
     class ShiftViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val shiftTable: TableLayout = itemView.findViewById(R.id.tableShift)
@@ -33,18 +33,17 @@ class ShiftLogRecyclerAdapter(private val shifts: List<Shift>) :
         return ShiftViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: ShiftViewHolder, position: Int) {
-        holder.textId.text = shifts[position].id.toString()
-        holder.textDate.text = shifts[position].date
-        holder.textTime.text = shifts[position].time
-        holder.textEarnings.text = shifts[position].earnings.toString()
-        holder.textWash.text = shifts[position].wash.toString()
-        holder.textFuel.text = shifts[position].fuelCost.toString()
-        holder.textMileage.text = shifts[position].mileage.toString()
-        holder.textPerHour.text =
-            ShiftStatsUtil.calcAverageEarningsPerHour(shifts[position]).toString()
-        holder.textProfit.text = shifts[position].profit.toString()
-        holder.shiftTable.id = shifts[position].id
+    override fun onBindViewHolder(holder: ShiftViewHolder, index: Int) {
+        holder.textId.text = shifts[index].id.toString()
+        holder.textDate.text = shifts[index].date
+        holder.textTime.text = shifts[index].duration
+        holder.textEarnings.text = shifts[index].earnings
+        holder.textWash.text = shifts[index].wash
+        holder.textFuel.text = shifts[index].fuelCost
+        holder.textMileage.text = shifts[index].mileageKm
+        holder.textPerHour.text = shifts[index].earningsPerHour
+        holder.textProfit.text = shifts[index].profit
+        holder.shiftTable.id = shifts[index].id
     }
 
     override fun getItemCount(): Int {

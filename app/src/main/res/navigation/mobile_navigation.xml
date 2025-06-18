@@ -49,7 +49,7 @@
         tools:layout="@layout/settings_activity" />
     <activity
         android:id="@+id/logActivity"
-        android:name="com.hsact.taxilog.ui.activities.LogActivity"
+        android:name="com.hsact.taxilog.ui.activities.log.LogActivity"
         android:label="activity_log"
         app:action="log_to_addshift"
         tools:layout="@layout/activity_log"

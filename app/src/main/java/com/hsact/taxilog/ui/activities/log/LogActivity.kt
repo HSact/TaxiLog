@@ -1,41 +1,35 @@
-package com.hsact.taxilog.ui.activities
+package com.hsact.taxilog.ui.activities.log
 
-import android.annotation.SuppressLint
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hsact.taxilog.ui.components.ShiftLogRecyclerAdapter
-import com.hsact.taxilog.data.db.DBHelper
 import com.hsact.taxilog.R
-import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.databinding.ActivityLogBinding
-import com.hsact.taxilog.databinding.DialogShiftEditBinding
 import com.hsact.taxilog.databinding.RecyclerviewItemBinding
-import com.hsact.taxilog.ui.components.DatePickerFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.widget.Toolbar
-import com.hsact.taxilog.data.repository.ShiftRepositoryLegacy
+import com.hsact.taxilog.domain.utils.toUi
 import com.hsact.taxilog.ui.locale.ContextWrapper
+import com.hsact.taxilog.ui.shift.ShiftOutputModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
 @AndroidEntryPoint
 class LogActivity : AppCompatActivity() {
 
-    private var shifts = mutableListOf<Shift>()
-    private var shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(this, null))
+    private val viewModel: LogViewModel by viewModels()
 
     private lateinit var binding: ActivityLogBinding
     private lateinit var bindingR: RecyclerviewItemBinding
-    private lateinit var bindingE: DialogShiftEditBinding
+    //private lateinit var bindingE: DialogShiftEditBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,16 +42,26 @@ class LogActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.title_my_shifts)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        shifts = shiftRepositoryLegacy.getAllShifts()
-        if (shifts.isEmpty())
-        {
-            Toast.makeText(applicationContext,
-                getString(R.string.list_is_empty), Toast.LENGTH_SHORT).show()
-        }
         val recycler: RecyclerView = findViewById(R.id.recyclerView)
         recycler.layoutManager = LinearLayoutManager(this)
 
-        recycler.adapter = ShiftLogRecyclerAdapter(fillList())
+        viewModel.shifts.observe(this) { shiftList ->
+            if (shiftList.isNullOrEmpty()) {
+                Toast.makeText(
+                    applicationContext,
+                    getString(R.string.list_is_empty),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            recycler.adapter = ShiftLogRecyclerAdapter(shiftList.toUi(Locale.getDefault()))
+            if (viewModel.shifts.value.isNullOrEmpty()) {
+                Toast.makeText(applicationContext,
+                    getString(R.string.list_is_empty), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        //recycler.adapter = ShiftLogRecyclerAdapter(fillList())
         recycler.hasOnClickListeners()
     }
 
@@ -83,11 +87,14 @@ class LogActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-    private fun fillList(): MutableList<Shift> {
-        val data = mutableListOf<Shift>()
-        (shifts.indices.reversed()).forEach { i -> data.add(shifts[i]) }
-
-        return data
+    private fun fillList(): List<ShiftOutputModel> {
+        val shiftList = viewModel.shifts.value
+        val data = mutableListOf<ShiftOutputModel>()
+        if (shiftList != null) {
+            (shiftList.indices).forEach { i -> data.add(viewModel.shifts.value!!.toUi(Locale.getDefault())[i]) }
+            return data
+        }
+        else return emptyList()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -119,29 +126,31 @@ class LogActivity : AppCompatActivity() {
 
     private fun editShift(index: Int)
     {
-        showEditShiftDialog(index-1)
+        //showEditShiftDialog(index-1)
+        //TODO: make intent to AddShiftFragment
     }
 
     private fun deleteShift(index: Int)
     {
-        val shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(this, null))
-        shiftRepositoryLegacy.deleteShift(index)
+        //shiftRepositoryLegacy.deleteShift(index)
+        viewModel.handleIntent(LogIntent.DeleteShift(viewModel.shifts.value!![index]))
         Toast.makeText(applicationContext,
             getString(R.string.shift_deleted_successfully, index.toString()), Toast.LENGTH_SHORT).show()
         recreate()
     }
     private fun deleteAll()
     {
-        val shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(this, null))
-        shiftRepositoryLegacy.deleteAllShifts()
+        //shiftRepositoryLegacy.deleteAllShifts()
+        viewModel.handleIntent(LogIntent.DeleteAllShifts)
         Toast.makeText(applicationContext,
             getString(R.string.all_shifts_have_been_deleted_successfully), Toast.LENGTH_SHORT).show()
         recreate()
     }
 
-    @SuppressLint("SetTextI18n")
+    /*@SuppressLint("SetTextI18n")
     private fun showEditShiftDialog(index: Int) {
-        val shift = shifts[index].copy()
+        //val shift = shiftsLegacy[index].copy()
+        val shift = viewModel.shifts.value!![index].copy()
         val builder = MaterialAlertDialogBuilder(this)
         val dialog = builder.create()
 
@@ -183,15 +192,15 @@ class LogActivity : AppCompatActivity() {
 
             if (shift.isValid())
             {
-                if (shift==shifts[index])
+                if (shift==shiftsLegacy[index])
                 {
                     dialog.dismiss()
                     Toast.makeText(applicationContext,
                         getString(R.string.nothing_changed), Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
-                shifts[index] = shift
-                DBHelper(this, null).recreateDB(shifts)
+                shiftsLegacy[index] = shift
+                DBHelper(this, null).recreateDB(shiftsLegacy)
                 dialog.dismiss()
                 Toast.makeText(applicationContext,
                     getString(R.string.shift_edited_successfully), Toast.LENGTH_SHORT).show()
@@ -208,5 +217,5 @@ class LogActivity : AppCompatActivity() {
 
     private fun pickDate(editObj: EditText) {
         DatePickerFragment.pickDate(context = this, editObj = editObj)
-    }
+    }*/
 }

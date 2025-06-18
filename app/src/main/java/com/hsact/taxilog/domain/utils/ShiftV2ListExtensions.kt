@@ -2,10 +2,16 @@ package com.hsact.taxilog.domain.utils
 
 import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.ui.shift.ShiftOutputModel
+import com.hsact.taxilog.ui.shift.mappers.toUi
+import java.util.Locale
 
 @Suppress("DEPRECATION")
 val List<ShiftV2>.toLegacy: List<Shift>
     get() = map { shift -> shift.toLegacy() }
+
+fun List<ShiftV2>.toUi(locale: Locale): List<ShiftOutputModel> =
+    map { shift -> shift.toUi(locale) }
 
 val List<ShiftV2>.totalEarnings: Long
     get() = sumOf { it.financeInput.earnings }
