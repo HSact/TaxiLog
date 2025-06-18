@@ -61,8 +61,8 @@ class GoalsFragment : Fragment() {
         buttonDatePicker.setOnClickListener {
             pickDate(buttonDatePicker)
         }
-        viewModel.defineGoals(viewModel.pickedDate, requireContext())
-        viewModel.calculateDaysData(viewModel.pickedDate, requireContext())
+        viewModel.defineGoals(viewModel.pickedDate)
+        viewModel.calculateDaysData(viewModel.pickedDate)
         return root
     }
 
@@ -74,8 +74,8 @@ class GoalsFragment : Fragment() {
     private fun pickDate(editObj: EditText) {
         DatePickerFragment.pickDate(context = this, editObj = editObj) {
             viewModel.pickedDate = editObj.text.toString()
-            viewModel.calculateDaysData(viewModel.pickedDate, requireContext())
-            viewModel.defineGoals(viewModel.pickedDate, requireContext())
+            viewModel.calculateDaysData(viewModel.pickedDate)
+            viewModel.defineGoals(viewModel.pickedDate)
             card1.setContent { DrawDayWeekMonthProgressCard(viewModel.goalData) }
             card2.setContent { DrawDaysInMonthCard(viewModel.daysData, viewModel.pickedDate) }
         }
@@ -95,7 +95,7 @@ class GoalsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.defineGoals(viewModel.pickedDate, requireContext())
+        viewModel.defineGoals(viewModel.pickedDate)
     }
 
     private fun displayMonthGoal(goalMonthString: String?) {

@@ -31,7 +31,7 @@ data class ShiftV2(
         get() = profit / time.totalDuration.toHours()
 
     @Suppress("DEPRECATION")
-    fun toShift(): Shift {
+    fun toLegacy(): Shift {
         return Shift(
             id = id,
             date = time.period.start.toLocalDate().format(DeprecatedDateFormatter),

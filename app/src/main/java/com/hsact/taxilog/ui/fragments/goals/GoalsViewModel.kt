@@ -3,23 +3,36 @@ package com.hsact.taxilog.ui.fragments.goals
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.hsact.taxilog.data.db.DBHelper
-import com.hsact.taxilog.data.repository.ShiftRepositoryLegacy
+import androidx.lifecycle.viewModelScope
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
+import com.hsact.taxilog.domain.model.ShiftV2
 import com.hsact.taxilog.domain.model.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
+import com.hsact.taxilog.domain.usecase.shift.GetAllShiftsUseCase
+import com.hsact.taxilog.domain.utils.toLegacy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
 import javax.inject.Inject
 
 @HiltViewModel
 class GoalsViewModel @Inject constructor(
-    getAllSettingsUseCase: GetAllSettingsUseCase
+    getAllSettingsUseCase: GetAllSettingsUseCase,
+    private val getAllShiftsUseCase: GetAllShiftsUseCase,
 ) : ViewModel() {
+
     private val settings: UserSettings = getAllSettingsUseCase.invoke()
+    private val _shifts = MutableStateFlow<List<ShiftV2>>(emptyList())
+    val shifts: StateFlow<List<ShiftV2?>> = _shifts
+
+    init {
+        viewModelScope.launch {
+            _shifts.value = getAllShiftsUseCase.invoke()
+        }
+    }
 
     private val _goalData = MutableStateFlow<Map<String, Double>>(emptyMap())
     val goalData: StateFlow<Map<String, Double>> = _goalData
@@ -35,12 +48,11 @@ class GoalsViewModel @Inject constructor(
     private var goalDay: Double = -1.0
 
     @SuppressLint("DefaultLocale")
-    fun calculateDaysData(date: String, context: Context) {
-        var shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(context, null))
+    fun calculateDaysData(date: String) {
+        val shiftsLegacy = _shifts.value.toLegacy
         if (pickedDate.isEmpty()) {
             pickedDate = date
         }
-        val shifts = shiftRepositoryLegacy.getAllShifts()
         val parts = date.split(".")
         if (parts.size != 3) return
         val month = parts[1]
@@ -48,23 +60,19 @@ class GoalsViewModel @Inject constructor(
         val newData = MutableList(31) { day ->
             val dayString = String.format("%02d", day + 1)
             val formattedDate = "$dayString.$month.$year"
-            ShiftStatsUtil.calculateDayProgress(formattedDate, shifts)
+            ShiftStatsUtil.calculateDayProgress(formattedDate, shiftsLegacy)
         }
         _daysData.value = newData
     }
 
-    fun defineGoals(date: String, context: Context)
-    {
-        var shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(context, null))
+    fun defineGoals(date: String) {
         goalMonthString = settings.goalPerMonth
-        if (goalMonthString.isNullOrEmpty() || goalMonthString == "-1")
-        {
+        if (goalMonthString.isNullOrEmpty() || goalMonthString == "-1") {
             goalMonthString = ""
             _goalData.value = createEmptyData()
             return
         }
-        if (pickedDate.isEmpty())
-        {
+        if (pickedDate.isEmpty()) {
             pickedDate = date
         }
         goalMonth = goalMonthString!!.toDouble()
@@ -77,29 +85,44 @@ class GoalsViewModel @Inject constructor(
             else -> 30.0
         }
         goalDay = goalMonth / denominatorDay
-        val shifts = shiftRepositoryLegacy.getAllShifts()
+        val shiftsLegacy = _shifts.value.toLegacy
         _goalData.value = mapOf(
             "monthGoal" to roundTo2(goalMonth),
             "weekGoal" to roundTo2(goalWeek),
             "dayGoal" to roundTo2(goalDay),
-            "dayProgress" to (roundTo2(ShiftStatsUtil.calculateDayProgress(date, shifts))),
-            "weekProgress" to (roundTo2(ShiftStatsUtil.calculateWeekProgress(date, shifts))),
-            "monthProgress" to (roundTo2(ShiftStatsUtil.calculateMonthProgress(date, shifts))),
-            "todayPercent" to (roundTo2(ShiftStatsUtil.calculateDayProgress(date, shifts) * 100 / goalDay)),
-            "weekPercent" to (roundTo2(ShiftStatsUtil.calculateWeekProgress(date, shifts) * 100 / goalWeek)),
-            "monthPercent" to (roundTo2(ShiftStatsUtil.calculateMonthProgress(date, shifts) * 100 / goalMonth))
+            "dayProgress" to (roundTo2(ShiftStatsUtil.calculateDayProgress(date, shiftsLegacy))),
+            "weekProgress" to (roundTo2(ShiftStatsUtil.calculateWeekProgress(date, shiftsLegacy))),
+            "monthProgress" to (roundTo2(ShiftStatsUtil.calculateMonthProgress(date, shiftsLegacy))),
+            "todayPercent" to (roundTo2(
+                ShiftStatsUtil.calculateDayProgress(
+                    date,
+                    shiftsLegacy
+                ) * 100 / goalDay
+            )),
+            "weekPercent" to (roundTo2(
+                ShiftStatsUtil.calculateWeekProgress(
+                    date,
+                    shiftsLegacy
+                ) * 100 / goalWeek
+            )),
+            "monthPercent" to (roundTo2(
+                ShiftStatsUtil.calculateMonthProgress(
+                    date,
+                    shiftsLegacy
+                ) * 100 / goalMonth
+            ))
         )
     }
 
-    private fun createEmptyData(): Map <String, Double>
-    {
+    private fun createEmptyData(): Map<String, Double> {
         val zeroValue = 0.0
         return mapOf(
-        "todayPercent" to zeroValue,
-        "weekPercent" to zeroValue,
-        "monthPercent" to zeroValue
+            "todayPercent" to zeroValue,
+            "weekPercent" to zeroValue,
+            "monthPercent" to zeroValue
         )
     }
+
     private fun roundTo2(value: Double): Double {
         return BigDecimal(value).setScale(2, RoundingMode.HALF_UP).toDouble()
     }

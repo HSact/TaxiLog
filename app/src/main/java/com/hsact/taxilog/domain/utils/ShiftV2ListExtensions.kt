@@ -1,6 +1,10 @@
 package com.hsact.taxilog.domain.utils
 
+import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.domain.model.ShiftV2
+
+val List<ShiftV2>.toLegacy: List<Shift>
+    get() = map { shift -> shift.toLegacy() }
 
 val List<ShiftV2>.totalEarnings: Long
     get() = sumOf { it.financeInput.earnings }
