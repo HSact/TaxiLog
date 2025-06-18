@@ -26,12 +26,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hsact.taxilog.R
 import ir.ehsannarmani.compose_charts.LineChart
+import ir.ehsannarmani.compose_charts.models.AnimationMode
 import ir.ehsannarmani.compose_charts.models.GridProperties
 import ir.ehsannarmani.compose_charts.models.HorizontalIndicatorProperties
 import ir.ehsannarmani.compose_charts.models.LabelHelperProperties
+import ir.ehsannarmani.compose_charts.models.LabelProperties
 import ir.ehsannarmani.compose_charts.models.Line
 import ir.ehsannarmani.compose_charts.models.ViewRange
-import ir.ehsannarmani.compose_charts.models.ZeroLineProperties
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
@@ -61,6 +62,20 @@ fun DrawMonthGraphCard(chartData: StateFlow<List<Double>>, goalData: StateFlow<D
         textStyle = textStyle
     )
 
+    val labels = chartState.mapIndexed {
+            index, value,
+        ->
+        if (index % 2 == 0 && index < LocalDate.now().lengthOfMonth()) (index + 1).toString()
+        else " "
+    }
+
+    val labelProperties = LabelProperties(
+        enabled = true,
+        textStyle = textStyle,
+        labels = labels,
+        rotation = LabelProperties.Rotation(degree = 0f)
+    )
+
     val gridProperties = GridProperties(
         enabled = false,
     )
@@ -79,46 +94,43 @@ fun DrawMonthGraphCard(chartData: StateFlow<List<Double>>, goalData: StateFlow<D
                     .fillMaxWidth()
                     .wrapContentWidth(Alignment.CenterHorizontally)
             )
-            LineChart(
-                data = remember {
-                    listOf(
-                        Line(
-                            label = progressName,
-                            values = trimmedChartState,
-                            color = SolidColor(colorGraphLine),
-                            firstGradientFillColor = colorGraphLine.copy(alpha = .5f),
-                            secondGradientFillColor = Color.Transparent,
-                            strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
-                            gradientAnimationDelay = 1000,
-                            drawStyle = ir.ehsannarmani.compose_charts.models.DrawStyle.Stroke(
-                                width = 2.dp
+            if (chartState.isNotEmpty())
+                LineChart(
+                    data =
+                        listOf(
+                            Line(
+                                label = progressName,
+                                values = trimmedChartState,
+                                color = SolidColor(colorGraphLine),
+                                firstGradientFillColor = colorGraphLine.copy(alpha = .5f),
+                                secondGradientFillColor = Color.Transparent,
+                                strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
+                                gradientAnimationDelay = 1000,
+                                drawStyle = ir.ehsannarmani.compose_charts.models.DrawStyle.Stroke(
+                                    width = 2.dp
+                                ),
+                                viewRange = viewRange
                             ),
-                            viewRange = viewRange
+                            Line(
+                                label = goalName,
+                                values = List(daysInMonth) { goal },
+                                color = SolidColor(Color.Red),
+                            )
                         ),
-                        Line(
-                            label = goalName,
-                            values = List(daysInMonth) { goal },
-                            color = SolidColor(Color.Red),
-                        )
-                    )
-                },
-                animationMode = ir.ehsannarmani.compose_charts.models.AnimationMode.Together(
-                    delayBuilder = {
-                        it * 500L
-                    }),
-                gridProperties = gridProperties,
-                zeroLineProperties = ZeroLineProperties(
-                    enabled = false,
-                    //color = SolidColor(Color(0xFFFFFFFF)),
-                ),
-                indicatorProperties = indicatorProperties,
-                labelHelperProperties = labelHelperProperties,
-                minValue = min,
-                maxValue = max * 1.0,
-                modifier = Modifier
-                    .heightIn(max = 300.dp)
-                    .padding(top = 50.dp)
-            )
+                    animationMode = AnimationMode.Together(
+                        delayBuilder = {
+                            it * 500L
+                        }),
+                    gridProperties = gridProperties,
+                    indicatorProperties = indicatorProperties,
+                    labelHelperProperties = labelHelperProperties,
+                    labelProperties = labelProperties,
+                    minValue = min,
+                    maxValue = max * 1.0,
+                    modifier = Modifier
+                        .heightIn(max = 300.dp)
+                        .padding(top = 50.dp)
+                )
         }
     }
 }

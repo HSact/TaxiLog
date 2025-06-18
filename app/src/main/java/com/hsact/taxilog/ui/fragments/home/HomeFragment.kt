@@ -33,6 +33,12 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         card1 = binding.card1
         card2 = binding.card2
         card3 = binding.card3
@@ -40,18 +46,7 @@ class HomeFragment : Fragment() {
             viewModel.shiftListThisMonth) }
         card2.setContent { DrawLastShiftCard(viewModel.lastShift) }
         card3.setContent { DrawMonthGraphCard(viewModel.chartData, viewModel.goalData) }
-        return root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel.calculateShift(requireContext())
-        viewModel.calculateChart(requireContext())
         binding.fabNewShift.setOnClickListener { newShift() }
-    }
-    override fun onResume() {
-        super.onResume()
-        viewModel.calculateShift(requireContext())
     }
 
     override fun onDestroyView() {

@@ -1,14 +1,8 @@
 package com.hsact.taxilog.ui.fragments.home
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hsact.taxilog.R
-import com.hsact.taxilog.data.db.DBHelper
-import com.hsact.taxilog.data.repository.ShiftRepositoryLegacy
-import com.hsact.taxilog.data.utils.DateUtils
-import com.hsact.taxilog.data.utils.DeprecatedDateFormatter
-import com.hsact.taxilog.data.utils.ShiftStatsUtil
+import com.hsact.taxilog.data.utils.centsToDollars
 import com.hsact.taxilog.domain.model.ShiftV2
 import com.hsact.taxilog.domain.model.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
@@ -26,13 +20,10 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     getAllSettingsUseCase: GetAllSettingsUseCase,
     private val getLastShiftUseCase: GetLastShiftUseCase,
-    private val getShiftsInRangeUseCase: GetShiftsInRangeUseCase
+    private val getShiftsInRangeUseCase: GetShiftsInRangeUseCase,
 ) : ViewModel() {
 
     val settings: UserSettings = getAllSettingsUseCase.invoke()
-
-    //private val _shiftList = MutableStateFlow<List<ShiftV2>>(emptyList())
-    //val shiftList: StateFlow<List<ShiftV2>> = _shiftList
 
     private val _lastShift = MutableStateFlow<ShiftV2?>(null)
     val lastShift: StateFlow<ShiftV2?> = _lastShift
@@ -40,14 +31,11 @@ class HomeViewModel @Inject constructor(
     private val _shiftListThisMonth = MutableStateFlow<List<ShiftV2>>(emptyList())
     val shiftListThisMonth: StateFlow<List<ShiftV2>> = _shiftListThisMonth
 
-    private val _shiftData = MutableStateFlow<Map<String, String>>(emptyMap())
-    val shiftData: StateFlow<Map<String, String>> = _shiftData
-
-    private val _chartData = MutableStateFlow(MutableList(31) { 0.0 })
+    private val _chartData = MutableStateFlow(emptyList<Double>())
     val chartData: StateFlow<List<Double>> = _chartData
 
-    private var _goalData = MutableStateFlow(0.0)
-    var goalData: StateFlow<Double> = _goalData
+    private val _goalData = MutableStateFlow(0.0)
+    val goalData: StateFlow<Double> = _goalData
 
     init {
         viewModelScope.launch {
@@ -56,23 +44,18 @@ class HomeViewModel @Inject constructor(
                 LocalDateTime.now().withDayOfMonth(1),
                 LocalDateTime.now().withDayOfMonth(LocalDate.now().lengthOfMonth())
             )
+            calculateChart()
         }
     }
 
-    fun calculateChart(context: Context) {
-        val shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(context, null))
-        val shifts = shiftRepositoryLegacy.getAllShifts()
-        if (shifts.isEmpty()) {
-            return
-        }
+    fun calculateChart() {
+        val shifts = shiftListThisMonth.value
 
         _goalData.value = settings.goalPerMonth?.toDoubleOrNull() ?: 0.0
         val tempData = mutableMapOf<Int, Double>()
         for (shift in shifts) {
-            if (DateUtils.getCurrentMonth(shift.date) == DateUtils.getCurrentMonth()) {
-                val day = DateUtils.getCurrentDay(shift.date)
-                tempData[day] = (tempData[day] ?: 0.0) + shift.profit
-            }
+            val day = shift.time.period.start.dayOfMonth
+            tempData[day] = (tempData[day] ?: 0.0) + shift.profit.centsToDollars()
         }
 
         var cumulativeSum = 0.0
@@ -80,51 +63,5 @@ class HomeViewModel @Inject constructor(
             cumulativeSum += tempData[day] ?: 0.0
             cumulativeSum
         }
-    }
-
-    fun calculateShift(context: Context) {
-        val shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(context, null))
-        val shifts = shiftRepositoryLegacy.getAllShifts()
-        if (shifts.isEmpty()) {
-            _shiftData.value = createEmptyShift()
-            return
-        }
-        val shift = shifts.last()
-        val date =
-            LocalDate.now().withDayOfMonth(1).format(DeprecatedDateFormatter)
-        val textDate = shift.date
-        val textEarnings = shift.earnings.toString()
-        val textCosts = (shift.wash + shift.fuelCost).toString()
-        val textTime = shift.time + " " + context.getString(R.string.hours)
-        val textTotal = shift.profit.toString()
-        val textPerHour = ShiftStatsUtil.calcAverageEarningsPerHour(shifts.last()).toString()
-        val goalMonthString = settings.goalPerMonth ?: ""
-
-        val goalCurrent = ShiftStatsUtil.calculateMonthProgress(date, shifts).toString()
-
-        _shiftData.value = mapOf(
-            "date" to textDate,
-            "earnings" to textEarnings,
-            "costs" to textCosts,
-            "time" to textTime,
-            "total" to textTotal,
-            "perHour" to textPerHour,
-            "goal" to goalMonthString,
-            "goalCurrent" to goalCurrent,
-        )
-    }
-
-    private fun createEmptyShift(): Map<String, String> {
-        val na = "N/A"
-        return mapOf(
-            "date" to na,
-            "earnings" to na,
-            "costs" to na,
-            "time" to na,
-            "total" to na,
-            "perHour" to na,
-            "goal" to na,
-            "goalCurrent" to na,
-        )
     }
 }
