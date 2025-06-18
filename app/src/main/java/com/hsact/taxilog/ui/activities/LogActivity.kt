@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hsact.taxilog.ui.components.ShiftLogRecyclerAdapter
 import com.hsact.taxilog.data.db.DBHelper
-import com.hsact.taxilog.ui.locale.LocaleHelper
 import com.hsact.taxilog.R
 import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.databinding.ActivityLogBinding
@@ -27,12 +26,9 @@ import androidx.appcompat.widget.Toolbar
 import com.hsact.taxilog.data.repository.ShiftRepositoryLegacy
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class LogActivity : AppCompatActivity() {
-    @Inject
-    lateinit var localeHelper: LocaleHelper
 
     private var shifts = mutableListOf<Shift>()
     private var shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(this, null))
