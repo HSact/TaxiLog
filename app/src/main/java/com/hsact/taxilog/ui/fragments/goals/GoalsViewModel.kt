@@ -1,9 +1,9 @@
 package com.hsact.taxilog.ui.fragments.goals
 
 import android.annotation.SuppressLint
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hsact.taxilog.data.utils.DeprecatedDateFormatter
 import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import com.hsact.taxilog.domain.model.ShiftV2
 import com.hsact.taxilog.domain.model.UserSettings
@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,16 +29,21 @@ class GoalsViewModel @Inject constructor(
     private val _shifts = MutableStateFlow<List<ShiftV2>>(emptyList())
     val shifts: StateFlow<List<ShiftV2?>> = _shifts
 
+    private val _date = MutableStateFlow("")
+    val date: StateFlow<String> = _date
+
     init {
         viewModelScope.launch {
             _shifts.value = getAllShiftsUseCase.invoke()
+            calculateDaysData()
+            defineGoals()
         }
+        _date.value = LocalDate.now().format(DeprecatedDateFormatter)
     }
 
     private val _goalData = MutableStateFlow<Map<String, Double>>(emptyMap())
     val goalData: StateFlow<Map<String, Double>> = _goalData
 
-    var pickedDate: String = ""
     var goalMonthString: String? = ""
 
     private val _daysData = MutableStateFlow(MutableList(31) { 0.0 })
@@ -47,13 +53,14 @@ class GoalsViewModel @Inject constructor(
     private var goalWeek: Double = -1.0
     private var goalDay: Double = -1.0
 
+    fun setDate (date: String) {
+        _date.value = date
+    }
+
     @SuppressLint("DefaultLocale")
-    fun calculateDaysData(date: String) {
+    fun calculateDaysData() {
         val shiftsLegacy = _shifts.value.toLegacy
-        if (pickedDate.isEmpty()) {
-            pickedDate = date
-        }
-        val parts = date.split(".")
+        val parts = date.value.split(".")
         if (parts.size != 3) return
         val month = parts[1]
         val year = parts[2]
@@ -65,15 +72,13 @@ class GoalsViewModel @Inject constructor(
         _daysData.value = newData
     }
 
-    fun defineGoals(date: String) {
+    fun defineGoals() {
+        val date = date.value
         goalMonthString = settings.goalPerMonth
         if (goalMonthString.isNullOrEmpty() || goalMonthString == "-1") {
             goalMonthString = ""
             _goalData.value = createEmptyData()
             return
-        }
-        if (pickedDate.isEmpty()) {
-            pickedDate = date
         }
         goalMonth = goalMonthString!!.toDouble()
         val denominatorWeek = 4.5

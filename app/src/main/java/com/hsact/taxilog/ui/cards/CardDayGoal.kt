@@ -33,11 +33,11 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-
 @Composable
-fun DrawDaysInMonthCard(daysData: StateFlow<List<Double>>, pickedDate: String = "") {
+fun DrawDaysInMonthCard(daysData: StateFlow<List<Double>>, pickedDate: StateFlow <String>) {
 
     val days by daysData.collectAsStateWithLifecycle()
+    val date by pickedDate.collectAsStateWithLifecycle()
     val isDarkTheme = isSystemInDarkTheme()
     val textStyle: TextStyle = if (isDarkTheme) TextStyle(color = Color.White)
     else TextStyle(color = Color.Black)
@@ -62,19 +62,22 @@ fun DrawDaysInMonthCard(daysData: StateFlow<List<Double>>, pickedDate: String = 
     val locale = Locale.getDefault()
     val formatter = DateTimeFormatter.ofPattern("LLLL", locale)
     val inputFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.getDefault())
-    val parsedDate = LocalDate.parse(pickedDate, inputFormatter)
+    val parsedDate = LocalDate.parse(date, inputFormatter)
     var currentMonth = parsedDate.format(formatter)
     if (locale.language == "ru") {
         currentMonth = currentMonth.replaceFirstChar { it.uppercase(locale) }
     }
-    val bars = List(parsedDate.lengthOfMonth()) { index ->
-        Bars(
-            label = if (index % 2 == 0) (index + 1).toString() else " ",
-            values = listOf(
-                Bars.Data(value = days[index], color = SolidColor(colorGraphLine))
+
+    val bars =
+        List(parsedDate.lengthOfMonth()) { index ->
+            Bars(
+                label = if (index % 2 == 0) (index + 1).toString() else " ",
+                values = listOf(
+                    Bars.Data(value = days[index], color = SolidColor(colorGraphLine))
+                )
             )
-        )
-    }
+        }
+
 
     BaseCard {
         CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
@@ -115,5 +118,8 @@ private fun CardPreview() {
             )
         )
     }
-    DrawDaysInMonthCard(previewData)
+    val dateFlow = remember {
+        MutableStateFlow("01.01.2020")
+    }
+    DrawDaysInMonthCard(previewData, dateFlow)
 }

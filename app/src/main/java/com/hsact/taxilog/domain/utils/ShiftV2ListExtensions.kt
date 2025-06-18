@@ -3,6 +3,7 @@ package com.hsact.taxilog.domain.utils
 import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.domain.model.ShiftV2
 
+@Suppress("DEPRECATION")
 val List<ShiftV2>.toLegacy: List<Shift>
     get() = map { shift -> shift.toLegacy() }
 

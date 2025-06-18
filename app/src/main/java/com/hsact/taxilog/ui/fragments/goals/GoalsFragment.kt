@@ -17,10 +17,8 @@ import com.hsact.taxilog.ui.cards.DrawDayWeekMonthProgressCard
 import com.hsact.taxilog.ui.cards.DrawDaysInMonthCard
 import com.hsact.taxilog.ui.components.DatePickerFragment
 import dagger.hilt.android.AndroidEntryPoint
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
 
 @AndroidEntryPoint
 class GoalsFragment : Fragment() {
@@ -48,54 +46,42 @@ class GoalsFragment : Fragment() {
         bindItems()
         card1 = binding.card1
         card2 = binding.card2
-        card1.setContent { DrawDayWeekMonthProgressCard(viewModel.goalData) }
-        card2.setContent { DrawDaysInMonthCard(viewModel.daysData, viewModel.pickedDate) }
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         val now = LocalDateTime.now()
         val currentDate = now.toLocalDate()
-        if (viewModel.pickedDate.isEmpty())
-        {
-            viewModel.pickedDate = getCurrentDay()
-        }
         buttonDatePicker.setText(currentDate.format(formatter))
         buttonDatePicker.setOnClickListener {
             pickDate(buttonDatePicker)
         }
-        viewModel.defineGoals(viewModel.pickedDate)
-        viewModel.calculateDaysData(viewModel.pickedDate)
+        viewModel.defineGoals()
+        viewModel.calculateDaysData()
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         displayMonthGoal(viewModel.goalMonthString)
+        card1.setContent {
+            DrawDayWeekMonthProgressCard(viewModel.goalData)
+        }
+        card2.setContent {
+            DrawDaysInMonthCard(viewModel.daysData, viewModel.date)
+        }
         super.onViewCreated(view, savedInstanceState)
     }
 
     private fun pickDate(editObj: EditText) {
         DatePickerFragment.pickDate(context = this, editObj = editObj) {
-            viewModel.pickedDate = editObj.text.toString()
-            viewModel.calculateDaysData(viewModel.pickedDate)
-            viewModel.defineGoals(viewModel.pickedDate)
+            viewModel.setDate(editObj.text.toString())
+            viewModel.calculateDaysData()
+            viewModel.defineGoals()
             card1.setContent { DrawDayWeekMonthProgressCard(viewModel.goalData) }
-            card2.setContent { DrawDaysInMonthCard(viewModel.daysData, viewModel.pickedDate) }
-        }
-    }
-
-    private fun getCurrentDay(): String {
-        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-
-        return try {
-            buttonDatePicker.text.takeIf { it.isNotEmpty() }
-                ?.let { LocalDate.parse(it, dateFormatter).format(dateFormatter) }
-                ?: LocalDate.now().format(dateFormatter)
-        } catch (e: DateTimeParseException) {
-            LocalDate.now().format(dateFormatter)
+            card2.setContent { DrawDaysInMonthCard(viewModel.daysData, viewModel.date) }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.defineGoals(viewModel.pickedDate)
+        viewModel.defineGoals()
     }
 
     private fun displayMonthGoal(goalMonthString: String?) {
