@@ -17,7 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentAddShiftBinding
-import com.hsact.taxilog.data.utils.ShiftStatsUtil
+import com.hsact.taxilog.domain.utils.ShiftStatsUtil
 import com.hsact.taxilog.ui.activities.MainActivity
 import com.hsact.taxilog.ui.components.DatePickerFragment
 import com.hsact.taxilog.ui.components.TimePickerFragment
@@ -229,7 +229,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
     private suspend fun submit() {
         Toast.makeText(activity, getString(R.string.shift_added_successfully), Toast.LENGTH_SHORT)
             .show()
-        viewModel.submit(requireContext())
+        viewModel.submit()
         findNavController().navigate(R.id.action_addShift_to_home_fragment)
         MainActivity.botNav.isVisible = true
     }

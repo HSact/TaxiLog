@@ -3,8 +3,8 @@ package com.hsact.taxilog.ui.fragments.stats
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.taxilog.data.model.Shift
-import com.hsact.taxilog.data.utils.DeprecatedDateFormatter
-import com.hsact.taxilog.data.utils.ShiftStatsUtil
+import com.hsact.taxilog.domain.utils.DeprecatedDateFormatter
+import com.hsact.taxilog.domain.utils.ShiftStatsUtil
 import com.hsact.taxilog.domain.model.ShiftV2
 import com.hsact.taxilog.domain.usecase.shift.GetShiftsInRangeUseCase
 import com.hsact.taxilog.domain.utils.toLegacy

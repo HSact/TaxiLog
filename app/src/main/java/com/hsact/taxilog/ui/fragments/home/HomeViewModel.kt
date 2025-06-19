@@ -2,7 +2,7 @@ package com.hsact.taxilog.ui.fragments.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hsact.taxilog.data.utils.centsToDollars
+import com.hsact.taxilog.domain.utils.centsToDollars
 import com.hsact.taxilog.domain.model.ShiftV2
 import com.hsact.taxilog.domain.model.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase

@@ -3,8 +3,8 @@ package com.hsact.taxilog.ui.fragments.goals
 import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hsact.taxilog.data.utils.DeprecatedDateFormatter
-import com.hsact.taxilog.data.utils.ShiftStatsUtil
+import com.hsact.taxilog.domain.utils.DeprecatedDateFormatter
+import com.hsact.taxilog.domain.utils.ShiftStatsUtil
 import com.hsact.taxilog.domain.model.ShiftV2
 import com.hsact.taxilog.domain.model.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase

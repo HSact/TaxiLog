@@ -1,9 +1,9 @@
-package com.hsact.taxilog.data.utils
+package com.hsact.taxilog.domain.utils
 
 import android.annotation.SuppressLint
 import com.hsact.taxilog.data.model.Shift
-import com.hsact.taxilog.data.utils.DateUtils.getCurrentWeek
-import com.hsact.taxilog.data.utils.DateUtils.getDayToday
+import com.hsact.taxilog.domain.utils.DateUtils.getCurrentWeek
+import com.hsact.taxilog.domain.utils.DateUtils.getDayToday
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

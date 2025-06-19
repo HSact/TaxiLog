@@ -1,4 +1,4 @@
-package com.hsact.taxilog.data.utils
+package com.hsact.taxilog.domain.utils
 
 import java.time.format.DateTimeFormatter
 

@@ -48,12 +48,14 @@ class LogViewModel @Inject constructor(
     private fun deleteAllShifts() {
         viewModelScope.launch {
             deleteAllShiftsUseCase.invoke()
+            _shifts.value = getAllShiftsUseCase()
         }
     }
 
     private fun deleteShift(shiftV2: ShiftV2) {
         viewModelScope.launch {
             deleteShiftUseCase(shiftV2)
+            _shifts.value = getAllShiftsUseCase()
         }
     }
 

@@ -128,7 +128,7 @@ class LogActivity : AppCompatActivity() {
         viewModel.handleIntent(LogIntent.DeleteShift(shift))
         Toast.makeText(applicationContext,
             getString(R.string.shift_deleted_successfully, shift.id.toString()), Toast.LENGTH_SHORT).show()
-        recreate()
+        //recreate()
     }
     private fun deleteAll()
     {
@@ -136,7 +136,7 @@ class LogActivity : AppCompatActivity() {
         viewModel.handleIntent(LogIntent.DeleteAllShifts)
         Toast.makeText(applicationContext,
             getString(R.string.all_shifts_have_been_deleted_successfully), Toast.LENGTH_SHORT).show()
-        recreate()
+        //recreate()
     }
 
     /*@SuppressLint("SetTextI18n")

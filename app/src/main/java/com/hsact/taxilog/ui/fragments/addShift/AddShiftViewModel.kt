@@ -1,21 +1,16 @@
 package com.hsact.taxilog.ui.fragments.addShift
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.hsact.taxilog.data.db.DBHelper
-import com.hsact.taxilog.data.model.Shift
-import com.hsact.taxilog.data.repository.ShiftRepositoryLegacy
-import com.hsact.taxilog.data.utils.DeprecatedDateFormatter
-import com.hsact.taxilog.data.utils.ShiftStatsUtil
-import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertLongToTime
-import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertTimeToLong
+import com.hsact.taxilog.domain.utils.DeprecatedDateFormatter
+import com.hsact.taxilog.domain.utils.ShiftStatsUtil
+import com.hsact.taxilog.domain.utils.ShiftStatsUtil.convertLongToTime
+import com.hsact.taxilog.domain.utils.ShiftStatsUtil.convertTimeToLong
 import com.hsact.taxilog.domain.model.ShiftV2
 import com.hsact.taxilog.domain.model.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.taxilog.domain.usecase.shift.AddShiftUseCase
-import com.hsact.taxilog.domain.usecase.shift.GetAllShiftsUseCase
 import com.hsact.taxilog.ui.shift.ShiftInputModel
 import com.hsact.taxilog.ui.shift.mappers.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,8 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddShiftViewModel @Inject constructor(
     getAllSettingsUseCase: GetAllSettingsUseCase,
-    private val addShiftUseCase: AddShiftUseCase,
-    private val getAllShiftsUseCase: GetAllShiftsUseCase
+    private val addShiftUseCase: AddShiftUseCase
 ) : ViewModel() {
     private val _shiftData = MutableLiveData<UiState>()
     val shiftData: LiveData<UiState> get() = _shiftData
@@ -106,23 +100,12 @@ class AddShiftViewModel @Inject constructor(
         _shiftData.value = currentShift
     }
 
-    suspend fun submit(context: Context) {
+    suspend fun submit() {
         val uiState = _shiftData.value ?: return
         val shiftInput = buildShiftInputModel(uiState)
 
         val shiftV2: ShiftV2 = shiftInput.toDomain()
         addShiftUseCase(shiftV2)
-
-        roomTest()
-
-        val shiftRepositoryLegacy = ShiftRepositoryLegacy(DBHelper(context, null))
-        val shift =
-            Shift(
-                0, uiState.date, ShiftStatsUtil.msToHours(uiState.totalTime).toString(),
-                uiState.earnings, uiState.wash, uiState.fuelCost,
-                uiState.mileage, uiState.profit
-            )
-        shiftRepositoryLegacy.addShift(shift)
     }
 
     private fun buildShiftInputModel(
@@ -143,13 +126,6 @@ class AddShiftViewModel @Inject constructor(
         shiftInput.serviceCost = settings.serviceCost ?: ""
         shiftInput.consumption = settings.consumption ?: ""
         return shiftInput
-    }
-
-    private suspend fun roomTest() {
-        val shiftListNew = getAllShiftsUseCase()
-        shiftListNew.forEach { shift ->
-            println(shift)
-        }
     }
 
     private fun hoursToMs(hours: Int): Long {
