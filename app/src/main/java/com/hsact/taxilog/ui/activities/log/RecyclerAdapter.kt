@@ -1,4 +1,4 @@
-package com.hsact.taxilog.ui.components
+package com.hsact.taxilog.ui.activities.log
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,12 +7,15 @@ import android.widget.TableLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hsact.taxilog.R
-import com.hsact.taxilog.data.utils.ShiftStatsUtil
-import com.hsact.taxilog.ui.shift.ShiftOutputModel
+import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.ui.shift.mappers.toUi
+import java.util.Locale
 
-class ShiftLogRecyclerAdapter(private val shifts: List<ShiftOutputModel>) :
-    RecyclerView.Adapter<ShiftLogRecyclerAdapter.ShiftViewHolder>() {
-    class ShiftViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class RecyclerAdapter(
+    private val shifts: List<ShiftV2>,
+    private val onItemMenuClick: (ShiftV2) -> Unit) :
+    RecyclerView.Adapter<RecyclerAdapter.ShiftViewHolder>() {
+    inner class ShiftViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val shiftTable: TableLayout = itemView.findViewById(R.id.tableShift)
 
         val textId: TextView = itemView.findViewById(R.id.textId1)
@@ -34,16 +37,22 @@ class ShiftLogRecyclerAdapter(private val shifts: List<ShiftOutputModel>) :
     }
 
     override fun onBindViewHolder(holder: ShiftViewHolder, index: Int) {
-        holder.textId.text = shifts[index].id.toString()
-        holder.textDate.text = shifts[index].date
-        holder.textTime.text = shifts[index].duration
-        holder.textEarnings.text = shifts[index].earnings
-        holder.textWash.text = shifts[index].wash
-        holder.textFuel.text = shifts[index].fuelCost
-        holder.textMileage.text = shifts[index].mileageKm
-        holder.textPerHour.text = shifts[index].earningsPerHour
-        holder.textProfit.text = shifts[index].profit
-        holder.shiftTable.id = shifts[index].id
+        val shift = shifts[index].toUi(Locale.getDefault())
+        holder.textId.text = shift.id.toString()
+        holder.textDate.text = shift.date
+        holder.textTime.text = shift.duration
+        holder.textEarnings.text = shift.earnings
+        holder.textWash.text = shift.wash
+        holder.textFuel.text = shift.fuelCost
+        holder.textMileage.text = shift.mileageKm
+        holder.textPerHour.text = shift.earningsPerHour
+        holder.textProfit.text = shift.profit
+        //holder.shiftTable.id = shifts[index].id
+
+        holder.itemView.setOnClickListener {
+            onItemMenuClick(shifts[index])
+            true
+        }
     }
 
     override fun getItemCount(): Int {

@@ -5,22 +5,18 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.hsact.taxilog.ui.components.ShiftLogRecyclerAdapter
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.ActivityLogBinding
 import com.hsact.taxilog.databinding.RecyclerviewItemBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.widget.Toolbar
-import com.hsact.taxilog.domain.utils.toUi
+import com.hsact.taxilog.domain.model.ShiftV2
 import com.hsact.taxilog.ui.locale.ContextWrapper
-import com.hsact.taxilog.ui.shift.ShiftOutputModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
 
 @AndroidEntryPoint
 class LogActivity : AppCompatActivity() {
@@ -54,14 +50,19 @@ class LogActivity : AppCompatActivity() {
                 ).show()
             }
 
-            recycler.adapter = ShiftLogRecyclerAdapter(shiftList.toUi(Locale.getDefault()))
+            recycler.adapter = RecyclerAdapter(
+                shiftList,
+                onItemMenuClick = { shift ->
+                    val shiftV2 = viewModel.shifts.value?.firstOrNull { it.id == shift.id }
+                    if (shiftV2 != null) {
+                        onClickElement(shiftV2)
+                    }
+                })
             if (viewModel.shifts.value.isNullOrEmpty()) {
                 Toast.makeText(applicationContext,
                     getString(R.string.list_is_empty), Toast.LENGTH_SHORT).show()
             }
         }
-
-        //recycler.adapter = ShiftLogRecyclerAdapter(fillList())
         recycler.hasOnClickListeners()
     }
 
@@ -87,55 +88,46 @@ class LogActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-    private fun fillList(): List<ShiftOutputModel> {
-        val shiftList = viewModel.shifts.value
-        val data = mutableListOf<ShiftOutputModel>()
-        if (shiftList != null) {
-            (shiftList.indices).forEach { i -> data.add(viewModel.shifts.value!!.toUi(Locale.getDefault())[i]) }
-            return data
-        }
-        else return emptyList()
-    }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
         return true
     }
 
-    fun onClickElement(view: View)
+    fun onClickElement(shift: ShiftV2)
     {
         val items = arrayOf(getString(R.string.edit), getString(R.string.delete))
         val alert = MaterialAlertDialogBuilder(this)
-        alert.setTitle(getString(R.string.edit_or_delete_shift) + " " + view.id + "?")
+        alert.setTitle(getString(R.string.edit_or_delete_shift) + " " + shift.id.toString() + "?")
         with(alert)
         {
             //setTitle("Edit or delete shift" + items[which])
             setItems(items) { dialog, id ->
-                onPopUpMenuClicked(id, view.id)
+                onPopUpMenuClicked(id, shift)
             }
         alert.show()
         }
     }
 
-    private fun onPopUpMenuClicked (item: Int, shiftId: Int)
+    private fun onPopUpMenuClicked (item: Int, shift: ShiftV2)
     {
         //Toast.makeText(applicationContext, "$item for ID $shiftId is clicked", Toast.LENGTH_SHORT).show()
-        if (item==0) editShift(shiftId)
-        if (item==1) deleteShift(shiftId)
+        if (item==0) editShift(shift)
+        if (item==1) deleteShift(shift)
     }
 
-    private fun editShift(index: Int)
+    private fun editShift(shiftV2: ShiftV2)
     {
         //showEditShiftDialog(index-1)
         //TODO: make intent to AddShiftFragment
     }
 
-    private fun deleteShift(index: Int)
+    private fun deleteShift(shift: ShiftV2)
     {
         //shiftRepositoryLegacy.deleteShift(index)
-        viewModel.handleIntent(LogIntent.DeleteShift(viewModel.shifts.value!![index]))
+        viewModel.handleIntent(LogIntent.DeleteShift(shift))
         Toast.makeText(applicationContext,
-            getString(R.string.shift_deleted_successfully, index.toString()), Toast.LENGTH_SHORT).show()
+            getString(R.string.shift_deleted_successfully, shift.id.toString()), Toast.LENGTH_SHORT).show()
         recreate()
     }
     private fun deleteAll()
