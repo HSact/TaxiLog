@@ -3,7 +3,6 @@ package com.hsact.taxilog.ui.activities.log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TableLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hsact.taxilog.R
@@ -16,7 +15,6 @@ class RecyclerAdapter(
     private val onItemMenuClick: (ShiftV2) -> Unit) :
     RecyclerView.Adapter<RecyclerAdapter.ShiftViewHolder>() {
     inner class ShiftViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val shiftTable: TableLayout = itemView.findViewById(R.id.tableShift)
 
         val textId: TextView = itemView.findViewById(R.id.textId1)
         val textDate: TextView = itemView.findViewById(R.id.textDate1)
@@ -47,7 +45,6 @@ class RecyclerAdapter(
         holder.textMileage.text = shift.mileageKm
         holder.textPerHour.text = shift.earningsPerHour
         holder.textProfit.text = shift.profit
-        //holder.shiftTable.id = shifts[index].id
 
         holder.itemView.setOnClickListener {
             onItemMenuClick(shifts[index])
