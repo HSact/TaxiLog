@@ -1,4 +1,4 @@
-package com.hsact.taxilog.ui.activities.log
+package com.hsact.taxilog.ui.fragments.log
 
 import com.hsact.taxilog.domain.model.Shift
 

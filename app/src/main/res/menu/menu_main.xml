@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.hsact.taxilog.ui.activities.MainActivity">
     <item
-        android:id="@+id/action_log"
+        android:id="@+id/fragment_log"
         android:orderInCategory="100"
         android:title="@string/title_my_shifts"
         app:showAsAction="never" />

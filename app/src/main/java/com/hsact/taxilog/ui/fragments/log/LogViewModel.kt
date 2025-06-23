@@ -1,4 +1,4 @@
-package com.hsact.taxilog.ui.activities.log
+package com.hsact.taxilog.ui.fragments.log
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

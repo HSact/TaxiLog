@@ -1,0 +1,129 @@
+package com.hsact.taxilog.ui.fragments.log
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.hsact.taxilog.R
+import com.hsact.taxilog.databinding.FragmentLogBinding
+import com.hsact.taxilog.domain.model.Shift
+import com.hsact.taxilog.ui.activities.MainActivity
+
+import dagger.hilt.android.AndroidEntryPoint
+import kotlin.getValue
+
+@AndroidEntryPoint
+class LogFragment : Fragment() {
+
+    private val viewModel: LogViewModel by viewModels()
+    private var _binding: FragmentLogBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true) // включаем меню для фрагмента
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentLogBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireActivity().title = getString(R.string.title_my_shifts)
+
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        viewModel.shifts.observe(viewLifecycleOwner) { shiftList ->
+            if (shiftList.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), getString(R.string.list_is_empty), Toast.LENGTH_SHORT).show()
+            }
+            binding.recyclerView.adapter = RecyclerAdapter(
+                shiftList,
+                onItemMenuClick = { shift ->
+                    val shiftV2 = viewModel.shifts.value?.firstOrNull { it.id == shift.id }
+                    if (shiftV2 != null) {
+                        onClickElement(shiftV2)
+                    }
+                }
+            )
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_log, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_delete_all -> {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.delete)
+                    .setMessage(getString(R.string.delete_all) + "?")
+                    .setPositiveButton(getString(R.string.yes)) { _, _ -> deleteAll() }
+                    .setNegativeButton(getString(R.string.cancel), null)
+                    .show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun onClickElement(shift: Shift) {
+        val items = arrayOf(getString(R.string.edit), getString(R.string.delete))
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("${getString(R.string.edit_or_delete_shift)} ${shift.id}?")
+            .setItems(items) { _, which -> onPopUpMenuClicked(which, shift) }
+            .show()
+    }
+
+    private fun onPopUpMenuClicked(item: Int, shift: Shift) {
+        when (item) {
+            0 -> editShift(shift)
+            1 -> deleteShift(shift)
+        }
+    }
+
+    private fun editShift(shift: Shift) {
+        // TODO: переход на AddShiftFragment с передачей shift
+    }
+
+    private fun deleteShift(shift: Shift) {
+        viewModel.handleIntent(LogIntent.DeleteShift(shift))
+        Toast.makeText(requireContext(),
+            getString(R.string.shift_deleted_successfully, shift.id.toString()), Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun deleteAll() {
+        viewModel.handleIntent(LogIntent.DeleteAllShifts)
+        Toast.makeText(requireContext(),
+            getString(R.string.all_shifts_have_been_deleted_successfully), Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+    override fun onResume() {
+        MainActivity.botNav.isVisible = false
+        super.onResume()
+    }
+
+    override fun onDestroy() {
+        MainActivity.botNav.isVisible = true
+        super.onDestroy()
+    }
+}
