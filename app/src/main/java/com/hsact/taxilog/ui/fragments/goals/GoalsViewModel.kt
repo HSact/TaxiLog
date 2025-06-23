@@ -1,15 +1,16 @@
 package com.hsact.taxilog.ui.fragments.goals
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.taxilog.domain.utils.DeprecatedDateFormatter
-import com.hsact.taxilog.domain.utils.ShiftStatsUtil
 import com.hsact.taxilog.domain.model.ShiftV2
 import com.hsact.taxilog.domain.model.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
-import com.hsact.taxilog.domain.usecase.shift.GetAllShiftsUseCase
-import com.hsact.taxilog.domain.utils.toLegacy
+import com.hsact.taxilog.domain.usecase.shift.GetShiftsInRangeUseCase
+import com.hsact.taxilog.domain.utils.centsToDollars
+import com.hsact.taxilog.domain.utils.dailyProfit
+import com.hsact.taxilog.domain.utils.monthlyProfitByDay
+import com.hsact.taxilog.domain.utils.weeklyProfitByDay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class GoalsViewModel @Inject constructor(
     getAllSettingsUseCase: GetAllSettingsUseCase,
-    private val getAllShiftsUseCase: GetAllShiftsUseCase,
+    private val getShiftsInRangeUseCase: GetShiftsInRangeUseCase,
 ) : ViewModel() {
 
     private val settings: UserSettings = getAllSettingsUseCase.invoke()
@@ -32,13 +33,22 @@ class GoalsViewModel @Inject constructor(
     private val _date = MutableStateFlow("")
     val date: StateFlow<String> = _date
 
+    private val _dateLD = MutableStateFlow(LocalDate.now())
+    val dateLD: StateFlow<LocalDate> = _dateLD
+
+    private val _daysData = MutableStateFlow(MutableList(31) { 0.0 })
+    val daysData: StateFlow<List<Double>> = _daysData
+
     init {
+        _date.value = _dateLD.value.format(DeprecatedDateFormatter)
         viewModelScope.launch {
-            _shifts.value = getAllShiftsUseCase.invoke()
+            _shifts.value = getShiftsInRangeUseCase.invoke(
+                _dateLD.value.withDayOfMonth(1).atStartOfDay(),
+                _dateLD.value.withDayOfMonth(LocalDate.now().lengthOfMonth()).plusDays(1).atStartOfDay()
+            )
             calculateDaysData()
             defineGoals()
         }
-        _date.value = LocalDate.now().format(DeprecatedDateFormatter)
     }
 
     private val _goalData = MutableStateFlow<Map<String, Double>>(emptyMap())
@@ -46,34 +56,22 @@ class GoalsViewModel @Inject constructor(
 
     var goalMonthString: String? = ""
 
-    private val _daysData = MutableStateFlow(MutableList(31) { 0.0 })
-    val daysData: StateFlow<List<Double>> = _daysData
-
     private var goalMonth: Double = -1.0
     private var goalWeek: Double = -1.0
     private var goalDay: Double = -1.0
 
-    fun setDate (date: String) {
+    fun setDate(date: String) {
+        _dateLD.value = LocalDate.parse(date, DeprecatedDateFormatter)
         _date.value = date
+        calculateDaysData()
+        defineGoals()
     }
 
-    @SuppressLint("DefaultLocale")
     fun calculateDaysData() {
-        val shiftsLegacy = _shifts.value.toLegacy
-        val parts = date.value.split(".")
-        if (parts.size != 3) return
-        val month = parts[1]
-        val year = parts[2]
-        val newData = MutableList(31) { day ->
-            val dayString = String.format("%02d", day + 1)
-            val formattedDate = "$dayString.$month.$year"
-            ShiftStatsUtil.calculateDayProgress(formattedDate, shiftsLegacy)
-        }
-        _daysData.value = newData
+        _daysData.value = _shifts.value.monthlyProfitByDay(_dateLD.value).centsToDollars().toMutableList()
     }
 
     fun defineGoals() {
-        val date = date.value
         goalMonthString = settings.goalPerMonth
         if (goalMonthString.isNullOrEmpty() || goalMonthString == "-1") {
             goalMonthString = ""
@@ -90,31 +88,40 @@ class GoalsViewModel @Inject constructor(
             else -> 30.0
         }
         goalDay = goalMonth / denominatorDay
-        val shiftsLegacy = _shifts.value.toLegacy
+//        val dayShifts =
+//            _shifts.value.filterByDateRange(startDate = _dateLD.value, endDate = _dateLD.value)
+//        val weekShifts = _shifts.value.filterByDateRange(
+//            startDate = _dateLD.value.getStartOfWeek(),
+//            endDate = _dateLD.value.getEndOfWeek()
+//        )
+//        val monthShifts = _shifts.value.filterByDateRange(
+//            startDate = _dateLD.value.withDayOfMonth(1),
+//            endDate = _dateLD.value.withDayOfMonth(LocalDate.now().lengthOfMonth())
+//        )
+
+//        val dayProfitSum = dayShifts.profit.sum()
+//        val weekProfitSum = weekShifts.profit.sum()
+//        val monthProfitSum = monthShifts.profit.sum()
+
+        val dayProfitSum = _shifts.value.dailyProfit(_dateLD.value)
+        val weekProfitSum = _shifts.value.weeklyProfitByDay(_dateLD.value).sum()
+        val monthProfitSum = _shifts.value.monthlyProfitByDay(_dateLD.value).sum()
+
         _goalData.value = mapOf(
             "monthGoal" to roundTo2(goalMonth),
             "weekGoal" to roundTo2(goalWeek),
             "dayGoal" to roundTo2(goalDay),
-            "dayProgress" to (roundTo2(ShiftStatsUtil.calculateDayProgress(date, shiftsLegacy))),
-            "weekProgress" to (roundTo2(ShiftStatsUtil.calculateWeekProgress(date, shiftsLegacy))),
-            "monthProgress" to (roundTo2(ShiftStatsUtil.calculateMonthProgress(date, shiftsLegacy))),
+            "dayProgress" to dayProfitSum.centsToDollars(),
+            "weekProgress" to weekProfitSum.centsToDollars(),
+            "monthProgress" to monthProfitSum.centsToDollars(),
             "todayPercent" to (roundTo2(
-                ShiftStatsUtil.calculateDayProgress(
-                    date,
-                    shiftsLegacy
-                ) * 100 / goalDay
+                dayProfitSum.centsToDollars() * 100 / goalDay
             )),
             "weekPercent" to (roundTo2(
-                ShiftStatsUtil.calculateWeekProgress(
-                    date,
-                    shiftsLegacy
-                ) * 100 / goalWeek
+                weekProfitSum.centsToDollars() * 100 / goalWeek
             )),
             "monthPercent" to (roundTo2(
-                ShiftStatsUtil.calculateMonthProgress(
-                    date,
-                    shiftsLegacy
-                ) * 100 / goalMonth
+                monthProfitSum.centsToDollars() * 100 / goalMonth
             ))
         )
     }

@@ -1,12 +1,21 @@
 package com.hsact.taxilog.domain.utils
 
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
+import java.time.temporal.TemporalAdjusters
 import java.time.temporal.WeekFields
 import java.util.Locale
 
 object DateUtils {
+
+    fun LocalDate.getStartOfWeek(): LocalDate =
+        this.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+
+    fun LocalDate.getEndOfWeek(): LocalDate =
+        this.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+
     fun getDayToday(): String {
         val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         return LocalDate.now().format(dateFormatter)

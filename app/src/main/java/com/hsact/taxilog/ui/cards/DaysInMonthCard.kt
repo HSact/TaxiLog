@@ -42,6 +42,10 @@ fun DrawDaysInMonthCard(daysData: StateFlow<List<Double>>, pickedDate: StateFlow
     val textStyle: TextStyle = if (isDarkTheme) TextStyle(color = Color.White)
     else TextStyle(color = Color.Black)
 
+    if (days.isEmpty()) {
+        return
+    }
+
     val colorGraphLine = Color(0xFFFBD323)
     val labelProperties = LabelProperties(
         enabled = true,
@@ -67,7 +71,6 @@ fun DrawDaysInMonthCard(daysData: StateFlow<List<Double>>, pickedDate: StateFlow
     if (locale.language == "ru") {
         currentMonth = currentMonth.replaceFirstChar { it.uppercase(locale) }
     }
-
     val bars =
         List(parsedDate.lengthOfMonth()) { index ->
             Bars(

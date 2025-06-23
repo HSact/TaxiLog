@@ -2,16 +2,80 @@ package com.hsact.taxilog.domain.utils
 
 import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.domain.utils.DateUtils.getEndOfWeek
+import com.hsact.taxilog.domain.utils.DateUtils.getStartOfWeek
 import com.hsact.taxilog.ui.shift.ShiftOutputModel
 import com.hsact.taxilog.ui.shift.mappers.toUi
+import java.time.LocalDate
+import java.time.YearMonth
 import java.util.Locale
 
 @Suppress("DEPRECATION")
 val List<ShiftV2>.toLegacy: List<Shift>
     get() = map { shift -> shift.toLegacy() }
 
+fun List<ShiftV2>.filterByDateRange(
+    startDate: LocalDate? = null,
+    endDate: LocalDate? = null
+): List<ShiftV2> {
+    return this.filter { shift ->
+        val shiftDate = shift.time.period.start.toLocalDate()
+        val afterStart = startDate?.let { !shiftDate.isBefore(it) } != false
+        val beforeEnd = endDate?.let { !shiftDate.isAfter(it) } != false
+        afterStart && beforeEnd
+    }
+}
+
+fun List<ShiftV2>.monthlyProfitByDay(date: LocalDate): List<Long> {
+    val yearMonth = YearMonth.from(date)
+    val daysInMonth = yearMonth.lengthOfMonth()
+
+    val shiftsInMonth = this.filter {
+        val d = it.time.period.start.toLocalDate()
+        d.monthValue == date.monthValue && d.year == date.year
+    }
+
+    val grouped = shiftsInMonth.groupBy {
+        it.time.period.start.dayOfMonth
+    }
+
+    return List(daysInMonth) { index ->
+        val day = index + 1
+        grouped[day]?.sumOf { it.profit } ?: 0L
+    }
+}
+
+fun List<ShiftV2>.weeklyProfitByDay(date: LocalDate): List<Long> {
+    val startOfWeek = date.getStartOfWeek()
+    val endOfWeek = date.getEndOfWeek()
+
+    val grouped = this
+        .filter {
+            val d = it.time.period.start.toLocalDate()
+            !d.isBefore(startOfWeek) && !d.isAfter(endOfWeek)
+        }
+        .groupBy {
+            it.time.period.start.dayOfWeek.value % 7 // Пн = 1 … Вс = 7 → Пн = 1, ..., Вс = 0
+        }
+
+    return List(7) { index -> // 0 = Пн, 6 = Вс
+        grouped[index + 1]?.sumOf { it.profit } ?: 0L
+    }
+}
+
+fun List<ShiftV2>.dailyProfit(date: LocalDate): Long {
+    return this
+        .filter {
+            it.time.period.start.toLocalDate() == date
+        }
+        .sumOf { it.profit }
+}
+
 fun List<ShiftV2>.toUi(locale: Locale): List<ShiftOutputModel> =
     map { shift -> shift.toUi(locale) }
+
+val List<ShiftV2>.profit: List <Long>
+    get() = map { it.profit }
 
 val List<ShiftV2>.totalEarnings: Long
     get() = sumOf { it.financeInput.earnings }

@@ -5,6 +5,10 @@ import java.math.RoundingMode
 
 fun Long.centsToDollars(): Double = (this.toDouble() / 100).round()
 
+fun List<Long>.centsToDollars(): List<Double> {
+    return map { it.centsToDollars() }
+}
+
 fun Double.toCentsLong(): Long {
     return BigDecimal(this)
         .setScale(2, RoundingMode.HALF_UP)
