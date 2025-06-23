@@ -115,6 +115,13 @@ val List<Shift>.averageFuelCost: Long
 val List<Shift>.averageProfit: Long
     get() = takeIf { it.isNotEmpty() }?.sumOf { it.profit }?.div(size) ?: 0
 
+val List<Shift>.averageEarningsPerHour: Long
+    get() = filter { it.time.totalDuration.toHours() > 0 }
+        .takeIf { it.isNotEmpty() }
+        ?.let { list ->
+            list.sumOf { it.financeInput.earnings.toDouble() / it.time.totalDuration.toHours() } / list.size
+        }?.toLong() ?: 0L
+
 val List<Shift>.averageProfitPerHour: Long
     get() = filter { it.time.totalDuration.toHours() > 0 }
         .takeIf { it.isNotEmpty() }

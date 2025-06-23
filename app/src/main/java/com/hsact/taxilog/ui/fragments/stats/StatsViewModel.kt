@@ -6,6 +6,7 @@ import com.hsact.taxilog.domain.utils.DeprecatedDateFormatter
 import com.hsact.taxilog.domain.model.Shift
 import com.hsact.taxilog.domain.usecase.shift.GetShiftsInRangeUseCase
 import com.hsact.taxilog.domain.utils.averageDuration
+import com.hsact.taxilog.domain.utils.averageEarningsPerHour
 import com.hsact.taxilog.domain.utils.averageFuelCost
 import com.hsact.taxilog.domain.utils.averageMileage
 import com.hsact.taxilog.domain.utils.averageProfitPerHour
@@ -60,7 +61,7 @@ class StatsViewModel @Inject constructor(
             val shiftValue = _shifts.value
             _uiState.value = UiState(
                 shiftsCount = shiftValue.size.toString(),
-                avErPh = shiftValue.averageProfitPerHour.centsToCurrency(locale),
+                avErPh = shiftValue.averageEarningsPerHour.centsToCurrency(locale),
                 avProfitPh = shiftValue.averageProfitPerHour.centsToCurrency(locale),
                 avDuration = shiftValue.averageDuration.minutesToHours(locale),
                 avMileage = shiftValue.averageMileage.metersToKilometers(locale),

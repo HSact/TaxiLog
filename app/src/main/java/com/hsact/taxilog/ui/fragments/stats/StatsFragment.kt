@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TableLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -27,6 +28,7 @@ class StatsFragment : Fragment() {
     private var _binding: FragmentStatsBinding? = null
     private val binding get() = _binding!!
     private lateinit var tableLayout: TableLayout
+    private lateinit var countLayout: LinearLayout
     private lateinit var textListIsEmpty: TextView
     private lateinit var butDatePickBegin: EditText
     private lateinit var butDatePickEnd: EditText
@@ -52,10 +54,10 @@ class StatsFragment : Fragment() {
         val root: View = binding.root
         bindItems()
         lifecycleScope.launch {
+            viewModel.updateShifts(Locale.getDefault())
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.shifts.collect {
-                    viewModel.updateShifts(Locale.getDefault())
-                    displayInfo()
+                viewModel.uiState.collect { uiState ->
+                    displayInfo(uiState)
                 }
             }
         }
@@ -91,16 +93,17 @@ class StatsFragment : Fragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun displayInfo() {
+    private fun displayInfo(uiState: UiState) {
         val shifts = viewModel.shifts.value
         if (shifts.isEmpty()) {
             tableLayout.visibility = View.GONE
+            countLayout.visibility = View.GONE
             textListIsEmpty.visibility = View.VISIBLE
             return
         }
-        val uiState = viewModel.uiState.value
         textListIsEmpty.visibility = View.GONE
         tableLayout.visibility = View.VISIBLE
+        countLayout.visibility = View.VISIBLE
         textShiftsCount.text = uiState.shiftsCount
         textAvErPh.text = uiState.avErPh
         textAvProfitPh.text = uiState.avProfitPh
@@ -117,6 +120,7 @@ class StatsFragment : Fragment() {
 
     private fun bindItems() {
         tableLayout = binding.tableLayout
+        countLayout = binding.layoutCount
         butDatePickBegin = binding.buttonDatePickBegin
         butDatePickEnd = binding.buttonDatePickEnd
         textListIsEmpty = binding.textListIsEmpty

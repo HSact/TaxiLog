@@ -58,7 +58,7 @@
     <string name="your_goal_per_month">Your goal is %s per month</string>
     <string name="n_a">N/A</string>
     <string name="hours">hours</string>
-    <string name="shifts_count">Shifts count</string>
+    <string name="shifts_count">Shifts count:</string>
     <string name="average_earnings_per_hour">Average earnings per hour</string>
     <string name="average_profit_per_hour">Average profit per hour</string>
     <string name="average_shift_duration">Average shift duration</string>
