@@ -54,7 +54,7 @@
                     android:inputType="none"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -86,7 +86,7 @@
                     android:inputType="none"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 

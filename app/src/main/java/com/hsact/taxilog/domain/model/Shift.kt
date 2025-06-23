@@ -25,18 +25,4 @@ data class Shift(
 
     val profitPerHour: Long
         get() = profit / time.totalDuration.toHours()
-
-//    @Suppress("DEPRECATION")
-//    fun toLegacy(): Shift {
-//        return Shift(
-//            id = id,
-//            date = time.period.start.toLocalDate().format(DeprecatedDateFormatter),
-//            time = time.totalDuration.toHours().toString(),
-//            earnings = financeInput.earnings.centsToDollars(),
-//            wash = financeInput.wash.centsToDollars(),
-//            fuelCost = financeInput.fuelCost.centsToDollars(),
-//            mileage = (carSnapshot.mileage.toDouble() / 1000).round(),
-//            profit = financeInput.profit.centsToDollars()
-//        )
-//    }
 }
