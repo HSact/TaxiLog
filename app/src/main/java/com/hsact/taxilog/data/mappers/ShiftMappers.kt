@@ -5,13 +5,13 @@ import com.hsact.taxilog.data.db.entities.DateTimePeriodEntity
 import com.hsact.taxilog.data.db.entities.ShiftEntity
 import com.hsact.taxilog.data.db.entities.ShiftFinanceInputEntity
 import com.hsact.taxilog.domain.model.ShiftFinanceInput
-import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.domain.model.Shift
 import com.hsact.taxilog.domain.model.car.CarSnapshot
 import com.hsact.taxilog.domain.model.time.DateTimePeriod
 import com.hsact.taxilog.domain.model.time.ShiftTime
 
-fun ShiftEntity.toDomain(): ShiftV2 {
-    return ShiftV2(
+fun ShiftEntity.toDomain(): Shift {
+    return Shift(
         id = id,
         carId = carId,
         carSnapshot = carSnapshot.toDomain(),
@@ -48,7 +48,7 @@ fun ShiftFinanceInputEntity.toDomain(): ShiftFinanceInput {
     )
 }
 
-fun ShiftV2.toEntity(): ShiftEntity = ShiftEntity(
+fun Shift.toEntity(): ShiftEntity = ShiftEntity(
     id = id,
     carId = carId,
     carSnapshot = carSnapshot.toEntity(),

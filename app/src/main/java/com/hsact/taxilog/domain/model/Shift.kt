@@ -1,13 +1,9 @@
 package com.hsact.taxilog.domain.model
 
-import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.domain.model.car.CarSnapshot
 import com.hsact.taxilog.domain.model.time.ShiftTime
-import com.hsact.taxilog.domain.utils.DeprecatedDateFormatter
-import com.hsact.taxilog.domain.utils.centsToDollars
-import com.hsact.taxilog.domain.utils.round
 
-data class ShiftV2(
+data class Shift(
     val id: Int,
     val carId: Int,
     val carSnapshot: CarSnapshot,
@@ -30,17 +26,17 @@ data class ShiftV2(
     val profitPerHour: Long
         get() = profit / time.totalDuration.toHours()
 
-    @Suppress("DEPRECATION")
-    fun toLegacy(): Shift {
-        return Shift(
-            id = id,
-            date = time.period.start.toLocalDate().format(DeprecatedDateFormatter),
-            time = time.totalDuration.toHours().toString(),
-            earnings = financeInput.earnings.centsToDollars(),
-            wash = financeInput.wash.centsToDollars(),
-            fuelCost = financeInput.fuelCost.centsToDollars(),
-            mileage = (carSnapshot.mileage.toDouble() / 1000).round(),
-            profit = financeInput.profit.centsToDollars()
-        )
-    }
+//    @Suppress("DEPRECATION")
+//    fun toLegacy(): Shift {
+//        return Shift(
+//            id = id,
+//            date = time.period.start.toLocalDate().format(DeprecatedDateFormatter),
+//            time = time.totalDuration.toHours().toString(),
+//            earnings = financeInput.earnings.centsToDollars(),
+//            wash = financeInput.wash.centsToDollars(),
+//            fuelCost = financeInput.fuelCost.centsToDollars(),
+//            mileage = (carSnapshot.mileage.toDouble() / 1000).round(),
+//            profit = financeInput.profit.centsToDollars()
+//        )
+//    }
 }

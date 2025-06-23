@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.domain.model.Shift
 import com.hsact.taxilog.domain.model.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.taxilog.domain.usecase.shift.DeleteAllShiftsUseCase
@@ -25,8 +25,8 @@ class LogViewModel @Inject constructor(
     private val _settings = MutableLiveData<UserSettings>()
     val settings: LiveData<UserSettings> = _settings
 
-    private val _shifts = MutableLiveData<List<ShiftV2>>()
-    val shifts: LiveData<List<ShiftV2>> = _shifts
+    private val _shifts = MutableLiveData<List<Shift>>()
+    val shifts: LiveData<List<Shift>> = _shifts
 
     init {
         viewModelScope.launch {
@@ -52,14 +52,14 @@ class LogViewModel @Inject constructor(
         }
     }
 
-    private fun deleteShift(shiftV2: ShiftV2) {
+    private fun deleteShift(shift: Shift) {
         viewModelScope.launch {
-            deleteShiftUseCase(shiftV2)
+            deleteShiftUseCase(shift)
             _shifts.value = getAllShiftsUseCase()
         }
     }
 
-    private fun editShift(shift: ShiftV2) {
+    private fun editShift(shift: Shift) {
         TODO("Not yet implemented")
     }
 }

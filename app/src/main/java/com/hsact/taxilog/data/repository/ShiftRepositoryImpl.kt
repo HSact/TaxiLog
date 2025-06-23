@@ -3,7 +3,7 @@ package com.hsact.taxilog.data.repository
 import com.hsact.taxilog.data.db.ShiftDao
 import com.hsact.taxilog.data.mappers.toDomain
 import com.hsact.taxilog.data.mappers.toEntity
-import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.domain.model.Shift
 import com.hsact.taxilog.domain.repository.ShiftRepository
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -19,7 +19,7 @@ class ShiftRepositoryImpl @Inject constructor(
     override suspend fun getShiftsInRange(
         start: LocalDateTime?,
         end: LocalDateTime?,
-    ): List<ShiftV2> {
+    ): List<Shift> {
         val startString = start?.toString() // ISO-8601
         val endString = end?.toString()
         val entities = shiftDao.getShiftsInRange(startString, endString)
@@ -32,13 +32,13 @@ class ShiftRepositoryImpl @Inject constructor(
     override suspend fun getLastShift() =
         shiftDao.getLastShift()?.toDomain()
 
-    override suspend fun insertShift(shift: ShiftV2) =
+    override suspend fun insertShift(shift: Shift) =
         shiftDao.insertShift(shift.toEntity())
 
-    override suspend fun deleteShift(shift: ShiftV2) =
+    override suspend fun deleteShift(shift: Shift) =
         shiftDao.deleteShift(shift.toEntity())
 
-    override suspend fun updateShift(shift: ShiftV2) =
+    override suspend fun updateShift(shift: Shift) =
         shiftDao.updateShift(shift.toEntity())
 
     override suspend fun deleteAll() =

@@ -1,22 +1,23 @@
 package com.hsact.taxilog.ui.fragments.addShift
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hsact.taxilog.domain.utils.DeprecatedDateFormatter
-import com.hsact.taxilog.domain.utils.ShiftStatsUtil
-import com.hsact.taxilog.domain.utils.ShiftStatsUtil.convertLongToTime
-import com.hsact.taxilog.domain.utils.ShiftStatsUtil.convertTimeToLong
-import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.domain.model.Shift
 import com.hsact.taxilog.domain.model.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.taxilog.domain.usecase.shift.AddShiftUseCase
 import com.hsact.taxilog.ui.shift.ShiftInputModel
 import com.hsact.taxilog.ui.shift.mappers.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Date
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @HiltViewModel
 class AddShiftViewModel @Inject constructor(
@@ -43,12 +44,12 @@ class AddShiftViewModel @Inject constructor(
         val beginTime = convertLongToTime(convertTimeToLong(endTime) - hoursToMs(10))
         val beginDate = endDate.minusDays(1)
 
-        var uiState = UiState().copy(timeBegin = beginTime, timeEnd = endTime)
+        var uiState = UiState(timeBegin = beginTime, timeEnd = endTime)
 
-        if (convertTimeToLong(beginTime) > convertTimeToLong(endTime)) {
-            uiState = uiState.copy(date = beginDate.format(formatter))
+        uiState = if (convertTimeToLong(beginTime) > convertTimeToLong(endTime)) {
+            uiState.copy(date = beginDate.format(formatter))
         } else {
-            uiState = uiState.copy(date = endDate.format(formatter))
+            uiState.copy(date = endDate.format(formatter))
         }
         _shiftData.value = uiState
     }
@@ -67,7 +68,7 @@ class AddShiftViewModel @Inject constructor(
             return
         }
         currentShift = currentShift.copy(
-            fuelCost = ShiftStatsUtil.centsRound(
+            fuelCost = centsRound(
                 fuelPrice * currentShift.mileage * consumption / 100
             )
         )
@@ -104,8 +105,8 @@ class AddShiftViewModel @Inject constructor(
         val uiState = _shiftData.value ?: return
         val shiftInput = buildShiftInputModel(uiState)
 
-        val shiftV2: ShiftV2 = shiftInput.toDomain()
-        addShiftUseCase(shiftV2)
+        val shift: Shift = shiftInput.toDomain()
+        addShiftUseCase(shift)
     }
 
     private fun buildShiftInputModel(
@@ -130,5 +131,22 @@ class AddShiftViewModel @Inject constructor(
 
     private fun hoursToMs(hours: Int): Long {
         return (hours * 60 * 60 * 1000).toLong()
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun convertLongToTime(time: Long): String {
+        val date = Date(time)
+        val format = SimpleDateFormat("H:mm")
+        return format.format(date)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun convertTimeToLong(date: String): Long {
+        val df = SimpleDateFormat("H:mm")
+        return df.parse(date)!!.time
+    }
+
+    private fun centsRound(n: Double): Double {
+        return (n * 100).roundToInt() / 100.toDouble()
     }
 }

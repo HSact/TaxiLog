@@ -93,7 +93,7 @@
     <string name="earnings_is_empty">Earnings is empty</string>
     <string name="fuel_cost_is_empty">Fuel cost is empty</string>
     <string name="mileage_is_empty">Mileage is empty</string>
-    <string name="you_earn_in_hours">You earned %1$s in %2$s hours?</string>
+    <string name="you_earn_in_hours">You earned %1$s in %2$s?</string>
     <string name="ok">OK</string>
     <string name="nope">Nope</string>
     <string name="looks_like_its_a_first_launch_lets_set_it_up">Looks like it\'s a first launch.\nLet\'s set it up!</string>

@@ -19,14 +19,14 @@ import androidx.compose.ui.unit.dp
 import com.hsact.taxilog.R
 import androidx.compose.runtime.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.domain.model.Shift
 import com.hsact.taxilog.ui.shift.mappers.toUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.Locale
 
 @Composable
-fun DrawLastShiftCard(shift: StateFlow<ShiftV2?>) {
+fun DrawLastShiftCard(shift: StateFlow<Shift?>) {
     val lastShift = shift.collectAsStateWithLifecycle()
     val lastShiftUi = lastShift.value?.toUi(Locale.getDefault())
     BaseCard {

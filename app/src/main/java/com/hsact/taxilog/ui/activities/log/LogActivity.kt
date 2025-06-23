@@ -14,7 +14,7 @@ import com.hsact.taxilog.databinding.ActivityLogBinding
 import com.hsact.taxilog.databinding.RecyclerviewItemBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.widget.Toolbar
-import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.domain.model.Shift
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -94,7 +94,7 @@ class LogActivity : AppCompatActivity() {
         return true
     }
 
-    fun onClickElement(shift: ShiftV2)
+    fun onClickElement(shift: Shift)
     {
         val items = arrayOf(getString(R.string.edit), getString(R.string.delete))
         val alert = MaterialAlertDialogBuilder(this)
@@ -109,20 +109,20 @@ class LogActivity : AppCompatActivity() {
         }
     }
 
-    private fun onPopUpMenuClicked (item: Int, shift: ShiftV2)
+    private fun onPopUpMenuClicked (item: Int, shift: Shift)
     {
         //Toast.makeText(applicationContext, "$item for ID $shiftId is clicked", Toast.LENGTH_SHORT).show()
         if (item==0) editShift(shift)
         if (item==1) deleteShift(shift)
     }
 
-    private fun editShift(shiftV2: ShiftV2)
+    private fun editShift(shift: Shift)
     {
         //showEditShiftDialog(index-1)
         //TODO: make intent to AddShiftFragment
     }
 
-    private fun deleteShift(shift: ShiftV2)
+    private fun deleteShift(shift: Shift)
     {
         //shiftRepositoryLegacy.deleteShift(index)
         viewModel.handleIntent(LogIntent.DeleteShift(shift))

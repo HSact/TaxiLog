@@ -17,15 +17,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentAddShiftBinding
-import com.hsact.taxilog.domain.utils.ShiftStatsUtil
 import com.hsact.taxilog.ui.activities.MainActivity
 import com.hsact.taxilog.ui.components.DatePickerFragment
 import com.hsact.taxilog.ui.components.TimePickerFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputLayout
+import com.hsact.taxilog.ui.shift.mappers.millisToHours
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @AndroidEntryPoint
 class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
@@ -208,7 +209,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
             getString(
                 R.string.you_earn_in_hours,
                 viewModel.shiftData.value?.profit.toString(),
-                ShiftStatsUtil.msToHours(viewModel.shiftData.value?.totalTime ?: 0).toString()
+                (viewModel.shiftData.value?.totalTime ?: 0).millisToHours(Locale.getDefault())
             )
         )
     }
@@ -254,7 +255,6 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         TransitionManager.beginDelayedTransition(parentLayout)
         view.visibility = visibility
     }
-
     /*override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("IS_VISIBLE_TABLE_BREAK", binding.tableBreak.visibility == View.VISIBLE)

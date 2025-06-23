@@ -2,51 +2,46 @@ package com.hsact.taxilog.ui.fragments.stats
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.domain.utils.DeprecatedDateFormatter
-import com.hsact.taxilog.domain.utils.ShiftStatsUtil
-import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.domain.model.Shift
 import com.hsact.taxilog.domain.usecase.shift.GetShiftsInRangeUseCase
-import com.hsact.taxilog.domain.utils.toLegacy
+import com.hsact.taxilog.domain.utils.averageDuration
+import com.hsact.taxilog.domain.utils.averageFuelCost
+import com.hsact.taxilog.domain.utils.averageMileage
+import com.hsact.taxilog.domain.utils.averageProfitPerHour
+import com.hsact.taxilog.domain.utils.averageWash
+import com.hsact.taxilog.domain.utils.totalEarnings
+import com.hsact.taxilog.domain.utils.totalFuelCost
+import com.hsact.taxilog.domain.utils.totalMileage
+import com.hsact.taxilog.domain.utils.totalProfit
+import com.hsact.taxilog.domain.utils.totalTime
+import com.hsact.taxilog.domain.utils.totalWash
+import com.hsact.taxilog.ui.shift.mappers.centsToCurrency
+import com.hsact.taxilog.ui.shift.mappers.metersToKilometers
+import com.hsact.taxilog.ui.shift.mappers.minutesToHours
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.inject.Inject
+import java.util.Locale
 
 @HiltViewModel
 class StatsViewModel @Inject constructor(
     private val getShiftsInRangeUseCase: GetShiftsInRangeUseCase,
 ) : ViewModel() {
-    private val _shifts = MutableStateFlow<List<ShiftV2>>(emptyList())
-    val shifts: MutableStateFlow<List<ShiftV2>> = _shifts
+    private val _shifts = MutableStateFlow<List<Shift>>(emptyList())
+    val shifts: MutableStateFlow<List<Shift>> = _shifts
 
-    val shiftsLegacy: List<Shift>
-        get() = shifts.value.toLegacy
+    private val _uiState = MutableStateFlow(UiState())
+    val uiState: MutableStateFlow<UiState> = _uiState
 
     private val now = LocalDateTime.now()
     private val currentDate = now.toLocalDate()
     private val firstDayOfMonth = now.toLocalDate().withDayOfMonth(1)
     var startDate: String = firstDayOfMonth.format(DeprecatedDateFormatter)
     var endDate: String = currentDate.format(DeprecatedDateFormatter)
-
-    init {
-        updateShifts()
-    }
-
-    val shiftsCount: String get() = shiftsLegacy.size.toString()
-    val avErPh: String get() = ShiftStatsUtil.calcAverageEarningsPerHour(shiftsLegacy).toString()
-    val avProfitPh: String get() = ShiftStatsUtil.calcAverageProfitPerHour(shiftsLegacy).toString()
-    val avDuration: String get() = ShiftStatsUtil.calcAverageShiftDuration(shiftsLegacy).toString()
-    val avMileage: String get() = ShiftStatsUtil.calcAverageMileage(shiftsLegacy).toString()
-    val totalDuration: String get() = ShiftStatsUtil.calcTotalShiftDuration(shiftsLegacy).toString()
-    val totalMileage: String get() = ShiftStatsUtil.calcTotalMileage(shiftsLegacy).toString()
-    val totalWash: String get() = ShiftStatsUtil.calcTotalWash(shiftsLegacy).toString()
-    val totalEarnings: String get() = ShiftStatsUtil.calcTotalEarnings(shiftsLegacy).toString()
-    val totalProfit: String get() = ShiftStatsUtil.calcTotalProfit(shiftsLegacy).toString()
-    val avFuel: String get() = ShiftStatsUtil.calcAverageFuelCost(shiftsLegacy).toString()
-    val totalFuel: String get() = ShiftStatsUtil.calcTotalFuelCost(shiftsLegacy).toString()
 
     fun defineDates() {
         val now = LocalDateTime.now()
@@ -56,11 +51,27 @@ class StatsViewModel @Inject constructor(
         endDate = currentDate.format(DeprecatedDateFormatter)
     }
 
-    fun updateShifts() {
+    fun updateShifts(locale: Locale) {
         viewModelScope.launch {
             _shifts.value = getShiftsInRangeUseCase.invoke(
                 startDate.toLocalDate().atStartOfDay(),
                 endDate.toLocalDate().plusDays(1).atStartOfDay()
+            )
+            val shiftValue = _shifts.value
+            _uiState.value = UiState(
+                shiftsCount = shiftValue.size.toString(),
+                avErPh = shiftValue.averageProfitPerHour.centsToCurrency(locale),
+                avProfitPh = shiftValue.averageProfitPerHour.centsToCurrency(locale),
+                avDuration = shiftValue.averageDuration.minutesToHours(locale),
+                avMileage = shiftValue.averageMileage.metersToKilometers(locale),
+                avFuel = shiftValue.averageFuelCost.centsToCurrency(locale),
+                avWash = shiftValue.averageWash.centsToCurrency(locale),
+                totalDuration = shiftValue.totalTime.minutesToHours(locale),
+                totalMileage = shiftValue.totalMileage.metersToKilometers(locale),
+                totalFuel = shiftValue.totalFuelCost.centsToCurrency(locale),
+                totalWash = shiftValue.totalWash.centsToCurrency(locale),
+                totalEarnings = shiftValue.totalEarnings.centsToCurrency(locale),
+                totalProfit = shiftValue.totalProfit.centsToCurrency(locale),
             )
         }
     }

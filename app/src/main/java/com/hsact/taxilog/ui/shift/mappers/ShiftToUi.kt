@@ -1,12 +1,12 @@
 package com.hsact.taxilog.ui.shift.mappers
 
-import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.domain.model.Shift
 import com.hsact.taxilog.ui.shift.ShiftOutputModel
 import java.time.Duration
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-fun ShiftV2.toUi(locale: Locale): ShiftOutputModel {
+fun Shift.toUi(locale: Locale): ShiftOutputModel {
     val formatterDate = DateTimeFormatter.ofPattern("dd.MM.yyyy", locale)
     val formatterTime = DateTimeFormatter.ofPattern("HH:mm", locale)
 
@@ -37,6 +37,30 @@ fun ShiftV2.toUi(locale: Locale): ShiftOutputModel {
     )
 }
 
+fun Long.centsToCurrency(locale: Locale): String {
+    val rubles = this.toDouble() / 100
+    return when (locale.language) {
+        "ru" -> String.format(locale, "%,.0f ₽", rubles).replace(',', ' ')
+        else -> String.format(locale, "$%,.0f", rubles)
+    }
+}
+
+fun Long.minutesToHours(locale: Locale): String {
+    return formatDuration (Duration.ofMinutes(this), locale)
+}
+
+fun Long.millisToHours(locale: Locale): String {
+    return formatDuration (Duration.ofMillis(this), locale)
+}
+
+fun Long.metersToKilometers(locale: Locale): String {
+    val kilometers = this.toDouble() / 1000
+    return when (locale.language) {
+        "ru" -> String.format(locale, "%,.1f км", kilometers).replace(',', '.')
+        else -> String.format(locale, "%,.1f km", kilometers)
+    }
+}
+
 private fun formatDuration(duration: Duration, locale: Locale): String {
     val hours = duration.toHours()
     val minutes = (duration.toMinutes() % 60)
@@ -50,13 +74,5 @@ private fun formatDuration(duration: Duration, locale: Locale): String {
             if (hours > 0) append("$hours h ")
             if (minutes > 0 || hours == 0L) append("$minutes min")
         }.trim()
-    }
-}
-
-private fun Long.centsToCurrency(locale: Locale): String {
-    val rubles = this.toDouble() / 100
-    return when (locale.language) {
-        "ru" -> String.format(locale, "%,.0f ₽", rubles).replace(',', ' ')
-        else -> String.format(locale, "$%,.0f", rubles)
     }
 }

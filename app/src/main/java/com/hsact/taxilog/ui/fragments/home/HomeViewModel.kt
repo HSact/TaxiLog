@@ -3,7 +3,7 @@ package com.hsact.taxilog.ui.fragments.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.taxilog.domain.utils.centsToDollars
-import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.domain.model.Shift
 import com.hsact.taxilog.domain.model.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.taxilog.domain.usecase.shift.GetLastShiftUseCase
@@ -25,11 +25,11 @@ class HomeViewModel @Inject constructor(
 
     val settings: UserSettings = getAllSettingsUseCase.invoke()
 
-    private val _lastShift = MutableStateFlow<ShiftV2?>(null)
-    val lastShift: StateFlow<ShiftV2?> = _lastShift
+    private val _lastShift = MutableStateFlow<Shift?>(null)
+    val lastShift: StateFlow<Shift?> = _lastShift
 
-    private val _shiftListThisMonth = MutableStateFlow<List<ShiftV2>>(emptyList())
-    val shiftListThisMonth: StateFlow<List<ShiftV2>> = _shiftListThisMonth
+    private val _shiftListThisMonth = MutableStateFlow<List<Shift>>(emptyList())
+    val shiftListThisMonth: StateFlow<List<Shift>> = _shiftListThisMonth
 
     private val _chartData = MutableStateFlow(emptyList<Double>())
     val chartData: StateFlow<List<Double>> = _chartData

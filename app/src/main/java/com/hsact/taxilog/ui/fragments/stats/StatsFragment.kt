@@ -17,6 +17,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.hsact.taxilog.ui.components.DatePickerFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @AndroidEntryPoint
 class StatsFragment : Fragment() {
@@ -53,6 +54,7 @@ class StatsFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.shifts.collect {
+                    viewModel.updateShifts(Locale.getDefault())
                     displayInfo()
                 }
             }
@@ -78,7 +80,7 @@ class StatsFragment : Fragment() {
                 } else if (editObj == butDatePickEnd) {
                     viewModel.endDate = date
                 }
-                viewModel.updateShifts()
+                viewModel.updateShifts(Locale.getDefault())
             }
         )
     }
@@ -90,26 +92,27 @@ class StatsFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun displayInfo() {
-        val shifts = viewModel.shiftsLegacy
+        val shifts = viewModel.shifts.value
         if (shifts.isEmpty()) {
             tableLayout.visibility = View.GONE
             textListIsEmpty.visibility = View.VISIBLE
             return
         }
+        val uiState = viewModel.uiState.value
         textListIsEmpty.visibility = View.GONE
         tableLayout.visibility = View.VISIBLE
-        textShiftsCount.text = viewModel.shiftsCount
-        textAvErPh.text = viewModel.avErPh
-        textAvProfitPh.text = viewModel.avProfitPh
-        textAvDuration.text = viewModel.avDuration
-        textAvMileage.text = viewModel.avMileage
-        textTotalDuration.text = viewModel.totalDuration
-        textTotalMileage.text = viewModel.totalMileage
-        textTotalWash.text = viewModel.totalWash
-        textTotalEarnings.text = viewModel.totalEarnings
-        textTotalProfit.text = viewModel.totalProfit
-        textAvFuel.text = viewModel.avFuel
-        textTotalFuel.text = viewModel.totalFuel
+        textShiftsCount.text = uiState.shiftsCount
+        textAvErPh.text = uiState.avErPh
+        textAvProfitPh.text = uiState.avProfitPh
+        textAvDuration.text = uiState.avDuration
+        textAvMileage.text = uiState.avMileage
+        textTotalDuration.text = uiState.totalDuration
+        textTotalMileage.text = uiState.totalMileage
+        textTotalWash.text = uiState.totalWash
+        textTotalEarnings.text = uiState.totalEarnings
+        textTotalProfit.text = uiState.totalProfit
+        textAvFuel.text = uiState.avFuel
+        textTotalFuel.text = uiState.totalFuel
     }
 
     private fun bindItems() {

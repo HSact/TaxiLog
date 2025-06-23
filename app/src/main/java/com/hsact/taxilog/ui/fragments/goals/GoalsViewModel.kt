@@ -3,7 +3,7 @@ package com.hsact.taxilog.ui.fragments.goals
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.taxilog.domain.utils.DeprecatedDateFormatter
-import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.domain.model.Shift
 import com.hsact.taxilog.domain.model.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.taxilog.domain.usecase.shift.GetShiftsInRangeUseCase
@@ -27,8 +27,8 @@ class GoalsViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val settings: UserSettings = getAllSettingsUseCase.invoke()
-    private val _shifts = MutableStateFlow<List<ShiftV2>>(emptyList())
-    val shifts: StateFlow<List<ShiftV2?>> = _shifts
+    private val _shifts = MutableStateFlow<List<Shift>>(emptyList())
+    val shifts: StateFlow<List<Shift?>> = _shifts
 
     private val _date = MutableStateFlow("")
     val date: StateFlow<String> = _date

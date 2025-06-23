@@ -1,7 +1,7 @@
 package com.hsact.taxilog.ui.shift.mappers
 
 import com.hsact.taxilog.domain.model.ShiftFinanceInput
-import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.domain.model.Shift
 import com.hsact.taxilog.domain.model.car.CarSnapshot
 import com.hsact.taxilog.domain.model.time.DateTimePeriod
 import com.hsact.taxilog.domain.model.time.ShiftTime
@@ -12,7 +12,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToLong
 
-fun ShiftInputModel.toDomain(): ShiftV2 {
+fun ShiftInputModel.toDomain(): Shift {
     val formatterDate = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     val formatterTime = DateTimeFormatter.ofPattern("H:mm")
 
@@ -41,7 +41,7 @@ fun ShiftInputModel.toDomain(): ShiftV2 {
         null
     }
 
-    return ShiftV2(
+    return Shift(
         id = 0,
         carId = carId.toInt(),
         carSnapshot = CarSnapshot(

@@ -6,13 +6,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hsact.taxilog.R
-import com.hsact.taxilog.domain.model.ShiftV2
+import com.hsact.taxilog.domain.model.Shift
 import com.hsact.taxilog.ui.shift.mappers.toUi
 import java.util.Locale
 
 class RecyclerAdapter(
-    private val shifts: List<ShiftV2>,
-    private val onItemMenuClick: (ShiftV2) -> Unit) :
+    private val shifts: List<Shift>,
+    private val onItemMenuClick: (Shift) -> Unit) :
     RecyclerView.Adapter<RecyclerAdapter.ShiftViewHolder>() {
     inner class ShiftViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
