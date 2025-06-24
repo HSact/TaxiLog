@@ -1,6 +1,7 @@
 package com.hsact.taxilog.ui.fragments.addShift
 
 data class UiState(
+    val id: Int = 0,
     var date: String = "",
     var timeBegin: String = "",
     var timeEnd: String = "",

@@ -74,12 +74,13 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val shiftId = arguments?.getInt("shiftId") ?: -1
-        if (shiftId != -1) {
-            viewModel.loadShift(shiftId)
-        }
         viewModel.uiState.observe(viewLifecycleOwner)
         { shift -> updateUI(shift) }
+        val shiftId = (arguments?.getLong("shiftId") ?: -1).toInt()
+        if (shiftId != -1) {
+            viewModel.loadShift(shiftId)
+            //editEarnings.setText(viewModel.uiState.value?.earnings.toString())
+        }
 
         editDate.setOnClickListener {
             DatePickerFragment.pickDate(

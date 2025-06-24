@@ -11,7 +11,11 @@ import com.hsact.taxilog.domain.model.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.taxilog.domain.usecase.shift.AddShiftUseCase
 import com.hsact.taxilog.domain.usecase.shift.GetShiftByIdUseCase
+import com.hsact.taxilog.domain.utils.centsToDollars
+import com.hsact.taxilog.domain.utils.toShortDate
+import com.hsact.taxilog.domain.utils.toShortTime
 import com.hsact.taxilog.ui.shift.ShiftInputModel
+import com.hsact.taxilog.ui.shift.mappers.metersToKilometers
 import com.hsact.taxilog.ui.shift.mappers.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,6 +23,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -157,6 +162,25 @@ class AddShiftViewModel @Inject constructor(
     fun loadShift(id: Int) {
         viewModelScope.launch {
             val shift = getShiftByIdUseCase(id)
+            if (shift == null) {
+                return@launch
+            }
+            _uiState.value = UiState(
+                id = shift.id,
+                date = shift.time.period.start.toShortDate(),
+                timeBegin = shift.time.period.start.toShortTime(),
+                timeEnd = shift.time.period.end.toShortTime(),
+                breakBegin = if (shift.time.rest != null) {shift.time.rest.start.toShortTime()} else "",
+                breakEnd = if (shift.time.rest != null) {shift.time.rest.end.toShortTime()} else "",
+                earnings = shift.financeInput.earnings.centsToDollars(),
+                wash = shift.financeInput.wash.centsToDollars(),
+                fuelCost = shift.financeInput.fuelCost.centsToDollars(),
+                mileage = shift.carSnapshot.mileage.toDouble() / 1000,
+//                onlineTime = shift.time.online,
+//                breakTime = shift.time.breakTime,
+//                totalTime = shift.d,
+                profit = shift.profit.centsToDollars()
+            )
             //_uiState.value = UiState.Edit(shift)
         }
     }
