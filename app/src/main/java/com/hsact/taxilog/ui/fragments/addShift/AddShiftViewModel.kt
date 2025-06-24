@@ -4,14 +4,17 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.hsact.taxilog.domain.utils.DeprecatedDateFormatter
 import com.hsact.taxilog.domain.model.Shift
 import com.hsact.taxilog.domain.model.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.taxilog.domain.usecase.shift.AddShiftUseCase
+import com.hsact.taxilog.domain.usecase.shift.GetShiftByIdUseCase
 import com.hsact.taxilog.ui.shift.ShiftInputModel
 import com.hsact.taxilog.ui.shift.mappers.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -22,10 +25,11 @@ import kotlin.math.roundToInt
 @HiltViewModel
 class AddShiftViewModel @Inject constructor(
     getAllSettingsUseCase: GetAllSettingsUseCase,
-    private val addShiftUseCase: AddShiftUseCase
+    private val addShiftUseCase: AddShiftUseCase,
+    private val getShiftByIdUseCase: GetShiftByIdUseCase,
 ) : ViewModel() {
-    private val _shiftData = MutableLiveData<UiState>()
-    val shiftData: LiveData<UiState> get() = _shiftData
+    private val _uiState = MutableLiveData<UiState>()
+    val uiState: LiveData<UiState> get() = _uiState
 
     private val settings: UserSettings = getAllSettingsUseCase.invoke()
 
@@ -51,14 +55,14 @@ class AddShiftViewModel @Inject constructor(
         } else {
             uiState.copy(date = endDate.format(formatter))
         }
-        _shiftData.value = uiState
+        _uiState.value = uiState
     }
 
     fun guessFuelCost() {
         if (!settings.isConfigured) return
-        if (_shiftData.value?.mileage == 0.0) return
+        if (_uiState.value?.mileage == 0.0) return
         if (settings.fuelPrice.isNullOrEmpty() || settings.consumption.isNullOrEmpty()) return
-        var currentShift = _shiftData.value ?: return
+        var currentShift = _uiState.value ?: return
         val fuelPrice: Double = (settings.fuelPrice).toDouble()
         val consumption = (settings.consumption).toDouble()
         if (fuelPrice == 0.0 || consumption == 0.0) {
@@ -72,15 +76,15 @@ class AddShiftViewModel @Inject constructor(
                 fuelPrice * currentShift.mileage * consumption / 100
             )
         )
-        _shiftData.value = currentShift
+        _uiState.value = currentShift
     }
 
     fun updateShift(shift: UiState) {
-        _shiftData.value = shift
+        _uiState.value = shift
     }
 
     fun calculateShift() {
-        var currentShift = _shiftData.value ?: return
+        var currentShift = _uiState.value ?: return
         currentShift = currentShift.copy(
             onlineTime = convertTimeToLong(currentShift.timeEnd) - convertTimeToLong(currentShift.timeBegin)
         )
@@ -98,11 +102,11 @@ class AddShiftViewModel @Inject constructor(
             currentShift.totalTime = currentShift.onlineTime
         }
         currentShift.profit = currentShift.earnings - currentShift.wash - currentShift.fuelCost
-        _shiftData.value = currentShift
+        _uiState.value = currentShift
     }
 
     suspend fun submit() {
-        val uiState = _shiftData.value ?: return
+        val uiState = _uiState.value ?: return
         val shiftInput = buildShiftInputModel(uiState)
 
         val shift: Shift = shiftInput.toDomain()
@@ -112,21 +116,21 @@ class AddShiftViewModel @Inject constructor(
     private fun buildShiftInputModel(
         uiState: UiState,
     ): ShiftInputModel {
-        val shiftInput = ShiftInputModel()
-        shiftInput.date = uiState.date
-        shiftInput.timeStart = uiState.timeBegin
-        shiftInput.timeEnd = uiState.timeEnd
-        shiftInput.breakStart = uiState.breakBegin
-        shiftInput.breakEnd = uiState.breakEnd
-        shiftInput.earnings = uiState.earnings.toString()
-        shiftInput.wash = uiState.wash.toString()
-        shiftInput.fuelCost = uiState.fuelCost.toString()
-        shiftInput.mileage = uiState.mileage.toString()
-        shiftInput.taxRate = settings.taxRate ?: ""
-        shiftInput.rentCost = settings.rentCost ?: ""
-        shiftInput.serviceCost = settings.serviceCost ?: ""
-        shiftInput.consumption = settings.consumption ?: ""
-        return shiftInput
+        return ShiftInputModel(
+        date = uiState.date,
+        timeStart = uiState.timeBegin,
+        timeEnd = uiState.timeEnd,
+        breakStart = uiState.breakBegin,
+        breakEnd = uiState.breakEnd,
+        earnings = uiState.earnings.toString(),
+        wash = uiState.wash.toString(),
+        fuelCost = uiState.fuelCost.toString(),
+        mileage = uiState.mileage.toString(),
+        taxRate = settings.taxRate ?: "",
+        rentCost = settings.rentCost ?: "",
+        serviceCost = settings.serviceCost ?: "",
+        consumption = settings.consumption ?: ""
+        )
     }
 
     private fun hoursToMs(hours: Int): Long {
@@ -148,5 +152,12 @@ class AddShiftViewModel @Inject constructor(
 
     private fun centsRound(n: Double): Double {
         return (n * 100).roundToInt() / 100.toDouble()
+    }
+
+    fun loadShift(id: Int) {
+        viewModelScope.launch {
+            val shift = getShiftByIdUseCase(id)
+            //_uiState.value = UiState.Edit(shift)
+        }
     }
 }

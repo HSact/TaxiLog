@@ -60,6 +60,7 @@ class LogViewModel @Inject constructor(
     }
 
     private fun editShift(shift: Shift) {
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
+
     }
 }

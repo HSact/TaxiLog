@@ -38,6 +38,10 @@
         <action
             android:id="@+id/action_addShift_to_home_fragment"
             app:destination="@id/navigation_home" />
+        <argument
+            android:name="shiftId"
+            app:argType="long"
+            app:defaultValue="-1" />
     </fragment>
     <fragment
         android:id="@+id/navigation_log"

@@ -74,33 +74,37 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.shiftData.observe(viewLifecycleOwner)
+        val shiftId = arguments?.getInt("shiftId") ?: -1
+        if (shiftId != -1) {
+            viewModel.loadShift(shiftId)
+        }
+        viewModel.uiState.observe(viewLifecycleOwner)
         { shift -> updateUI(shift) }
 
         editDate.setOnClickListener {
             DatePickerFragment.pickDate(
                 this,
                 editDate,
-                onDatePicked = { viewModel.shiftData.value?.date = editDate.text.toString() }
+                onDatePicked = { viewModel.uiState.value?.date = editDate.text.toString() }
             )
         }
         editStart.setOnClickListener {
             TimePickerFragment.pickTime(
                 this, editStart,
-                onTimePicked = { viewModel.shiftData.value?.timeBegin = editStart.text.toString() }
+                onTimePicked = { viewModel.uiState.value?.timeBegin = editStart.text.toString() }
             )
         }
         editEnd.setOnClickListener {
             TimePickerFragment.pickTime(
                 this, editEnd,
-                onTimePicked = { viewModel.shiftData.value?.timeEnd = editEnd.text.toString() }
+                onTimePicked = { viewModel.uiState.value?.timeEnd = editEnd.text.toString() }
             )
         }
         editBreakStart.setOnClickListener {
             TimePickerFragment.pickTime(
                 this, editBreakStart,
                 onTimePicked = {
-                    viewModel.shiftData.value?.breakBegin = editBreakStart.text.toString()
+                    viewModel.uiState.value?.breakBegin = editBreakStart.text.toString()
                 }
             )
         }
@@ -108,7 +112,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
             TimePickerFragment.pickTime(
                 this, editBreakEnd,
                 onTimePicked = {
-                    viewModel.shiftData.value?.breakEnd = editBreakEnd.text.toString()
+                    viewModel.uiState.value?.breakEnd = editBreakEnd.text.toString()
                 }
             )
         }
@@ -134,7 +138,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
     }
 
     private fun updateShiftField(fieldSetter: (UiState) -> Unit) {
-        val currentShift = viewModel.shiftData.value ?: return
+        val currentShift = viewModel.uiState.value ?: return
         fieldSetter(currentShift)
         viewModel.updateShift(currentShift)
     }
@@ -145,7 +149,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         editEnd.setText(shift.timeEnd)
         editBreakStart.setText(shift.breakBegin)
         editBreakEnd.setText(shift.breakEnd)
-        if (viewModel.shiftData.value?.fuelCost != 0.0) {
+        if (viewModel.uiState.value?.fuelCost != 0.0) {
             editFuelCost.setText(shift.fuelCost.toString())
         }
         if (editBreakStart.text.isNotEmpty() || editBreakEnd.text.isNotEmpty()) {
@@ -198,18 +202,18 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
             }
             return
         }
-        viewModel.shiftData.value?.earnings = editEarnings.text.toString().toDoubleOrNull() ?: 0.0
-        viewModel.shiftData.value?.wash = editWash.text.toString().toDoubleOrNull() ?: 0.0
-        viewModel.shiftData.value?.fuelCost = editFuelCost.text.toString().toDoubleOrNull() ?: 0.0
-        viewModel.shiftData.value?.mileage = editMileage.text.toString().toDoubleOrNull() ?: 0.0
+        viewModel.uiState.value?.earnings = editEarnings.text.toString().toDoubleOrNull() ?: 0.0
+        viewModel.uiState.value?.wash = editWash.text.toString().toDoubleOrNull() ?: 0.0
+        viewModel.uiState.value?.fuelCost = editFuelCost.text.toString().toDoubleOrNull() ?: 0.0
+        viewModel.uiState.value?.mileage = editMileage.text.toString().toDoubleOrNull() ?: 0.0
 
         viewModel.calculateShift()
 
         showSubmitMessage(
             getString(
                 R.string.you_earn_in_hours,
-                viewModel.shiftData.value?.profit.toString(),
-                (viewModel.shiftData.value?.totalTime ?: 0).millisToHours(Locale.getDefault())
+                viewModel.uiState.value?.profit.toString(),
+                (viewModel.uiState.value?.totalTime ?: 0).millisToHours(Locale.getDefault())
             )
         )
     }
