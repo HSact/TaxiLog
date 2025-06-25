@@ -55,6 +55,8 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
     private lateinit var editFuelCostL: TextInputLayout
     private lateinit var editMileageL: TextInputLayout
 
+    private lateinit var mileageWatcher: TextWatcher
+
     private var _binding: FragmentAddShiftBinding? = null
     private val binding get() = _binding!!
 
@@ -74,13 +76,27 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.uiState.observe(viewLifecycleOwner)
-        { shift -> updateUI(shift) }
+        mileageWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                if (s.isNullOrEmpty()) {
+                    editFuelCost.setText("")
+                    return
+                }
+                updateShiftField { it.mileage = s.toString().toDoubleOrNull() ?: 0.0 }
+                viewModel.guessFuelCost()
+            }
+        }
+        editMileage.addTextChangedListener(mileageWatcher)
         val shiftId = (arguments?.getLong("shiftId") ?: -1).toInt()
         if (shiftId != -1) {
             viewModel.loadShift(shiftId)
             //editEarnings.setText(viewModel.uiState.value?.earnings.toString())
         }
+        editMileage.removeTextChangedListener(mileageWatcher)
+        viewModel.uiState.observe(viewLifecycleOwner)
+        { shift -> updateUI(shift) }
 
         editDate.setOnClickListener {
             DatePickerFragment.pickDate(
@@ -123,19 +139,6 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
                 calculateShift()
             }
         }
-
-        editMileage.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                if (s.isNullOrEmpty()) {
-                    editFuelCost.setText("")
-                    return
-                }
-                updateShiftField { it.mileage = s.toString().toDoubleOrNull() ?: 0.0 }
-                viewModel.guessFuelCost()
-            }
-        })
     }
 
     private fun updateShiftField(fieldSetter: (UiState) -> Unit) {
@@ -150,6 +153,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         editEnd.setText(shift.timeEnd)
         editBreakStart.setText(shift.breakBegin)
         editBreakEnd.setText(shift.breakEnd)
+        loadFinanceInput(shift)
         if (viewModel.uiState.value?.fuelCost != 0.0) {
             editFuelCost.setText(shift.fuelCost.toString())
         }
@@ -160,6 +164,17 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
             switchBreak.isChecked = false
             binding.tableBreak.isVisible = false
         }
+    }
+
+    private fun loadFinanceInput(shift: UiState) {
+        //editMileage.removeTextChangedListener(mileageWatcher)
+
+        editEarnings.setText(shift.earnings.toString())
+        editWash.setText(shift.wash.toString())
+        editFuelCost.setText(shift.fuelCost.toString())
+        editMileage.setText(shift.mileage.toString())
+
+        //editMileage.addTextChangedListener(mileageWatcher)
     }
 
     private fun bindItems() {

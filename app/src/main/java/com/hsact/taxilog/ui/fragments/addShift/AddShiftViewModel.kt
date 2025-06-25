@@ -15,7 +15,6 @@ import com.hsact.taxilog.domain.utils.centsToDollars
 import com.hsact.taxilog.domain.utils.toShortDate
 import com.hsact.taxilog.domain.utils.toShortTime
 import com.hsact.taxilog.ui.shift.ShiftInputModel
-import com.hsact.taxilog.ui.shift.mappers.metersToKilometers
 import com.hsact.taxilog.ui.shift.mappers.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -23,7 +22,6 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
-import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -115,7 +113,7 @@ class AddShiftViewModel @Inject constructor(
         val shiftInput = buildShiftInputModel(uiState)
 
         val shift: Shift = shiftInput.toDomain()
-        addShiftUseCase(shift)
+        addShiftUseCase(shift.copy(id = uiState.id))
     }
 
     private fun buildShiftInputModel(

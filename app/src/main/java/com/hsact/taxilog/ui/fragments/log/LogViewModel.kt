@@ -42,7 +42,6 @@ class LogViewModel @Inject constructor(
             is LogIntent.DeleteShift -> deleteShift(intent.shift)
             is LogIntent.DeleteAllShifts -> deleteAllShifts()
         }
-
     }
 
     private fun deleteAllShifts() {
@@ -61,6 +60,5 @@ class LogViewModel @Inject constructor(
 
     private fun editShift(shift: Shift) {
         //TODO("Not yet implemented")
-
     }
 }
