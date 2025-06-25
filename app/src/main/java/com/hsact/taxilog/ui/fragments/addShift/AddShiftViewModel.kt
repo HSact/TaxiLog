@@ -1,46 +1,47 @@
 package com.hsact.taxilog.ui.fragments.addShift
 
-import android.content.Context
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.hsact.taxilog.data.db.DBHelper
-import com.hsact.taxilog.data.model.Shift
-import com.hsact.taxilog.data.repository.ShiftRepository
-import com.hsact.taxilog.helpers.SettingsHelper
-import com.hsact.taxilog.data.utils.ShiftStatsUtil
-import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertLongToTime
-import com.hsact.taxilog.data.utils.ShiftStatsUtil.convertTimeToLong
+import androidx.lifecycle.viewModelScope
+import com.hsact.taxilog.domain.utils.DeprecatedDateFormatter
+import com.hsact.taxilog.domain.model.Shift
+import com.hsact.taxilog.domain.model.UserSettings
+import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
+import com.hsact.taxilog.domain.usecase.shift.AddShiftUseCase
+import com.hsact.taxilog.domain.usecase.shift.GetShiftByIdUseCase
+import com.hsact.taxilog.domain.utils.centsToDollars
+import com.hsact.taxilog.domain.utils.toShortDate
+import com.hsact.taxilog.domain.utils.toShortTime
+import com.hsact.taxilog.ui.shift.ShiftInputModel
+import com.hsact.taxilog.ui.shift.mappers.toDomain
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Date
+import javax.inject.Inject
+import kotlin.math.roundToInt
 
-data class AddShiftState
-    (
-    var date: String = "",
-    var timeBegin: String = "",
-    var timeEnd: String = "",
-    var breakBegin: String = "",
-    var breakEnd: String = "",
-    var onlineTime: Long = 0,
-    var breakTime: Long = 0,
-    var totalTime: Long = 0,
-    var earnings: Double = 0.0,
-    var wash: Double = 0.0,
-    var fuelCost: Double = 0.0,
-    var mileage: Double = 0.0,
-    var profit: Double = 0.0,
-)
+@HiltViewModel
+class AddShiftViewModel @Inject constructor(
+    getAllSettingsUseCase: GetAllSettingsUseCase,
+    private val addShiftUseCase: AddShiftUseCase,
+    private val getShiftByIdUseCase: GetShiftByIdUseCase,
+) : ViewModel() {
+    private val _uiState = MutableLiveData<UiState>()
+    val uiState: LiveData<UiState> get() = _uiState
 
-class AddShiftViewModel : ViewModel() {
-    private val _shiftData = MutableLiveData<AddShiftState>()
-    val shiftData: LiveData<AddShiftState> get() = _shiftData
+    private val settings: UserSettings = getAllSettingsUseCase.invoke()
 
     init {
         loadGuess()
     }
 
     private fun loadGuess() {
-        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        val formatter = DeprecatedDateFormatter
         val timeFormatter = DateTimeFormatter.ofPattern("H:mm")
 
         val now = LocalDateTime.now()
@@ -50,44 +51,43 @@ class AddShiftViewModel : ViewModel() {
         val beginTime = convertLongToTime(convertTimeToLong(endTime) - hoursToMs(10))
         val beginDate = endDate.minusDays(1)
 
-        var currentShift = AddShiftState().copy(timeBegin = beginTime, timeEnd = endTime)
+        var uiState = UiState(timeBegin = beginTime, timeEnd = endTime)
 
-        if (convertTimeToLong(beginTime) > convertTimeToLong(endTime)) {
-            currentShift = currentShift.copy(date = beginDate.format(formatter))
+        uiState = if (convertTimeToLong(beginTime) > convertTimeToLong(endTime)) {
+            uiState.copy(date = beginDate.format(formatter))
         } else {
-            currentShift = currentShift.copy(date = endDate.format(formatter))
+            uiState.copy(date = endDate.format(formatter))
         }
-        _shiftData.value = currentShift
+        _uiState.value = uiState
     }
 
-    fun guessFuelCost(context: Context) {
-        val settings = SettingsHelper.getInstance(context)
-        if (!settings.seted_up) return
-        if (_shiftData.value?.mileage == 0.0) return
+    fun guessFuelCost() {
+        if (!settings.isConfigured) return
+        if (_uiState.value?.mileage == 0.0) return
         if (settings.fuelPrice.isNullOrEmpty() || settings.consumption.isNullOrEmpty()) return
-        var currentShift = _shiftData.value ?: return
-        val fuelPrice: Double = (settings.fuelPrice ?: return).toDouble()
-        val consumption = (settings.consumption ?: return).toDouble()
-        if (!settings.seted_up || fuelPrice == 0.0 || consumption == 0.0) {
+        var currentShift = _uiState.value ?: return
+        val fuelPrice: Double = (settings.fuelPrice).toDouble()
+        val consumption = (settings.consumption).toDouble()
+        if (fuelPrice == 0.0 || consumption == 0.0) {
             return
         }
         if (currentShift.mileage == 0.0) {
             return
         }
         currentShift = currentShift.copy(
-            fuelCost = ShiftStatsUtil.centsRound(
+            fuelCost = centsRound(
                 fuelPrice * currentShift.mileage * consumption / 100
             )
         )
-        _shiftData.value = currentShift
+        _uiState.value = currentShift
     }
 
-    fun updateShift(shift: AddShiftState) {
-        _shiftData.value = shift
+    fun updateShift(shift: UiState) {
+        _uiState.value = shift
     }
 
     fun calculateShift() {
-        var currentShift = _shiftData.value ?: return
+        var currentShift = _uiState.value ?: return
         currentShift = currentShift.copy(
             onlineTime = convertTimeToLong(currentShift.timeEnd) - convertTimeToLong(currentShift.timeBegin)
         )
@@ -105,22 +105,81 @@ class AddShiftViewModel : ViewModel() {
             currentShift.totalTime = currentShift.onlineTime
         }
         currentShift.profit = currentShift.earnings - currentShift.wash - currentShift.fuelCost
-        _shiftData.value = currentShift
+        _uiState.value = currentShift
     }
 
-    fun submit(context: Context) {
-        val currentShift = _shiftData.value ?: return
-        val shiftRepository = ShiftRepository(DBHelper(context, null))
-        val shift =
-            Shift(
-                0, currentShift.date, ShiftStatsUtil.msToHours(currentShift.totalTime).toString(),
-                currentShift.earnings, currentShift.wash, currentShift.fuelCost,
-                currentShift.mileage, currentShift.profit
-            )
-        shiftRepository.addShift(shift)
+    suspend fun submit() {
+        val uiState = _uiState.value ?: return
+        val shiftInput = buildShiftInputModel(uiState)
+
+        val shift: Shift = shiftInput.toDomain()
+        addShiftUseCase(shift.copy(id = uiState.id))
+    }
+
+    private fun buildShiftInputModel(
+        uiState: UiState,
+    ): ShiftInputModel {
+        return ShiftInputModel(
+        date = uiState.date,
+        timeStart = uiState.timeBegin,
+        timeEnd = uiState.timeEnd,
+        breakStart = uiState.breakBegin,
+        breakEnd = uiState.breakEnd,
+        earnings = uiState.earnings.toString(),
+        wash = uiState.wash.toString(),
+        fuelCost = uiState.fuelCost.toString(),
+        mileage = uiState.mileage.toString(),
+        taxRate = settings.taxRate ?: "",
+        rentCost = settings.rentCost ?: "",
+        serviceCost = settings.serviceCost ?: "",
+        consumption = settings.consumption ?: ""
+        )
     }
 
     private fun hoursToMs(hours: Int): Long {
         return (hours * 60 * 60 * 1000).toLong()
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun convertLongToTime(time: Long): String {
+        val date = Date(time)
+        val format = SimpleDateFormat("H:mm")
+        return format.format(date)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun convertTimeToLong(date: String): Long {
+        val df = SimpleDateFormat("H:mm")
+        return df.parse(date)!!.time
+    }
+
+    private fun centsRound(n: Double): Double {
+        return (n * 100).roundToInt() / 100.toDouble()
+    }
+
+    fun loadShift(id: Int) {
+        viewModelScope.launch {
+            val shift = getShiftByIdUseCase(id)
+            if (shift == null) {
+                return@launch
+            }
+            _uiState.value = UiState(
+                id = shift.id,
+                date = shift.time.period.start.toShortDate(),
+                timeBegin = shift.time.period.start.toShortTime(),
+                timeEnd = shift.time.period.end.toShortTime(),
+                breakBegin = if (shift.time.rest != null) {shift.time.rest.start.toShortTime()} else "",
+                breakEnd = if (shift.time.rest != null) {shift.time.rest.end.toShortTime()} else "",
+                earnings = shift.financeInput.earnings.centsToDollars(),
+                wash = shift.financeInput.wash.centsToDollars(),
+                fuelCost = shift.financeInput.fuelCost.centsToDollars(),
+                mileage = shift.carSnapshot.mileage.toDouble() / 1000,
+//                onlineTime = shift.time.online,
+//                breakTime = shift.time.breakTime,
+//                totalTime = shift.d,
+                profit = shift.profit.centsToDollars()
+            )
+            //_uiState.value = UiState.Edit(shift)
+        }
     }
 }

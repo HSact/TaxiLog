@@ -6,15 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TableLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.hsact.taxilog.data.db.DBHelper
-import com.hsact.taxilog.data.model.Shift
 import com.hsact.taxilog.databinding.FragmentStatsBinding
 import androidx.fragment.app.viewModels
-import com.hsact.taxilog.ui.fragments.DatePickerFragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.hsact.taxilog.ui.components.DatePickerFragment
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import java.util.Locale
 
+@AndroidEntryPoint
 class StatsFragment : Fragment() {
 
     private val viewModel: StatsViewModel by viewModels()
@@ -22,6 +28,7 @@ class StatsFragment : Fragment() {
     private var _binding: FragmentStatsBinding? = null
     private val binding get() = _binding!!
     private lateinit var tableLayout: TableLayout
+    private lateinit var countLayout: LinearLayout
     private lateinit var textListIsEmpty: TextView
     private lateinit var butDatePickBegin: EditText
     private lateinit var butDatePickEnd: EditText
@@ -38,34 +45,33 @@ class StatsFragment : Fragment() {
     private lateinit var textAvFuel: TextView
     private lateinit var textTotalFuel: TextView
 
-    private var shifts = mutableListOf<Shift>()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentStatsBinding.inflate(inflater, container, false)
         val root: View = binding.root
         bindItems()
-        if (viewModel.startDate == null || viewModel.endDate == null) {
-            viewModel.defineDates()
+        lifecycleScope.launch {
+            viewModel.updateShifts(Locale.getDefault())
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { uiState ->
+                    displayInfo(uiState)
+                }
+            }
         }
-        if (viewModel.shiftsOrigin.isEmpty() || viewModel.shifts.isEmpty()) {
-            viewModel.defineShifts(DBHelper(requireContext(), null))
-        }
+        viewModel.defineDates()
         butDatePickBegin.setText(viewModel.startDate)
         butDatePickEnd.setText(viewModel.endDate)
-        viewModel.updateShifts(DBHelper(requireContext(), null))
-        displayInfo()
-        butDatePickBegin.setOnClickListener {pickDate(butDatePickBegin)}
-        butDatePickEnd.setOnClickListener {pickDate(butDatePickEnd)}
+        butDatePickBegin.setOnClickListener { pickDate(butDatePickBegin) }
+        butDatePickEnd.setOnClickListener { pickDate(butDatePickEnd) }
         return root
     }
 
     private fun pickDate(editObj: EditText) {
         DatePickerFragment.pickDate(
-            context = requireContext(),
+            context = this,
             editObj = editObj,
             minDate = if (editObj == butDatePickEnd) butDatePickBegin.text.toString() else "",
             maxDate = if (editObj == butDatePickBegin) butDatePickEnd.text.toString() else "",
@@ -76,8 +82,7 @@ class StatsFragment : Fragment() {
                 } else if (editObj == butDatePickEnd) {
                     viewModel.endDate = date
                 }
-                viewModel.updateShifts(DBHelper(requireContext(), null))
-                displayInfo()
+                viewModel.updateShifts(Locale.getDefault())
             }
         )
     }
@@ -86,34 +91,36 @@ class StatsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     @SuppressLint("SetTextI18n")
-    private fun displayInfo ()
-    {
-        shifts = viewModel.shifts
-        if (shifts.isEmpty())
-        {
+    private fun displayInfo(uiState: UiState) {
+        val shifts = viewModel.shifts.value
+        if (shifts.isEmpty()) {
             tableLayout.visibility = View.GONE
+            countLayout.visibility = View.GONE
             textListIsEmpty.visibility = View.VISIBLE
             return
         }
         textListIsEmpty.visibility = View.GONE
         tableLayout.visibility = View.VISIBLE
-        textShiftsCount.text = viewModel.shiftsCount
-        textAvErPh.text = viewModel.avErPh
-        textAvProfitPh.text  = viewModel.avProfitPh
-        textAvDuration.text  = viewModel.avDuration
-        textAvMileage.text  = viewModel.avMileage
-        textTotalDuration.text  = viewModel.totalDuration
-        textTotalMileage.text  = viewModel.totalMileage
-        textTotalWash.text  = viewModel.totalWash
-        textTotalEarnings.text  = viewModel.totalEarnings
-        textTotalProfit.text  = viewModel.totalProfit
-        textAvFuel.text  = viewModel.avFuel
-        textTotalFuel.text  = viewModel.totalFuel
+        countLayout.visibility = View.VISIBLE
+        textShiftsCount.text = uiState.shiftsCount
+        textAvErPh.text = uiState.avErPh
+        textAvProfitPh.text = uiState.avProfitPh
+        textAvDuration.text = uiState.avDuration
+        textAvMileage.text = uiState.avMileage
+        textTotalDuration.text = uiState.totalDuration
+        textTotalMileage.text = uiState.totalMileage
+        textTotalWash.text = uiState.totalWash
+        textTotalEarnings.text = uiState.totalEarnings
+        textTotalProfit.text = uiState.totalProfit
+        textAvFuel.text = uiState.avFuel
+        textTotalFuel.text = uiState.totalFuel
     }
-    private fun bindItems ()
-    {
+
+    private fun bindItems() {
         tableLayout = binding.tableLayout
+        countLayout = binding.layoutCount
         butDatePickBegin = binding.buttonDatePickBegin
         butDatePickEnd = binding.buttonDatePickEnd
         textListIsEmpty = binding.textListIsEmpty

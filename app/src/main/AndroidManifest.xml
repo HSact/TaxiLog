@@ -5,6 +5,7 @@
         android:maxSdkVersion="32" />
 
     <application
+        android:name=".TaxiLog"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -12,12 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TaxiLog">
         <activity
-            android:name=".ui.activities.LogActivity"
-            android:windowTranslucentStatus="true"
-            android:fitsSystemWindows="true"
-            android:exported="false" />
-        <activity
-            android:name=".ui.activities.StartUpActivity"
+            android:name=".ui.activities.startup.StartUpActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,7 +26,7 @@
             android:fitsSystemWindows="true"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.SettingsActivity"
+            android:name=".ui.activities.settings.SettingsActivity"
             android:exported="false"
             android:windowTranslucentStatus="true"
             android:windowSoftInputMode="adjustResize"

@@ -11,12 +11,16 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.ActivityMainBinding
-import com.hsact.taxilog.helpers.LocaleHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.findNavController
 import androidx.appcompat.widget.Toolbar
+import com.hsact.taxilog.ui.activities.settings.SettingsActivity
+import com.hsact.taxilog.ui.locale.ContextWrapper
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
     companion object {
         lateinit var botNav: BottomNavigationView
     }
@@ -29,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val navView: BottomNavigationView = binding.navView
         botNav = navView
-        loadSettings()
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -47,16 +50,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        val currentDestination = navController.currentDestination?.id
+        return if (currentDestination == R.id.navigation_log) {
+            false
+        } else {
+            menuInflater.inflate(R.menu.menu_main, menu)
+            true
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         return when (item.itemId) {
-            R.id.action_log -> {
-                val logIntent = Intent(this, LogActivity::class.java)
-                startActivity(logIntent)
+            R.id.fragment_log -> {
+                findNavController(R.id.nav_host_fragment_activity_main)
+                    .navigate(R.id.action_global_navigation_log)
                 true
             }
 
@@ -82,19 +91,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun attachBaseContext(newBase: Context) {
-        var newLocale = LocaleHelper.getSavedLanguage(newBase)
-        if (newLocale == "") {
-            newLocale = LocaleHelper.getDefault()
-        }
-        super.attachBaseContext(
-            LocaleHelper.updateLocale(
-                newBase,
-                newLocale
-            )
-        )
-    }
-
-    private fun loadSettings() {
-        LocaleHelper.setLocale(this, LocaleHelper.getSavedLanguage(this))
+        super.attachBaseContext(ContextWrapper.wrapContext(newBase))
     }
 }

@@ -39,7 +39,7 @@
     <string name="addshift_money">Деньги</string>
     <string name="earnings">Заработок</string>
     <string name="wash">Мойка</string>
-    <string name="fuel_cost">Стоимость топлива</string>
+    <string name="fuel_cost">Стоимость</string>
     <string name="mileage">Пробег</string>
     <string name="addshift_submit">Подтвердить</string>
     <string name="last_shift">Последняя смена</string>
@@ -56,7 +56,7 @@
     <string name="your_goal_per_month">Ваша цель %s в месяц</string>
     <string name="n_a">N/A</string>
     <string name="hours">часов</string>
-    <string name="shifts_count">Всего смен</string>
+    <string name="shifts_count">Всего смен:</string>
     <string name="average_earnings_per_hour">Средний грязный доход</string>
     <string name="average_profit_per_hour">Средний чистый доход</string>
     <string name="average_shift_duration">Среднее время смены</string>
@@ -68,7 +68,7 @@
     <string name="total_profit">Общий чистый доход</string>
     <string name="edit_or_delete_shift">"Редактировать или удалить смену "</string>
     <string name="total_fuel">Общие траты на топливо</string>
-    <string name="average_fuel">Средняя стоимость топлива</string>
+    <string name="average_fuel">Средние траты на топливо</string>
     <string name="settings_fuel_price">Цена топлива</string>
     <string name="statsHeader">Общая статистика</string>
     <string name="list_is_empty">Нет смен за этот период</string>
@@ -90,7 +90,7 @@
     <string name="earnings_is_empty">Заработок не заполнен</string>
     <string name="fuel_cost_is_empty">Стоимость топлива не заполнена</string>
     <string name="mileage_is_empty">Пробег не заполнен</string>
-    <string name="you_earn_in_hours">Вы заработали %1$s за %2$s часов?</string>
+    <string name="you_earn_in_hours">Вы заработали %1$s за %2$s?</string>
     <string name="ok">OK</string>
     <string name="nope">Потом</string>
     <string name="looks_like_its_a_first_launch_lets_set_it_up">Похоже, это первый запуск.\nДавайте всё настроим!</string>

@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true"
     android:theme="@style/Theme.TaxiLog"
-    tools:context=".ui.activities.StartUpActivity">
+    tools:context=".ui.activities.startup.StartUpActivity">
 
     <LinearLayout
         android:id="@+id/Logo_layout"

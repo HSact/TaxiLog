@@ -54,7 +54,7 @@
                     android:inputType="none"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -66,7 +66,6 @@
                 android:text="-"
                 android:textSize="25sp"
                 tools:ignore="HardcodedText" />
-
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/buttonDatePickEndL"
@@ -87,7 +86,7 @@
                     android:inputType="none"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -101,32 +100,48 @@
             android:textSize="16sp"
             android:visibility="gone" />
 
+        <LinearLayout
+            android:id="@+id/layoutCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/table_row_padding_first"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/textShifts_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shifts_count"
+                android:textSize="@dimen/statsTextSize"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/textShifts_count_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/n_a"
+                android:textSize="@dimen/statsTextSize" />
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/linearShift"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:strokeWidth="0dp"
+            app:strokeColor="@android:color/transparent"
+            app:cardBackgroundColor="?attr/colorBackgroundFloating"
+            android:orientation="vertical">
         <TableLayout
             android:id="@+id/table_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/table_row_padding_first"
+            android:padding="10dp"
             android:stretchColumns="0"
             android:visibility="visible">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/textShifts_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/shifts_count"
-                    android:textSize="@dimen/statsTextSize" />
-
-                <TextView
-                    android:id="@+id/textShifts_count_val"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/n_a"
-                    android:textSize="@dimen/statsTextSize" />
-            </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
@@ -337,6 +352,7 @@
                     android:textSize="@dimen/statsTextSize" />
             </TableRow>
         </TableLayout>
+    </com.google.android.material.card.MaterialCardView>
         <Space
             android:layout_width="match_parent"
             android:layout_height="100dp"/>

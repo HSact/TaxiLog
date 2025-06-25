@@ -12,20 +12,26 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentAddShiftBinding
-import com.hsact.taxilog.data.utils.ShiftStatsUtil
 import com.hsact.taxilog.ui.activities.MainActivity
-import com.hsact.taxilog.ui.fragments.DatePickerFragment
-import com.hsact.taxilog.ui.fragments.TimePickerFragment
+import com.hsact.taxilog.ui.components.DatePickerFragment
+import com.hsact.taxilog.ui.components.TimePickerFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputLayout
+import com.hsact.taxilog.ui.shift.mappers.millisToHours
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import java.util.Locale
 
+@AndroidEntryPoint
 class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
-    private val viewModel = AddShiftViewModel()
+    private val viewModel: AddShiftViewModel by viewModels()
 
     private lateinit var editDate: EditText
     private lateinit var editStart: EditText
@@ -49,6 +55,8 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
     private lateinit var editFuelCostL: TextInputLayout
     private lateinit var editMileageL: TextInputLayout
 
+    private lateinit var mileageWatcher: TextWatcher
+
     private var _binding: FragmentAddShiftBinding? = null
     private val binding get() = _binding!!
 
@@ -68,48 +76,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.shiftData.observe(viewLifecycleOwner)
-        { shift -> updateUI(shift) }
-
-        editDate.setOnClickListener {
-            DatePickerFragment.pickDate(
-                requireContext(),
-                editDate,
-                onDatePicked = { viewModel.shiftData.value?.date = editDate.text.toString() }
-            )
-        }
-        editStart.setOnClickListener {
-            TimePickerFragment.pickTime(
-                this, editStart,
-                onTimePicked = { viewModel.shiftData.value?.timeBegin = editStart.text.toString() }
-            )
-        }
-        editEnd.setOnClickListener {
-            TimePickerFragment.pickTime(
-                this, editEnd,
-                onTimePicked = { viewModel.shiftData.value?.timeEnd = editEnd.text.toString() }
-            )
-        }
-        editBreakStart.setOnClickListener {
-            TimePickerFragment.pickTime(
-                this, editBreakStart,
-                onTimePicked = {
-                    viewModel.shiftData.value?.breakBegin = editBreakStart.text.toString()
-                }
-            )
-        }
-        editBreakEnd.setOnClickListener {
-            TimePickerFragment.pickTime(
-                this, editBreakEnd,
-                onTimePicked = {
-                    viewModel.shiftData.value?.breakEnd = editBreakEnd.text.toString()
-                }
-            )
-        }
-        switchBreak.setOnClickListener { switchBrake() }
-        buttonSubmit.setOnClickListener { calculateShift() }
-
-        editMileage.addTextChangedListener(object : TextWatcher {
+        mileageWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
@@ -118,24 +85,76 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
                     return
                 }
                 updateShiftField { it.mileage = s.toString().toDoubleOrNull() ?: 0.0 }
-                viewModel.guessFuelCost(requireContext())
+                viewModel.guessFuelCost()
             }
-        })
+        }
+        editMileage.addTextChangedListener(mileageWatcher)
+        val shiftId = (arguments?.getLong("shiftId") ?: -1).toInt()
+        if (shiftId != -1) {
+            viewModel.loadShift(shiftId)
+            //editEarnings.setText(viewModel.uiState.value?.earnings.toString())
+        }
+        editMileage.removeTextChangedListener(mileageWatcher)
+        viewModel.uiState.observe(viewLifecycleOwner)
+        { shift -> updateUI(shift) }
+
+        editDate.setOnClickListener {
+            DatePickerFragment.pickDate(
+                this,
+                editDate,
+                onDatePicked = { viewModel.uiState.value?.date = editDate.text.toString() }
+            )
+        }
+        editStart.setOnClickListener {
+            TimePickerFragment.pickTime(
+                this, editStart,
+                onTimePicked = { viewModel.uiState.value?.timeBegin = editStart.text.toString() }
+            )
+        }
+        editEnd.setOnClickListener {
+            TimePickerFragment.pickTime(
+                this, editEnd,
+                onTimePicked = { viewModel.uiState.value?.timeEnd = editEnd.text.toString() }
+            )
+        }
+        editBreakStart.setOnClickListener {
+            TimePickerFragment.pickTime(
+                this, editBreakStart,
+                onTimePicked = {
+                    viewModel.uiState.value?.breakBegin = editBreakStart.text.toString()
+                }
+            )
+        }
+        editBreakEnd.setOnClickListener {
+            TimePickerFragment.pickTime(
+                this, editBreakEnd,
+                onTimePicked = {
+                    viewModel.uiState.value?.breakEnd = editBreakEnd.text.toString()
+                }
+            )
+        }
+        switchBreak.setOnClickListener { switchBrake() }
+        buttonSubmit.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                calculateShift()
+            }
+        }
     }
 
-    private fun updateShiftField(fieldSetter: (AddShiftState) -> Unit) {
-        val currentShift = viewModel.shiftData.value ?: return
+    private fun updateShiftField(fieldSetter: (UiState) -> Unit) {
+        val currentShift = viewModel.uiState.value ?: return
         fieldSetter(currentShift)
         viewModel.updateShift(currentShift)
     }
 
-    private fun updateUI(shift: AddShiftState) {
+    private fun updateUI(shift: UiState) {
         editDate.setText(shift.date)
         editStart.setText(shift.timeBegin)
         editEnd.setText(shift.timeEnd)
         editBreakStart.setText(shift.breakBegin)
         editBreakEnd.setText(shift.breakEnd)
-        if (viewModel.shiftData.value?.fuelCost != 0.0) {
+        loadFinanceInput(shift)
+        if (viewModel.uiState.value?.fuelCost != 0.0) {
             editFuelCost.setText(shift.fuelCost.toString())
         }
         if (editBreakStart.text.isNotEmpty() || editBreakEnd.text.isNotEmpty()) {
@@ -145,6 +164,17 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
             switchBreak.isChecked = false
             binding.tableBreak.isVisible = false
         }
+    }
+
+    private fun loadFinanceInput(shift: UiState) {
+        //editMileage.removeTextChangedListener(mileageWatcher)
+
+        editEarnings.setText(shift.earnings.toString())
+        editWash.setText(shift.wash.toString())
+        editFuelCost.setText(shift.fuelCost.toString())
+        editMileage.setText(shift.mileage.toString())
+
+        //editMileage.addTextChangedListener(mileageWatcher)
     }
 
     private fun bindItems() {
@@ -188,18 +218,18 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
             }
             return
         }
-        viewModel.shiftData.value?.earnings = editEarnings.text.toString().toDoubleOrNull() ?: 0.0
-        viewModel.shiftData.value?.wash = editWash.text.toString().toDoubleOrNull() ?: 0.0
-        viewModel.shiftData.value?.fuelCost = editFuelCost.text.toString().toDoubleOrNull() ?: 0.0
-        viewModel.shiftData.value?.mileage = editMileage.text.toString().toDoubleOrNull() ?: 0.0
+        viewModel.uiState.value?.earnings = editEarnings.text.toString().toDoubleOrNull() ?: 0.0
+        viewModel.uiState.value?.wash = editWash.text.toString().toDoubleOrNull() ?: 0.0
+        viewModel.uiState.value?.fuelCost = editFuelCost.text.toString().toDoubleOrNull() ?: 0.0
+        viewModel.uiState.value?.mileage = editMileage.text.toString().toDoubleOrNull() ?: 0.0
 
         viewModel.calculateShift()
 
         showSubmitMessage(
             getString(
                 R.string.you_earn_in_hours,
-                viewModel.shiftData.value?.profit.toString(),
-                ShiftStatsUtil.msToHours(viewModel.shiftData.value?.totalTime ?: 0).toString()
+                viewModel.uiState.value?.profit.toString(),
+                (viewModel.uiState.value?.totalTime ?: 0).millisToHours(Locale.getDefault())
             )
         )
     }
@@ -207,16 +237,20 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
     private fun showSubmitMessage(warningCode: String) {
         val alert = MaterialAlertDialogBuilder(requireContext())
         alert.setTitle(getString(R.string.submit))
-        alert.setPositiveButton(R.string.ok) { dialog, id -> submit() }
+        alert.setPositiveButton(R.string.ok) { dialog, id ->
+            viewLifecycleOwner.lifecycleScope.launch {
+                submit()
+            }
+        }
         alert.setNegativeButton(R.string.cancel, null)
         alert.setMessage(warningCode)
         alert.show()
     }
 
-    private fun submit() {
+    private suspend fun submit() {
         Toast.makeText(activity, getString(R.string.shift_added_successfully), Toast.LENGTH_SHORT)
             .show()
-        viewModel.submit(requireContext())
+        viewModel.submit()
         findNavController().navigate(R.id.action_addShift_to_home_fragment)
         MainActivity.botNav.isVisible = true
     }
@@ -241,7 +275,6 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         TransitionManager.beginDelayedTransition(parentLayout)
         view.visibility = visibility
     }
-
     /*override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("IS_VISIBLE_TABLE_BREAK", binding.tableBreak.visibility == View.VISIBLE)

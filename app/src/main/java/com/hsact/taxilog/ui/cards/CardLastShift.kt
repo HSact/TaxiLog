@@ -19,64 +19,70 @@ import androidx.compose.ui.unit.dp
 import com.hsact.taxilog.R
 import androidx.compose.runtime.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hsact.taxilog.domain.model.Shift
+import com.hsact.taxilog.ui.shift.mappers.toUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.util.Locale
 
-
-class CardLastShift {
-
-    @Composable
-    fun DrawLastShiftCard(shiftData: StateFlow<Map<String, String>>) {
-        val shiftState by shiftData.collectAsStateWithLifecycle()
-        BaseCard {
-            CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
-                Text(
-                    text = stringResource(R.string.last_shift),
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(top = 30.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Column {
-                        Text(text = stringResource(R.string.date))
-                        Text(text = stringResource(R.string.earnings))
-                        Text(text = stringResource(R.string.costs))
-                        Text(text = stringResource(R.string.time))
-                        Text(text = stringResource(R.string.total))
-                        Text(text = stringResource(R.string.per_hour))
-                    }
-                    Column {
-                        Text(text = shiftState["date"] ?: "")
-                        Text(text = shiftState["earnings"] ?: "")
-                        Text(text = shiftState["costs"] ?: "")
-                        Text(text = shiftState["time"] ?: "")
-                        Text(text = shiftState["total"] ?: "")
-                        Text(text = shiftState["perHour"] ?: "")
-                    }
+@Composable
+fun DrawLastShiftCard(shift: StateFlow<Shift?>) {
+    val lastShift = shift.collectAsStateWithLifecycle()
+    val lastShiftUi = lastShift.value?.toUi(Locale.getDefault())
+    BaseCard {
+        CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
+            Text(
+                text = stringResource(R.string.last_shift),
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth(Alignment.CenterHorizontally)
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 30.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column {
+                    Text(text = stringResource(R.string.date))
+                    Text(text = stringResource(R.string.earnings))
+                    Text(text = stringResource(R.string.costs))
+                    Text(text = stringResource(R.string.time))
+                    Text(text = stringResource(R.string.total))
+                    Text(text = stringResource(R.string.per_hour))
+                }
+                Column {
+                    Text(text = lastShiftUi?.date ?: "")
+                    Text(text = lastShiftUi?.earnings ?: "")
+                    Text(text = lastShiftUi?.totalExpenses ?: "")
+                    Text(text = lastShiftUi?.duration ?: "")
+                    Text(text = lastShiftUi?.profit ?: "")
+                    Text(text = lastShiftUi?.earningsPerHour ?: "")
                 }
             }
         }
     }
+}
 
-    @Preview(showBackground = true)
-    @Composable
-    fun CardPreview() {
-        val na = "N/A"
-        val previewData = remember {
-            MutableStateFlow(
-                mapOf(
-                    "date" to na,
-                    "earnings" to na,
-                    "costs" to na,
-                    "time" to na,
-                    "total" to na,
-                    "perHour" to na
-                )
+@Preview(showBackground = true)
+@Composable
+private fun CardPreview() {
+    val na = "N/A"
+    val previewData = remember {
+        MutableStateFlow(
+            mapOf(
+                "date" to na,
+                "earnings" to na,
+                "costs" to na,
+                "time" to na,
+                "total" to na,
+                "perHour" to na
             )
-        }
-        DrawLastShiftCard(previewData)
+        )
     }
+    /*DrawLastShiftCard(
+        //shiftData = previewData,
+        shiftList = MutableStateFlow(emptyList())
+    )*/
 }

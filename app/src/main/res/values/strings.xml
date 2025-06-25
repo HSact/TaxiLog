@@ -58,7 +58,7 @@
     <string name="your_goal_per_month">Your goal is %s per month</string>
     <string name="n_a">N/A</string>
     <string name="hours">hours</string>
-    <string name="shifts_count">Shifts count</string>
+    <string name="shifts_count">Shifts count:</string>
     <string name="average_earnings_per_hour">Average earnings per hour</string>
     <string name="average_profit_per_hour">Average profit per hour</string>
     <string name="average_shift_duration">Average shift duration</string>
@@ -93,7 +93,7 @@
     <string name="earnings_is_empty">Earnings is empty</string>
     <string name="fuel_cost_is_empty">Fuel cost is empty</string>
     <string name="mileage_is_empty">Mileage is empty</string>
-    <string name="you_earn_in_hours">You earned %1$s in %2$s hours?</string>
+    <string name="you_earn_in_hours">You earned %1$s in %2$s?</string>
     <string name="ok">OK</string>
     <string name="nope">Nope</string>
     <string name="looks_like_its_a_first_launch_lets_set_it_up">Looks like it\'s a first launch.\nLet\'s set it up!</string>
@@ -125,5 +125,7 @@
         <item>English</item>
         <item>Русский</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
