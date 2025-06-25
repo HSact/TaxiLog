@@ -4,12 +4,36 @@ TaxiLog is an app for taxi drivers that helps track shifts and analyze earnings.
 
 ---
 
-📌 **Main Features:**
+## 📌 **Main Features:**
 
-✅ Shift log: track income, mileage, and working hours.  
-✅ Automatic statistics calculation by day, week, and month.  
-✅ Graphs and analytics for easy income tracking.  
-✅ Simple and intuitive record management.  
+-  Shift log: track income, mileage, and working hours.  
+-  Automatic statistics calculation by day, week, and month.  
+-  Graphs and analytics for easy income tracking.  
+-  Simple and intuitive record management.  
+
+## 🧩 Architecture Overview
+
+The app follows a hybrid MVVM pattern with gradual migration to Compose:
+
+- UI is mostly built with XML Fragments and Views, some screens use Compose
+- Each screen uses a `ViewModel` to manage data and state
+- `LiveData` is used for reactive XML binding, while `StateFlow` is used for newer Compose elements
+- Room handles local persistence of shift entries
+- Shared Preferences handles user settings
+- Structured domain logic with models, repositories, and use cases
+
+
+## 🧱 Tech Stack
+
+- **Language:** Kotlin  
+- **UI:** Mostly XML + Jetpack Compose elements  
+- **Architecture:** MVVM  
+- **State Management:** LiveData & StateFlow  
+- **Dependency Injection:** Hilt  
+- **Database:** Room  
+- **UI Charts:** [ComposeCharts](https://github.com/ehsannarmani/ComposeCharts)<br>
+- **Date handling:** ThreeTenABP (`LocalDate`, `LocalDateTime`)  
+- **Others:** ViewModel, Coroutines, Material Design components  
 
 ## Screenshots
 
@@ -40,12 +64,33 @@ Obtainium is an app that allows automatic APK updates from GitHub. If you have O
 
 TaxiLog – это приложение для водителей такси, которое помогает отслеживать смены и анализировать заработок.  
 
-📌 **Основные возможности:**  
+## 📌 **Основные возможности:**  
 
-✅ Ведение журнала смен: доход, пробег, время работы.  
-✅ Автоматический расчет статистики по дням, неделям и месяцам.  
-✅ Графики и аналитика для удобного просмотра динамики доходов.  
-✅ Удобное управление записями.  
+-  Ведение журнала смен: доход, пробег, время работы.  
+-  Автоматический расчет статистики по дням, неделям и месяцам.  
+-  Графики и аналитика для удобного просмотра динамики доходов.  
+-  Удобное управление записями.  
+
+## 🧱 Технологии
+
+- **Язык:** Kotlin  
+- **UI:** в основном XML, частично Jetpack Compose  
+- **Архитектура:** MVVM  
+- **Состояния:** LiveData и StateFlow  
+- **DI:** Hilt  
+- **БД:** Room  
+- **Графики:** [ComposeCharts](https://github.com/ehsannarmani/ComposeCharts)<br>
+- **Дата и время:** ThreeTenABP (`LocalDate`, `LocalDateTime`)  
+
+---
+
+## 🧩 Архитектура
+
+- Основная часть UI реализована на XML  
+- Для управления состоянием используются LiveData (в XML) и StateFlow (в Compose)  
+- Вся логика вынесена в ViewModel и UseCases  
+- Room используется для хранения данных смен
+- Shared Preferenceses используется для хранения настроек
 
 📥 **Установка**  
 
