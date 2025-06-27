@@ -99,7 +99,6 @@ class LogFragment : Fragment() {
     }
 
     private fun editShift(shift: Shift, visibleId: Int) {
-        //viewModel.handleIntent(LogIntent.EditShift(shift))
         val action = LogFragmentDirections.actionLogFragmentToShiftForm(shiftId = shift.id, visibleId = visibleId)
         findNavController().navigate(action)
     }

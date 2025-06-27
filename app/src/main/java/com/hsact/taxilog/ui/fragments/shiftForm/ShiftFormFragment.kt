@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -89,10 +90,15 @@ class ShiftFormFragment : Fragment(R.layout.fragment_add_shift) {
             }
         }
         editMileage.addTextChangedListener(mileageWatcher)
-        val shiftId = (arguments?.getInt("shiftId") ?: -1)
+        val shiftId = arguments?.getInt("shiftId") ?: -1
+        val visibleId = arguments?.getInt("visibleId") ?: -1
         if (shiftId != -1) {
             viewModel.loadShift(shiftId)
-            //editEarnings.setText(viewModel.uiState.value?.earnings.toString())
+            (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
+                getString(R.string.title_edit_shift, visibleId)
+        } else {
+            (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
+                getString(R.string.title_new_shift)
         }
         editMileage.removeTextChangedListener(mileageWatcher)
         viewModel.uiState.observe(viewLifecycleOwner)
@@ -279,8 +285,4 @@ class ShiftFormFragment : Fragment(R.layout.fragment_add_shift) {
         TransitionManager.beginDelayedTransition(parentLayout)
         view.visibility = visibility
     }
-    /*override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean("IS_VISIBLE_TABLE_BREAK", binding.tableBreak.visibility == View.VISIBLE)
-    }*/
 }

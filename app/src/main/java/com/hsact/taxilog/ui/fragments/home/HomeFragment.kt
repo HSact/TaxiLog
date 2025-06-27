@@ -8,7 +8,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentHomeBinding
 import com.hsact.taxilog.ui.cards.DrawGoalCard
 import com.hsact.taxilog.ui.cards.DrawLastShiftCard
@@ -53,8 +52,12 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-    private fun newShift()
-    {
-        findNavController().navigate(R.id.action_homeFragment_to_addShift)
+    private fun newShift() {
+        val action = HomeFragmentDirections
+            .actionHomeFragmentToAddShift(
+                shiftId = -1,
+                visibleId = -1
+            )
+        findNavController().navigate(action)
     }
 }

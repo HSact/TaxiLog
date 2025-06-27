@@ -13,7 +13,7 @@
 
         <action
             android:id="@+id/action_homeFragment_to_addShift"
-            app:destination="@id/addShift" />
+            app:destination="@id/shiftForm" />
         <action
             android:id="@+id/action_navigation_home_to_settingsActivity"
             app:destination="@id/settingsActivity" />
@@ -31,7 +31,7 @@
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_stats" />
     <fragment
-        android:id="@+id/addShift"
+        android:id="@+id/shiftForm"
         android:name="com.hsact.taxilog.ui.fragments.shiftForm.ShiftFormFragment"
         android:label="@string/title_new_shift"
         tools:layout="@layout/fragment_add_shift">
@@ -54,7 +54,7 @@
         tools:layout="@layout/fragment_log">
         <action
             android:id="@+id/action_logFragment_to_shiftForm"
-            app:destination="@id/addShift" />
+            app:destination="@id/shiftForm" />
     </fragment>
     <action
         android:id="@+id/action_global_navigation_home"
@@ -68,7 +68,4 @@
         android:name="com.hsact.taxilog.ui.activities.settings.SettingsActivity"
         android:label="settings_activity"
         tools:layout="@layout/settings_activity" />
-    <action
-        android:id="@+id/action_edit_current"
-        app:destination="@id/addShift" />
 </navigation>

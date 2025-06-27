@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">TaxiLog</string>
-
-    <!-- Headers -->
-
     <string name="title_dashboard">Goals</string>
     <string name="title_notifications">Stats</string>
     <string name="title_settings">Settings</string>
@@ -11,7 +8,6 @@
     <string name="title_new_shift">New shift</string>
     <string name="title_my_shifts">My shifts</string>
     <string name="select_language">Select language</string>
-    <string name="logo_text">TaxiLog</string>
     <string name="settings_interface">Interface</string>
     <string name="settings_language">Language</string>
     <string name="settings_theme">Theme</string>
@@ -68,7 +64,7 @@
     <string name="total_wash">Total wash</string>
     <string name="total_earnings">Total earnings</string>
     <string name="total_profit">Total profit</string>
-    <string name="edit_or_delete_shift">"Edit or delete shift "</string>
+    <string name="edit_or_delete_shift">"Edit or delete shift #"</string>
     <string name="total_fuel">Total fuel</string>
     <string name="average_fuel">Average fuel cost</string>
     <string name="settings_fuel_price">Fuel price</string>
@@ -125,7 +121,5 @@
         <item>English</item>
         <item>Русский</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="title_edit_shift">Edit Shift #%1$d</string>
 </resources>
