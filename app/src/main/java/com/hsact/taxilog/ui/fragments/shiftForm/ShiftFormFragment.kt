@@ -1,4 +1,4 @@
-package com.hsact.taxilog.ui.fragments.addShift
+package com.hsact.taxilog.ui.fragments.shiftForm
 
 import android.os.Bundle
 import android.text.Editable
@@ -29,9 +29,9 @@ import kotlinx.coroutines.launch
 import java.util.Locale
 
 @AndroidEntryPoint
-class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
+class ShiftFormFragment : Fragment(R.layout.fragment_add_shift) {
 
-    private val viewModel: AddShiftViewModel by viewModels()
+    private val viewModel: ShiftFormViewModel by viewModels()
 
     private lateinit var editDate: EditText
     private lateinit var editStart: EditText
@@ -89,7 +89,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
             }
         }
         editMileage.addTextChangedListener(mileageWatcher)
-        val shiftId = (arguments?.getLong("shiftId") ?: -1).toInt()
+        val shiftId = (arguments?.getInt("shiftId") ?: -1)
         if (shiftId != -1) {
             viewModel.loadShift(shiftId)
             //editEarnings.setText(viewModel.uiState.value?.earnings.toString())
@@ -255,7 +255,7 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         Toast.makeText(activity, getString(R.string.shift_added_successfully), Toast.LENGTH_SHORT)
             .show()
         viewModel.submit()
-        findNavController().navigate(R.id.action_addShift_to_home_fragment)
+        findNavController().navigate(R.id.action_shiftForm_to_home_fragment)
         MainActivity.botNav.isVisible = true
     }
 

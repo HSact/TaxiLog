@@ -32,19 +32,19 @@
         tools:layout="@layout/fragment_stats" />
     <fragment
         android:id="@+id/addShift"
-        android:name="com.hsact.taxilog.ui.fragments.addShift.AddShiftFragment"
+        android:name="com.hsact.taxilog.ui.fragments.shiftForm.ShiftFormFragment"
         android:label="@string/title_new_shift"
         tools:layout="@layout/fragment_add_shift">
         <action
-            android:id="@+id/action_addShift_to_home_fragment"
+            android:id="@+id/action_shiftForm_to_home_fragment"
             app:destination="@id/navigation_home" />
         <argument
             android:name="shiftId"
-            app:argType="long"
+            app:argType="integer"
             app:defaultValue="-1" />
         <argument
             android:name="visibleId"
-            app:argType="long"
+            app:argType="integer"
             app:defaultValue="-1" />
     </fragment>
     <fragment
@@ -53,7 +53,7 @@
         android:label="@string/title_my_shifts"
         tools:layout="@layout/fragment_log">
         <action
-            android:id="@+id/action_logFragment_to_addShift"
+            android:id="@+id/action_logFragment_to_shiftForm"
             app:destination="@id/addShift" />
     </fragment>
     <action

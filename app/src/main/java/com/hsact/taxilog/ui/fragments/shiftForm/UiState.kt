@@ -1,4 +1,4 @@
-package com.hsact.taxilog.ui.fragments.addShift
+package com.hsact.taxilog.ui.fragments.shiftForm
 
 data class UiState(
     val id: Int = 0,

@@ -1,4 +1,4 @@
-package com.hsact.taxilog.ui.fragments.addShift
+package com.hsact.taxilog.ui.fragments.shiftForm
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
@@ -26,7 +26,7 @@ import javax.inject.Inject
 import kotlin.math.roundToInt
 
 @HiltViewModel
-class AddShiftViewModel @Inject constructor(
+class ShiftFormViewModel @Inject constructor(
     getAllSettingsUseCase: GetAllSettingsUseCase,
     private val addShiftUseCase: AddShiftUseCase,
     private val getShiftByIdUseCase: GetShiftByIdUseCase,
