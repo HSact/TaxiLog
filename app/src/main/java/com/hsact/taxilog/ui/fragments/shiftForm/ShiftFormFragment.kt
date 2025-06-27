@@ -57,6 +57,7 @@ class ShiftFormFragment : Fragment(R.layout.fragment_add_shift) {
     private lateinit var editMileageL: TextInputLayout
 
     private lateinit var mileageWatcher: TextWatcher
+    private var isProgrammaticChange = false
 
     private var _binding: FragmentAddShiftBinding? = null
     private val binding get() = _binding!!
@@ -81,12 +82,14 @@ class ShiftFormFragment : Fragment(R.layout.fragment_add_shift) {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                if (s.isNullOrEmpty()) {
+                if (isProgrammaticChange) return
+                val mileageValue = s?.toString()?.toDoubleOrNull()
+                if (mileageValue != null) {
+                    updateShiftField { it.mileage = mileageValue }
+                    viewModel.guessFuelCost()
+                } else {
                     editFuelCost.setText("")
-                    return
                 }
-                updateShiftField { it.mileage = s.toString().toDoubleOrNull() ?: 0.0 }
-                viewModel.guessFuelCost()
             }
         }
         editMileage.addTextChangedListener(mileageWatcher)
@@ -100,7 +103,6 @@ class ShiftFormFragment : Fragment(R.layout.fragment_add_shift) {
             (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
                 getString(R.string.title_new_shift)
         }
-        editMileage.removeTextChangedListener(mileageWatcher)
         viewModel.uiState.observe(viewLifecycleOwner)
         { shift -> updateUI(shift) }
 
@@ -154,6 +156,7 @@ class ShiftFormFragment : Fragment(R.layout.fragment_add_shift) {
     }
 
     private fun updateUI(shift: UiState) {
+        isProgrammaticChange = true
         editDate.setText(shift.date)
         editStart.setText(shift.timeBegin)
         editEnd.setText(shift.timeEnd)
@@ -170,6 +173,7 @@ class ShiftFormFragment : Fragment(R.layout.fragment_add_shift) {
             switchBreak.isChecked = false
             binding.tableBreak.isVisible = false
         }
+        isProgrammaticChange = false
     }
 
     private fun loadFinanceInput(uiState: UiState) {
