@@ -42,6 +42,10 @@
             android:name="shiftId"
             app:argType="long"
             app:defaultValue="-1" />
+        <argument
+            android:name="visibleId"
+            app:argType="long"
+            app:defaultValue="-1" />
     </fragment>
     <fragment
         android:id="@+id/navigation_log"

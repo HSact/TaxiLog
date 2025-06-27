@@ -31,10 +31,6 @@ class LogFragment : Fragment() {
     private var _binding: FragmentLogBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentLogBinding.inflate(inflater, container, false)
         return binding.root
@@ -51,11 +47,14 @@ class LogFragment : Fragment() {
                 Toast.makeText(requireContext(), getString(R.string.list_is_empty), Toast.LENGTH_SHORT).show()
             }
 
+            val shiftListWithVisibleId = shiftList.mapIndexed { index, shift ->
+                Pair(shiftList.size - index, shift)
+            }
             binding.recyclerView.adapter = RecyclerAdapter(
-                shiftList,
-                onItemMenuClick = { shift ->
+                shiftListWithVisibleId,
+                onItemMenuClick = { visibleId, shift ->
                     viewModel.shifts.value?.firstOrNull { it.id == shift.id }?.let {
-                        onClickElement(it)
+                        onClickElement(it, visibleId)
                     }
                 }
             )
@@ -84,24 +83,24 @@ class LogFragment : Fragment() {
         }, viewLifecycleOwner)
     }
 
-    private fun onClickElement(shift: Shift) {
+    private fun onClickElement(shift: Shift, visibleId: Int) {
         val items = arrayOf(getString(R.string.edit), getString(R.string.delete))
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("${getString(R.string.edit_or_delete_shift)} ${shift.id}?")
-            .setItems(items) { _, which -> onPopUpMenuClicked(which, shift) }
+            .setTitle("${getString(R.string.edit_or_delete_shift)} ${visibleId}?")
+            .setItems(items) { _, which -> onPopUpMenuClicked(which, shift, visibleId) }
             .show()
     }
 
-    private fun onPopUpMenuClicked(item: Int, shift: Shift) {
+    private fun onPopUpMenuClicked(item: Int, shift: Shift, visibleId: Int) {
         when (item) {
-            0 -> editShift(shift)
+            0 -> editShift(shift, visibleId)
             1 -> deleteShift(shift)
         }
     }
 
-    private fun editShift(shift: Shift) {
+    private fun editShift(shift: Shift, visibleId: Int) {
         //viewModel.handleIntent(LogIntent.EditShift(shift))
-        val action = LogFragmentDirections.actionLogFragmentToAddShift(shiftId = shift.id.toLong())
+        val action = LogFragmentDirections.actionLogFragmentToAddShift(shiftId = shift.id.toLong(), visibleId = visibleId.toLong())
         findNavController().navigate(action)
     }
 

@@ -166,15 +166,19 @@ class AddShiftFragment : Fragment(R.layout.fragment_add_shift) {
         }
     }
 
-    private fun loadFinanceInput(shift: UiState) {
-        //editMileage.removeTextChangedListener(mileageWatcher)
-
-        editEarnings.setText(shift.earnings.toString())
-        editWash.setText(shift.wash.toString())
-        editFuelCost.setText(shift.fuelCost.toString())
-        editMileage.setText(shift.mileage.toString())
-
-        //editMileage.addTextChangedListener(mileageWatcher)
+    private fun loadFinanceInput(uiState: UiState) {
+        if (uiState.earnings != 0.0) {
+            editEarnings.setText(uiState.earnings.toString())
+        }
+        if (uiState.wash != 0.0) {
+            editWash.setText(uiState.wash.toString())
+        }
+        if (uiState.fuelCost != 0.0) {
+            editFuelCost.setText(uiState.fuelCost.toString())
+        }
+        if (uiState.mileage != 0.0) {
+            editMileage.setText(uiState.mileage.toString())
+        }
     }
 
     private fun bindItems() {

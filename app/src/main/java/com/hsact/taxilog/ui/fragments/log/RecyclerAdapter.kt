@@ -11,8 +11,9 @@ import com.hsact.taxilog.ui.shift.mappers.toUi
 import java.util.Locale
 
 class RecyclerAdapter(
-    private val shifts: List<Shift>,
-    private val onItemMenuClick: (Shift) -> Unit) :
+    private val items: List<Pair<Int, Shift>>,
+    private val onItemMenuClick: (visibleId: Int, shift: Shift) -> Unit,
+) :
     RecyclerView.Adapter<RecyclerAdapter.ShiftViewHolder>() {
     inner class ShiftViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -35,8 +36,8 @@ class RecyclerAdapter(
     }
 
     override fun onBindViewHolder(holder: ShiftViewHolder, index: Int) {
-        val shift = shifts[index].toUi(Locale.getDefault())
-        holder.textId.text = shift.id.toString()
+        val shift = items[index].second.toUi(Locale.getDefault())
+        holder.textId.text = (items.size - index).toString()
         holder.textDate.text = shift.date
         holder.textTime.text = shift.duration
         holder.textEarnings.text = shift.earnings
@@ -47,12 +48,12 @@ class RecyclerAdapter(
         holder.textProfit.text = shift.profit
 
         holder.itemView.setOnClickListener {
-            onItemMenuClick(shifts[index])
+            onItemMenuClick(items[index].first, items[index].second)
             true
         }
     }
 
     override fun getItemCount(): Int {
-        return shifts.size
+        return items.size
     }
 }
