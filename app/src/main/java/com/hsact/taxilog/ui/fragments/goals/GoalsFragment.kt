@@ -59,7 +59,7 @@ class GoalsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         displayMonthGoal(viewModel.goalMonthString)
         card1.setContent {
-            DrawDayWeekMonthProgressCard(viewModel.goalData)
+            DrawDayWeekMonthProgressCard(viewModel.goalDataState)
         }
         card2.setContent {
             DrawDaysInMonthCard(viewModel.daysData, viewModel.date)
@@ -70,7 +70,7 @@ class GoalsFragment : Fragment() {
     private fun pickDate(editObj: EditText) {
         DatePickerFragment.pickDate(context = this, editObj = editObj) {
             viewModel.setDate(editObj.text.toString())
-            card1.setContent { DrawDayWeekMonthProgressCard(viewModel.goalData) }
+            card1.setContent { DrawDayWeekMonthProgressCard(viewModel.goalDataState) }
             card2.setContent { DrawDaysInMonthCard(viewModel.daysData, viewModel.date) }
         }
     }

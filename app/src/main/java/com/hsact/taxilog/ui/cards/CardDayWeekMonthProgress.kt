@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hsact.taxilog.R
+import com.hsact.taxilog.ui.fragments.goals.GoalDataState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -34,7 +35,7 @@ private var stringWeek = ""
 private var stringMonth = ""
 
 @Composable
-fun DrawDayWeekMonthProgressCard(goalData: StateFlow<Map<String, Double>>) {
+fun DrawDayWeekMonthProgressCard(goalData: StateFlow<GoalDataState>) {
     stringOf = stringResource(R.string.of)
     stringDay = stringResource(R.string.day)
     stringWeek = stringResource(R.string.this_week)
@@ -42,17 +43,17 @@ fun DrawDayWeekMonthProgressCard(goalData: StateFlow<Map<String, Double>>) {
 
     val goalState by goalData.collectAsStateWithLifecycle()
 
-    val progressDayP = (goalState["todayPercent"] ?: 0f).toFloat()
-    val progressWeekP = (goalState["weekPercent"] ?: 0f).toFloat()
-    val progressMonthP = (goalState["monthPercent"] ?: 0f).toFloat()
+    val progressDayP = goalState.todayPercent.toFloat()
+    val progressWeekP = goalState.weekPercent.toFloat()
+    val progressMonthP = goalState.monthPercent.toFloat()
 
-    val progressDay = (goalState["dayProgress"] ?: 0f).toFloat()
-    val progressWeek = (goalState["weekProgress"] ?: 0f).toFloat()
-    val progressMonth = (goalState["monthProgress"] ?: 0f).toFloat()
+    val progressDay = goalState.dayProgress.toFloat()
+    val progressWeek = goalState.weekProgress.toFloat()
+    val progressMonth = goalState.monthProgress.toFloat()
 
-    val goalMonth = (goalState["monthGoal"] ?: 0f).toFloat()
-    val goalWeek = (goalState["weekGoal"] ?: 0f).toFloat()
-    val goalDay = (goalState["dayGoal"] ?: 0f).toFloat()
+    val goalMonth = goalState.monthGoal.toFloat()
+    val goalWeek = goalState.weekGoal.toFloat()
+    val goalDay = goalState.dayGoal.toFloat()
 
     val animationDuration = 2000
 
@@ -168,13 +169,16 @@ private fun CardPreview() {
     val goalCurrent = 50.0
     val previewData = remember {
         MutableStateFlow(
-            mapOf(
-                "todayPercent" to 0.5,
-                "weekPercent" to 0.6,
-                "monthPercent" to 0.75,
-                "monthGoal" to goal,
-                "weekGoal" to goal,
-                "dayGoal" to goal
+            GoalDataState(
+                dayProgress = goalCurrent,
+                weekProgress = goalCurrent,
+                monthProgress = goalCurrent,
+                dayGoal = goal,
+                weekGoal = goal,
+                monthGoal = goal,
+                todayPercent = 70.0,
+                weekPercent = 60.0,
+                monthPercent = 40.0
             )
         )
     }
