@@ -174,12 +174,8 @@ class ShiftFormViewModel @Inject constructor(
                 wash = shift.financeInput.wash.centsToDollars(),
                 fuelCost = shift.financeInput.fuelCost.centsToDollars(),
                 mileage = shift.carSnapshot.mileage.toDouble() / 1000,
-//                onlineTime = shift.time.online,
-//                breakTime = shift.time.breakTime,
-//                totalTime = shift.d,
                 profit = shift.profit.centsToDollars()
             )
-            //_uiState.value = UiState.Edit(shift)
         }
     }
 }

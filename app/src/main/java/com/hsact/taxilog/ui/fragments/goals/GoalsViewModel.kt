@@ -51,9 +51,6 @@ class GoalsViewModel @Inject constructor(
         }
     }
 
-//    private val _goalData = MutableStateFlow<Map<String, Double>>(emptyMap())
-//    val goalData: StateFlow<Map<String, Double>> = _goalData
-
     private val _goalDataState = MutableStateFlow(GoalDataState())
     val goalDataState: StateFlow<GoalDataState> = _goalDataState
 
@@ -91,42 +88,11 @@ class GoalsViewModel @Inject constructor(
             else -> 30.0
         }
         goalDay = goalMonth / denominatorDay
-//        val dayShifts =
-//            _shifts.value.filterByDateRange(startDate = _dateLD.value, endDate = _dateLD.value)
-//        val weekShifts = _shifts.value.filterByDateRange(
-//            startDate = _dateLD.value.getStartOfWeek(),
-//            endDate = _dateLD.value.getEndOfWeek()
-//        )
-//        val monthShifts = _shifts.value.filterByDateRange(
-//            startDate = _dateLD.value.withDayOfMonth(1),
-//            endDate = _dateLD.value.withDayOfMonth(LocalDate.now().lengthOfMonth())
-//        )
-
-//        val dayProfitSum = dayShifts.profit.sum()
-//        val weekProfitSum = weekShifts.profit.sum()
-//        val monthProfitSum = monthShifts.profit.sum()
 
         val dayProfitSum = _shifts.value.dailyProfit(_dateLD.value)
         val weekProfitSum = _shifts.value.weeklyProfitByDay(_dateLD.value).sum()
         val monthProfitSum = _shifts.value.monthlyProfitByDay(_dateLD.value).sum()
 
-//        _goalData.value = mapOf(
-//            "monthGoal" to roundTo2(goalMonth),
-//            "weekGoal" to roundTo2(goalWeek),
-//            "dayGoal" to roundTo2(goalDay),
-//            "dayProgress" to dayProfitSum.centsToDollars(),
-//            "weekProgress" to weekProfitSum.centsToDollars(),
-//            "monthProgress" to monthProfitSum.centsToDollars(),
-//            "todayPercent" to (roundTo2(
-//                dayProfitSum.centsToDollars() * 100 / goalDay
-//            )),
-//            "weekPercent" to (roundTo2(
-//                weekProfitSum.centsToDollars() * 100 / goalWeek
-//            )),
-//            "monthPercent" to (roundTo2(
-//                monthProfitSum.centsToDollars() * 100 / goalMonth
-//            ))
-//        )
         _goalDataState.value = GoalDataState(
             monthGoal = roundTo2(goalMonth),
             weekGoal = roundTo2(goalWeek),
@@ -145,15 +111,6 @@ class GoalsViewModel @Inject constructor(
             )
         )
     }
-
-//    private fun createEmptyData(): Map<String, Double> {
-//        val zeroValue = 0.0
-//        return mapOf(
-//            "todayPercent" to zeroValue,
-//            "weekPercent" to zeroValue,
-//            "monthPercent" to zeroValue
-//        )
-//    }
 
     private fun roundTo2(value: Double): Double {
         return BigDecimal(value).setScale(2, RoundingMode.HALF_UP).toDouble()

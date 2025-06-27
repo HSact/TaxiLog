@@ -34,7 +34,6 @@ class GoalsFragment : Fragment() {
 
     private lateinit var textAssignedGoal: TextView
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
