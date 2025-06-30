@@ -86,10 +86,14 @@ class ShiftFormViewModel @Inject constructor(
         _uiState.value = shift
     }
 
-    fun calculateShift() {
+    fun calculateShift(earnings: Double, wash: Double, fuelCost: Double, mileage: Double) {
         var currentShift = _uiState.value ?: return
         currentShift = currentShift.copy(
-            onlineTime = convertTimeToLong(currentShift.timeEnd) - convertTimeToLong(currentShift.timeBegin)
+            onlineTime = convertTimeToLong(currentShift.timeEnd) - convertTimeToLong(currentShift.timeBegin),
+            mileage = mileage,
+            earnings = earnings,
+            wash = wash,
+            fuelCost = fuelCost
         )
         if (currentShift.onlineTime < 0) {
             currentShift.onlineTime += hoursToMs(24)
@@ -104,7 +108,7 @@ class ShiftFormViewModel @Inject constructor(
         } else {
             currentShift.totalTime = currentShift.onlineTime
         }
-        currentShift.profit = currentShift.earnings - currentShift.wash - currentShift.fuelCost
+        currentShift.profit = earnings - wash - fuelCost
         _uiState.value = currentShift
     }
 

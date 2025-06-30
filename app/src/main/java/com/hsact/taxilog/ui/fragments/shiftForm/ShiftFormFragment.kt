@@ -232,12 +232,13 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
             }
             return
         }
-        viewModel.uiState.value?.earnings = editEarnings.text.toString().toDoubleOrNull() ?: 0.0
-        viewModel.uiState.value?.wash = editWash.text.toString().toDoubleOrNull() ?: 0.0
-        viewModel.uiState.value?.fuelCost = editFuelCost.text.toString().toDoubleOrNull() ?: 0.0
-        viewModel.uiState.value?.mileage = editMileage.text.toString().toDoubleOrNull() ?: 0.0
 
-        viewModel.calculateShift()
+        viewModel.calculateShift(
+            editEarnings.text.toString().toDoubleOrNull() ?: 0.0,
+            editWash.text.toString().toDoubleOrNull() ?: 0.0,
+            editFuelCost.text.toString().toDoubleOrNull() ?: 0.0,
+            editMileage.text.toString().toDoubleOrNull() ?: 0.0
+        )
 
         showSubmitMessage(
             getString(
