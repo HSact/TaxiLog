@@ -279,9 +279,9 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
     }
 
     private suspend fun submit() {
+        viewModel.submit()
         Toast.makeText(activity, getString(R.string.shift_added_successfully), Toast.LENGTH_SHORT)
             .show()
-        viewModel.submit()
         findNavController().navigate(R.id.action_shiftForm_to_home_fragment)
         MainActivity.botNav.isVisible = true
     }

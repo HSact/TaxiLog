@@ -117,7 +117,7 @@ class ShiftFormViewModel @Inject constructor(
         } else {
             currentShift.totalTime = currentShift.onlineTime
         }
-        currentShift.profit = earnings + tips - wash - fuelCost
+        currentShift.profit = ((earnings + tips - wash - fuelCost) * 100).roundToInt() / 100.0
         _uiState.value = currentShift
     }
 
