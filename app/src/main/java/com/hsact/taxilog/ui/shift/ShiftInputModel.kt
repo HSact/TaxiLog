@@ -1,7 +1,7 @@
 package com.hsact.taxilog.ui.shift
 
 data class ShiftInputModel(
-    var carId: Long = 0,
+    var carId: Int = 0,
     var carName: String = "",
     var date: String = "",
     var timeStart: String = "",

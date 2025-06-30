@@ -43,6 +43,8 @@ fun DateTimePeriodEntity.toDomain(): DateTimePeriod {
 fun ShiftFinanceInputEntity.toDomain(): ShiftFinanceInput {
     return ShiftFinanceInput(
         earnings = earnings,
+        tips = tips,
+        taxRate = taxRate,
         wash = wash,
         fuelCost = fuelCost
     )
@@ -73,6 +75,8 @@ fun DateTimePeriod.toEntity(): DateTimePeriodEntity = DateTimePeriodEntity(
 
 fun ShiftFinanceInput.toEntity(): ShiftFinanceInputEntity = ShiftFinanceInputEntity(
     earnings = earnings,
+    tips = tips,
+    taxRate = taxRate,
     wash = wash,
     fuelCost = fuelCost
 )

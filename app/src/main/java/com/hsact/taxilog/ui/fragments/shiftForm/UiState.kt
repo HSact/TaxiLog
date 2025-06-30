@@ -11,8 +11,10 @@ data class UiState(
     var breakTime: Long = 0,
     var totalTime: Long = 0,
     var earnings: Double = 0.0,
+    var tips: Double = 0.0,
     var wash: Double = 0.0,
     var fuelCost: Double = 0.0,
     var mileage: Double = 0.0,
     var profit: Double = 0.0,
+    var note: String = "",
 )

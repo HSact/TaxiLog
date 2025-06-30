@@ -67,7 +67,6 @@
                     android:paddingBottom="10dp"
                     tools:ignore="TouchTargetSizeCheck" />
             </com.google.android.material.textfield.TextInputLayout>
-
         </TableRow>
 
         <TableRow
@@ -242,7 +241,39 @@
                     android:paddingBottom="10dp"
                     tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
             </com.google.android.material.textfield.TextInputLayout>
+        </TableRow>
 
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:weightSum="100">
+
+            <TextView
+                android:id="@+id/TextTips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="100"
+                android:text="@string/tips" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editTextTipsL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_money">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextTips"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="numberDecimal"
+                    android:maxLength="8"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
         </TableRow>
 
         <TableRow
@@ -346,6 +377,32 @@
 
         <TableRow
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editTextNoteL"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_span="1"
+                android:layout_weight="1"
+                android:hint="@string/note">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextNote"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:minLines="2"
+                    android:maxLines="4"
+                    android:maxLength="1000"
+                    android:gravity="top|start"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:paddingTop="50dp">
@@ -358,7 +415,5 @@
                 android:layout_weight="1"
                 android:text="@string/addshift_submit" />
         </TableRow>
-
     </TableLayout>
-
 </ScrollView>

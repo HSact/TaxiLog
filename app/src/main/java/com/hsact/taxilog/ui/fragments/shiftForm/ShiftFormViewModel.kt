@@ -86,14 +86,23 @@ class ShiftFormViewModel @Inject constructor(
         _uiState.value = shift
     }
 
-    fun calculateShift(earnings: Double, wash: Double, fuelCost: Double, mileage: Double) {
+    fun calculateShift(
+        earnings: Double,
+        tips: Double,
+        wash: Double,
+        fuelCost: Double,
+        mileage: Double,
+        note: String,
+    ) {
         var currentShift = _uiState.value ?: return
         currentShift = currentShift.copy(
             onlineTime = convertTimeToLong(currentShift.timeEnd) - convertTimeToLong(currentShift.timeBegin),
             mileage = mileage,
             earnings = earnings,
+            tips = tips,
             wash = wash,
-            fuelCost = fuelCost
+            fuelCost = fuelCost,
+            note = note
         )
         if (currentShift.onlineTime < 0) {
             currentShift.onlineTime += hoursToMs(24)
@@ -108,7 +117,7 @@ class ShiftFormViewModel @Inject constructor(
         } else {
             currentShift.totalTime = currentShift.onlineTime
         }
-        currentShift.profit = earnings - wash - fuelCost
+        currentShift.profit = earnings + tips - wash - fuelCost
         _uiState.value = currentShift
     }
 
@@ -124,19 +133,21 @@ class ShiftFormViewModel @Inject constructor(
         uiState: UiState,
     ): ShiftInputModel {
         return ShiftInputModel(
-        date = uiState.date,
-        timeStart = uiState.timeBegin,
-        timeEnd = uiState.timeEnd,
-        breakStart = uiState.breakBegin,
-        breakEnd = uiState.breakEnd,
-        earnings = uiState.earnings.toString(),
-        wash = uiState.wash.toString(),
-        fuelCost = uiState.fuelCost.toString(),
-        mileage = uiState.mileage.toString(),
-        taxRate = settings.taxRate ?: "",
-        rentCost = settings.rentCost ?: "",
-        serviceCost = settings.serviceCost ?: "",
-        consumption = settings.consumption ?: ""
+            date = uiState.date,
+            timeStart = uiState.timeBegin,
+            timeEnd = uiState.timeEnd,
+            breakStart = uiState.breakBegin,
+            breakEnd = uiState.breakEnd,
+            earnings = uiState.earnings.toString(),
+            tips = uiState.tips.toString(),
+            wash = uiState.wash.toString(),
+            fuelCost = uiState.fuelCost.toString(),
+            mileage = uiState.mileage.toString(),
+            taxRate = settings.taxRate ?: "",
+            rentCost = settings.rentCost ?: "",
+            serviceCost = settings.serviceCost ?: "",
+            consumption = settings.consumption ?: "",
+            note = uiState.note.ifEmpty { null },
         )
     }
 
@@ -172,13 +183,19 @@ class ShiftFormViewModel @Inject constructor(
                 date = shift.time.period.start.toShortDate(),
                 timeBegin = shift.time.period.start.toShortTime(),
                 timeEnd = shift.time.period.end.toShortTime(),
-                breakBegin = if (shift.time.rest != null) {shift.time.rest.start.toShortTime()} else "",
-                breakEnd = if (shift.time.rest != null) {shift.time.rest.end.toShortTime()} else "",
+                breakBegin = if (shift.time.rest != null) {
+                    shift.time.rest.start.toShortTime()
+                } else "",
+                breakEnd = if (shift.time.rest != null) {
+                    shift.time.rest.end.toShortTime()
+                } else "",
                 earnings = shift.financeInput.earnings.centsToDollars(),
+                tips = shift.financeInput.tips.centsToDollars(),
                 wash = shift.financeInput.wash.centsToDollars(),
                 fuelCost = shift.financeInput.fuelCost.centsToDollars(),
                 mileage = shift.carSnapshot.mileage.toDouble() / 1000,
-                profit = shift.profit.centsToDollars()
+                profit = shift.profit.centsToDollars(),
+                note = shift.note ?: "",
             )
         }
     }

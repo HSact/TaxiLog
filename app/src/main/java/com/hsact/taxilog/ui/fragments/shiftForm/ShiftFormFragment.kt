@@ -41,9 +41,11 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
     private lateinit var editBreakStart: EditText
     private lateinit var editBreakEnd: EditText
     private lateinit var editEarnings: EditText
+    private lateinit var editTips: EditText
     private lateinit var editWash: EditText
     private lateinit var editFuelCost: EditText
     private lateinit var editMileage: EditText
+    private lateinit var editNote: EditText
     private lateinit var buttonSubmit: Button
 
     private lateinit var editDateL: TextInputLayout
@@ -52,9 +54,11 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
     private lateinit var editBreakStartL: TextInputLayout
     private lateinit var editBreakEndL: TextInputLayout
     private lateinit var editEarningsL: TextInputLayout
+    private lateinit var editTipsL: TextInputLayout
     private lateinit var editWashL: TextInputLayout
     private lateinit var editFuelCostL: TextInputLayout
     private lateinit var editMileageL: TextInputLayout
+    private lateinit var editNoteL: TextInputLayout
 
     private lateinit var mileageWatcher: TextWatcher
     private var isProgrammaticChange = false
@@ -163,6 +167,9 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         editBreakStart.setText(shift.breakBegin)
         editBreakEnd.setText(shift.breakEnd)
         loadFinanceInput(shift)
+        if (!shift.note.isEmpty()) {
+            editNote.setText(shift.note)
+        }
         if (viewModel.uiState.value?.fuelCost != 0.0) {
             editFuelCost.setText(shift.fuelCost.toString())
         }
@@ -179,6 +186,9 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
     private fun loadFinanceInput(uiState: UiState) {
         if (uiState.earnings != 0.0) {
             editEarnings.setText(uiState.earnings.toString())
+        }
+        if (uiState.tips != 0.0) {
+            editTips.setText(uiState.tips.toString())
         }
         if (uiState.wash != 0.0) {
             editWash.setText(uiState.wash.toString())
@@ -199,9 +209,11 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         editBreakStart = binding.buttonTimeStartBrake
         editBreakEnd = binding.buttonTimeEndBrake
         editEarnings = binding.editTextEarnings
+        editTips = binding.editTextTips
         editWash = binding.editTextWash
         editFuelCost = binding.editTextFuelCost
         editMileage = binding.editTextMileage
+        editNote = binding.editTextNote
         buttonSubmit = binding.buttonSubmit
 
         editDateL = binding.buttonDatePickL
@@ -210,9 +222,11 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         editBreakStartL = binding.buttonTimeStartL
         editBreakEndL = binding.buttonTimeEndL
         editEarningsL = binding.editTextEarningsL
+        editTipsL = binding.editTextTipsL
         editWashL = binding.editTextWashL
         editFuelCostL = binding.editTextFuelCostL
         editMileageL = binding.editTextMileageL
+        editNoteL = binding.editTextNoteL
     }
 
     private fun calculateShift() {
@@ -235,9 +249,11 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
 
         viewModel.calculateShift(
             editEarnings.text.toString().toDoubleOrNull() ?: 0.0,
+            editTips.text.toString().toDoubleOrNull() ?: 0.0,
             editWash.text.toString().toDoubleOrNull() ?: 0.0,
             editFuelCost.text.toString().toDoubleOrNull() ?: 0.0,
-            editMileage.text.toString().toDoubleOrNull() ?: 0.0
+            editMileage.text.toString().toDoubleOrNull() ?: 0.0,
+            editNote.text.toString()
         )
 
         showSubmitMessage(

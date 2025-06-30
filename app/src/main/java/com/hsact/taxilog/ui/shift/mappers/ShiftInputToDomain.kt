@@ -43,7 +43,7 @@ fun ShiftInputModel.toDomain(): Shift {
 
     return Shift(
         id = 0,
-        carId = carId.toInt(),
+        carId = carId,
         carSnapshot = CarSnapshot(
             name = carName,
             mileage = ((mileage.toDoubleOrNull() ?: 0.0) * 1000).toLong(),
@@ -56,16 +56,16 @@ fun ShiftInputModel.toDomain(): Shift {
             rest = restPeriod
         ),
         financeInput = ShiftFinanceInput(
-            earnings = rubToCents(earnings),
-            tips = rubToCents(tips),
-            wash = rubToCents(wash),
-            fuelCost = rubToCents(fuelCost),
+            earnings = dollarsToCents(earnings),
+            tips = dollarsToCents(tips),
+            wash = dollarsToCents(wash),
+            fuelCost = dollarsToCents(fuelCost),
             taxRate = ((taxRate.toDoubleOrNull() ?: 0.0) * 100).toInt()
         ),
         note = note
     )
 }
 
-private fun rubToCents(input: String): Long {
+private fun dollarsToCents(input: String): Long {
     return ((input.replace(",", ".").toDoubleOrNull() ?: 0.0) * 100).roundToLong()
 }
