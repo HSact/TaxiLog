@@ -120,6 +120,7 @@
     <string name="fuel">Топливо</string>
     <string name="tips">Чаевые</string>
     <string name="note">Заметка</string>
+    <string name="title_shift_detail">Смена №%1$d</string>
     <string-array name="languages">
         <item>English</item>
         <item>Русский</item>

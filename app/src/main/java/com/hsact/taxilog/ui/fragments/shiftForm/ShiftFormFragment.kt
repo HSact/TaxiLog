@@ -34,6 +34,9 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
 
     private val viewModel: ShiftFormViewModel by viewModels()
 
+    private var shiftId: Int = -1
+    private var visibleId: Int = -1
+
     private lateinit var editDate: EditText
     private lateinit var editStart: EditText
     private lateinit var editEnd: EditText
@@ -69,6 +72,10 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MainActivity.botNav.isVisible = false
+        arguments?.let {
+            shiftId = it.getInt("shiftId", -1)
+            visibleId = it.getInt("visibleId", -1)
+        }
     }
 
     override fun onCreateView(
@@ -97,8 +104,8 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
             }
         }
         editMileage.addTextChangedListener(mileageWatcher)
-        val shiftId = arguments?.getInt("shiftId") ?: -1
-        val visibleId = arguments?.getInt("visibleId") ?: -1
+//        val shiftId = arguments?.getInt("shiftId") ?: -1
+//        val visibleId = arguments?.getInt("visibleId") ?: -1
         if (shiftId != -1) {
             viewModel.loadShift(shiftId)
             (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =

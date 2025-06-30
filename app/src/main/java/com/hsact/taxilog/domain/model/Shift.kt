@@ -14,6 +14,9 @@ data class Shift(
     val carExpenses: Long
         get() = carSnapshot.rentCost + carSnapshot.serviceCost
 
+    val consumption: Long
+        get() = (carSnapshot.fuelConsumption * carSnapshot.mileage) / 100_000
+
     val totalExpenses: Long
         get() = carExpenses + financeInput.wash + financeInput.fuelCost + financeInput.tax
 

@@ -6,29 +6,41 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.hsact.taxilog.R
-import com.hsact.taxilog.ui.AppTheme
+import com.hsact.taxilog.ui.activities.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ShiftDetailFragment : Fragment() {
     private val viewModel: ShiftDetailViewModel by viewModels()
 
+    private var shiftId: Int = -1
+    private var visibleId: Int = -1
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        MainActivity.botNav.isVisible = false
+        arguments?.let {
+            shiftId = it.getInt("shiftId", -1)
+            visibleId = it.getInt("visibleId", -1)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         return inflater.inflate(R.layout.fragment_shift_detail, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val shiftId = arguments?.getInt("shiftId") ?: -1
-        val visibleId = arguments?.getInt("visibleId") ?: -1
         if (shiftId != -1) {
             viewModel.loadShift(shiftId)
         }
@@ -36,12 +48,17 @@ class ShiftDetailFragment : Fragment() {
         val container = view.findViewById<FrameLayout>(R.id.compose_container)
         val composeView = ComposeView(requireContext()).apply {
             setContent {
-                AppTheme {
-                    val state by viewModel.shift.collectAsState()
-                    ShiftDetailScreen(state)
-                }
+                val state by viewModel.shift.collectAsState()
+                ShiftDetailScreen(state)
             }
         }
         container.addView(composeView)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        MainActivity.botNav.isVisible = false
+        (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
+            getString(R.string.title_shift_detail, visibleId)
     }
 }
