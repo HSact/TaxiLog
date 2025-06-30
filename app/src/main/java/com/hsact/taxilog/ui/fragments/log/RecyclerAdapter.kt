@@ -12,6 +12,7 @@ import java.util.Locale
 
 class RecyclerAdapter(
     private val items: List<Pair<Int, Shift>>,
+    private val onItemClick: (visibleId: Int, shift: Shift) -> Unit,
     private val onItemMenuClick: (visibleId: Int, shift: Shift) -> Unit,
 ) :
     RecyclerView.Adapter<RecyclerAdapter.ShiftViewHolder>() {
@@ -48,6 +49,11 @@ class RecyclerAdapter(
         holder.textProfit.text = shift.profit
 
         holder.itemView.setOnClickListener {
+            onItemClick(items[index].first, items[index].second)
+            true
+        }
+
+        holder.itemView.setOnLongClickListener {
             onItemMenuClick(items[index].first, items[index].second)
             true
         }

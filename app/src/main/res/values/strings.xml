@@ -125,4 +125,6 @@
     <string name="fuel">Fuel</string>
     <string name="tips">Tips</string>
     <string name="note">Note</string>
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

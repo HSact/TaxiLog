@@ -52,9 +52,14 @@ class LogFragment : Fragment() {
             }
             binding.recyclerView.adapter = RecyclerAdapter(
                 shiftListWithVisibleId,
+                onItemClick = { visibleId, shift ->
+                    viewModel.shifts.value?.firstOrNull { it.id == shift.id }?.let {
+                        onClickElement(shift, visibleId)
+                    }
+                },
                 onItemMenuClick = { visibleId, shift ->
                     viewModel.shifts.value?.firstOrNull { it.id == shift.id }?.let {
-                        onClickElement(it, visibleId)
+                        onLongClickElement(shift, visibleId)
                     }
                 }
             )
@@ -84,6 +89,10 @@ class LogFragment : Fragment() {
     }
 
     private fun onClickElement(shift: Shift, visibleId: Int) {
+        val action = LogFragmentDirections.actionLogFragmentToShiftDetails(shiftId = shift.id, visibleId = visibleId)
+        findNavController().navigate(action)
+    }
+    private fun onLongClickElement(shift: Shift, visibleId: Int) {
         val items = arrayOf(getString(R.string.edit), getString(R.string.delete))
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("${getString(R.string.edit_or_delete_shift)} ${visibleId}?")
