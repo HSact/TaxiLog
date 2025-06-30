@@ -34,7 +34,7 @@
         android:id="@+id/shiftForm"
         android:name="com.hsact.taxilog.ui.fragments.shiftForm.ShiftFormFragment"
         android:label="@string/title_new_shift"
-        tools:layout="@layout/fragment_add_shift">
+        tools:layout="@layout/fragment_shift_form">
         <action
             android:id="@+id/action_shiftForm_to_home_fragment"
             app:destination="@id/navigation_home" />

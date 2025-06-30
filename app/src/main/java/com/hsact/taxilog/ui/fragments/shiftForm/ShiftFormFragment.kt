@@ -17,20 +17,20 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.hsact.taxilog.R
-import com.hsact.taxilog.databinding.FragmentAddShiftBinding
 import com.hsact.taxilog.ui.activities.MainActivity
 import com.hsact.taxilog.ui.components.DatePickerFragment
 import com.hsact.taxilog.ui.components.TimePickerFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputLayout
+import com.hsact.taxilog.databinding.FragmentShiftFormBinding
 import com.hsact.taxilog.ui.shift.mappers.millisToHours
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Locale
 
 @AndroidEntryPoint
-class ShiftFormFragment : Fragment(R.layout.fragment_add_shift) {
+class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
 
     private val viewModel: ShiftFormViewModel by viewModels()
 
@@ -59,7 +59,7 @@ class ShiftFormFragment : Fragment(R.layout.fragment_add_shift) {
     private lateinit var mileageWatcher: TextWatcher
     private var isProgrammaticChange = false
 
-    private var _binding: FragmentAddShiftBinding? = null
+    private var _binding: FragmentShiftFormBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,7 +71,7 @@ class ShiftFormFragment : Fragment(R.layout.fragment_add_shift) {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentAddShiftBinding.inflate(inflater, container, false)
+        _binding = FragmentShiftFormBinding.inflate(inflater, container, false)
         bindItems()
         return binding.root
     }

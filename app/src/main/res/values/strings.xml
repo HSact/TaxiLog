@@ -122,4 +122,5 @@
         <item>Русский</item>
     </string-array>
     <string name="title_edit_shift">Edit Shift #%1$d</string>
+    <string name="fuel">Fuel</string>
 </resources>
