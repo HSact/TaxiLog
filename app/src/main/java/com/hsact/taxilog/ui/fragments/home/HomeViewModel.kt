@@ -61,7 +61,8 @@ class HomeViewModel @Inject constructor(
         }
 
         var cumulativeSum = 0.0
-        _chartData.value = MutableList(31) { day ->
+        _chartData.value = MutableList(31) { index ->
+            val day = index + 1 //day with start at 0
             cumulativeSum += tempData[day] ?: 0.0
             cumulativeSum
         }
