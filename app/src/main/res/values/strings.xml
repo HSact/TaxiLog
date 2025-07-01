@@ -116,11 +116,6 @@
     <string name="month_graph">Goal progress</string>
     <string name="progress">Progress</string>
     <string name="goal">Goal</string>
-
-    <string-array name="languages">
-        <item>English</item>
-        <item>Русский</item>
-    </string-array>
     <string name="title_edit_shift">Edit Shift #%1$d</string>
     <string name="fuel">Fuel</string>
     <string name="tips">Tips</string>
@@ -132,4 +127,9 @@
     <string name="car_name">Car name</string>
     <string name="duration">Duration</string>
     <string name="tax">Tax</string>
+
+    <string-array name="languages">
+        <item>English</item>
+        <item>Русский</item>
+    </string-array>
 </resources>
