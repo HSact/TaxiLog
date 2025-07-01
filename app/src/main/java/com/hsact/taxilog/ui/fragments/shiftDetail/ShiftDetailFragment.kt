@@ -15,7 +15,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.hsact.taxilog.R
 import com.hsact.taxilog.ui.activities.MainActivity
-import com.hsact.taxilog.ui.fragments.log.LogFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,7 +27,6 @@ class ShiftDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MainActivity.botNav.isVisible = false
-        setHasOptionsMenu(false)
         arguments?.let {
             shiftId = it.getInt("shiftId", -1)
             visibleId = it.getInt("visibleId", -1)

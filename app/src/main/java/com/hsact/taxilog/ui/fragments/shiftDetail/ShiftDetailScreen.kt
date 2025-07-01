@@ -1,5 +1,7 @@
 package com.hsact.taxilog.ui.fragments.shiftDetail
 
+import androidx.compose.ui.res.stringResource
+import com.hsact.taxilog.R
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -67,7 +69,7 @@ fun ShiftDetailScreen(
                         onClick = onEditClick,
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text(text = "Edit", color = textButtonColor)
+                        Text(text = stringResource(R.string.edit), color = textButtonColor)
                     }
                     Spacer(modifier = Modifier.width(10.dp))
                     Button(
@@ -77,7 +79,7 @@ fun ShiftDetailScreen(
                             containerColor = MaterialTheme.colorScheme.error
                         )
                     ) {
-                        Text(text = "Delete", color = textButtonColor)
+                        Text(text = stringResource(R.string.delete), color = textButtonColor)
                     }
                 }
             }
@@ -85,8 +87,8 @@ fun ShiftDetailScreen(
             if (showDeleteDialog) {
                 AlertDialog(
                     onDismissRequest = { showDeleteDialog = false },
-                    title = { Text("Delete Shift") },
-                    text = { Text("Are you sure you want to delete this shift? This action cannot be undone.") },
+                    title = { Text(text = stringResource(R.string.delete_shift)) },
+                    text = { Text(stringResource(R.string.dialog_delete_message)) },
                     confirmButton = {
                         TextButton(
                             onClick = {
@@ -94,12 +96,12 @@ fun ShiftDetailScreen(
                                 onDeleteConfirmed()
                             }
                         ) {
-                            Text("Delete")
+                            Text(text = stringResource(R.string.delete))
                         }
                     },
                     dismissButton = {
                         TextButton(onClick = { showDeleteDialog = false }) {
-                            Text("Cancel")
+                            Text(text = stringResource(R.string.cancel))
                         }
                     }
                 )
@@ -109,7 +111,7 @@ fun ShiftDetailScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text("No shift data", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.no_shift_data), style = MaterialTheme.typography.bodyMedium)
             }
         }
     }
@@ -133,13 +135,13 @@ fun Header(
 fun CarCard(ui: ShiftOutputModel) {
     BaseCard {
         Column {
-            Header("Car")
+            Header(text = stringResource(R.string.car))
             Space()
             if (ui.carName.isNotBlank()) {
-                Text("Name: ${ui.carName}")
+                Text("${stringResource(R.string.car_name)}: ${ui.carName}")
             }
-            Text("Mileage: ${ui.mileageKm}")
-            Text("Fuel: ${ui.fuelConsumption}")
+            Text("${stringResource(R.string.mileage)}: ${ui.mileageKm}")
+            Text("${stringResource(R.string.fuel)}: ${ui.fuelConsumption}")
         }
     }
 }
@@ -148,15 +150,15 @@ fun CarCard(ui: ShiftOutputModel) {
 fun TimeCard(ui: ShiftOutputModel) {
     BaseCard {
         Column {
-            Header("Time")
+            Header(text = stringResource(R.string.time))
             Space()
-            Text("Date: ${ui.date}")
-            Text("Start: ${ui.timeBegin}")
-            Text("End: ${ui.timeEnd}")
+            Text("${stringResource(R.string.date)}: ${ui.date}")
+            Text("${stringResource(R.string.start)}: ${ui.timeBegin}")
+            Text("${stringResource(R.string.end)}: ${ui.timeEnd}")
             if (ui.timeRestBegin.isNotBlank() && ui.timeRestEnd.isNotBlank()) {
-                Text("Rest: ${ui.timeRestBegin} – ${ui.timeRestEnd}")
+                Text("${stringResource(R.string.rest)}: ${ui.timeRestBegin} – ${ui.timeRestEnd}")
             }
-            Text("Duration: ${ui.duration}")
+            Text("${stringResource(R.string.duration)}: ${ui.duration}")
         }
     }
 }
@@ -165,14 +167,14 @@ fun TimeCard(ui: ShiftOutputModel) {
 fun FinanceCard(ui: ShiftOutputModel) {
     BaseCard {
         Column {
-            Header("Finance")
+            Header(text = stringResource(R.string.finance))
             Space()
-            Text("Earnings: ${ui.earnings}")
-            Text("Tips: ${ui.tips}")
-            Text("Fuel: ${ui.fuelCost}")
-            Text("Wash: ${ui.wash}")
-            Text("Tax: ${ui.tax}")
-            Text("Profit: ${ui.profit}")
+            Text("${stringResource(R.string.earnings)}: ${ui.earnings}")
+            Text("${stringResource(R.string.tips)}: ${ui.tips}")
+            Text("${stringResource(R.string.fuel)}: ${ui.fuelCost}")
+            Text("${stringResource(R.string.wash)}: ${ui.wash}")
+            Text("${stringResource(R.string.tax)}: ${ui.tax}")
+            Text("${stringResource(R.string.profit)}: ${ui.profit}")
         }
     }
 }
@@ -182,7 +184,7 @@ fun OtherCard(ui: ShiftOutputModel) {
     if (!ui.note.isNullOrBlank()) {
         BaseCard {
             Column {
-                Header("Note")
+                Header(text = stringResource(R.string.note))
                 Space()
                 Text(ui.note)
             }

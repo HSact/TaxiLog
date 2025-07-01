@@ -17,7 +17,7 @@
     <string name="settings_km_mi">km/mi</string>
     <string name="settings_km">Km</string>
     <string name="settings_mi">Mi</string>
-    <string name="settings_car">Car</string>
+    <string name="car">Car</string>
     <string name="settings_consumption">Consumption</string>
     <string name="settings_rented_car">Rented car</string>
     <string name="settings_rent_cost">Rent cost</string>
@@ -32,7 +32,7 @@
     <string name="addshift_date_and_time">Date and time</string>
     <string name="addshift_date">Date:</string>
     <string name="addshift_online">Online:</string>
-    <string name="addshift_break">Break</string>
+    <string name="rest">Break</string>
     <string name="addshift_break_time">Break:</string>
     <string name="addshift_money">Money</string>
     <string name="earnings">Earnings</string>
@@ -126,4 +126,10 @@
     <string name="tips">Tips</string>
     <string name="note">Note</string>
     <string name="title_shift_detail">Shift #%1$d</string>
+    <string name="finance">Finance</string>
+    <string name="dialog_delete_message">Are you sure you want to delete this shift? This action cannot be undone.</string>
+    <string name="no_shift_data">No shift data</string>
+    <string name="car_name">Car name</string>
+    <string name="duration">Duration</string>
+    <string name="tax">Tax</string>
 </resources>

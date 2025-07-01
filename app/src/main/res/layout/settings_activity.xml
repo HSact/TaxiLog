@@ -183,7 +183,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="@string/settings_car"
+                    android:text="@string/car"
                     android:textSize="24sp" />
             </LinearLayout>
 
