@@ -63,6 +63,11 @@ class ShiftDetailFragment : Fragment() {
             getString(R.string.title_shift_detail, visibleId)
     }
 
+    override fun onPause() {
+        super.onPause()
+        MainActivity.botNav.isVisible = true
+    }
+
     fun editShift() {
         val action = ShiftDetailFragmentDirections.actionShiftDetailFragmentToShiftForm(
             shiftId = shiftId,

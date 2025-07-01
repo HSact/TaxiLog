@@ -7,6 +7,11 @@
         android:title="@string/title_home" />
 
     <item
+        android:id="@+id/navigation_log"
+        android:icon="@drawable/overview_24px"
+        android:title="@string/title_my_shifts" />
+
+    <item
         android:id="@+id/navigation_goals"
         android:icon="@drawable/monitoring_24px"
         android:title="@string/title_dashboard" />
@@ -15,5 +20,4 @@
         android:id="@+id/navigation_stats"
         android:icon="@drawable/database_24px"
         android:title="@string/title_notifications" />
-
 </menu>

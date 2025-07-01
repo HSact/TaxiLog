@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -47,39 +48,39 @@ fun ShiftDetailScreen(
             val ui = it.toUi(Locale.getDefault())
             val textButtonColor = if (isSystemInDarkTheme()) Color.Black else Color.White
 
-            Column(
+            LazyColumn(
                 modifier = Modifier
-                    .padding(10.dp)
                     .fillMaxSize()
+                    .padding(10.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                CarCard(ui)
-                TimeCard(ui)
-                FinanceCard(ui)
-                OtherCard(ui)
-                Spacer(Modifier.weight(1f))
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 10.dp, vertical = 10.dp)
-                        .padding(bottom = 50.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Button(
-                        onClick = onEditClick,
-                        modifier = Modifier.weight(1f)
+                item { CarCard(ui) }
+                item { TimeCard(ui) }
+                item { FinanceCard(ui) }
+                item { OtherCard(ui) }
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 20.dp),
+                        horizontalArrangement = Arrangement.Center
                     ) {
-                        Text(text = stringResource(R.string.edit), color = textButtonColor)
-                    }
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Button(
-                        onClick = { showDeleteDialog = true },
-                        modifier = Modifier.weight(1f),
-                        colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.error
-                        )
-                    ) {
-                        Text(text = stringResource(R.string.delete), color = textButtonColor)
+                        Button(
+                            onClick = onEditClick,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(text = stringResource(R.string.edit), color = textButtonColor)
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Button(
+                            onClick = { showDeleteDialog = true },
+                            modifier = Modifier.weight(1f),
+                            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.error
+                            )
+                        ) {
+                            Text(text = stringResource(R.string.delete), color = textButtonColor)
+                        }
                     }
                 }
             }
@@ -111,7 +112,10 @@ fun ShiftDetailScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(stringResource(R.string.no_shift_data), style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = stringResource(R.string.no_shift_data),
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         }
     }

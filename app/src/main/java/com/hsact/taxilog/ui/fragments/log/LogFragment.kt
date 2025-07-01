@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -19,7 +18,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentLogBinding
 import com.hsact.taxilog.domain.model.Shift
-import com.hsact.taxilog.ui.activities.MainActivity
 
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.getValue
@@ -129,14 +127,5 @@ class LogFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-    override fun onResume() {
-        MainActivity.botNav.isVisible = false
-        super.onResume()
-    }
-
-    override fun onDestroy() {
-        MainActivity.botNav.isVisible = true
-        super.onDestroy()
     }
 }
