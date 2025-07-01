@@ -45,6 +45,7 @@ class HomeFragment : Fragment() {
             viewModel.shiftListThisMonth) }
         card2.setContent { DrawLastShiftCard(viewModel.lastShift) }
         card3.setContent { DrawMonthGraphCard(viewModel.chartData, viewModel.goalData) }
+        binding.fabNewShift.extend()
         binding.fabNewShift.setOnClickListener { newShift() }
     }
 
