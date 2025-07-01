@@ -24,7 +24,7 @@
     <ScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <TableLayout
             android:id="@+id/layout_settings"
@@ -83,7 +83,6 @@
 
             </TableRow>
 
-
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -130,7 +129,6 @@
                         android:text="@string/settings_dark" />
 
                 </RadioGroup>
-
             </TableRow>
 
             <TableRow
@@ -171,7 +169,6 @@
                         android:text="@string/settings_mi" />
 
                 </RadioGroup>
-
             </TableRow>
 
             <LinearLayout
@@ -186,7 +183,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="@string/settings_car"
+                    android:text="@string/car"
                     android:textSize="24sp" />
             </LinearLayout>
 
@@ -269,7 +266,6 @@
                     android:minHeight="50dp"
                     android:text="@string/settings_rented_car"
                     tools:ignore="TouchTargetSizeCheck" />
-
             </LinearLayout>
 
             <TableRow
@@ -301,7 +297,6 @@
                         android:maxLength="8"
                         tools:ignore="TouchTargetSizeCheck" />
                 </com.google.android.material.textfield.TextInputLayout>
-
             </TableRow>
 
             <LinearLayout
@@ -320,7 +315,6 @@
                     android:gravity="center_vertical"
                     android:minHeight="50dp"
                     android:text="@string/settings_calculate_service" />
-
             </LinearLayout>
 
             <TableRow
@@ -399,7 +393,6 @@
                         android:maxLength="8"
                         tools:ignore="TouchTargetSizeCheck" />
                 </com.google.android.material.textfield.TextInputLayout>
-
             </TableRow>
 
             <TableRow
@@ -467,7 +460,6 @@
                     android:minWidth="48dp"
                     android:minHeight="48dp"
                     android:text="@string/settings_calculate_taxes" />
-
             </LinearLayout>
 
             <TableRow

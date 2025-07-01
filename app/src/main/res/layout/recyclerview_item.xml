@@ -134,7 +134,7 @@
                 android:id="@+id/textFuel0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/fuel_cost"
+                android:text="@string/fuel"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="20sp" />
 

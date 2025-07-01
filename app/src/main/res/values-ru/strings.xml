@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">TaxiLog</string>
-    <string name="logo_text">TaxiLog</string>
     <string name="title_home">Сводка</string>
     <string name="title_dashboard">Цели</string>
     <string name="title_notifications">Статистика</string>
@@ -19,7 +18,7 @@
     <string name="settings_km_mi">Км/Мили</string>
     <string name="settings_km">Км</string>
     <string name="settings_mi">Мили</string>
-    <string name="settings_car">Авто</string>
+    <string name="car">Авто</string>
     <string name="settings_consumption">Расход топлива</string>
     <string name="settings_rented_car">Арендованное авто</string>
     <string name="settings_rent_cost">Стоимость аренды</string>
@@ -34,12 +33,12 @@
     <string name="addshift_date_and_time">Дата и время</string>
     <string name="addshift_date">Дата:</string>
     <string name="addshift_online">На линии:</string>
-    <string name="addshift_break">Перерыв</string>
+    <string name="rest">Перерыв</string>
     <string name="addshift_break_time">Перерыв:</string>
     <string name="addshift_money">Деньги</string>
     <string name="earnings">Заработок</string>
     <string name="wash">Мойка</string>
-    <string name="fuel_cost">Стоимость</string>
+    <string name="fuel_cost">Стоимость топлива</string>
     <string name="mileage">Пробег</string>
     <string name="addshift_submit">Подтвердить</string>
     <string name="last_shift">Последняя смена</string>
@@ -66,7 +65,7 @@
     <string name="total_wash">Общие траты на мойку</string>
     <string name="total_earnings">Общий грязный доход</string>
     <string name="total_profit">Общий чистый доход</string>
-    <string name="edit_or_delete_shift">"Редактировать или удалить смену "</string>
+    <string name="edit_or_delete_shift">"Редактировать или удалить смену №"</string>
     <string name="total_fuel">Общие траты на топливо</string>
     <string name="average_fuel">Средние траты на топливо</string>
     <string name="settings_fuel_price">Цена топлива</string>
@@ -117,10 +116,19 @@
     <string name="month_graph">Достижение цели</string>
     <string name="progress">Прогресс</string>
     <string name="goal">Цель</string>
-
+    <string name="title_edit_shift">Редактирование смены №%1$d</string>
+    <string name="fuel">Топливо</string>
+    <string name="tips">Чаевые</string>
+    <string name="note">Заметка</string>
+    <string name="title_shift_detail">Смена №%1$d</string>
+    <string name="finance">Финансы</string>
+    <string name="dialog_delete_message">Вы уверены, что хотите удалить эту смену? Это действие необратимо.</string>
+    <string name="no_shift_data">Нет данных о смене</string>
+    <string name="car_name">Название</string>
+    <string name="duration">Продолжительность</string>
+    <string name="tax">Налог</string>
     <string-array name="languages">
         <item>English</item>
         <item>Русский</item>
     </string-array>
-
 </resources>

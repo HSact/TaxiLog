@@ -22,13 +22,11 @@
         </activity>
         <activity
             android:name=".ui.activities.AboutActivity"
-            android:windowTranslucentStatus="true"
             android:fitsSystemWindows="true"
             android:exported="false" />
         <activity
             android:name=".ui.activities.settings.SettingsActivity"
             android:exported="false"
-            android:windowTranslucentStatus="true"
             android:windowSoftInputMode="adjustResize"
             android:fitsSystemWindows="true"
             android:label="@string/title_settings" />
@@ -36,7 +34,6 @@
             android:name=".ui.activities.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"
-            android:windowTranslucentStatus="true"
             android:fitsSystemWindows="true"
             android:launchMode="singleTop" />
     </application>

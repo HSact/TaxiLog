@@ -15,18 +15,18 @@ fun appColorScheme(isDarkTheme: Boolean): ColorScheme {
     return if (isDarkTheme) {
         darkColorScheme(
             primary = colorFromRes(context, R.color.yellow_3),
-            onPrimary = colorFromRes(context, R.color.black),
+            onPrimary = colorFromRes(context, R.color.white),
             secondary = colorFromRes(context, R.color.yellow_3),
-            onSecondary = colorFromRes(context, R.color.black),
-            background = colorFromRes(context, R.color.black), // android:colorBackground
-            surface = colorFromRes(context, R.color.dark_gray), // bottomNavigationBackground
-            onBackground = colorFromRes(context, R.color.white), // android:textColor
-            onSurface = colorFromRes(context, R.color.hint_night) // android:textColorHint
+            onSecondary = colorFromRes(context, R.color.white),
+            background = colorFromRes(context, R.color.black),
+            surface = colorFromRes(context, R.color.dark_gray),
+            onBackground = colorFromRes(context, R.color.white),
+            onSurface = colorFromRes(context, R.color.hint_night)
         )
     } else {
         lightColorScheme(
             primary = colorFromRes(context, R.color.yellow_4),
-            onPrimary = colorFromRes(context, R.color.white),
+            onPrimary = colorFromRes(context, R.color.black),
             secondary = colorFromRes(context, R.color.yellow_4),
             onSecondary = colorFromRes(context, R.color.black),
             background = colorFromRes(context, R.color.light_gray),
@@ -40,28 +40,40 @@ fun appColorScheme(isDarkTheme: Boolean): ColorScheme {
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     MaterialTheme(
-            colorScheme = appColorScheme(darkTheme),
-    //typography = Typography,
-    //shapes = Shapes,
-    content = content
+        colorScheme = appColorScheme(darkTheme),
+        //typography = Typography,
+        //shapes = Shapes,
+        content = content
     )
 }
 
 @Composable
 fun CardTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val baseColorScheme = appColorScheme(darkTheme)
 
     val cardColorScheme = baseColorScheme.copy(
-        primary = colorFromRes(LocalContext.current, if (darkTheme) R.color.dark_gray else R.color.white),
-        onPrimary = colorFromRes(LocalContext.current, if (darkTheme) R.color.white else R.color.black),
-        surface = colorFromRes(LocalContext.current, if (darkTheme) R.color.dark_gray else R.color.white),
-        onSurface = colorFromRes(LocalContext.current, if (darkTheme) R.color.hint_night else R.color.hint_day)
+        primary = colorFromRes(
+            LocalContext.current,
+            if (darkTheme) R.color.dark_gray else R.color.white
+        ),
+        onPrimary = colorFromRes(
+            LocalContext.current,
+            if (darkTheme) R.color.white else R.color.black
+        ),
+        surface = colorFromRes(
+            LocalContext.current,
+            if (darkTheme) R.color.dark_gray else R.color.white
+        ),
+        onSurface = colorFromRes(
+            LocalContext.current,
+            if (darkTheme) R.color.hint_night else R.color.hint_day
+        )
     )
 
     MaterialTheme(

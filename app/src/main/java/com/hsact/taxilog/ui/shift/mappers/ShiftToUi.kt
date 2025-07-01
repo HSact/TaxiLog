@@ -18,6 +18,10 @@ fun Shift.toUi(locale: Locale): ShiftOutputModel {
         carName = carSnapshot.name,
         date = start.format(formatterDate),
         timeRange = "${start.format(formatterTime)} – ${end.format(formatterTime)}",
+        timeBegin = start.format(formatterTime),
+        timeEnd = end.format(formatterTime),
+        timeRestBegin = if (time.rest != null) time.rest.start.format(formatterTime) else "",
+        timeRestEnd = if (time.rest != null) time.rest.end.format(formatterTime) else "",
         duration = formatDuration(time.totalDuration, locale),
         mileageKm = when (locale.language) {
             "ru" -> "${carSnapshot.mileage / 1000} км"
@@ -28,8 +32,10 @@ fun Shift.toUi(locale: Locale): ShiftOutputModel {
         tips = financeInput.tips.centsToCurrency(locale),
         wash = financeInput.wash.centsToCurrency(locale),
         fuelCost = financeInput.fuelCost.centsToCurrency(locale),
+        fuelConsumption = consumption.millilitersToLiters(locale),
         rent = carSnapshot.rentCost.centsToCurrency(locale),
         serviceCost = carSnapshot.serviceCost.centsToCurrency(locale),
+        tax = financeInput.tax.centsToCurrency(locale),
         totalExpenses = totalExpenses.centsToCurrency(locale),
         profit = profit.centsToCurrency(locale),
         profitPerHour = profitPerHour.centsToCurrency(locale),
@@ -58,6 +64,14 @@ fun Long.metersToKilometers(locale: Locale): String {
     return when (locale.language) {
         "ru" -> String.format(locale, "%,.1f км", kilometers).replace(',', '.')
         else -> String.format(locale, "%,.1f km", kilometers)
+    }
+}
+
+fun Long.millilitersToLiters(locale: Locale): String {
+    val kilometers = this.toDouble() / 1000
+    return when (locale.language) {
+        "ru" -> String.format(locale, "%,.1f л", kilometers).replace(',', '.')
+        else -> String.format(locale, "%,.1f L", kilometers)
     }
 }
 
