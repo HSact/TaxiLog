@@ -84,7 +84,6 @@ class GoalsViewModel @Inject constructor(
         goalMonthString = settings.goalPerMonth
         if (goalMonthString.isNullOrEmpty() || goalMonthString == "-1") {
             goalMonthString = ""
-//            _goalData.value = createEmptyData()
             return
         }
         goalMonth = goalMonthString!!.toDouble()
