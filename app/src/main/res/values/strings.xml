@@ -127,9 +127,17 @@
     <string name="car_name">Car name</string>
     <string name="duration">Duration</string>
     <string name="tax">Tax</string>
+    <string name="currency">Currency</string>
 
     <string-array name="languages">
         <item>English</item>
         <item>Русский</item>
+    </string-array>
+    <string-array name="currencies">
+        <item>$</item>
+        <item>€</item>
+        <item>₽</item>
+        <item>£</item>
+        <item>¥</item>
     </string-array>
 </resources>

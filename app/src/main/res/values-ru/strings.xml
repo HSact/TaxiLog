@@ -127,6 +127,7 @@
     <string name="car_name">Название</string>
     <string name="duration">Продолжительность</string>
     <string name="tax">Налог</string>
+    <string name="currency">Валюта</string>
     <string-array name="languages">
         <item>English</item>
         <item>Русский</item>

@@ -1,11 +1,13 @@
 package com.hsact.taxilog.domain.repository
 
-import com.hsact.taxilog.domain.model.UserSettings
+import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
+import com.hsact.taxilog.domain.model.settings.UserSettings
 
 interface SettingsRepository {
 
     val isConfigured: Boolean
     val theme: String?
+    val currency: CurrencySymbolMode?
     val language: String?
     val kmMi: Boolean
     val consumption: String?

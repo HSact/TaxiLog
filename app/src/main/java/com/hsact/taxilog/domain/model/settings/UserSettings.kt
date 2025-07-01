@@ -1,9 +1,10 @@
-package com.hsact.taxilog.domain.model
+package com.hsact.taxilog.domain.model.settings
 
 data class UserSettings(
     val isConfigured: Boolean = false,
     val language: String?,
     val theme: String?,
+    val currency: CurrencySymbolMode?,
     val isKmUnit: Boolean = true,
     val consumption: String?,
     val rented: Boolean = false,
