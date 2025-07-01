@@ -85,6 +85,14 @@ class LogFragment : Fragment() {
         }, viewLifecycleOwner)
     }
 
+    override fun onResume() {
+        super.onResume()
+//        if (!isFirstLoad) {
+            viewModel.handleIntent(LogIntent.UpdateList)
+//        }
+//        isFirstLoad = false
+    }
+
     private fun onClickElement(shift: Shift, visibleId: Int) {
         val action = LogFragmentDirections.actionLogFragmentToShiftDetails(shiftId = shift.id, visibleId = visibleId)
         findNavController().navigate(action)

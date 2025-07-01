@@ -31,14 +31,12 @@ class LogViewModel @Inject constructor(
     init {
         viewModelScope.launch {
         _settings.value = getAllSettingsUseCase()
-        _shifts.value = getAllShiftsUseCase()
         }
     }
 
     fun handleIntent(intent: LogIntent) {
         when (intent) {
-            //is LogIntent.LoadShifts -> loadShifts()
-            is LogIntent.EditShift -> editShift(intent.shift)
+            is LogIntent.UpdateList -> updateList()
             is LogIntent.DeleteShift -> deleteShift(intent.shift)
             is LogIntent.DeleteAllShifts -> deleteAllShifts()
         }
@@ -58,7 +56,9 @@ class LogViewModel @Inject constructor(
         }
     }
 
-    private fun editShift(shift: Shift) {
-        //TODO("Not yet implemented")
+    private fun updateList() {
+        viewModelScope.launch {
+            _shifts.value = getAllShiftsUseCase()
+        }
     }
 }
