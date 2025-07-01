@@ -12,8 +12,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.hsact.taxilog.R
 import com.hsact.taxilog.ui.activities.MainActivity
+import com.hsact.taxilog.ui.fragments.log.LogFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,6 +28,7 @@ class ShiftDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MainActivity.botNav.isVisible = false
+        setHasOptionsMenu(false)
         arguments?.let {
             shiftId = it.getInt("shiftId", -1)
             visibleId = it.getInt("visibleId", -1)
@@ -44,12 +47,12 @@ class ShiftDetailFragment : Fragment() {
         if (shiftId != -1) {
             viewModel.loadShift(shiftId)
         }
-
+        requireActivity().invalidateOptionsMenu()
         val container = view.findViewById<FrameLayout>(R.id.compose_container)
         val composeView = ComposeView(requireContext()).apply {
             setContent {
                 val state by viewModel.shift.collectAsState()
-                ShiftDetailScreen(state)
+                ShiftDetailScreen(state, { editShift() }, { deleteShift() })
             }
         }
         container.addView(composeView)
@@ -60,5 +63,18 @@ class ShiftDetailFragment : Fragment() {
         MainActivity.botNav.isVisible = false
         (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
             getString(R.string.title_shift_detail, visibleId)
+    }
+
+    fun editShift() {
+        val action = ShiftDetailFragmentDirections.actionShiftDetailFragmentToShiftForm(
+            shiftId = shiftId,
+            visibleId = visibleId
+        )
+        findNavController().navigate(action)
+    }
+
+    fun deleteShift() {
+        viewModel.deleteShift()
+        findNavController().popBackStack()
     }
 }

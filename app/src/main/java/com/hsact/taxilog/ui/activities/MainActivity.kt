@@ -52,7 +52,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         val currentDestination = navController.currentDestination?.id
-        return if (currentDestination == R.id.navigation_log) {
+        return if (currentDestination == R.id.navigation_log ||
+            currentDestination == R.id.shiftDetailFragment) {
             false
         } else {
             menuInflater.inflate(R.menu.menu_main, menu)
