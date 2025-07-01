@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ScrollView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -37,6 +38,7 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
     private var shiftId: Int = -1
     private var visibleId: Int = -1
 
+    private lateinit var scrollView: ScrollView
     private lateinit var editDate: EditText
     private lateinit var editStart: EditText
     private lateinit var editEnd: EditText
@@ -84,6 +86,49 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
     ): View {
         _binding = FragmentShiftFormBinding.inflate(inflater, container, false)
         bindItems()
+        scrollView.setPadding(0,0,0,0)
+        editEarnings.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                scrollView.post {
+                    scrollView.smoothScrollTo(0, v.top)
+                }
+            }
+        }
+        editTips.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                scrollView.post {
+                    scrollView.smoothScrollTo(0, v.top)
+                }
+            }
+        }
+        editWash.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                scrollView.post {
+                    scrollView.smoothScrollTo(0, v.top)
+                }
+            }
+        }
+        editMileage.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                scrollView.post {
+                    scrollView.smoothScrollTo(0, v.top)
+                }
+            }
+        }
+        editFuelCost.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                scrollView.post {
+                    scrollView.smoothScrollTo(0, v.top)
+                }
+            }
+        }
+        editNote.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                scrollView.post {
+                    scrollView.smoothScrollTo(0, v.top)
+                }
+            }
+        }
         return binding.root
     }
 
@@ -104,8 +149,6 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
             }
         }
         editMileage.addTextChangedListener(mileageWatcher)
-//        val shiftId = arguments?.getInt("shiftId") ?: -1
-//        val visibleId = arguments?.getInt("visibleId") ?: -1
         if (shiftId != -1) {
             viewModel.loadShift(shiftId)
             (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
@@ -203,12 +246,18 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         if (uiState.fuelCost != 0.0) {
             editFuelCost.setText(uiState.fuelCost.toString())
         }
-        if (uiState.mileage != 0.0) {
-            editMileage.setText(uiState.mileage.toString())
+        val mileageStr = if (uiState.mileage != 0.0) uiState.mileage.toString() else ""
+        if (editMileage.text.toString() != mileageStr) {
+            val cursorPos = editMileage.selectionStart.coerceAtMost(mileageStr.length)
+            isProgrammaticChange = true
+            editMileage.setText(mileageStr)
+            editMileage.setSelection(cursorPos)
+            isProgrammaticChange = false
         }
     }
 
     private fun bindItems() {
+        scrollView = binding.scroll
         editDate = binding.buttonDatePick
         editStart = binding.buttonTimeStart
         editEnd = binding.buttonTimeEnd
