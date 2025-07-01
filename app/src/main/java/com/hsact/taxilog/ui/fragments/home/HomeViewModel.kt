@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.YearMonth
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,9 +42,11 @@ class HomeViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             _lastShift.value = getLastShiftUseCase.invoke()
+            val startOfMonth = YearMonth.now().atDay(1).atStartOfDay()
+            val endOfMonth = YearMonth.now().atEndOfMonth().atTime(LocalTime.MAX)
             _shiftListThisMonth.value = getShiftsInRangeUseCase.invoke(
-                LocalDateTime.now().withDayOfMonth(1),
-                LocalDateTime.now().withDayOfMonth(LocalDate.now().lengthOfMonth())
+                startOfMonth,
+                endOfMonth
             )
             calculateChart()
         }

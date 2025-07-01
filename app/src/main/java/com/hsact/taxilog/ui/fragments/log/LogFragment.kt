@@ -28,7 +28,11 @@ class LogFragment : Fragment() {
     private var _binding: FragmentLogBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = FragmentLogBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -41,7 +45,11 @@ class LogFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         viewModel.shifts.observe(viewLifecycleOwner) { shiftList ->
             if (shiftList.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), getString(R.string.list_is_empty), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.list_is_empty),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
             val shiftListWithVisibleId = shiftList.mapIndexed { index, shift ->
@@ -79,6 +87,7 @@ class LogFragment : Fragment() {
                             .show()
                         true
                     }
+
                     else -> false
                 }
             }
@@ -87,16 +96,17 @@ class LogFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-//        if (!isFirstLoad) {
-            viewModel.handleIntent(LogIntent.UpdateList)
-//        }
-//        isFirstLoad = false
+        viewModel.handleIntent(LogIntent.UpdateList)
     }
 
     private fun onClickElement(shift: Shift, visibleId: Int) {
-        val action = LogFragmentDirections.actionLogFragmentToShiftDetails(shiftId = shift.id, visibleId = visibleId)
+        val action = LogFragmentDirections.actionLogFragmentToShiftDetails(
+            shiftId = shift.id,
+            visibleId = visibleId
+        )
         findNavController().navigate(action)
     }
+
     private fun onLongClickElement(shift: Shift, visibleId: Int) {
         val items = arrayOf(getString(R.string.edit), getString(R.string.delete))
         MaterialAlertDialogBuilder(requireContext())
@@ -113,20 +123,25 @@ class LogFragment : Fragment() {
     }
 
     private fun editShift(shift: Shift, visibleId: Int) {
-        val action = LogFragmentDirections.actionLogFragmentToShiftForm(shiftId = shift.id, visibleId = visibleId)
+        val action = LogFragmentDirections.actionLogFragmentToShiftForm(
+            shiftId = shift.id,
+            visibleId = visibleId
+        )
         findNavController().navigate(action)
     }
 
     private fun deleteShift(shift: Shift) {
         viewModel.handleIntent(LogIntent.DeleteShift(shift))
-        Toast.makeText(requireContext(),
+        Toast.makeText(
+            requireContext(),
             getString(R.string.shift_deleted_successfully, shift.id.toString()), Toast.LENGTH_SHORT
         ).show()
     }
 
     private fun deleteAll() {
         viewModel.handleIntent(LogIntent.DeleteAllShifts)
-        Toast.makeText(requireContext(),
+        Toast.makeText(
+            requireContext(),
             getString(R.string.all_shifts_have_been_deleted_successfully), Toast.LENGTH_SHORT
         ).show()
     }

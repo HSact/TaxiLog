@@ -19,8 +19,8 @@ class LogViewModel @Inject constructor(
     private val getAllSettingsUseCase: GetAllSettingsUseCase,
     private val getAllShiftsUseCase: GetAllShiftsUseCase,
     private val deleteShiftUseCase: DeleteShiftUseCase,
-    private val deleteAllShiftsUseCase: DeleteAllShiftsUseCase
-): ViewModel() {
+    private val deleteAllShiftsUseCase: DeleteAllShiftsUseCase,
+) : ViewModel() {
 
     private val _settings = MutableLiveData<UserSettings>()
     val settings: LiveData<UserSettings> = _settings
@@ -30,7 +30,7 @@ class LogViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-        _settings.value = getAllSettingsUseCase()
+            _settings.value = getAllSettingsUseCase()
         }
     }
 
