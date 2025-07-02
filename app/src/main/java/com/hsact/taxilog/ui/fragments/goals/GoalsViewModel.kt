@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.taxilog.domain.utils.DeprecatedDateFormatter
 import com.hsact.taxilog.domain.model.Shift
-import com.hsact.taxilog.domain.model.UserSettings
+import com.hsact.taxilog.domain.model.settings.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.taxilog.domain.usecase.shift.GetShiftsInRangeUseCase
 import com.hsact.taxilog.domain.utils.centsToDollars
@@ -18,6 +18,8 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDate
+import java.time.LocalTime
+import java.time.YearMonth
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,11 +42,19 @@ class GoalsViewModel @Inject constructor(
     val daysData: StateFlow<List<Double>> = _daysData
 
     init {
+        updateData()
+    }
+
+    private fun updateData() {
         _date.value = _dateLD.value.format(DeprecatedDateFormatter)
         viewModelScope.launch {
+            val yearMonth = YearMonth.from(_dateLD.value)
+            val startOfMonth = yearMonth.atDay(1).atStartOfDay()
+            val endOfMonth = yearMonth.atEndOfMonth().atTime(LocalTime.MAX)
+
             _shifts.value = getShiftsInRangeUseCase.invoke(
-                _dateLD.value.withDayOfMonth(1).atStartOfDay(),
-                _dateLD.value.withDayOfMonth(LocalDate.now().lengthOfMonth()).plusDays(1).atStartOfDay()
+                startOfMonth,
+                endOfMonth
             )
             calculateDaysData()
             defineGoals()
@@ -62,20 +72,18 @@ class GoalsViewModel @Inject constructor(
 
     fun setDate(date: String) {
         _dateLD.value = LocalDate.parse(date, DeprecatedDateFormatter)
-        _date.value = date
-        calculateDaysData()
-        defineGoals()
+        updateData()
     }
 
     fun calculateDaysData() {
-        _daysData.value = _shifts.value.monthlyProfitByDay(_dateLD.value).centsToDollars().toMutableList()
+        _daysData.value =
+            _shifts.value.monthlyProfitByDay(_dateLD.value).centsToDollars().toMutableList()
     }
 
     fun defineGoals() {
         goalMonthString = settings.goalPerMonth
         if (goalMonthString.isNullOrEmpty() || goalMonthString == "-1") {
             goalMonthString = ""
-//            _goalData.value = createEmptyData()
             return
         }
         goalMonth = goalMonthString!!.toDouble()

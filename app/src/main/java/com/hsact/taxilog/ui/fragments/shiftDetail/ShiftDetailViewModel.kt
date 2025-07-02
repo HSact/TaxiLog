@@ -3,6 +3,7 @@ package com.hsact.taxilog.ui.fragments.shiftDetail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.taxilog.domain.model.Shift
+import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.taxilog.domain.usecase.shift.DeleteShiftUseCase
 import com.hsact.taxilog.domain.usecase.shift.GetShiftByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,11 +14,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ShiftDetailViewModel @Inject constructor(
+    private val getAllSettingsUseCase: GetAllSettingsUseCase,
     private val getShiftByIdUseCase: GetShiftByIdUseCase,
     private val deleteShiftUseCase: DeleteShiftUseCase
 ): ViewModel() {
     private val _shift = MutableStateFlow<Shift?>(null)
     val shift: StateFlow<Shift?> = _shift
+
+    val settings = getAllSettingsUseCase()
     fun loadShift(shiftId: Int) {
         viewModelScope.launch {
             _shift.value = getShiftByIdUseCase(shiftId)

@@ -3,7 +3,7 @@ package com.hsact.taxilog.ui.activities.settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.hsact.taxilog.domain.model.UserSettings
+import com.hsact.taxilog.domain.model.settings.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.taxilog.domain.usecase.settings.SaveAllSettingsUseCase
 import com.hsact.taxilog.ui.locale.LocaleHelper

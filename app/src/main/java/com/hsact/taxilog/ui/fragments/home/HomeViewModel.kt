@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.taxilog.domain.utils.centsToDollars
 import com.hsact.taxilog.domain.model.Shift
-import com.hsact.taxilog.domain.model.UserSettings
+import com.hsact.taxilog.domain.model.settings.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.taxilog.domain.usecase.shift.GetLastShiftUseCase
 import com.hsact.taxilog.domain.usecase.shift.GetShiftsInRangeUseCase
@@ -12,8 +12,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.YearMonth
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,9 +40,11 @@ class HomeViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             _lastShift.value = getLastShiftUseCase.invoke()
+            val startOfMonth = YearMonth.now().atDay(1).atStartOfDay()
+            val endOfMonth = YearMonth.now().atEndOfMonth().atTime(LocalTime.MAX)
             _shiftListThisMonth.value = getShiftsInRangeUseCase.invoke(
-                LocalDateTime.now().withDayOfMonth(1),
-                LocalDateTime.now().withDayOfMonth(LocalDate.now().lengthOfMonth())
+                startOfMonth,
+                endOfMonth
             )
             calculateChart()
         }
@@ -59,7 +61,8 @@ class HomeViewModel @Inject constructor(
         }
 
         var cumulativeSum = 0.0
-        _chartData.value = MutableList(31) { day ->
+        _chartData.value = MutableList(31) { index ->
+            val day = index + 1 //day with start at 0
             cumulativeSum += tempData[day] ?: 0.0
             cumulativeSum
         }

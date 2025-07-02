@@ -18,9 +18,12 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import com.google.android.material.materialswitch.MaterialSwitch
+import com.google.android.material.textfield.TextInputLayout
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.SettingsActivityBinding
-import com.hsact.taxilog.domain.model.UserSettings
+import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
+import com.hsact.taxilog.domain.model.settings.UserSettings
+import com.hsact.taxilog.domain.model.settings.indexToCurrencySymbolMode
 import com.hsact.taxilog.ui.activities.MainActivity
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,6 +41,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var switchTaxes: MaterialSwitch
 
     private lateinit var spinnerLang: Spinner
+    private lateinit var spinnerCurrency: Spinner
     private lateinit var radioTheme: RadioGroup
     private lateinit var radioDefault: RadioButton
     private lateinit var radioLight: RadioButton
@@ -46,10 +50,15 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var radioKm: RadioButton
     private lateinit var radioMi: RadioButton
     private lateinit var textConsumption: EditText
+    private lateinit var textConsumptionL: TextInputLayout
     private lateinit var textFuelCost: EditText
+    private lateinit var textFuelCostL: TextInputLayout
     private lateinit var textRentCost: EditText
+    private lateinit var textRentCostL: TextInputLayout
     private lateinit var textServiceCost: EditText
+    private lateinit var textServiceCostL: TextInputLayout
     private lateinit var textGoalPerMonth: EditText
+    private lateinit var textGoalPerMonthL: TextInputLayout
     private lateinit var radioSchedule: RadioGroup
     private lateinit var radio70: RadioButton
     private lateinit var radio61: RadioButton
@@ -69,6 +78,13 @@ class SettingsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         bindItems()
+        val currencySymbol = viewModel.settings.value?.currency?.toSymbol()
+            ?: CurrencySymbolMode.fromLocale(Locale.getDefault()).toSymbol()
+        textFuelCostL.hint = currencySymbol
+        textConsumptionL.hint = currencySymbol
+        textRentCostL.hint = currencySymbol
+        textServiceCostL.hint = currencySymbol
+        textGoalPerMonthL.hint = currencySymbol
         updateUiWithSettings()
         updateThemeRadioButtons()
         toggleTableVisibility(switchRent)
@@ -118,6 +134,7 @@ class SettingsActivity : AppCompatActivity() {
         switchTaxes = binding.switchTaxes
 
         spinnerLang = binding.spinnerLang
+        spinnerCurrency = binding.spinnerCurrency
 
         radioTheme = binding.radioTheme
         radioDefault = binding.radioDefault
@@ -134,6 +151,12 @@ class SettingsActivity : AppCompatActivity() {
         textRentCost = binding.editTextRentCost
         textServiceCost = binding.editTextServiceCost
         textGoalPerMonth = binding.editTextGoalPerMonth
+
+        textFuelCostL = binding.editTextFuelPriceL
+        textConsumptionL = binding.editTextConsumptionL
+        textRentCostL = binding.editTextRentCostL
+        textServiceCostL = binding.editTextServiceCostL
+        textGoalPerMonthL = binding.editTextGoalPerMonthL
 
         radioSchedule = binding.radioSchedule
         radio70 = binding.radio70
@@ -152,7 +175,8 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun updateUiWithSettings() {
         val settings = viewModel.settings.value ?: return
-        setupLanguageSpinner(settings)
+        setupLanguageSpinner(settings.language)
+        setupCurrencySpinner(settings.currency)
         if (!(settings.isConfigured)) {
             return
         }
@@ -170,8 +194,8 @@ class SettingsActivity : AppCompatActivity() {
         textTaxRate.setText(settings.taxRate)
     }
 
-    private fun setupLanguageSpinner(settings: UserSettings) {
-        var currentLang: String = settings.language ?: Locale.getDefault().language
+    private fun setupLanguageSpinner(language: String?) {
+        var currentLang: String = language ?: Locale.getDefault().language
         if (currentLang.isEmpty()) {
             currentLang = Locale.getDefault().language
         }
@@ -181,6 +205,14 @@ class SettingsActivity : AppCompatActivity() {
         if (currentLang == "ru") {
             spinnerLang.setSelection(1)
         }
+    }
+
+    private fun setupCurrencySpinner(currency: CurrencySymbolMode?) {
+        spinnerCurrency.setSelection(
+            currency?.toIndex() ?: CurrencySymbolMode.fromLocale(
+                Locale.getDefault()
+            ).toIndex()
+        )
     }
 
     private fun updateThemeRadioButtons() {
@@ -245,6 +277,7 @@ class SettingsActivity : AppCompatActivity() {
             isConfigured = true,
             language = getSelectedLanguage(),
             theme = getSelectedTheme(),
+            currency = getSelectedCurrency(),
             isKmUnit = isKmUnitSelected(),
             consumption = textConsumption.text.toString(),
             rented = switchRent.isChecked,
@@ -284,6 +317,10 @@ class SettingsActivity : AppCompatActivity() {
         val visibility = if (view.isVisible) View.GONE else View.VISIBLE
         TransitionManager.beginDelayedTransition(parentLayout)
         view.visibility = visibility
+    }
+
+    private fun getSelectedCurrency(): CurrencySymbolMode {
+        return spinnerCurrency.selectedItemPosition.indexToCurrencySymbolMode()
     }
 
     private fun getSelectedLanguage(): String {

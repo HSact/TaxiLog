@@ -229,8 +229,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editTextEarningsL"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_money">
+                android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextEarnings"
@@ -262,8 +261,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editTextTipsL"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_money">
+                android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextTips"
@@ -295,8 +293,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editTextWashL"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_money">
+                android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextWash"
@@ -361,8 +358,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editTextFuelCostL"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_money">
+                android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextFuelCost"

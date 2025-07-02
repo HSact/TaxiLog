@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.taxilog.domain.utils.DeprecatedDateFormatter
 import com.hsact.taxilog.domain.model.Shift
-import com.hsact.taxilog.domain.model.UserSettings
+import com.hsact.taxilog.domain.model.settings.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.taxilog.domain.usecase.shift.AddShiftUseCase
 import com.hsact.taxilog.domain.usecase.shift.GetShiftByIdUseCase
@@ -34,7 +34,7 @@ class ShiftFormViewModel @Inject constructor(
     private val _uiState = MutableLiveData<UiState>()
     val uiState: LiveData<UiState> get() = _uiState
 
-    private val settings: UserSettings = getAllSettingsUseCase.invoke()
+    val settings: UserSettings = getAllSettingsUseCase.invoke()
 
     init {
         loadGuess()

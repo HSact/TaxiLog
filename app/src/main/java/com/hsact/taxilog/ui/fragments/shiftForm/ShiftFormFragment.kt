@@ -25,6 +25,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputLayout
 import com.hsact.taxilog.databinding.FragmentShiftFormBinding
+import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.ui.shift.mappers.millisToHours
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -86,7 +87,14 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
     ): View {
         _binding = FragmentShiftFormBinding.inflate(inflater, container, false)
         bindItems()
-        scrollView.setPadding(0,0,0,0)
+        val currencySymbol = viewModel.settings.currency?.toSymbol()
+            ?: CurrencySymbolMode.fromLocale(Locale.getDefault()).toSymbol()
+        editEarningsL.hint = currencySymbol
+        editTipsL.hint = currencySymbol
+        editWashL.hint = currencySymbol
+        editFuelCostL.hint = currencySymbol
+        editMileageL.hint = currencySymbol
+        scrollView.setPadding(0, 0, 0, 0)
         editEarnings.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
                 scrollView.post {

@@ -9,10 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.hsact.taxilog.databinding.FragmentHomeBinding
+import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.ui.cards.DrawGoalCard
 import com.hsact.taxilog.ui.cards.DrawLastShiftCard
 import com.hsact.taxilog.ui.cards.DrawMonthGraphCard
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -27,7 +29,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -41,10 +43,21 @@ class HomeFragment : Fragment() {
         card1 = binding.card1
         card2 = binding.card2
         card3 = binding.card3
-        card1.setContent { DrawGoalCard(viewModel.settings.goalPerMonth?.toFloatOrNull() ?: 0f,
-            viewModel.shiftListThisMonth) }
-        card2.setContent { DrawLastShiftCard(viewModel.lastShift) }
+        card1.setContent {
+            DrawGoalCard(
+                viewModel.settings.goalPerMonth?.toFloatOrNull() ?: 0f,
+                viewModel.shiftListThisMonth
+            )
+        }
+        card2.setContent {
+            DrawLastShiftCard(
+                viewModel.lastShift, viewModel.settings.currency ?: CurrencySymbolMode.fromLocale(
+                    Locale.getDefault()
+                )
+            )
+        }
         card3.setContent { DrawMonthGraphCard(viewModel.chartData, viewModel.goalData) }
+        binding.fabNewShift.extend()
         binding.fabNewShift.setOnClickListener { newShift() }
     }
 
@@ -52,6 +65,7 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     private fun newShift() {
         val action = HomeFragmentDirections
             .actionHomeFragmentToAddShift(

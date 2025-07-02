@@ -46,7 +46,11 @@ fun DrawGoalCard(
     val totalProfit = shiftList.totalProfit.toFloat() / 100
 
     //val goalCurrent = shiftState["goalCurrent"]?.toFloatOrNull() ?: 0f
-    val rawProgress = (totalProfit / goal).coerceIn(0f, 1f)
+    val rawProgress: Float = if (goal != 0f) {
+        (totalProfit / goal).coerceIn(0f, 1f)
+    } else {
+        0f
+    }
     var progress by remember { mutableFloatStateOf(0f) }
     var formattedGoal = NumberFormat.getNumberInstance(Locale.getDefault()).format(goal)
     if (goal == 1f) {

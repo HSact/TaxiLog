@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.taxilog.domain.utils.DeprecatedDateFormatter
 import com.hsact.taxilog.domain.model.Shift
+import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
+import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.taxilog.domain.usecase.shift.GetShiftsInRangeUseCase
 import com.hsact.taxilog.domain.utils.averageDuration
 import com.hsact.taxilog.domain.utils.averageEarningsPerHour
@@ -30,6 +32,7 @@ import java.util.Locale
 
 @HiltViewModel
 class StatsViewModel @Inject constructor(
+    private val getAllSettingsUseCase: GetAllSettingsUseCase,
     private val getShiftsInRangeUseCase: GetShiftsInRangeUseCase,
 ) : ViewModel() {
     private val _shifts = MutableStateFlow<List<Shift>>(emptyList())
@@ -58,23 +61,28 @@ class StatsViewModel @Inject constructor(
                 startDate.toLocalDate().atStartOfDay(),
                 endDate.toLocalDate().plusDays(1).atStartOfDay()
             )
+            val currency = getCurrencySymbol()?: CurrencySymbolMode.fromLocale(locale)
             val shiftValue = _shifts.value
             _uiState.value = UiState(
                 shiftsCount = shiftValue.size.toString(),
-                avErPh = shiftValue.averageEarningsPerHour.centsToCurrency(locale),
-                avProfitPh = shiftValue.averageProfitPerHour.centsToCurrency(locale),
+                avErPh = shiftValue.averageEarningsPerHour.centsToCurrency(locale, currency),
+                avProfitPh = shiftValue.averageProfitPerHour.centsToCurrency(locale, currency),
                 avDuration = shiftValue.averageDuration.minutesToHours(locale),
                 avMileage = shiftValue.averageMileage.metersToKilometers(locale),
-                avFuel = shiftValue.averageFuelCost.centsToCurrency(locale),
-                avWash = shiftValue.averageWash.centsToCurrency(locale),
+                avFuel = shiftValue.averageFuelCost.centsToCurrency(locale, currency),
+                avWash = shiftValue.averageWash.centsToCurrency(locale, currency),
                 totalDuration = shiftValue.totalTime.minutesToHours(locale),
                 totalMileage = shiftValue.totalMileage.metersToKilometers(locale),
-                totalFuel = shiftValue.totalFuelCost.centsToCurrency(locale),
-                totalWash = shiftValue.totalWash.centsToCurrency(locale),
-                totalEarnings = shiftValue.totalEarnings.centsToCurrency(locale),
-                totalProfit = shiftValue.totalProfit.centsToCurrency(locale),
+                totalFuel = shiftValue.totalFuelCost.centsToCurrency(locale, currency),
+                totalWash = shiftValue.totalWash.centsToCurrency(locale, currency),
+                totalEarnings = shiftValue.totalEarnings.centsToCurrency(locale, currency),
+                totalProfit = shiftValue.totalProfit.centsToCurrency(locale, currency),
             )
         }
+    }
+
+    private fun getCurrencySymbol(): CurrencySymbolMode? {
+        return getAllSettingsUseCase.invoke().currency
     }
 
     private fun String.toLocalDate(): LocalDate {

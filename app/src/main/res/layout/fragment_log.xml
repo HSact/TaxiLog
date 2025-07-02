@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.fragments.log.LogFragment">
+    android:clipToPadding="false"
+    android:layout_marginBottom="100dp"
+    android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -12,4 +12,4 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         tools:listitem="@layout/recyclerview_item" />
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

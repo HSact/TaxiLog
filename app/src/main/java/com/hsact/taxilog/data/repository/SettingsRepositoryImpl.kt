@@ -3,7 +3,9 @@ package com.hsact.taxilog.data.repository
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.hsact.taxilog.domain.model.UserSettings
+import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
+import com.hsact.taxilog.domain.model.settings.UserSettings
+import com.hsact.taxilog.domain.model.settings.currencyNameToSymbolMode
 import com.hsact.taxilog.domain.repository.SettingsRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -19,6 +21,9 @@ class SettingsRepositoryImpl @Inject constructor(
 
     override val theme: String?
         get() = sharedPreferences.getString("Theme", "")
+
+    override val currency: CurrencySymbolMode?
+        get() = sharedPreferences.getString("Currency", "").currencyNameToSymbolMode()
 
     override val language: String?
         get() = sharedPreferences.getString("My_Lang", "")
@@ -61,6 +66,7 @@ class SettingsRepositoryImpl @Inject constructor(
             isConfigured = isConfigured,
             language = language,
             theme = theme,
+            currency = currency,
             isKmUnit = kmMi,
             consumption = consumption,
             rented = rented,
@@ -92,6 +98,7 @@ class SettingsRepositoryImpl @Inject constructor(
         updateSetting("Is_configured", settings.isConfigured)
         updateSetting("My_Lang", settings.language)
         updateSetting("Theme", settings.theme)
+        updateSetting("Currency", settings.currency?.toName())
         updateSetting("KmMi", settings.isKmUnit)
         updateSetting("Consumption", settings.consumption)
         updateSetting("Rented", settings.rented)

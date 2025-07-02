@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.taxilog.domain.model.Shift
-import com.hsact.taxilog.domain.model.UserSettings
+import com.hsact.taxilog.domain.model.settings.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.taxilog.domain.usecase.shift.DeleteAllShiftsUseCase
 import com.hsact.taxilog.domain.usecase.shift.DeleteShiftUseCase
@@ -19,8 +19,8 @@ class LogViewModel @Inject constructor(
     private val getAllSettingsUseCase: GetAllSettingsUseCase,
     private val getAllShiftsUseCase: GetAllShiftsUseCase,
     private val deleteShiftUseCase: DeleteShiftUseCase,
-    private val deleteAllShiftsUseCase: DeleteAllShiftsUseCase
-): ViewModel() {
+    private val deleteAllShiftsUseCase: DeleteAllShiftsUseCase,
+) : ViewModel() {
 
     private val _settings = MutableLiveData<UserSettings>()
     val settings: LiveData<UserSettings> = _settings
@@ -30,15 +30,13 @@ class LogViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-        _settings.value = getAllSettingsUseCase()
-        _shifts.value = getAllShiftsUseCase()
+            _settings.value = getAllSettingsUseCase()
         }
     }
 
     fun handleIntent(intent: LogIntent) {
         when (intent) {
-            //is LogIntent.LoadShifts -> loadShifts()
-            is LogIntent.EditShift -> editShift(intent.shift)
+            is LogIntent.UpdateList -> updateList()
             is LogIntent.DeleteShift -> deleteShift(intent.shift)
             is LogIntent.DeleteAllShifts -> deleteAllShifts()
         }
@@ -58,7 +56,9 @@ class LogViewModel @Inject constructor(
         }
     }
 
-    private fun editShift(shift: Shift) {
-        //TODO("Not yet implemented")
+    private fun updateList() {
+        viewModelScope.launch {
+            _shifts.value = getAllShiftsUseCase()
+        }
     }
 }

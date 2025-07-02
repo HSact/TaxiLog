@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_goals, R.id.navigation_stats
+                R.id.navigation_home, R.id.navigation_log, R.id.navigation_goals, R.id.navigation_stats
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -64,11 +64,6 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         return when (item.itemId) {
-            R.id.fragment_log -> {
-                findNavController(R.id.nav_host_fragment_activity_main)
-                    .navigate(R.id.action_global_navigation_log)
-                true
-            }
 
             R.id.action_settings -> {
                 val settingsIntent = Intent(this, SettingsActivity::class.java)

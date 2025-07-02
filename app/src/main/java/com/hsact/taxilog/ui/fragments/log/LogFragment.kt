@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -19,8 +18,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentLogBinding
 import com.hsact.taxilog.domain.model.Shift
-import com.hsact.taxilog.ui.activities.MainActivity
-
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.getValue
 
@@ -31,7 +28,11 @@ class LogFragment : Fragment() {
     private var _binding: FragmentLogBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = FragmentLogBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -44,7 +45,11 @@ class LogFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         viewModel.shifts.observe(viewLifecycleOwner) { shiftList ->
             if (shiftList.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), getString(R.string.list_is_empty), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.list_is_empty),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
             val shiftListWithVisibleId = shiftList.mapIndexed { index, shift ->
@@ -52,6 +57,7 @@ class LogFragment : Fragment() {
             }
             binding.recyclerView.adapter = RecyclerAdapter(
                 shiftListWithVisibleId,
+                settings = viewModel.settings.value!!,
                 onItemClick = { visibleId, shift ->
                     viewModel.shifts.value?.firstOrNull { it.id == shift.id }?.let {
                         onClickElement(shift, visibleId)
@@ -82,16 +88,26 @@ class LogFragment : Fragment() {
                             .show()
                         true
                     }
+
                     else -> false
                 }
             }
         }, viewLifecycleOwner)
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.handleIntent(LogIntent.UpdateList)
+    }
+
     private fun onClickElement(shift: Shift, visibleId: Int) {
-        val action = LogFragmentDirections.actionLogFragmentToShiftDetails(shiftId = shift.id, visibleId = visibleId)
+        val action = LogFragmentDirections.actionLogFragmentToShiftDetails(
+            shiftId = shift.id,
+            visibleId = visibleId
+        )
         findNavController().navigate(action)
     }
+
     private fun onLongClickElement(shift: Shift, visibleId: Int) {
         val items = arrayOf(getString(R.string.edit), getString(R.string.delete))
         MaterialAlertDialogBuilder(requireContext())
@@ -108,20 +124,25 @@ class LogFragment : Fragment() {
     }
 
     private fun editShift(shift: Shift, visibleId: Int) {
-        val action = LogFragmentDirections.actionLogFragmentToShiftForm(shiftId = shift.id, visibleId = visibleId)
+        val action = LogFragmentDirections.actionLogFragmentToShiftForm(
+            shiftId = shift.id,
+            visibleId = visibleId
+        )
         findNavController().navigate(action)
     }
 
     private fun deleteShift(shift: Shift) {
         viewModel.handleIntent(LogIntent.DeleteShift(shift))
-        Toast.makeText(requireContext(),
+        Toast.makeText(
+            requireContext(),
             getString(R.string.shift_deleted_successfully, shift.id.toString()), Toast.LENGTH_SHORT
         ).show()
     }
 
     private fun deleteAll() {
         viewModel.handleIntent(LogIntent.DeleteAllShifts)
-        Toast.makeText(requireContext(),
+        Toast.makeText(
+            requireContext(),
             getString(R.string.all_shifts_have_been_deleted_successfully), Toast.LENGTH_SHORT
         ).show()
     }
@@ -129,14 +150,5 @@ class LogFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-    override fun onResume() {
-        MainActivity.botNav.isVisible = false
-        super.onResume()
-    }
-
-    override fun onDestroy() {
-        MainActivity.botNav.isVisible = true
-        super.onDestroy()
     }
 }
