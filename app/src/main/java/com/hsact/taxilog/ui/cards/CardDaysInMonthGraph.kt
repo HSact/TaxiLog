@@ -83,7 +83,7 @@ fun DrawMonthGraphCard(chartData: StateFlow<List<Double>>, goalData: StateFlow<D
         enabled = true,
         textStyle = textStyle,
     )
-    val viewRange = ViewRange(0, LocalDate.now().dayOfMonth - 1)
+    val viewRange = ViewRange(0, LocalDate.now().dayOfMonth)
 
     BaseCard {
         CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {

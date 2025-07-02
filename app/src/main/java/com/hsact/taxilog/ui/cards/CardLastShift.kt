@@ -20,15 +20,16 @@ import com.hsact.taxilog.R
 import androidx.compose.runtime.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hsact.taxilog.domain.model.Shift
+import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.ui.shift.mappers.toUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.Locale
 
 @Composable
-fun DrawLastShiftCard(shift: StateFlow<Shift?>) {
+fun DrawLastShiftCard(shift: StateFlow<Shift?>, symbolMode: CurrencySymbolMode) {
     val lastShift = shift.collectAsStateWithLifecycle()
-    val lastShiftUi = lastShift.value?.toUi(Locale.getDefault())
+    val lastShiftUi = lastShift.value?.toUi(Locale.getDefault(), symbolMode)
     BaseCard {
         CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
             Text(

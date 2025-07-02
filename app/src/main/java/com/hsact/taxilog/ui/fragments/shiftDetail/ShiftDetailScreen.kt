@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.hsact.taxilog.domain.model.Shift
+import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.ui.AppTheme
 import com.hsact.taxilog.ui.cards.BaseCard
 import com.hsact.taxilog.ui.shift.ShiftOutputModel
@@ -38,6 +39,7 @@ import java.util.Locale
 @Composable
 fun ShiftDetailScreen(
     shift: Shift?,
+    currencySymbolMode: CurrencySymbolMode?,
     onEditClick: () -> Unit,
     onDeleteConfirmed: () -> Unit,
 ) {
@@ -45,7 +47,10 @@ fun ShiftDetailScreen(
         var showDeleteDialog by remember { mutableStateOf(false) }
 
         shift?.let {
-            val ui = it.toUi(Locale.getDefault())
+            val ui = it.toUi(
+                Locale.getDefault(),
+                currencySymbolMode ?: CurrencySymbolMode.fromLocale(Locale.getDefault())
+            )
             val textButtonColor = if (isSystemInDarkTheme()) Color.Black else Color.White
 
             LazyColumn(

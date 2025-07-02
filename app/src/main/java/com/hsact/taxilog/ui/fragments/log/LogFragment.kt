@@ -57,6 +57,7 @@ class LogFragment : Fragment() {
             }
             binding.recyclerView.adapter = RecyclerAdapter(
                 shiftListWithVisibleId,
+                settings = viewModel.settings.value!!,
                 onItemClick = { visibleId, shift ->
                     viewModel.shifts.value?.firstOrNull { it.id == shift.id }?.let {
                         onClickElement(shift, visibleId)

@@ -1,12 +1,13 @@
 package com.hsact.taxilog.ui.shift.mappers
 
 import com.hsact.taxilog.domain.model.Shift
+import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.ui.shift.ShiftOutputModel
 import java.time.Duration
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-fun Shift.toUi(locale: Locale): ShiftOutputModel {
+fun Shift.toUi(locale: Locale, currencySymbol: CurrencySymbolMode): ShiftOutputModel {
     val formatterDate = DateTimeFormatter.ofPattern("dd.MM.yyyy", locale)
     val formatterTime = DateTimeFormatter.ofPattern("HH:mm", locale)
 
@@ -27,27 +28,43 @@ fun Shift.toUi(locale: Locale): ShiftOutputModel {
             "ru" -> "${carSnapshot.mileage / 1000} км"
             else -> "${carSnapshot.mileage / 1000} km"
         },
-        earnings = financeInput.earnings.centsToCurrency(locale),
-        earningsPerHour = earningsPerHour.centsToCurrency(locale),
-        tips = financeInput.tips.centsToCurrency(locale),
-        wash = financeInput.wash.centsToCurrency(locale),
-        fuelCost = financeInput.fuelCost.centsToCurrency(locale),
+        earnings = financeInput.earnings.centsToCurrency(locale, currencySymbol),
+        earningsPerHour = earningsPerHour.centsToCurrency(locale, currencySymbol),
+        tips = financeInput.tips.centsToCurrency(locale, currencySymbol),
+        wash = financeInput.wash.centsToCurrency(locale, currencySymbol),
+        fuelCost = financeInput.fuelCost.centsToCurrency(locale, currencySymbol),
         fuelConsumption = consumption.millilitersToLiters(locale),
-        rent = carSnapshot.rentCost.centsToCurrency(locale),
-        serviceCost = carSnapshot.serviceCost.centsToCurrency(locale),
-        tax = financeInput.tax.centsToCurrency(locale),
-        totalExpenses = totalExpenses.centsToCurrency(locale),
-        profit = profit.centsToCurrency(locale),
-        profitPerHour = profitPerHour.centsToCurrency(locale),
+        rent = carSnapshot.rentCost.centsToCurrency(locale, currencySymbol),
+        serviceCost = carSnapshot.serviceCost.centsToCurrency(locale, currencySymbol),
+        tax = financeInput.tax.centsToCurrency(locale, currencySymbol),
+        totalExpenses = totalExpenses.centsToCurrency(locale, currencySymbol),
+        profit = profit.centsToCurrency(locale, currencySymbol),
+        profitPerHour = profitPerHour.centsToCurrency(locale, currencySymbol),
         note = note
     )
 }
 
-fun Long.centsToCurrency(locale: Locale): String {
-    val rubles = this.toDouble() / 100
-    return when (locale.language) {
-        "ru" -> String.format(locale, "%,.0f ₽", rubles).replace(',', ' ')
-        else -> String.format(locale, "$%,.0f", rubles)
+fun Long.centsToCurrency(locale: Locale, currencySymbol: CurrencySymbolMode): String {
+    val amount = this.toDouble() / 100
+    val symbol = currencySymbol.toSymbol()
+
+    val decimalSeparator = when (currencySymbol) {
+        CurrencySymbolMode.RUB,
+        CurrencySymbolMode.EUR -> ','
+        else -> '.'
+    }
+
+    val rawFormatted = String.format(locale, "%,.2f", amount)
+
+    val formattedAmount = rawFormatted
+        .replace(',', decimalSeparator)
+        .replace('.', decimalSeparator)
+
+    val postfixSet = setOf(CurrencySymbolMode.RUB, CurrencySymbolMode.EUR)
+    return if (currencySymbol in postfixSet) {
+        "$formattedAmount $symbol"
+    } else {
+        "$symbol $formattedAmount"
     }
 }
 

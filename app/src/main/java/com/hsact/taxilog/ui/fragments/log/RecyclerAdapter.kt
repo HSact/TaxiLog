@@ -7,11 +7,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hsact.taxilog.R
 import com.hsact.taxilog.domain.model.Shift
+import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
+import com.hsact.taxilog.domain.model.settings.UserSettings
 import com.hsact.taxilog.ui.shift.mappers.toUi
 import java.util.Locale
 
 class RecyclerAdapter(
     private val items: List<Pair<Int, Shift>>,
+    private val settings: UserSettings,
     private val onItemClick: (visibleId: Int, shift: Shift) -> Unit,
     private val onItemMenuClick: (visibleId: Int, shift: Shift) -> Unit,
 ) :
@@ -37,7 +40,11 @@ class RecyclerAdapter(
     }
 
     override fun onBindViewHolder(holder: ShiftViewHolder, index: Int) {
-        val shift = items[index].second.toUi(Locale.getDefault())
+        val locale = Locale.getDefault()
+        val shift = items[index].second.toUi(
+            locale,
+            settings.currency ?: CurrencySymbolMode.fromLocale(Locale.getDefault())
+        )
         holder.textId.text = (items.size - index).toString()
         holder.textDate.text = shift.date
         holder.textTime.text = shift.duration

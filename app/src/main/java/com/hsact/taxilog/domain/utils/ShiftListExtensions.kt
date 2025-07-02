@@ -1,6 +1,7 @@
 package com.hsact.taxilog.domain.utils
 
 import com.hsact.taxilog.domain.model.Shift
+import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.ui.shift.ShiftOutputModel
 import com.hsact.taxilog.ui.shift.mappers.toUi
 import java.time.LocalDate
@@ -64,8 +65,8 @@ fun List<Shift>.dailyProfit(date: LocalDate): Long {
         .sumOf { it.profit }
 }
 
-fun List<Shift>.toUi(locale: Locale): List<ShiftOutputModel> =
-    map { shift -> shift.toUi(locale) }
+fun List<Shift>.toUi(locale: Locale, currencySymbol: CurrencySymbolMode): List<ShiftOutputModel> =
+    map { shift -> shift.toUi(locale, currencySymbol) }
 
 val List<Shift>.profit: List <Long>
     get() = map { it.profit }

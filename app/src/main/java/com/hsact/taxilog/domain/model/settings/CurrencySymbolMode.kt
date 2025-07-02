@@ -3,15 +3,14 @@ package com.hsact.taxilog.domain.model.settings
 import java.util.Locale
 
 enum class CurrencySymbolMode {
-    USD, RUB, EUR, GBP, CNY, JPY;
+    USD, RUB, EUR, GBP, JPY;
 
     fun toSymbol(): String = when (this) {
-        CurrencySymbolMode.USD -> "$"
-        CurrencySymbolMode.EUR -> "€"
-        CurrencySymbolMode.RUB -> "₽"
-        CurrencySymbolMode.GBP -> "£"
-        CurrencySymbolMode.CNY -> "¥"
-        CurrencySymbolMode.JPY -> "¥"
+        USD -> "$"
+        EUR -> "€"
+        RUB -> "₽"
+        GBP -> "£"
+        JPY -> "¥"
     }
 
     fun toIndex(): Int = when (this) {
@@ -19,8 +18,7 @@ enum class CurrencySymbolMode {
         EUR -> 1
         RUB -> 2
         GBP -> 3
-        CNY -> 4
-        JPY -> 5
+        JPY -> 4
     }
 
 //    fun String.currencyNameToSymbolMode(): CurrencySymbolMode = when (this) {
@@ -36,7 +34,6 @@ enum class CurrencySymbolMode {
         EUR -> "EURO"
         RUB -> "RUBLE"
         GBP -> "POUND"
-        CNY -> "YEN"
         JPY -> "YEN"
 
     }
@@ -46,7 +43,6 @@ enum class CurrencySymbolMode {
                 "US" -> USD
                 "RU" -> RUB
                 "GB" -> GBP
-                "CN" -> CNY
                 "JP" -> JPY
                 "DE", "FR", "ES", "IT" -> EUR
                 else -> USD
@@ -60,8 +56,7 @@ fun Int.indexToCurrencySymbolMode(): CurrencySymbolMode = when (this) {
     1 -> CurrencySymbolMode.EUR
     2 -> CurrencySymbolMode.RUB
     3 -> CurrencySymbolMode.GBP
-    4 -> CurrencySymbolMode.CNY
-    5 -> CurrencySymbolMode.JPY
+    4 -> CurrencySymbolMode.JPY
     else -> CurrencySymbolMode.USD
 }
 
@@ -70,7 +65,7 @@ fun String?.currencyNameToSymbolMode(): CurrencySymbolMode? = when (this) {
     "EURO" -> CurrencySymbolMode.EUR
     "RUBLE" -> CurrencySymbolMode.RUB
     "POUND" -> CurrencySymbolMode.GBP
-    "YEN" -> CurrencySymbolMode.CNY
+    "YEN" -> CurrencySymbolMode.JPY
     null -> null
     else -> CurrencySymbolMode.USD
 }

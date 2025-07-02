@@ -49,7 +49,6 @@ class HomeViewModel @Inject constructor(
             )
             calculateChart()
         }
-        val a = CurrencySymbolMode.CNY
     }
 
     fun calculateChart() {
