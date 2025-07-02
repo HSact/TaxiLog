@@ -47,20 +47,21 @@ fun Shift.toUi(locale: Locale, currencySymbol: CurrencySymbolMode): ShiftOutputM
 fun Long.centsToCurrency(locale: Locale, currencySymbol: CurrencySymbolMode): String {
     val amount = this.toDouble() / 100
     val symbol = currencySymbol.toSymbol()
-
     val decimalSeparator = when (currencySymbol) {
         CurrencySymbolMode.RUB,
         CurrencySymbolMode.EUR -> ','
         else -> '.'
     }
 
-    val rawFormatted = String.format(locale, "%,.2f", amount)
+    val rawFormatted = String.format(Locale.US, "%,.2f", amount)
+    // rawFormatted, example: "1,234.56"
 
     val formattedAmount = rawFormatted
-        .replace(',', decimalSeparator)
-        .replace('.', decimalSeparator)
+        .replace(",", " ")
+        .replace(".", decimalSeparator.toString())
 
     val postfixSet = setOf(CurrencySymbolMode.RUB, CurrencySymbolMode.EUR)
+
     return if (currencySymbol in postfixSet) {
         "$formattedAmount $symbol"
     } else {
