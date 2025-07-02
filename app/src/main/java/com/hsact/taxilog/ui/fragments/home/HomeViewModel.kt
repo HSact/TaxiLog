@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.taxilog.domain.utils.centsToDollars
 import com.hsact.taxilog.domain.model.Shift
-import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.domain.model.settings.UserSettings
 import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.taxilog.domain.usecase.shift.GetLastShiftUseCase

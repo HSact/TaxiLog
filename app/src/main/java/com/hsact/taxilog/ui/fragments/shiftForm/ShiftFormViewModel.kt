@@ -34,7 +34,7 @@ class ShiftFormViewModel @Inject constructor(
     private val _uiState = MutableLiveData<UiState>()
     val uiState: LiveData<UiState> get() = _uiState
 
-    private val settings: UserSettings = getAllSettingsUseCase.invoke()
+    val settings: UserSettings = getAllSettingsUseCase.invoke()
 
     init {
         loadGuess()

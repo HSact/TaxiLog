@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import com.google.android.material.materialswitch.MaterialSwitch
+import com.google.android.material.textfield.TextInputLayout
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.SettingsActivityBinding
 import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
@@ -26,8 +27,6 @@ import com.hsact.taxilog.domain.model.settings.indexToCurrencySymbolMode
 import com.hsact.taxilog.ui.activities.MainActivity
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
-import org.intellij.lang.annotations.Language
-import java.util.Currency
 import java.util.Locale
 
 @AndroidEntryPoint
@@ -51,10 +50,15 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var radioKm: RadioButton
     private lateinit var radioMi: RadioButton
     private lateinit var textConsumption: EditText
+    private lateinit var textConsumptionL: TextInputLayout
     private lateinit var textFuelCost: EditText
+    private lateinit var textFuelCostL: TextInputLayout
     private lateinit var textRentCost: EditText
+    private lateinit var textRentCostL: TextInputLayout
     private lateinit var textServiceCost: EditText
+    private lateinit var textServiceCostL: TextInputLayout
     private lateinit var textGoalPerMonth: EditText
+    private lateinit var textGoalPerMonthL: TextInputLayout
     private lateinit var radioSchedule: RadioGroup
     private lateinit var radio70: RadioButton
     private lateinit var radio61: RadioButton
@@ -74,6 +78,13 @@ class SettingsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         bindItems()
+        val currencySymbol = viewModel.settings.value?.currency?.toSymbol()
+            ?: CurrencySymbolMode.fromLocale(Locale.getDefault()).toSymbol()
+        textFuelCostL.hint = currencySymbol
+        textConsumptionL.hint = currencySymbol
+        textRentCostL.hint = currencySymbol
+        textServiceCostL.hint = currencySymbol
+        textGoalPerMonthL.hint = currencySymbol
         updateUiWithSettings()
         updateThemeRadioButtons()
         toggleTableVisibility(switchRent)
@@ -140,6 +151,12 @@ class SettingsActivity : AppCompatActivity() {
         textRentCost = binding.editTextRentCost
         textServiceCost = binding.editTextServiceCost
         textGoalPerMonth = binding.editTextGoalPerMonth
+
+        textFuelCostL = binding.editTextFuelPriceL
+        textConsumptionL = binding.editTextConsumptionL
+        textRentCostL = binding.editTextRentCostL
+        textServiceCostL = binding.editTextServiceCostL
+        textGoalPerMonthL = binding.editTextGoalPerMonthL
 
         radioSchedule = binding.radioSchedule
         radio70 = binding.radio70

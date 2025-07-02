@@ -103,7 +103,6 @@
     <string name="editShiftHours">Часы</string>
     <string name="nothing_changed">Ничего не изменилось</string>
     <string name="period">Период:</string>
-    <string name="hint_money">₽/$ и т.п.</string>
     <string name="start">Начало</string>
     <string name="end">Конец</string>
     <string name="start_date">От</string>

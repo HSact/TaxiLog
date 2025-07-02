@@ -227,6 +227,7 @@
                     android:text="@string/settings_consumption" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editTextConsumptionL"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="@string/settings_consumption_hint">
@@ -258,9 +259,9 @@
                     android:text="@string/settings_fuel_price" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editTextFuelPriceL"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_money">
+                    android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextFuelPrice"
@@ -308,6 +309,7 @@
                     android:text="@string/settings_rent_cost" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editTextRentCostL"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_money_per_week">
@@ -357,6 +359,7 @@
                     android:text="@string/settings_service_cost_per_km" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editTextServiceCostL"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_money_per_km_mi">
@@ -404,9 +407,9 @@
                     android:text="@string/settings_goal_per_month" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editTextGoalPerMonthL"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_money">
+                    android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextGoalPerMonth"
@@ -503,6 +506,7 @@
                     android:text="@string/settings_tax_rate" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editTextTaxRateL"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="@string/percent">

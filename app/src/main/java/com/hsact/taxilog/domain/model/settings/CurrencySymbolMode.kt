@@ -3,7 +3,7 @@ package com.hsact.taxilog.domain.model.settings
 import java.util.Locale
 
 enum class CurrencySymbolMode {
-    USD, RUB, EUR, GBP, JPY;
+    USD, EUR, RUB, GBP, JPY;
 
     fun toSymbol(): String = when (this) {
         USD -> "$"
@@ -66,6 +66,5 @@ fun String?.currencyNameToSymbolMode(): CurrencySymbolMode? = when (this) {
     "RUBLE" -> CurrencySymbolMode.RUB
     "POUND" -> CurrencySymbolMode.GBP
     "YEN" -> CurrencySymbolMode.JPY
-    null -> null
-    else -> CurrencySymbolMode.USD
+    else -> null
 }
