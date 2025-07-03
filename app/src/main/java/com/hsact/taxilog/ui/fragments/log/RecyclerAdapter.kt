@@ -46,7 +46,7 @@ class RecyclerAdapter(
             settings.currency ?: CurrencySymbolMode.fromLocale(Locale.getDefault())
         )
         holder.textId.text = (items.size - index).toString()
-        holder.textDate.text = shift.date
+        holder.textDate.text = shift.dateBegin
         holder.textTime.text = shift.duration
         holder.textEarnings.text = shift.earnings
         holder.textWash.text = shift.wash

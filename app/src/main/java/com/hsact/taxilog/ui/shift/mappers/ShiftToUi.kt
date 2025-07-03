@@ -11,25 +11,28 @@ fun Shift.toUi(locale: Locale, currencySymbol: CurrencySymbolMode): ShiftOutputM
     val formatterDate = DateTimeFormatter.ofPattern("dd.MM.yyyy", locale)
     val formatterTime = DateTimeFormatter.ofPattern("HH:mm", locale)
 
+    val kmString = when (locale.language) {
+        "ru" -> "км"
+        else -> "km"
+    }
     val start = time.period.start
     val end = time.period.end
 
     return ShiftOutputModel(
         id = id,
         carName = carSnapshot.name,
-        date = start.format(formatterDate),
+        dateBegin = start.format(formatterDate),
+        dateEnd = end.format(formatterDate),
         timeRange = "${start.format(formatterTime)} – ${end.format(formatterTime)}",
         timeBegin = start.format(formatterTime),
         timeEnd = end.format(formatterTime),
         timeRestBegin = if (time.rest != null) time.rest.start.format(formatterTime) else "",
         timeRestEnd = if (time.rest != null) time.rest.end.format(formatterTime) else "",
         duration = formatDuration(time.totalDuration, locale),
-        mileageKm = when (locale.language) {
-            "ru" -> "${carSnapshot.mileage / 1000} км"
-            else -> "${carSnapshot.mileage / 1000} km"
-        },
+        mileageKm = "${carSnapshot.mileage / 1000} $kmString",
         earnings = financeInput.earnings.centsToCurrency(locale, currencySymbol),
         earningsPerHour = earningsPerHour.centsToCurrency(locale, currencySymbol),
+        earningsPerKm = "${earningsPerKm.centsToCurrency(locale, currencySymbol)}/$kmString",
         tips = financeInput.tips.centsToCurrency(locale, currencySymbol),
         wash = financeInput.wash.centsToCurrency(locale, currencySymbol),
         fuelCost = financeInput.fuelCost.centsToCurrency(locale, currencySymbol),
@@ -40,6 +43,8 @@ fun Shift.toUi(locale: Locale, currencySymbol: CurrencySymbolMode): ShiftOutputM
         totalExpenses = totalExpenses.centsToCurrency(locale, currencySymbol),
         profit = profit.centsToCurrency(locale, currencySymbol),
         profitPerHour = profitPerHour.centsToCurrency(locale, currencySymbol),
+        profitPerKm = "${profitPerKm.centsToCurrency(locale, currencySymbol)}/$kmString",
+        profitMarginPercent = "$profitMarginPercent %",
         note = note
     )
 }
@@ -49,7 +54,9 @@ fun Long.centsToCurrency(locale: Locale, currencySymbol: CurrencySymbolMode): St
     val symbol = currencySymbol.toSymbol()
     val decimalSeparator = when (currencySymbol) {
         CurrencySymbolMode.RUB,
-        CurrencySymbolMode.EUR -> ','
+        CurrencySymbolMode.EUR,
+            -> ','
+
         else -> '.'
     }
 
@@ -70,11 +77,11 @@ fun Long.centsToCurrency(locale: Locale, currencySymbol: CurrencySymbolMode): St
 }
 
 fun Long.minutesToHours(locale: Locale): String {
-    return formatDuration (Duration.ofMinutes(this), locale)
+    return formatDuration(Duration.ofMinutes(this), locale)
 }
 
 fun Long.millisToHours(locale: Locale): String {
-    return formatDuration (Duration.ofMillis(this), locale)
+    return formatDuration(Duration.ofMillis(this), locale)
 }
 
 fun Long.metersToKilometers(locale: Locale): String {
@@ -102,6 +109,7 @@ private fun formatDuration(duration: Duration, locale: Locale): String {
             if (hours > 0) append("$hours ч ")
             if (minutes > 0 || hours == 0L) append("$minutes мин")
         }.trim()
+
         else -> buildString {
             if (hours > 0) append("$hours h ")
             if (minutes > 0 || hours == 0L) append("$minutes min")

@@ -81,7 +81,7 @@
     <string name="about_text">https://github.com/HSact/TaxiLog</string>
     <string name="https_github_com_hsact_taxilog" translatable="false">https://github.com/HSact/TaxiLog</string>
     <string name="app_repository">"App repository"</string>
-    <string name="shift_added_successfully">Shift added successfully</string>
+    <string name="shift_added_successfully">Shift saved successfully</string>
     <string name="shift_deleted_successfully">Shift %1$s deleted successfully</string>
     <string name="all_shifts_have_been_deleted_successfully">All shifts have been deleted successfully</string>
     <string name="break_start_is_empty">Break start is empty</string>
@@ -127,6 +127,14 @@
     <string name="duration">Duration</string>
     <string name="tax">Tax</string>
     <string name="currency">Currency</string>
+    <string name="earnings_per_hour">Earnings/h</string>
+    <string name="rent">Rent</string>
+    <string name="service">Service</string>
+    <string name="total_expenses">Total expenses</string>
+    <string name="profit_per_hour">Profit/h</string>
+    <string name="profit_margin">Profit margin</string>
+    <string name="profit_per_km">Profit/km</string>
+    <string name="earnings_per_km">Earnings/km</string>
 
     <string-array name="languages">
         <item>English</item>

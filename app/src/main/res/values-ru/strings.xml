@@ -127,6 +127,14 @@
     <string name="duration">Продолжительность</string>
     <string name="tax">Налог</string>
     <string name="currency">Валюта</string>
+    <string name="earnings_per_hour">Грязные/ч</string>
+    <string name="rent">Аренда</string>
+    <string name="service">Обслуживание</string>
+    <string name="total_expenses">Сумма трат</string>
+    <string name="profit_per_hour">Чистые/ч</string>
+    <string name="profit_margin">Рентабельность</string>
+    <string name="profit_per_km">Чистые/км</string>
+    <string name="earnings_per_km">Грязные/км</string>
     <string-array name="languages">
         <item>English</item>
         <item>Русский</item>
