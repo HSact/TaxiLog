@@ -52,8 +52,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         val currentDestination = navController.currentDestination?.id
-        return if (currentDestination == R.id.navigation_log ||
-            currentDestination == R.id.shiftDetailFragment) {
+        return if (currentDestination == R.id.shiftDetailFragment) {
             false
         } else {
             menuInflater.inflate(R.menu.menu_main, menu)
@@ -64,7 +63,6 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         return when (item.itemId) {
-
             R.id.action_settings -> {
                 val settingsIntent = Intent(this, SettingsActivity::class.java)
                 startActivity(settingsIntent)
@@ -76,7 +74,6 @@ class MainActivity : AppCompatActivity() {
                 startActivity(aboutIntent)
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
