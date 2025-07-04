@@ -50,7 +50,7 @@ fun DrawLastShiftCard(shift: StateFlow<Shift?>, symbolMode: CurrencySymbolMode) 
                     Text(text = stringResource(R.string.earnings))
                     Text(text = stringResource(R.string.costs))
                     Text(text = stringResource(R.string.time))
-                    Text(text = stringResource(R.string.total))
+                    Text(text = stringResource(R.string.profit))
                     Text(text = stringResource(R.string.per_hour))
                 }
                 Column {

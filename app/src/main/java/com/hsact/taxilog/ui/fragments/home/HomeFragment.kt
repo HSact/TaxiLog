@@ -12,7 +12,7 @@ import com.hsact.taxilog.databinding.FragmentHomeBinding
 import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.ui.cards.DrawGoalCard
 import com.hsact.taxilog.ui.cards.DrawLastShiftCard
-import com.hsact.taxilog.ui.cards.DrawMonthGraphCard
+import com.hsact.taxilog.ui.cards.MonthGraphCard
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 
@@ -56,7 +56,7 @@ class HomeFragment : Fragment() {
                 )
             )
         }
-        card3.setContent { DrawMonthGraphCard(viewModel.chartData, viewModel.goalData) }
+        card3.setContent { MonthGraphCard(viewModel.chartData, viewModel.goalData) }
         binding.fabNewShift.extend()
         binding.fabNewShift.setOnClickListener { newShift() }
     }

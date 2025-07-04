@@ -36,7 +36,7 @@
     <string name="rest">Перерыв</string>
     <string name="addshift_break_time">Перерыв:</string>
     <string name="addshift_money">Деньги</string>
-    <string name="earnings">Заработок</string>
+    <string name="earnings">Выручка</string>
     <string name="wash">Мойка</string>
     <string name="fuel_cost">Стоимость топлива</string>
     <string name="mileage">Пробег</string>
@@ -48,7 +48,7 @@
     <string name="total">Итого</string>
     <string name="per_hour">В час</string>
     <string name="new_shift">Добавить смену</string>
-    <string name="profit">Чистыми</string>
+    <string name="profit">Прибыль</string>
     <string name="id">ID</string>
     <string name="delete_all">Удалить все</string>
     <string name="you_haven_t_set_goal_yet">Вы пока не определили цель</string>
@@ -56,15 +56,15 @@
     <string name="n_a">N/A</string>
     <string name="hours">часов</string>
     <string name="shifts_count">Всего смен:</string>
-    <string name="average_earnings_per_hour">Средний грязный доход</string>
-    <string name="average_profit_per_hour">Средний чистый доход</string>
+    <string name="average_earnings_per_hour">Средняя ыыручка</string>
+    <string name="average_profit_per_hour">Средняя прибыль</string>
     <string name="average_shift_duration">Среднее время смены</string>
     <string name="average_mileage">Средний пробег</string>
     <string name="total_shift_duration">Общее время смен</string>
     <string name="total_mileage">Общий пробег</string>
     <string name="total_wash">Общие траты на мойку</string>
-    <string name="total_earnings">Общий грязный доход</string>
-    <string name="total_profit">Общий чистый доход</string>
+    <string name="total_earnings">Общая сумма выручки</string>
+    <string name="total_profit">Общая прибыль</string>
     <string name="edit_or_delete_shift">"Редактировать или удалить смену №"</string>
     <string name="total_fuel">Общие траты на топливо</string>
     <string name="average_fuel">Средние траты на топливо</string>
@@ -86,7 +86,7 @@
     <string name="all_shifts_have_been_deleted_successfully">Все смены были успешно удалены</string>
     <string name="break_start_is_empty">Заполните время начала перерыва</string>
     <string name="break_end_is_empty">Заполните время конца перерыва</string>
-    <string name="earnings_is_empty">Заработок не заполнен</string>
+    <string name="earnings_is_empty">Выручка не заполнена</string>
     <string name="fuel_cost_is_empty">Стоимость топлива не заполнена</string>
     <string name="mileage_is_empty">Пробег не заполнен</string>
     <string name="you_earn_in_hours">Вы заработали %1$s за %2$s?</string>
@@ -127,14 +127,14 @@
     <string name="duration">Продолжительность</string>
     <string name="tax">Налог</string>
     <string name="currency">Валюта</string>
-    <string name="earnings_per_hour">Грязные/ч</string>
+    <string name="earnings_per_hour">Выручка/ч</string>
     <string name="rent">Аренда</string>
     <string name="service">Обслуживание</string>
     <string name="total_expenses">Сумма трат</string>
-    <string name="profit_per_hour">Чистые/ч</string>
+    <string name="profit_per_hour">Прибыль/ч</string>
     <string name="profit_margin">Рентабельность</string>
-    <string name="profit_per_km">Чистые/км</string>
-    <string name="earnings_per_km">Грязные/км</string>
+    <string name="profit_per_km">Прибыль/км</string>
+    <string name="earnings_per_km">Выручка/км</string>
     <string-array name="languages">
         <item>English</item>
         <item>Русский</item>

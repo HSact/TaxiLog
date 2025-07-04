@@ -3,6 +3,7 @@ package com.hsact.taxilog.ui.shift.mappers
 import com.hsact.taxilog.domain.model.Shift
 import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.ui.shift.ShiftOutputModel
+import java.text.NumberFormat
 import java.time.Duration
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -51,21 +52,14 @@ fun Shift.toUi(locale: Locale, currencySymbol: CurrencySymbolMode): ShiftOutputM
 
 fun Long.centsToCurrency(locale: Locale, currencySymbol: CurrencySymbolMode): String {
     val amount = this.toDouble() / 100
-    val symbol = currencySymbol.toSymbol()
-    val decimalSeparator = when (currencySymbol) {
-        CurrencySymbolMode.RUB,
-        CurrencySymbolMode.EUR,
-            -> ','
 
-        else -> '.'
+    val numberFormat = NumberFormat.getNumberInstance(locale).apply {
+        minimumFractionDigits = 2
+        maximumFractionDigits = 2
     }
 
-    val rawFormatted = String.format(Locale.US, "%,.2f", amount)
-    // rawFormatted, example: "1,234.56"
-
-    val formattedAmount = rawFormatted
-        .replace(",", " ")
-        .replace(".", decimalSeparator.toString())
+    val formattedAmount = numberFormat.format(amount)
+    val symbol = currencySymbol.toSymbol()
 
     val postfixSet = setOf(CurrencySymbolMode.RUB, CurrencySymbolMode.EUR)
 

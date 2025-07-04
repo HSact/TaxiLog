@@ -14,36 +14,22 @@
         android:padding="10dp"
         tools:context=".ui.fragments.stats.StatsFragment">
 
-        <TextView
-            android:id="@+id/textStatsHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/statsHeader"
-            android:textSize="34sp" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/table_row_padding_first"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/period"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center|start"
-                android:text="@string/period"
-                android:textSize="20sp" />
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/table_row_padding_first">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/buttonDatePickBeginL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:gravity="center|fill_vertical"
                 android:hint="@string/start_date"
-                android:layout_marginStart="20dp"
-                app:hintAnimationEnabled="false"
-                android:minWidth="120dp">
+                android:minWidth="120dp"
+                app:hintAnimationEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/buttonDatePickBegin"
@@ -61,8 +47,8 @@
                 android:id="@+id/dash"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center|start"
                 android:layout_marginStart="10dp"
+                android:gravity="center|start"
                 android:text="-"
                 android:textSize="25sp"
                 tools:ignore="HardcodedText" />
@@ -71,11 +57,11 @@
                 android:id="@+id/buttonDatePickEndL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:gravity="center|fill_vertical"
                 android:hint="@string/end_date"
-                android:layout_marginStart="10dp"
-                app:hintAnimationEnabled="false"
-                android:minWidth="120dp">
+                android:minWidth="120dp"
+                app:hintAnimationEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/buttonDatePickEnd"

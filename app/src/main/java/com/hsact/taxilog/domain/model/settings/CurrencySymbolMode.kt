@@ -21,14 +21,6 @@ enum class CurrencySymbolMode {
         JPY -> 4
     }
 
-//    fun String.currencyNameToSymbolMode(): CurrencySymbolMode = when (this) {
-//        "DOLLAR" -> CurrencySymbolMode.USD
-//        "EURO" -> CurrencySymbolMode.EUR
-//        "RUBLE" -> CurrencySymbolMode.RUB
-//        "POUND" -> CurrencySymbolMode.GBP
-//        "YEN" -> CurrencySymbolMode.CNY
-//        else -> CurrencySymbolMode.USD
-//    }
     fun toName(): String? = when (this) {
         USD -> "DOLLAR"
         EUR -> "EURO"
