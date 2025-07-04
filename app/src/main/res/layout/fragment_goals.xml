@@ -39,13 +39,13 @@
                     android:clickable="true"
                     android:focusable="false"
                     android:inputType="none"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
                     tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
         <Space
             android:layout_width="match_parent"
-            android:layout_height="10dp"/>
+            android:layout_height="16dp"/>
 
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/card_1"

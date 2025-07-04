@@ -56,7 +56,7 @@
     <string name="n_a">N/A</string>
     <string name="hours">часов</string>
     <string name="shifts_count">Всего смен:</string>
-    <string name="average_earnings_per_hour">Средняя ыыручка</string>
+    <string name="average_earnings_per_hour">Средняя выручка</string>
     <string name="average_profit_per_hour">Средняя прибыль</string>
     <string name="average_shift_duration">Среднее время смены</string>
     <string name="average_mileage">Средний пробег</string>
@@ -69,7 +69,6 @@
     <string name="total_fuel">Общие траты на топливо</string>
     <string name="average_fuel">Средние траты на топливо</string>
     <string name="settings_fuel_price">Цена топлива</string>
-    <string name="statsHeader">Общая статистика</string>
     <string name="list_is_empty">Нет смен за этот период</string>
     <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
@@ -102,7 +101,6 @@
     <string name="save">Сохранить</string>
     <string name="editShiftHours">Часы</string>
     <string name="nothing_changed">Ничего не изменилось</string>
-    <string name="period">Период:</string>
     <string name="start">Начало</string>
     <string name="end">Конец</string>
     <string name="start_date">От</string>
