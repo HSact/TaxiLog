@@ -140,7 +140,7 @@
                         android:id="@+id/radioLight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="12dp"
                         android:minWidth="60dp"
                         android:text="@string/settings_light" />
 
@@ -149,7 +149,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="end"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="12dp"
                         android:text="@string/settings_dark" />
 
                 </RadioGroup>
@@ -449,18 +449,18 @@
                         android:id="@+id/radio70"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingRight="10dp"
+                        android:paddingEnd="12dp"
                         android:text="7/0"
-                        tools:ignore="HardcodedText" />
+                        tools:ignore="HardcodedText,RtlSymmetry" />
 
                     <RadioButton
                         android:id="@+id/radio61"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:minHeight="48dp"
-                        android:paddingRight="10dp"
+                        android:paddingEnd="12dp"
                         android:text="6/1"
-                        tools:ignore="HardcodedText" />
+                        tools:ignore="HardcodedText,RtlSymmetry" />
 
                     <RadioButton
                         android:id="@+id/radio52"
