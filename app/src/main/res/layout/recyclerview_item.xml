@@ -4,7 +4,7 @@
     android:id="@+id/linearShift"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="@dimen/layout_padding_regular"
     app:strokeWidth="0dp"
     app:strokeColor="@android:color/transparent"
     app:cardElevation="4dp"
@@ -13,7 +13,7 @@
     android:clickable="true"
     android:focusable="true"
     android:longClickable="true"
-    android:padding="10dp">
+    android:padding="@dimen/layout_padding_regular">
 
     <TableLayout
         android:id="@+id/tableShift"
@@ -22,7 +22,7 @@
         android:clickable="false"
         android:focusable="false"
         android:longClickable="false"
-        android:padding="10dp">
+        android:padding="@dimen/layout_padding_regular">
 
         <TableRow
             android:layout_width="match_parent"

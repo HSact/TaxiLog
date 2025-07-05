@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:padding="@dimen/layout_padding_regular"
         tools:context=".ui.fragments.stats.StatsFragment">
 
         <LinearLayout
@@ -44,7 +44,7 @@
                 android:id="@+id/dash"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="8dp"
                 android:gravity="center|start"
                 android:text="-"
                 android:textSize="25sp"
@@ -54,7 +54,7 @@
                 android:id="@+id/buttonDatePickEndL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="8dp"
                 android:gravity="center|fill_vertical"
                 android:hint="@string/end_date"
                 android:minWidth="120dp"
@@ -75,7 +75,7 @@
             android:id="@+id/textListIsEmpty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="120dp"
             android:gravity="center"
             android:text="@string/list_is_empty"
             android:textSize="16sp"
@@ -88,8 +88,8 @@
             android:paddingTop="@dimen/table_row_padding_first"
             android:orientation="horizontal"
             android:gravity="center_horizontal"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp">
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
 
             <TextView
                 android:id="@+id/textShifts_count"
@@ -111,7 +111,7 @@
             android:id="@+id/linearShift"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             app:strokeWidth="0dp"
             app:strokeColor="@android:color/transparent"
             app:cardBackgroundColor="?attr/colorBackgroundFloating"
@@ -120,7 +120,7 @@
             android:id="@+id/table_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:padding="@dimen/layout_padding_regular"
             android:stretchColumns="0"
             android:visibility="visible">
 
@@ -336,6 +336,6 @@
     </com.google.android.material.card.MaterialCardView>
         <Space
             android:layout_width="match_parent"
-            android:layout_height="100dp"/>
+            android:layout_height="120dp"/>
     </LinearLayout>
 </ScrollView>

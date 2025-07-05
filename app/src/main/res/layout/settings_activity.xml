@@ -32,7 +32,7 @@
             android:clipToPadding="false"
             android:isScrollContainer="false"
             android:orientation="vertical"
-            android:padding="10dp"
+            android:padding="@dimen/layout_padding_regular"
             android:stretchColumns="0"
             tools:context=".ui.activities.settings.SettingsActivity">
 
@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:minHeight="30dp"
+                android:minHeight="32dp"
                 android:orientation="horizontal">
 
                 <TextView

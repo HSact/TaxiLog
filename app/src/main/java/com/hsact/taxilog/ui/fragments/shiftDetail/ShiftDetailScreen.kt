@@ -57,10 +57,10 @@ fun ShiftDetailScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = 10.dp, end = 10.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                    .padding(start = 16.dp, end = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                item { Spacer(Modifier.height(10.dp)) }
+                item { Spacer(Modifier.height(8.dp)) }
                 item { CarCard(ui) }
                 item { TimeCard(ui) }
                 item { FinanceCard(shift, ui) }
@@ -69,7 +69,7 @@ fun ShiftDetailScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 20.dp),
+                            .padding(bottom = 16.dp),
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Button(
@@ -78,7 +78,7 @@ fun ShiftDetailScreen(
                         ) {
                             Text(text = stringResource(R.string.edit), color = textButtonColor)
                         }
-                        Spacer(modifier = Modifier.width(10.dp))
+                        Spacer(modifier = Modifier.width(16.dp))
                         Button(
                             onClick = { showDeleteDialog = true },
                             modifier = Modifier.weight(1f),
@@ -90,7 +90,7 @@ fun ShiftDetailScreen(
                         }
                     }
                 }
-                item { Spacer(Modifier.height(10.dp)) }
+                item { Spacer(Modifier.height(16.dp)) }
             }
 
             if (showDeleteDialog) {

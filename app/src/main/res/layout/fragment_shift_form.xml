@@ -14,14 +14,14 @@
         android:clipToPadding="false"
         android:isScrollContainer="false"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:padding="@dimen/layout_padding_regular"
         tools:context=".ui.fragments.shiftForm.ShiftFormFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:minHeight="30dp"
+            android:minHeight="@dimen/layout_padding_regular"
             android:orientation="horizontal">
 
             <TextView
@@ -37,8 +37,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:minHeight="50dp"
-            android:paddingTop="20dp"
+            android:minHeight="52dp"
+            android:paddingTop="@dimen/layout_padding_regular"
             android:orientation="horizontal">
 
             <TextView
@@ -64,8 +64,8 @@
                     android:clickable="true"
                     android:focusable="false"
                     android:inputType="none"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
                     tools:ignore="TouchTargetSizeCheck" />
             </com.google.android.material.textfield.TextInputLayout>
         </TableRow>
@@ -73,8 +73,8 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:minHeight="50dp"
+            android:paddingTop="12dp"
+            android:minHeight="52dp"
             android:orientation="horizontal">
 
             <TextView
@@ -100,8 +100,8 @@
                     android:clickable="true"
                     android:focusable="false"
                     android:inputType="none"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
                     tools:ignore="TouchTargetSizeCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -109,7 +109,7 @@
                 android:id="@+id/buttonTimeEndL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="12dp"
                 android:minWidth="120dp"
                 app:hintAnimationEnabled="false"
                 android:hint="@string/end">
@@ -121,8 +121,8 @@
                     android:clickable="true"
                     android:focusable="false"
                     android:inputType="none"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
                     tools:ignore="TouchTargetSizeCheck" />
             </com.google.android.material.textfield.TextInputLayout>
         </TableRow>
@@ -131,7 +131,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
+            android:paddingTop="12dp"
             android:orientation="horizontal">
 
             <com.google.android.material.materialswitch.MaterialSwitch
@@ -146,7 +146,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="10dp"
+            android:paddingTop="12dp"
             android:visibility="gone">
 
             <TextView
@@ -170,14 +170,14 @@
                     android:focusable="false"
                     android:clickable="true"
                     android:inputType="none"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp" />
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="12dp"
                 android:minWidth="120dp"
                 android:hint="@string/end">
 
@@ -188,8 +188,8 @@
                     android:focusable="false"
                     android:clickable="true"
                     android:inputType="none"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp" />
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </TableRow>
@@ -197,7 +197,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="24dp"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
@@ -214,8 +214,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:minHeight="50dp"
-            android:paddingTop="20dp"
+            android:minHeight="52dp"
+            android:paddingTop="24dp"
             android:weightSum="100">
 
             <TextView
@@ -237,8 +237,8 @@
                     android:layout_height="match_parent"
                     android:inputType="numberDecimal"
                     android:maxLength="8"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
                     tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
             </com.google.android.material.textfield.TextInputLayout>
         </TableRow>
@@ -247,7 +247,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="10dp"
+            android:paddingTop="12dp"
             android:weightSum="100">
 
             <TextView
@@ -269,8 +269,8 @@
                     android:layout_height="match_parent"
                     android:inputType="numberDecimal"
                     android:maxLength="8"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
                     tools:ignore="TouchTargetSizeCheck" />
             </com.google.android.material.textfield.TextInputLayout>
         </TableRow>
@@ -279,7 +279,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="10dp"
+            android:paddingTop="12dp"
             android:weightSum="100">
 
             <TextView
@@ -301,8 +301,8 @@
                     android:layout_height="match_parent"
                     android:inputType="numberDecimal"
                     android:maxLength="8"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
                     tools:ignore="TouchTargetSizeCheck" />
             </com.google.android.material.textfield.TextInputLayout>
         </TableRow>
@@ -311,7 +311,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="10dp"
+            android:paddingTop="12dp"
             android:weightSum="100">
 
             <TextView
@@ -334,8 +334,8 @@
                     android:layout_height="match_parent"
                     android:inputType="numberDecimal"
                     android:maxLength="6"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
                     tools:ignore="TouchTargetSizeCheck" />
             </com.google.android.material.textfield.TextInputLayout>
         </TableRow>
@@ -344,7 +344,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="10dp"
+            android:paddingTop="12dp"
             android:weightSum="100">
 
             <TextView
@@ -366,8 +366,8 @@
                     android:layout_height="match_parent"
                     android:inputType="numberDecimal"
                     android:maxLength="8"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
                     tools:ignore="TouchTargetSizeCheck" />
             </com.google.android.material.textfield.TextInputLayout>
         </TableRow>
@@ -375,7 +375,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp">
+            android:paddingTop="12dp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editTextNoteL"
@@ -402,7 +402,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:paddingTop="50dp">
+            android:paddingTop="52dp">
 
             <Button
                 android:id="@+id/buttonSubmit"
