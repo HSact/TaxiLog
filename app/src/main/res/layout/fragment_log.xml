@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:clipToPadding="false"
-    android:layout_marginBottom="100dp"
+    android:layout_marginBottom="120dp"
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView

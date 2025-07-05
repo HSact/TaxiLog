@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="10dp"
+            android:padding="@dimen/layout_padding_regular"
             tools:context=".ui.fragments.home.HomeFragment">
 
             <androidx.compose.ui.platform.ComposeView
@@ -28,15 +28,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
+
             <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/card_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
+
             <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/card_3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

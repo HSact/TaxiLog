@@ -38,7 +38,7 @@ import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 
 @Composable
-fun DrawMonthGraphCard(chartData: StateFlow<List<Double>>, goalData: StateFlow<Double>) {
+fun MonthGraphCard(chartData: StateFlow<List<Double>>, goalData: StateFlow<Double>) {
     val chartState by chartData.collectAsStateWithLifecycle()
     val goal by goalData.collectAsState()
     val daysInMonth = LocalDate.now().lengthOfMonth()
@@ -145,5 +145,5 @@ private fun CardPreview() {
             )
         )
     }
-    DrawMonthGraphCard(previewData, MutableStateFlow(0.0))
+    MonthGraphCard(previewData, MutableStateFlow(0.0))
 }

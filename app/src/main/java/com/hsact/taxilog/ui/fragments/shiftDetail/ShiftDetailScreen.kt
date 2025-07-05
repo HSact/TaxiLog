@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.hsact.taxilog.domain.model.Shift
 import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
@@ -56,18 +57,19 @@ fun ShiftDetailScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(10.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                    .padding(start = 16.dp, end = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                item { Spacer(Modifier.height(8.dp)) }
                 item { CarCard(ui) }
                 item { TimeCard(ui) }
-                item { FinanceCard(ui) }
+                item { FinanceCard(shift, ui) }
                 item { OtherCard(ui) }
                 item {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 20.dp),
+                            .padding(bottom = 16.dp),
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Button(
@@ -76,7 +78,7 @@ fun ShiftDetailScreen(
                         ) {
                             Text(text = stringResource(R.string.edit), color = textButtonColor)
                         }
-                        Spacer(modifier = Modifier.width(10.dp))
+                        Spacer(modifier = Modifier.width(16.dp))
                         Button(
                             onClick = { showDeleteDialog = true },
                             modifier = Modifier.weight(1f),
@@ -88,6 +90,7 @@ fun ShiftDetailScreen(
                         }
                     }
                 }
+                item { Spacer(Modifier.height(16.dp)) }
             }
 
             if (showDeleteDialog) {
@@ -136,7 +139,7 @@ fun Header(
         modifier = modifier
             .fillMaxWidth(),
         color = MaterialTheme.colorScheme.onBackground,
-        style = MaterialTheme.typography.titleMedium
+        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
     )
 }
 
@@ -147,10 +150,19 @@ fun CarCard(ui: ShiftOutputModel) {
             Header(text = stringResource(R.string.car))
             Space()
             if (ui.carName.isNotBlank()) {
-                Text("${stringResource(R.string.car_name)}: ${ui.carName}")
+                LabelValueRow(
+                    label = stringResource(R.string.car_name),
+                    value = ui.carName
+                )
             }
-            Text("${stringResource(R.string.mileage)}: ${ui.mileageKm}")
-            Text("${stringResource(R.string.fuel)}: ${ui.fuelConsumption}")
+            LabelValueRow(
+                label = stringResource(R.string.mileage),
+                value = ui.mileageKm
+            )
+            LabelValueRow(
+                label = stringResource(R.string.fuel),
+                value = ui.fuelConsumption
+            )
         }
     }
 }
@@ -161,29 +173,61 @@ fun TimeCard(ui: ShiftOutputModel) {
         Column {
             Header(text = stringResource(R.string.time))
             Space()
-            Text("${stringResource(R.string.date)}: ${ui.date}")
-            Text("${stringResource(R.string.start)}: ${ui.timeBegin}")
-            Text("${stringResource(R.string.end)}: ${ui.timeEnd}")
+            LabelValueRow(
+                label = stringResource(R.string.date),
+                value = if (ui.dateBegin == ui.dateEnd)
+                    ui.dateBegin
+                else
+                    "${ui.dateBegin} - ${ui.dateEnd}"
+            )
+            LabelValueRow(
+                label = stringResource(R.string.time),
+                value = "${ui.timeBegin} - ${ui.timeEnd}"
+            )
             if (ui.timeRestBegin.isNotBlank() && ui.timeRestEnd.isNotBlank()) {
-                Text("${stringResource(R.string.rest)}: ${ui.timeRestBegin} – ${ui.timeRestEnd}")
+                LabelValueRow(
+                    label = stringResource(R.string.rest),
+                    value = "${ui.timeRestBegin} – ${ui.timeRestEnd}"
+                )
             }
-            Text("${stringResource(R.string.duration)}: ${ui.duration}")
+            LabelValueRow(
+                label = stringResource(R.string.duration),
+                value = ui.duration
+            )
         }
     }
 }
 
 @Composable
-fun FinanceCard(ui: ShiftOutputModel) {
+fun FinanceCard(shiftData: Shift, ui: ShiftOutputModel) {
     BaseCard {
         Column {
             Header(text = stringResource(R.string.finance))
             Space()
-            Text("${stringResource(R.string.earnings)}: ${ui.earnings}")
-            Text("${stringResource(R.string.tips)}: ${ui.tips}")
-            Text("${stringResource(R.string.fuel)}: ${ui.fuelCost}")
-            Text("${stringResource(R.string.wash)}: ${ui.wash}")
-            Text("${stringResource(R.string.tax)}: ${ui.tax}")
-            Text("${stringResource(R.string.profit)}: ${ui.profit}")
+            LabelValueRow(stringResource(R.string.earnings), ui.earnings)
+            LabelValueRow(stringResource(R.string.earnings_per_hour), ui.earningsPerHour)
+            LabelValueRow(stringResource(R.string.earnings_per_km), ui.earningsPerKm)
+            if (shiftData.tipsIsNotZero) {
+                LabelValueRow(stringResource(R.string.tips), ui.tips)
+            }
+            if (shiftData.rentIsNotZero) {
+                LabelValueRow(stringResource(R.string.rent), ui.rent)
+            }
+            LabelValueRow(stringResource(R.string.fuel), ui.fuelCost)
+            if (shiftData.washIsNotZero) {
+                LabelValueRow(stringResource(R.string.wash), ui.wash)
+            }
+            if (shiftData.serviceIsNotZero) {
+                LabelValueRow(stringResource(R.string.service), ui.serviceCost)
+            }
+            if (shiftData.taxIsNotZero) {
+                LabelValueRow(stringResource(R.string.tax), ui.tax)
+            }
+            LabelValueRow(stringResource(R.string.total_expenses), ui.totalExpenses)
+            LabelValueRow(stringResource(R.string.profit), ui.profit)
+            LabelValueRow(stringResource(R.string.profit_per_km), ui.profitPerKm)
+            LabelValueRow(stringResource(R.string.profit_per_hour), ui.profitPerHour)
+            LabelValueRow(stringResource(R.string.profit_margin), ui.profitMarginPercent)
         }
     }
 }
@@ -198,6 +242,25 @@ fun OtherCard(ui: ShiftOutputModel) {
                 Text(ui.note)
             }
         }
+    }
+}
+
+@Composable
+private fun LabelValueRow(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 2.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(text = label,
+            style = MaterialTheme.typography.bodyLarge)
+        Text(text = value,
+            style = MaterialTheme.typography.bodyLarge)
     }
 }
 

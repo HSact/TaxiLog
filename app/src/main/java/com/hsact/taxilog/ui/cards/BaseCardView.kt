@@ -17,8 +17,7 @@ fun BaseCard(
     CardTheme {
         Card(
             modifier = modifier
-                .fillMaxWidth()
-                .padding(bottom = 10.dp),
+                .fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
         ) {
