@@ -7,7 +7,7 @@
     android:layout_margin="@dimen/layout_padding_regular"
     app:strokeWidth="0dp"
     app:strokeColor="@android:color/transparent"
-    app:cardElevation="4dp"
+    app:cardElevation="0dp"
     app:cardBackgroundColor="?attr/colorBackgroundFloating"
     android:orientation="vertical"
     android:clickable="true"
@@ -33,14 +33,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/id"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textId1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
         </TableRow>
 
@@ -54,14 +54,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/date"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textDate1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
         </TableRow>
 
@@ -75,14 +75,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/time"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textTime1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
         </TableRow>
 
         <TableRow
@@ -95,14 +95,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/earnings"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textEarnings1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
         </TableRow>
 
         <TableRow
@@ -115,14 +115,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/wash"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textWash1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
         </TableRow>
 
         <TableRow
@@ -135,14 +135,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/fuel"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textFuel1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
         </TableRow>
 
         <TableRow
@@ -155,14 +155,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/mileage"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textMileage1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
         </TableRow>
 
         <TableRow
@@ -175,14 +175,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/per_hour"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textPerHour1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
         </TableRow>
 
         <TableRow
@@ -195,14 +195,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/profit"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textProfit1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
         </TableRow>
     </TableLayout>
 </com.google.android.material.card.MaterialCardView>
