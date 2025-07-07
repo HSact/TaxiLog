@@ -1,10 +1,10 @@
-package com.hsact.taxilog.data.repository
+package com.hsact.data.repository
 
+import com.hsact.data.db.ShiftDao
+import com.hsact.data.mappers.toDomain
+import com.hsact.data.mappers.toEntity
 import com.hsact.domain.model.Shift
 import com.hsact.domain.repository.ShiftRepository
-import com.hsact.taxilog.data.db.ShiftDao
-import com.hsact.taxilog.data.mappers.toDomain
-import com.hsact.taxilog.data.mappers.toEntity
 import java.time.LocalDateTime
 import javax.inject.Inject
 

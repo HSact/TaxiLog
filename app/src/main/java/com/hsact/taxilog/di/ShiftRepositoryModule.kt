@@ -1,7 +1,7 @@
 package com.hsact.taxilog.di
 
+import com.hsact.data.repository.ShiftRepositoryImpl
 import com.hsact.domain.repository.ShiftRepository
-import com.hsact.taxilog.data.repository.ShiftRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

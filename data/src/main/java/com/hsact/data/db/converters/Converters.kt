@@ -1,4 +1,4 @@
-package com.hsact.taxilog.data.db.converters
+package com.hsact.data.db.converters
 
 import androidx.room.TypeConverter
 import java.time.LocalDateTime

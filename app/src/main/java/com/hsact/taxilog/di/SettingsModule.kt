@@ -1,7 +1,7 @@
 package com.hsact.taxilog.di
 
+import com.hsact.data.repository.SettingsRepositoryImpl
 import com.hsact.domain.repository.SettingsRepository
-import com.hsact.taxilog.data.repository.SettingsRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

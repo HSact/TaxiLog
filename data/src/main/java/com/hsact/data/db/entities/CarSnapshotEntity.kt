@@ -1,4 +1,4 @@
-package com.hsact.taxilog.data.db.entities
+package com.hsact.data.db.entities
 
 data class CarSnapshotEntity(
     val name: String,

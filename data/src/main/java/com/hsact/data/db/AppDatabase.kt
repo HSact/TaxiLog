@@ -1,12 +1,12 @@
-package com.hsact.taxilog.data.db
+package com.hsact.data.db
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.hsact.taxilog.data.db.converters.Converters
-import com.hsact.taxilog.data.db.entities.ShiftEntity
+import com.hsact.data.db.converters.Converters
+import com.hsact.data.db.entities.ShiftEntity
 
 @Database(
     entities = [

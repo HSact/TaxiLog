@@ -10,9 +10,6 @@ plugins {
     //noinspection GradleDependency
     id "org.jetbrains.kotlin.plugin.compose" version "2.2.0"
 }
-hilt {
-    enableAggregatingTask = false
-}
 
 android {
     compileSdk 36
@@ -61,6 +58,7 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":data"))
     implementation 'androidx.core:core-ktx:1.16.0'
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.google.android.material:material:1.12.0'

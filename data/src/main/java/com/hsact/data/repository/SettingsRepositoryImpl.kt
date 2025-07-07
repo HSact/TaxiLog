@@ -1,4 +1,4 @@
-package com.hsact.taxilog.data.repository
+package com.hsact.data.repository
 
 import android.content.Context
 import android.content.SharedPreferences
