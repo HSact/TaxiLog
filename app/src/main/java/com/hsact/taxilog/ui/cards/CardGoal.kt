@@ -108,7 +108,7 @@ fun DrawGoalCard(
 private fun CardPreview() {
     val goal = "100"
     val goalCurrent = "50"
-    val previewData = remember {
+    remember {
         MutableStateFlow(
             mapOf(
                 "goal" to goal,

@@ -70,7 +70,7 @@ fun DrawLastShiftCard(shift: StateFlow<Shift?>, symbolMode: CurrencySymbolMode) 
 @Composable
 private fun CardPreview() {
     val na = "N/A"
-    val previewData = remember {
+    remember {
         MutableStateFlow(
             mapOf(
                 "date" to na,
