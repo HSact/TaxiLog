@@ -2,10 +2,10 @@ package com.hsact.taxilog.ui.fragments.shiftDetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hsact.taxilog.domain.model.Shift
-import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
-import com.hsact.taxilog.domain.usecase.shift.DeleteShiftUseCase
-import com.hsact.taxilog.domain.usecase.shift.GetShiftByIdUseCase
+import com.hsact.domain.model.Shift
+import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
+import com.hsact.domain.usecase.shift.DeleteShiftUseCase
+import com.hsact.domain.usecase.shift.GetShiftByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

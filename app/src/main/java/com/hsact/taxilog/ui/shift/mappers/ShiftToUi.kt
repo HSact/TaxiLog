@@ -1,7 +1,7 @@
 package com.hsact.taxilog.ui.shift.mappers
 
-import com.hsact.taxilog.domain.model.Shift
-import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
+import com.hsact.domain.model.Shift
+import com.hsact.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.ui.shift.ShiftOutputModel
 import java.text.NumberFormat
 import java.time.Duration
@@ -27,8 +27,8 @@ fun Shift.toUi(locale: Locale, currencySymbol: CurrencySymbolMode): ShiftOutputM
         timeRange = "${start.format(formatterTime)} – ${end.format(formatterTime)}",
         timeBegin = start.format(formatterTime),
         timeEnd = end.format(formatterTime),
-        timeRestBegin = if (time.rest != null) time.rest.start.format(formatterTime) else "",
-        timeRestEnd = if (time.rest != null) time.rest.end.format(formatterTime) else "",
+        timeRestBegin = if (time.rest != null) time.rest!!.start.format(formatterTime) else "",
+        timeRestEnd = if (time.rest != null) time.rest!!.end.format(formatterTime) else "",
         duration = formatDuration(time.totalDuration, locale),
         mileageKm = "${carSnapshot.mileage / 1000} $kmString",
         earnings = financeInput.earnings.centsToCurrency(locale, currencySymbol),
@@ -50,6 +50,8 @@ fun Shift.toUi(locale: Locale, currencySymbol: CurrencySymbolMode): ShiftOutputM
     )
 }
 
+fun List<Shift>.toUi(locale: Locale, currencySymbol: CurrencySymbolMode): List<ShiftOutputModel> =
+    map { shift -> shift.toUi(locale, currencySymbol) }
 fun Long.centsToCurrency(locale: Locale, currencySymbol: CurrencySymbolMode): String {
     val amount = this.toDouble() / 100
 

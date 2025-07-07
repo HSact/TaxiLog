@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import com.hsact.taxilog.R
 import androidx.compose.runtime.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.hsact.taxilog.domain.model.Shift
-import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
+import com.hsact.domain.model.Shift
+import com.hsact.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.ui.shift.mappers.toUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -24,8 +24,8 @@ import com.hsact.taxilog.ui.components.TimePickerFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputLayout
+import com.hsact.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.databinding.FragmentShiftFormBinding
-import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.ui.shift.mappers.millisToHours
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

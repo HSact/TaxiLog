@@ -2,12 +2,12 @@ package com.hsact.taxilog.ui.fragments.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hsact.taxilog.domain.utils.centsToDollars
-import com.hsact.taxilog.domain.model.Shift
-import com.hsact.taxilog.domain.model.settings.UserSettings
-import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
-import com.hsact.taxilog.domain.usecase.shift.GetLastShiftUseCase
-import com.hsact.taxilog.domain.usecase.shift.GetShiftsInRangeUseCase
+import com.hsact.domain.model.Shift
+import com.hsact.domain.model.settings.UserSettings
+import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
+import com.hsact.domain.usecase.shift.GetLastShiftUseCase
+import com.hsact.domain.usecase.shift.GetShiftsInRangeUseCase
+import com.hsact.domain.utils.centsToDollars
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

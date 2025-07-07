@@ -3,10 +3,10 @@ package com.hsact.taxilog.data.repository
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
-import com.hsact.taxilog.domain.model.settings.UserSettings
-import com.hsact.taxilog.domain.model.settings.currencyNameToSymbolMode
-import com.hsact.taxilog.domain.repository.SettingsRepository
+import com.hsact.domain.model.settings.CurrencySymbolMode
+import com.hsact.domain.model.settings.UserSettings
+import com.hsact.domain.model.settings.currencyNameToSymbolMode
+import com.hsact.domain.repository.SettingsRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

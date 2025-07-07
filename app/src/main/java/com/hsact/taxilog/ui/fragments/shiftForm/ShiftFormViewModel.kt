@@ -5,15 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hsact.taxilog.domain.utils.DeprecatedDateFormatter
-import com.hsact.taxilog.domain.model.Shift
-import com.hsact.taxilog.domain.model.settings.UserSettings
-import com.hsact.taxilog.domain.usecase.settings.GetAllSettingsUseCase
-import com.hsact.taxilog.domain.usecase.shift.AddShiftUseCase
-import com.hsact.taxilog.domain.usecase.shift.GetShiftByIdUseCase
-import com.hsact.taxilog.domain.utils.centsToDollars
-import com.hsact.taxilog.domain.utils.toShortDate
-import com.hsact.taxilog.domain.utils.toShortTime
+import com.hsact.domain.model.Shift
+import com.hsact.domain.model.settings.UserSettings
+import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
+import com.hsact.domain.usecase.shift.AddShiftUseCase
+import com.hsact.domain.usecase.shift.GetShiftByIdUseCase
+import com.hsact.domain.utils.DeprecatedDateFormatter
+import com.hsact.domain.utils.centsToDollars
+import com.hsact.domain.utils.toShortDate
+import com.hsact.domain.utils.toShortTime
 import com.hsact.taxilog.ui.shift.ShiftInputModel
 import com.hsact.taxilog.ui.shift.mappers.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -66,8 +66,8 @@ class ShiftFormViewModel @Inject constructor(
         if (_uiState.value?.mileage == 0.0) return
         if (settings.fuelPrice.isNullOrEmpty() || settings.consumption.isNullOrEmpty()) return
         var currentShift = _uiState.value ?: return
-        val fuelPrice: Double = (settings.fuelPrice).toDouble()
-        val consumption = (settings.consumption).toDouble()
+        val fuelPrice: Double = (settings.fuelPrice!!).toDouble() //TODO: handle null
+        val consumption = (settings.consumption!!).toDouble()
         if (fuelPrice == 0.0 || consumption == 0.0) {
             return
         }
@@ -184,10 +184,10 @@ class ShiftFormViewModel @Inject constructor(
                 timeBegin = shift.time.period.start.toShortTime(),
                 timeEnd = shift.time.period.end.toShortTime(),
                 breakBegin = if (shift.time.rest != null) {
-                    shift.time.rest.start.toShortTime()
+                    shift.time.rest!!.start.toShortTime()
                 } else "",
                 breakEnd = if (shift.time.rest != null) {
-                    shift.time.rest.end.toShortTime()
+                    shift.time.rest!!.end.toShortTime()
                 } else "",
                 earnings = shift.financeInput.earnings.centsToDollars(),
                 tips = shift.financeInput.tips.centsToDollars(),

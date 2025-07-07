@@ -29,8 +29,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.hsact.taxilog.domain.model.Shift
-import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
+import com.hsact.domain.model.Shift
+import com.hsact.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.ui.AppTheme
 import com.hsact.taxilog.ui.cards.BaseCard
 import com.hsact.taxilog.ui.shift.ShiftOutputModel

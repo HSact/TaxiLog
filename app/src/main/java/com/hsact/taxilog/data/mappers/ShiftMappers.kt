@@ -1,14 +1,14 @@
 package com.hsact.taxilog.data.mappers
 
+import com.hsact.domain.model.Shift
+import com.hsact.domain.model.ShiftFinanceInput
+import com.hsact.domain.model.car.CarSnapshot
+import com.hsact.domain.model.time.DateTimePeriod
+import com.hsact.domain.model.time.ShiftTime
 import com.hsact.taxilog.data.db.entities.CarSnapshotEntity
 import com.hsact.taxilog.data.db.entities.DateTimePeriodEntity
 import com.hsact.taxilog.data.db.entities.ShiftEntity
 import com.hsact.taxilog.data.db.entities.ShiftFinanceInputEntity
-import com.hsact.taxilog.domain.model.ShiftFinanceInput
-import com.hsact.taxilog.domain.model.Shift
-import com.hsact.taxilog.domain.model.car.CarSnapshot
-import com.hsact.taxilog.domain.model.time.DateTimePeriod
-import com.hsact.taxilog.domain.model.time.ShiftTime
 
 fun ShiftEntity.toDomain(): Shift {
     return Shift(

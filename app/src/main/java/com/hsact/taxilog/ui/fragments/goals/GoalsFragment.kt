@@ -11,9 +11,9 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.hsact.domain.utils.DeprecatedDateFormatter
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentGoalsBinding
-import com.hsact.taxilog.domain.utils.DeprecatedDateFormatter
 import com.hsact.taxilog.ui.cards.DrawDayWeekMonthProgressCard
 import com.hsact.taxilog.ui.cards.DrawDaysInMonthCard
 import com.hsact.taxilog.ui.components.DatePickerFragment
