@@ -24,7 +24,7 @@ class StartUpActivity : AppCompatActivity() {
     private lateinit var settings: UserSettings
 
     private lateinit var binding: ActivityStartUpBinding
-    private val logoDuration: Long = 1500
+    private val logoDuration: Long = 1200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

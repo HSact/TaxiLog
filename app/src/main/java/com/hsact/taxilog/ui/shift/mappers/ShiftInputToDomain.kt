@@ -13,7 +13,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToLong
 
-fun ShiftInputModel.toDomain(): Shift {
+fun ShiftInputModel.toDomain(meta: ShiftMeta): Shift {
     val formatterDate = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     val formatterTime = DateTimeFormatter.ofPattern("H:mm")
 
@@ -46,12 +46,7 @@ fun ShiftInputModel.toDomain(): Shift {
         id = 0,
         remoteId = null,        //TODO: add remoteId
         carId = carId,
-        meta = ShiftMeta(
-            createdAt = LocalDateTime.now(),
-            updatedAt = LocalDateTime.now(),
-            lastModifiedBy = "",    //TODO: add lastModifiedBy
-            isSynced = false
-        ),
+        meta = meta,
         carSnapshot = CarSnapshot(
             name = carName,
             mileage = ((mileage.toDoubleOrNull() ?: 0.0) * 1000).toLong(),

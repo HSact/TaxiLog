@@ -6,6 +6,7 @@ import com.hsact.domain.model.settings.UserSettings
 interface SettingsRepository {
 
     val isConfigured: Boolean
+    val deviceId: String
     val theme: String?
     val currency: CurrencySymbolMode?
     val language: String?

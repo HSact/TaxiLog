@@ -6,8 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.domain.model.Shift
+import com.hsact.domain.model.ShiftMeta
 import com.hsact.domain.model.settings.UserSettings
 import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
+import com.hsact.domain.usecase.settings.GetDeviceIdUseCase
 import com.hsact.domain.usecase.shift.AddShiftUseCase
 import com.hsact.domain.usecase.shift.GetShiftByIdUseCase
 import com.hsact.domain.utils.DeprecatedDateFormatter
@@ -28,6 +30,7 @@ import kotlin.math.roundToInt
 @HiltViewModel
 class ShiftFormViewModel @Inject constructor(
     getAllSettingsUseCase: GetAllSettingsUseCase,
+    private val getDeviceIdUseCase: GetDeviceIdUseCase,
     private val addShiftUseCase: AddShiftUseCase,
     private val getShiftByIdUseCase: GetShiftByIdUseCase,
 ) : ViewModel() {
@@ -121,11 +124,16 @@ class ShiftFormViewModel @Inject constructor(
         _uiState.value = currentShift
     }
 
-    suspend fun submit() {
+    suspend fun submit() {                                  //TODO: Handle edit mode
         val uiState = _uiState.value ?: return
         val shiftInput = buildShiftInputModel(uiState)
-
-        val shift: Shift = shiftInput.toDomain()
+        val deviceId =  getDeviceIdUseCase.invoke()
+        val shiftMeta = ShiftMeta(
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now(),
+            lastModifiedBy = deviceId,
+        )
+        val shift: Shift = shiftInput.toDomain(shiftMeta)
         addShiftUseCase(shift.copy(id = uiState.id))
     }
 

@@ -8,6 +8,7 @@ import com.hsact.domain.model.settings.UserSettings
 import com.hsact.domain.model.settings.currencyNameToSymbolMode
 import com.hsact.domain.repository.SettingsRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.util.UUID
 import javax.inject.Inject
 
 class SettingsRepositoryImpl @Inject constructor(
@@ -19,47 +20,59 @@ class SettingsRepositoryImpl @Inject constructor(
     override val isConfigured: Boolean
         get() = sharedPreferences.getBoolean("Is_configured", false)
 
+    override val deviceId: String
+        get() {
+            val current = sharedPreferences.getString("Device_id", null)
+            return if (current != null) {
+                current
+            } else {
+                val newId = UUID.randomUUID().toString()
+                updateSetting("Device_id", newId)
+                newId
+            }
+        }
+
     override val theme: String?
-        get() = sharedPreferences.getString("Theme", "")
+        get() = sharedPreferences.getString("Theme", null)
 
     override val currency: CurrencySymbolMode?
-        get() = sharedPreferences.getString("Currency", "").currencyNameToSymbolMode()
+        get() = sharedPreferences.getString("Currency", null).currencyNameToSymbolMode()
 
     override val language: String?
-        get() = sharedPreferences.getString("My_Lang", "")
+        get() = sharedPreferences.getString("My_Lang", null)
 
     override val kmMi: Boolean
         get() = sharedPreferences.getBoolean("KmMi", false)
 
     override val consumption: String?
-        get() = sharedPreferences.getString("Consumption", "")
+        get() = sharedPreferences.getString("Consumption", null)
 
     override val rented: Boolean
         get() = sharedPreferences.getBoolean("Rented", false)
 
     override val rentCost: String?
-        get() = sharedPreferences.getString("Rent_cost", "")
+        get() = sharedPreferences.getString("Rent_cost", null)
 
     override val fuelPrice: String?
-        get() = sharedPreferences.getString("Fuel_price", "")
+        get() = sharedPreferences.getString("Fuel_price", null)
 
     override val service: Boolean
         get() = sharedPreferences.getBoolean("Service", false)
 
     override val serviceCost: String?
-        get() = sharedPreferences.getString("Service_cost", "")
+        get() = sharedPreferences.getString("Service_cost", null)
 
     override val goalPerMonth: String?
-        get() = sharedPreferences.getString("Goal_per_month", "")
+        get() = sharedPreferences.getString("Goal_per_month", null)
 
     override val schedule: String?
-        get() = sharedPreferences.getString("Schedule", "")
+        get() = sharedPreferences.getString("Schedule", null)
 
     override val taxes: Boolean
         get() = sharedPreferences.getBoolean("Taxes", false)
 
     override val taxRate: String?
-        get() = sharedPreferences.getString("Tax_rate", "")
+        get() = sharedPreferences.getString("Tax_rate", null)
 
     override fun getAllSettings(): UserSettings {
         return UserSettings(
