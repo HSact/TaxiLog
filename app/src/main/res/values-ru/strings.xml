@@ -106,9 +106,9 @@
     <string name="start_date">От</string>
     <string name="end_date">До</string>
     <string name="settings_consumption_hint">л/100 км</string>
-    <string name="settings_fuel_price_hint">л/$</string>
-    <string name="hint_money_per_week">₽/$ и т.п. в неделю</string>
-    <string name="hint_money_per_km_mi">₽/$ и т.п. за км</string>
+    <string name="settings_fuel_l">л</string>
+    <string name="hint_money_per_shift">за смену</string>
+    <string name="hint_money_per_km_mi">за км</string>
     <string name="percent">%</string>
     <string name="month_graph">Достижение цели</string>
     <string name="progress">Прогресс</string>

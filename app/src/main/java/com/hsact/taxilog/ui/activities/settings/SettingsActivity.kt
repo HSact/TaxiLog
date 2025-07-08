@@ -80,10 +80,9 @@ class SettingsActivity : AppCompatActivity() {
         bindItems()
         val currencySymbol = viewModel.settings.value?.currency?.toSymbol()
             ?: CurrencySymbolMode.fromLocale(Locale.getDefault()).toSymbol()
-        textFuelCostL.hint = currencySymbol
-        textConsumptionL.hint = currencySymbol
-        textRentCostL.hint = currencySymbol
-        textServiceCostL.hint = currencySymbol
+        textFuelCostL.hint = getString(R.string.settings_fuel_l) + "/" + currencySymbol
+        textRentCostL.hint = currencySymbol + "/" + getString(R.string.hint_money_per_shift)
+        textServiceCostL.hint = currencySymbol + "/" + getString(R.string.hint_money_per_km_mi)
         textGoalPerMonthL.hint = currencySymbol
         updateUiWithSettings()
         updateThemeRadioButtons()

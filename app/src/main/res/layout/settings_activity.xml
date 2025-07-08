@@ -313,7 +313,7 @@
                     android:id="@+id/editTextRentCostL"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_money_per_week">
+                    android:hint="@string/hint_money_per_shift">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextRentCost"
