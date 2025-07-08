@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "555965772887",
+    "project_id": "taxilog-01",
+    "storage_bucket": "taxilog-01.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:555965772887:android:77c45b097a3e2c33a45f12",
+        "android_client_info": {
+          "package_name": "com.hsact.taxilog"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeAK8TkGU2suIVZYyTDPbXqKLKAxDn3lM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
