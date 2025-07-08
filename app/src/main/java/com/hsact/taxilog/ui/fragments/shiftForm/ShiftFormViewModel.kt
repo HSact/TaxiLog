@@ -69,7 +69,7 @@ class ShiftFormViewModel @Inject constructor(
         if (_uiState.value?.mileage == 0.0) return
         if (settings.fuelPrice.isNullOrEmpty() || settings.consumption.isNullOrEmpty()) return
         var currentShift = _uiState.value ?: return
-        val fuelPrice: Double = (settings.fuelPrice!!).toDouble() //TODO: handle null
+        val fuelPrice: Double = (settings.fuelPrice!!).toDouble()
         val consumption = (settings.consumption!!).toDouble()
         if (fuelPrice == 0.0 || consumption == 0.0) {
             return
@@ -124,12 +124,15 @@ class ShiftFormViewModel @Inject constructor(
         _uiState.value = currentShift
     }
 
-    suspend fun submit() {                                  //TODO: Handle edit mode
+    suspend fun submit() {
         val uiState = _uiState.value ?: return
         val shiftInput = buildShiftInputModel(uiState)
-        val deviceId =  getDeviceIdUseCase.invoke()
+        val deviceId = getDeviceIdUseCase.invoke()
+        val createdAt =
+            if (uiState.editShift == null) LocalDateTime.now()
+            else uiState.editShift.meta.createdAt
         val shiftMeta = ShiftMeta(
-            createdAt = LocalDateTime.now(),
+            createdAt = createdAt,
             updatedAt = LocalDateTime.now(),
             lastModifiedBy = deviceId,
         )
@@ -188,6 +191,7 @@ class ShiftFormViewModel @Inject constructor(
             }
             _uiState.value = UiState(
                 id = shift.id,
+                editShift = shift,
                 date = shift.time.period.start.toShortDate(),
                 timeBegin = shift.time.period.start.toShortTime(),
                 timeEnd = shift.time.period.end.toShortTime(),

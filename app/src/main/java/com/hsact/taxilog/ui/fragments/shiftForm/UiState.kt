@@ -1,7 +1,10 @@
 package com.hsact.taxilog.ui.fragments.shiftForm
 
+import com.hsact.domain.model.Shift
+
 data class UiState(
     val id: Int = 0,
+    val editShift: Shift? = null,
     var date: String = "",
     var timeBegin: String = "",
     var timeEnd: String = "",
