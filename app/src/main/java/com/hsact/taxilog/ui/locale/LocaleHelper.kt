@@ -2,7 +2,7 @@ package com.hsact.taxilog.ui.locale
 
 import android.content.Context
 import android.content.res.Configuration
-import com.hsact.taxilog.domain.usecase.settings.UpdateSettingUseCase
+import com.hsact.domain.usecase.settings.UpdateSettingUseCase
 import java.util.Locale
 import javax.inject.Inject
 

@@ -8,8 +8,8 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.hsact.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.databinding.FragmentHomeBinding
-import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.ui.cards.DrawGoalCard
 import com.hsact.taxilog.ui.cards.DrawLastShiftCard
 import com.hsact.taxilog.ui.cards.MonthGraphCard

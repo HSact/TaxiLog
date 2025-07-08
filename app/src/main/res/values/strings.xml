@@ -106,9 +106,9 @@
     <string name="start_date">Start date</string>
     <string name="end_date">End date</string>
     <string name="settings_consumption_hint">l/100 km</string>
-    <string name="settings_fuel_price_hint">l/$</string>
-    <string name="hint_money_per_week">$/€/₽ etc. per week</string>
-    <string name="hint_money_per_km_mi">$/€/₽ etc. per km</string>
+    <string name="settings_fuel_l">l</string>
+    <string name="hint_money_per_shift">per shift</string>
+    <string name="hint_money_per_km_mi">per km</string>
     <string name="percent">%</string>
     <string name="month_graph">Goal progress</string>
     <string name="progress">Progress</string>

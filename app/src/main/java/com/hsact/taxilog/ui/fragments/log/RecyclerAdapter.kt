@@ -5,10 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.hsact.domain.model.Shift
+import com.hsact.domain.model.settings.CurrencySymbolMode
+import com.hsact.domain.model.settings.UserSettings
 import com.hsact.taxilog.R
-import com.hsact.taxilog.domain.model.Shift
-import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
-import com.hsact.taxilog.domain.model.settings.UserSettings
 import com.hsact.taxilog.ui.shift.mappers.toUi
 import java.util.Locale
 

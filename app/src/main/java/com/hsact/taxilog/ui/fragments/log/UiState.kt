@@ -1,7 +1,7 @@
 package com.hsact.taxilog.ui.fragments.log
 
-import com.hsact.taxilog.domain.model.Shift
-import com.hsact.taxilog.domain.model.settings.UserSettings
+import com.hsact.domain.model.Shift
+import com.hsact.domain.model.settings.UserSettings
 
 data class UiState(
     val shifts: List<Shift> = emptyList(),

@@ -2,8 +2,8 @@ package com.hsact.taxilog.di
 
 import android.content.Context
 import androidx.room.Room
-import com.hsact.taxilog.data.db.AppDatabase
-import com.hsact.taxilog.data.db.ShiftDao
+import com.hsact.data.db.AppDatabase
+import com.hsact.data.db.ShiftDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

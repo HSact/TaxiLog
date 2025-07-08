@@ -9,8 +9,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
+import com.hsact.domain.model.settings.UserSettings
 import com.hsact.taxilog.databinding.ActivityStartUpBinding
-import com.hsact.taxilog.domain.model.settings.UserSettings
 import com.hsact.taxilog.ui.activities.MainActivity
 import com.hsact.taxilog.ui.activities.settings.SettingsActivity
 import com.hsact.taxilog.ui.locale.ContextWrapper
@@ -24,7 +24,7 @@ class StartUpActivity : AppCompatActivity() {
     private lateinit var settings: UserSettings
 
     private lateinit var binding: ActivityStartUpBinding
-    private val logoDuration: Long = 1500
+    private val logoDuration: Long = 1200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

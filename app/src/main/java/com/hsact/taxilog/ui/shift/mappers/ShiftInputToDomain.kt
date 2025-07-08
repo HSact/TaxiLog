@@ -1,10 +1,11 @@
 package com.hsact.taxilog.ui.shift.mappers
 
-import com.hsact.taxilog.domain.model.ShiftFinanceInput
-import com.hsact.taxilog.domain.model.Shift
-import com.hsact.taxilog.domain.model.car.CarSnapshot
-import com.hsact.taxilog.domain.model.time.DateTimePeriod
-import com.hsact.taxilog.domain.model.time.ShiftTime
+import com.hsact.domain.model.Shift
+import com.hsact.domain.model.ShiftFinanceInput
+import com.hsact.domain.model.ShiftMeta
+import com.hsact.domain.model.car.CarSnapshot
+import com.hsact.domain.model.time.DateTimePeriod
+import com.hsact.domain.model.time.ShiftTime
 import com.hsact.taxilog.ui.shift.ShiftInputModel
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -12,7 +13,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToLong
 
-fun ShiftInputModel.toDomain(): Shift {
+fun ShiftInputModel.toDomain(meta: ShiftMeta): Shift {
     val formatterDate = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     val formatterTime = DateTimeFormatter.ofPattern("H:mm")
 
@@ -43,7 +44,9 @@ fun ShiftInputModel.toDomain(): Shift {
 
     return Shift(
         id = 0,
+        remoteId = null,        //TODO: add remoteId
         carId = carId,
+        meta = meta,
         carSnapshot = CarSnapshot(
             name = carName,
             mileage = ((mileage.toDoubleOrNull() ?: 0.0) * 1000).toLong(),

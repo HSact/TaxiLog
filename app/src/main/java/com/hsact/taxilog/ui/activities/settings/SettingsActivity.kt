@@ -19,11 +19,11 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputLayout
+import com.hsact.domain.model.settings.CurrencySymbolMode
+import com.hsact.domain.model.settings.UserSettings
+import com.hsact.domain.model.settings.indexToCurrencySymbolMode
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.SettingsActivityBinding
-import com.hsact.taxilog.domain.model.settings.CurrencySymbolMode
-import com.hsact.taxilog.domain.model.settings.UserSettings
-import com.hsact.taxilog.domain.model.settings.indexToCurrencySymbolMode
 import com.hsact.taxilog.ui.activities.MainActivity
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
@@ -80,10 +80,9 @@ class SettingsActivity : AppCompatActivity() {
         bindItems()
         val currencySymbol = viewModel.settings.value?.currency?.toSymbol()
             ?: CurrencySymbolMode.fromLocale(Locale.getDefault()).toSymbol()
-        textFuelCostL.hint = currencySymbol
-        textConsumptionL.hint = currencySymbol
-        textRentCostL.hint = currencySymbol
-        textServiceCostL.hint = currencySymbol
+        textFuelCostL.hint = getString(R.string.settings_fuel_l) + "/" + currencySymbol
+        textRentCostL.hint = currencySymbol + "/" + getString(R.string.hint_money_per_shift)
+        textServiceCostL.hint = currencySymbol + "/" + getString(R.string.hint_money_per_km_mi)
         textGoalPerMonthL.hint = currencySymbol
         updateUiWithSettings()
         updateThemeRadioButtons()
