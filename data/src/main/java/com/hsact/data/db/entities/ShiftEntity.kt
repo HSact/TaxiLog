@@ -7,7 +7,9 @@ import androidx.room.PrimaryKey
 @Entity
 data class ShiftEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
+    val remoteId: String?,
     val carId: Int,
+    @Embedded val meta: ShiftMetaEntity,
     @Embedded val carSnapshot: CarSnapshotEntity,
     @Embedded(prefix = "period_") val period: DateTimePeriodEntity,
     @Embedded(prefix = "rest_") val rest: DateTimePeriodEntity? = null,

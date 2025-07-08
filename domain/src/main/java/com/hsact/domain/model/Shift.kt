@@ -1,13 +1,14 @@
 package com.hsact.domain.model
 
-
 import com.hsact.domain.model.car.CarSnapshot
 import com.hsact.domain.model.time.ShiftTime
 import kotlin.math.roundToInt
 
 data class Shift(
     val id: Int,
+    val remoteId: String?,
     val carId: Int,
+    val meta: ShiftMeta,
     val carSnapshot: CarSnapshot,
     val time: ShiftTime,
     val financeInput: ShiftFinanceInput,

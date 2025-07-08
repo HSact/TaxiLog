@@ -2,6 +2,7 @@ package com.hsact.taxilog.ui.shift.mappers
 
 import com.hsact.domain.model.Shift
 import com.hsact.domain.model.ShiftFinanceInput
+import com.hsact.domain.model.ShiftMeta
 import com.hsact.domain.model.car.CarSnapshot
 import com.hsact.domain.model.time.DateTimePeriod
 import com.hsact.domain.model.time.ShiftTime
@@ -43,7 +44,14 @@ fun ShiftInputModel.toDomain(): Shift {
 
     return Shift(
         id = 0,
+        remoteId = null,        //TODO: add remoteId
         carId = carId,
+        meta = ShiftMeta(
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now(),
+            lastModifiedBy = "",    //TODO: add lastModifiedBy
+            isSynced = false
+        ),
         carSnapshot = CarSnapshot(
             name = carName,
             mileage = ((mileage.toDoubleOrNull() ?: 0.0) * 1000).toLong(),
