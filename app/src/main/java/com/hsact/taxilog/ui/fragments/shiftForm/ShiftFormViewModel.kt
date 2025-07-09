@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
+import java.util.UUID
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -124,20 +125,26 @@ class ShiftFormViewModel @Inject constructor(
         _uiState.value = currentShift
     }
 
-    suspend fun submit() {
+    fun submit() {
         val uiState = _uiState.value ?: return
         val shiftInput = buildShiftInputModel(uiState)
         val deviceId = getDeviceIdUseCase.invoke()
+        val remoteId =
+            if (uiState.editShift != null && uiState.editShift.remoteId != null) uiState.editShift.remoteId
+            else UUID.randomUUID().toString()
+
         val createdAt =
-            if (uiState.editShift == null) LocalDateTime.now()
-            else uiState.editShift.meta.createdAt
+            if (uiState.editShift != null) uiState.editShift.meta.createdAt
+            else LocalDateTime.now()
         val shiftMeta = ShiftMeta(
             createdAt = createdAt,
             updatedAt = LocalDateTime.now(),
             lastModifiedBy = deviceId,
         )
         val shift: Shift = shiftInput.toDomain(shiftMeta)
-        addShiftUseCase(shift.copy(id = uiState.id))
+        viewModelScope.launch {
+            addShiftUseCase(shift.copy(id = uiState.id, remoteId = remoteId))
+        }
     }
 
     private fun buildShiftInputModel(
