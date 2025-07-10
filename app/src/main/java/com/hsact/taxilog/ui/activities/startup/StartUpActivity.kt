@@ -26,7 +26,6 @@ import com.hsact.taxilog.ui.activities.MainActivity
 import com.hsact.taxilog.ui.activities.settings.SettingsActivity
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.system.exitProcess
 
 @AndroidEntryPoint
 class StartUpActivity : AppCompatActivity() {
