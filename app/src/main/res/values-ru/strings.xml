@@ -133,6 +133,11 @@
     <string name="profit_margin">Рентабельность</string>
     <string name="profit_per_km">Прибыль/км</string>
     <string name="earnings_per_km">Выручка/км</string>
+    <string name="authentication_failed">Ошибка авторизации</string>
+    <string name="sign_out">Выйти</string>
+    <string name="not_signed_in">Вход не выполнен</string>
+    <string name="retry_login_question">Повторить попытку?</string>
+    <string name="retry">Повторить</string>
     <string-array name="languages">
         <item>English</item>
         <item>Русский</item>
