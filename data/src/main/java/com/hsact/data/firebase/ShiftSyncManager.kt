@@ -1,6 +1,7 @@
 package com.hsact.data.firebase
 
 import android.util.Log
+import com.hsact.domain.model.Shift
 import com.hsact.domain.repository.ShiftRepository
 import javax.inject.Inject
 
@@ -23,9 +24,12 @@ class ShiftSyncManager @Inject constructor(
             val shiftWithSynced = remoteShift.copy(meta = newMeta)
 
             if (localShift == null) {
-                shiftRepository.insertShift(shiftWithSynced)
+                shiftRepository.insertShift(shiftWithSynced.withNewId())
                 Log.d("Sync", "Inserted remote shift: $remoteId")
             } else {
+                if (localShift.meta.updatedAt >= remoteShift.meta.updatedAt) {
+                    continue
+                }
                 // saving local ID
                 val updated = shiftWithSynced.copy(id = localShift.id)
                 shiftRepository.updateShift(updated)
@@ -41,4 +45,6 @@ class ShiftSyncManager @Inject constructor(
             shiftRepository.markAsSynced(localShift.id)
         }
     }
+
+    private fun Shift.withNewId(): Shift = this.copy(id = 0)
 }

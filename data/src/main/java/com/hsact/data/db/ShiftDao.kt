@@ -32,9 +32,6 @@ interface ShiftDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertShift(shift: ShiftEntity)
 
-    @Delete
-    suspend fun deleteShift(shift: ShiftEntity)
-
     @Query("DELETE FROM shiftentity WHERE id = :id")
     suspend fun deleteById(id: Int)
     @Update

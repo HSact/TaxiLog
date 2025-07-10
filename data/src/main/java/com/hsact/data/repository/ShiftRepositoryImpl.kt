@@ -59,17 +59,13 @@ class ShiftRepositoryImpl @Inject constructor(
         shiftDao.insertShift(shift.toEntity())
     }
 
-    override suspend fun deleteShift(shift: Shift) {
-//        shiftDao.deleteShift(shift.toEntity())
-        deleteById(shift.id)
+    override suspend fun deleteByLocalId(shift: Shift) {
+        shiftDao.deleteById(shift.id)
         Log.d("ShiftRepository", "Remove from Firebase: remoteId=${shift.remoteId} (${shift.remoteId?.length})")
         shift.remoteId?.let {
             firebaseShiftDataSource.delete(it)
         } ?: Log.w("ShiftRepository", "No remoteId to delete from Firebase for shift id=${shift.id}")
     }
-
-    override suspend fun deleteById(id: Int) =
-        shiftDao.deleteById(id)
 
     override suspend fun updateShift(shift: Shift) =
         shiftDao.updateShift(shift.toEntity())
