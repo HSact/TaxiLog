@@ -53,20 +53,17 @@ class StartUpActivity : AppCompatActivity() {
                 setTheme(theme)
                 binding.imageLogo.alpha = 0f
                 binding.buttonOkay.setOnClickListener {
-                    startActivity(
-                        Intent(
-                            this,
-                            SettingsActivity::class.java
-                        )
-                    )
+                    val intent = Intent(this, SettingsActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
                 }
+
                 binding.buttonNope.setOnClickListener {
-                    startActivity(
-                        Intent(
-                            this,
-                            MainActivity::class.java
-                        )
-                    )
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
                 }
 
                 binding.imageLogo.animate().setDuration(logoDuration).alpha(1f)
@@ -99,7 +96,10 @@ class StartUpActivity : AppCompatActivity() {
     private fun proceedAfterLogin() {
         if (settings.isConfigured) {
             Handler(Looper.getMainLooper()).postDelayed({
-                startActivity(Intent(this, MainActivity::class.java))
+                val intent = Intent(this, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             }, logoDuration)
         } else {
             Handler(Looper.getMainLooper()).postDelayed({
@@ -178,12 +178,6 @@ class StartUpActivity : AppCompatActivity() {
             val signInIntent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }, 500)
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        moveTaskToBack(true)
-        exitProcess(-1)
     }
 
     private fun getCurrentTheme(): String {
