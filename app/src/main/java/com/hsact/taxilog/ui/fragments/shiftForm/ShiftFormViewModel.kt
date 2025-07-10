@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hsact.data.firebase.ShiftSyncManager
 import com.hsact.domain.model.Shift
 import com.hsact.domain.model.ShiftMeta
 import com.hsact.domain.model.settings.UserSettings
@@ -24,7 +25,6 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
-import java.util.UUID
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -34,6 +34,7 @@ class ShiftFormViewModel @Inject constructor(
     private val getDeviceIdUseCase: GetDeviceIdUseCase,
     private val addShiftUseCase: AddShiftUseCase,
     private val getShiftByIdUseCase: GetShiftByIdUseCase,
+    private val shiftSyncManager: ShiftSyncManager
 ) : ViewModel() {
     private val _uiState = MutableLiveData<UiState>()
     val uiState: LiveData<UiState> get() = _uiState
@@ -131,7 +132,7 @@ class ShiftFormViewModel @Inject constructor(
         val deviceId = getDeviceIdUseCase.invoke()
         val remoteId =
             if (uiState.editShift != null && uiState.editShift.remoteId != null) uiState.editShift.remoteId
-            else UUID.randomUUID().toString()
+            else null
 
         val createdAt =
             if (uiState.editShift != null) uiState.editShift.meta.createdAt
@@ -144,6 +145,7 @@ class ShiftFormViewModel @Inject constructor(
         val shift: Shift = shiftInput.toDomain(shiftMeta)
         viewModelScope.launch {
             addShiftUseCase(shift.copy(id = uiState.id, remoteId = remoteId))
+            shiftSyncManager.sync()
         }
     }
 

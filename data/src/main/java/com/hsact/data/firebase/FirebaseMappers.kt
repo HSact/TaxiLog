@@ -24,11 +24,11 @@ fun Shift.toFirebase(): FirebaseShift = FirebaseShift(
     note = note
 )
 
-fun FirebaseShift.toDomainOrNull(): Shift? {
+fun FirebaseShift.toDomainOrNull(forceRemoteId: String? = null): Shift? {
     if (meta == null || carSnapshot == null || period == null || financeInput == null) return null
     return Shift(
         id = id ?: 0,
-        remoteId = remoteId,
+        remoteId = forceRemoteId ?: remoteId,
         carId = carId ?: 0,
         meta = meta.toDomain(),
         carSnapshot = carSnapshot.toDomain(),
