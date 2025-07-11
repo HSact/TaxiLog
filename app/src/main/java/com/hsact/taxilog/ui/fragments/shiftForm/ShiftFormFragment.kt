@@ -93,7 +93,6 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         editTipsL.hint = currencySymbol
         editWashL.hint = currencySymbol
         editFuelCostL.hint = currencySymbol
-        editMileageL.hint = currencySymbol
         scrollView.setPadding(0, 0, 0, 0)
         editEarnings.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
