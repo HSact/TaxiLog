@@ -9,10 +9,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.hsact.taxilog" />
+                  <option name="mobileSdkAppId" value="1:555965772887:android:77c45b097a3e2c33a45f12" />
+                  <option name="projectId" value="taxilog-01" />
+                  <option name="projectNumber" value="555965772887" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

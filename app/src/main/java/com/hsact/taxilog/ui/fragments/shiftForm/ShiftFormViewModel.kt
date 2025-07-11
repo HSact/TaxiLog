@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hsact.data.firebase.ShiftSyncManager
 import com.hsact.domain.model.Shift
 import com.hsact.domain.model.ShiftMeta
 import com.hsact.domain.model.settings.UserSettings
@@ -33,6 +34,7 @@ class ShiftFormViewModel @Inject constructor(
     private val getDeviceIdUseCase: GetDeviceIdUseCase,
     private val addShiftUseCase: AddShiftUseCase,
     private val getShiftByIdUseCase: GetShiftByIdUseCase,
+    private val shiftSyncManager: ShiftSyncManager
 ) : ViewModel() {
     private val _uiState = MutableLiveData<UiState>()
     val uiState: LiveData<UiState> get() = _uiState
@@ -124,20 +126,27 @@ class ShiftFormViewModel @Inject constructor(
         _uiState.value = currentShift
     }
 
-    suspend fun submit() {
+    fun submit() {
         val uiState = _uiState.value ?: return
         val shiftInput = buildShiftInputModel(uiState)
         val deviceId = getDeviceIdUseCase.invoke()
+        val remoteId =
+            if (uiState.editShift != null && uiState.editShift.remoteId != null) uiState.editShift.remoteId
+            else null
+
         val createdAt =
-            if (uiState.editShift == null) LocalDateTime.now()
-            else uiState.editShift.meta.createdAt
+            if (uiState.editShift != null) uiState.editShift.meta.createdAt
+            else LocalDateTime.now()
         val shiftMeta = ShiftMeta(
             createdAt = createdAt,
             updatedAt = LocalDateTime.now(),
             lastModifiedBy = deviceId,
         )
         val shift: Shift = shiftInput.toDomain(shiftMeta)
-        addShiftUseCase(shift.copy(id = uiState.id))
+        viewModelScope.launch {
+            addShiftUseCase(shift.copy(id = uiState.id, remoteId = remoteId))
+            shiftSyncManager.sync()
+        }
     }
 
     private fun buildShiftInputModel(

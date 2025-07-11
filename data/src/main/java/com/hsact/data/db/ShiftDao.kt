@@ -1,7 +1,6 @@
 package com.hsact.data.db
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -23,12 +22,17 @@ interface ShiftDao {
     @Query("SELECT * FROM shiftentity ORDER BY id DESC LIMIT 1")
     suspend fun getLastShift(): ShiftEntity?
 
+    @Query("SELECT * FROM shiftentity WHERE meta_isSynced = 0")
+    suspend fun getUnsyncedShifts(): List<ShiftEntity>
+
+    @Query("SELECT * FROM shiftentity WHERE remoteId = :remoteId LIMIT 1")
+    suspend fun getByRemoteId(remoteId: String): ShiftEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertShift(shift: ShiftEntity)
 
-    @Delete
-    suspend fun deleteShift(shift: ShiftEntity)
-
+    @Query("DELETE FROM shiftentity WHERE id = :id")
+    suspend fun deleteById(id: Int)
     @Update
     suspend fun updateShift(shift: ShiftEntity)
 

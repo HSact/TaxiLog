@@ -12,19 +12,24 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Spinner
 import android.widget.TableRow
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
 import com.hsact.domain.model.settings.CurrencySymbolMode
 import com.hsact.domain.model.settings.UserSettings
 import com.hsact.domain.model.settings.indexToCurrencySymbolMode
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.SettingsActivityBinding
 import com.hsact.taxilog.ui.activities.MainActivity
+import com.hsact.taxilog.ui.activities.startup.StartUpActivity
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -36,6 +41,8 @@ class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding: SettingsActivityBinding
 
+    private lateinit var textUserEmail: TextView
+    private lateinit var buttonSignOut: Button
     private lateinit var switchRent: MaterialSwitch
     private lateinit var switchService: MaterialSwitch
     private lateinit var switchTaxes: MaterialSwitch
@@ -78,6 +85,24 @@ class SettingsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         bindItems()
+
+        FirebaseAuth.getInstance().addAuthStateListener { auth ->
+            val user = auth.currentUser
+            textUserEmail.text = user?.email ?: getString(R.string.not_signed_in)
+//            textUserEmail.text = "example@example.com"
+            if (user == null) {
+                buttonSignOut.text = getString(R.string.sign_in)
+                buttonSignOut.setOnClickListener {
+                    login()
+                }
+            }
+            else {
+                buttonSignOut.setOnClickListener {
+                    logout()
+                }
+            }
+        }
+
         val currencySymbol = viewModel.settings.value?.currency?.toSymbol()
             ?: CurrencySymbolMode.fromLocale(Locale.getDefault()).toSymbol()
         textFuelCostL.hint = getString(R.string.settings_fuel_l) + "/" + currencySymbol
@@ -123,11 +148,36 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    private fun login() {
+        val intent = Intent(this, StartUpActivity::class.java)
+        startActivity(intent)
+    }
+
+    @Suppress("DEPRECATION")
+    private fun logout() {
+        FirebaseAuth.getInstance().signOut()
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        val client = GoogleSignIn.getClient(this, gso)
+        client.signOut().addOnCompleteListener {
+            val intent = Intent(this, StartUpActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
+    }
+
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(ContextWrapper.wrapContext(newBase))
     }
 
     private fun bindItems() {
+        textUserEmail = binding.textUserEmail
+        buttonSignOut = binding.buttonSignOut
         switchRent = binding.switchRent
         switchService = binding.switchService
         switchTaxes = binding.switchTaxes
@@ -271,9 +321,10 @@ class SettingsActivity : AppCompatActivity() {
         return radioKm.isChecked
     }
 
-    private fun saveSettings() {
+    private fun saveSettings(authSkip: Boolean? = null) {
         val settingsData = UserSettings(
             isConfigured = true,
+            //authSkipped = authSkip ?: viewModel.settings.value!!.authSkipped, //TODO: remove this
             language = getSelectedLanguage(),
             theme = getSelectedTheme(),
             currency = getSelectedCurrency(),

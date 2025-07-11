@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StartUpViewModel @Inject constructor(
-    getAllSettingsUseCase: GetAllSettingsUseCase
+    getAllSettingsUseCase: GetAllSettingsUseCase,
 ): ViewModel() {
     private val _settings = MutableLiveData<UserSettings>()
     val settings: LiveData<UserSettings> = _settings

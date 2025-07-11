@@ -8,6 +8,6 @@ class DeleteShiftUseCase(
     private val repository: ShiftRepository
 ) {
     suspend operator fun invoke(shift: Shift) {
-        repository.deleteShift(shift)
+        repository.deleteByLocalId(shift)
     }
 }

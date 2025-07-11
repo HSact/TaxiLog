@@ -93,7 +93,6 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         editTipsL.hint = currencySymbol
         editWashL.hint = currencySymbol
         editFuelCostL.hint = currencySymbol
-        editMileageL.hint = currencySymbol
         scrollView.setPadding(0, 0, 0, 0)
         editEarnings.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
@@ -342,7 +341,7 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         alert.show()
     }
 
-    private suspend fun submit() {
+    private fun submit() {
         viewModel.submit()
         Toast.makeText(activity, getString(R.string.shift_added_successfully), Toast.LENGTH_SHORT)
             .show()
