@@ -9,7 +9,8 @@ TaxiLog is an app for taxi drivers that helps track shifts and analyze earnings.
 -  Shift log: track income, mileage, and working hours.  
 -  Automatic statistics calculation by day, week, and month.  
 -  Graphs and analytics for easy income tracking.  
--  Simple and intuitive record management.  
+-  Simple and intuitive record management.
+-  ☁️ Cloud sync with Google account (Firebase + Firestore).
 
 ## 🧩 Architecture Overview
 
@@ -20,6 +21,9 @@ The app follows a hybrid MVVM pattern with gradual migration to Compose:
 - `LiveData` is used for reactive XML binding, while `StateFlow` is used for newer Compose elements
 - Room handles local persistence of shift entries
 - Shared Preferences handles user settings
+- Firebase Authentication is used for sign-in with Google
+- Firestore is used for syncing shift entries across devices
+- Synchronization logic is handled in a dedicated `ShiftSyncManager` (upload/download/merge of entries)
 - Structured domain logic with models, repositories, and use cases
 
 
@@ -30,7 +34,8 @@ The app follows a hybrid MVVM pattern with gradual migration to Compose:
 - **Architecture:** MVVM  
 - **State Management:** LiveData & StateFlow  
 - **Dependency Injection:** Hilt  
-- **Database:** Room  
+- **Database:** Room
+- **Cloud**: Firebase Auth, Cloud Firestore
 - **UI Charts:** [ComposeCharts](https://github.com/ehsannarmani/ComposeCharts)<br>
 - **Date handling:** ThreeTenABP (`LocalDate`, `LocalDateTime`)  
 - **Others:** ViewModel, Coroutines, Material Design components  
@@ -69,7 +74,8 @@ TaxiLog – это приложение для водителей такси, к
 -  Ведение журнала смен: доход, пробег, время работы.  
 -  Автоматический расчет статистики по дням, неделям и месяцам.  
 -  Графики и аналитика для удобного просмотра динамики доходов.  
--  Удобное управление записями.  
+-  Удобное управление записями.
+-  ☁️ Облачная синхронизация с Google-аккаунтом (Firebase + Firestore)
 
 ## 🧱 Технологии
 
@@ -78,7 +84,8 @@ TaxiLog – это приложение для водителей такси, к
 - **Архитектура:** MVVM  
 - **Состояния:** LiveData и StateFlow  
 - **DI:** Hilt  
-- **БД:** Room  
+- **БД:** Room
+- **Облако**: Firebase Auth, Cloud Firestore
 - **Графики:** [ComposeCharts](https://github.com/ehsannarmani/ComposeCharts)<br>
 - **Дата и время:** ThreeTenABP (`LocalDate`, `LocalDateTime`)  
 
@@ -91,6 +98,9 @@ TaxiLog – это приложение для водителей такси, к
 - Вся логика вынесена в ViewModel и UseCases  
 - Room используется для хранения данных смен
 - Shared Preferenceses используется для хранения настроек
+- Firebase Authentication используется для входа через Google
+- Cloud Firestore обеспечивает синхронизацию смен между устройствами
+- Синхронизация реализована в отдельном классе `ShiftSyncManager`, который автоматически обрабатывает загрузку, обновление и объединение смен
 
 📥 **Установка**  
 
