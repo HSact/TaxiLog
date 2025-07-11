@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -81,15 +82,36 @@ class StartUpActivity : AppCompatActivity() {
                 } else if (googleAccount != null) {
                     // 2. Authenticated in Google, but not in Firebase → request Firebase
                     firebaseAuthWithGoogle(googleAccount.idToken!!)
-                } else {
+                } else if (!settings.authSkipped) {
                     // 3. Not authenticated → begin login process
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        val signInIntent = googleSignInClient.signInIntent
-                        startActivityForResult(signInIntent, RC_SIGN_IN)
-                    }, logoDuration - 100)
+//                    Handler(Looper.getMainLooper()).postDelayed({
+//                        val signInIntent = googleSignInClient.signInIntent
+//                        startActivityForResult(signInIntent, RC_SIGN_IN)
+//                    }, logoDuration - 100)
+                    showAuthChoiceDialog(googleSignInClient)
+                }
+                else {
+                    proceedAfterLogin()
                 }
             }
         }
+    }
+
+    private fun showAuthChoiceDialog(googleSignInClient: GoogleSignInClient) {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(getString(R.string.sign_in_title))
+            .setMessage(getString(R.string.sign_in_description))
+            .setPositiveButton(getString(R.string.sign_in)) { _, _ ->
+                Handler(Looper.getMainLooper()).postDelayed({
+                    val signInIntent = googleSignInClient.signInIntent
+                    startActivityForResult(signInIntent, RC_SIGN_IN)
+                }, logoDuration - 100)
+            }
+            .setNegativeButton(getString(R.string.skip)) { _, _ ->
+                proceedAfterLogin()
+            }
+            .setCancelable(false)
+            .show()
     }
 
     private fun proceedAfterLogin() {

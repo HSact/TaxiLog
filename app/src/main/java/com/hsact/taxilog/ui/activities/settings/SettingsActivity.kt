@@ -89,10 +89,20 @@ class SettingsActivity : AppCompatActivity() {
         FirebaseAuth.getInstance().addAuthStateListener { auth ->
             val user = auth.currentUser
             textUserEmail.text = user?.email ?: getString(R.string.not_signed_in)
+//            textUserEmail.text = "example@example.com"
+            if (user == null) {
+                buttonSignOut.text = getString(R.string.sign_in)
+                buttonSignOut.setOnClickListener {
+                    login()
+                }
+            }
+            else {
+                buttonSignOut.setOnClickListener {
+                    logout()
+                }
+            }
         }
-        buttonSignOut.setOnClickListener {
-            logout()
-        }
+
         val currencySymbol = viewModel.settings.value?.currency?.toSymbol()
             ?: CurrencySymbolMode.fromLocale(Locale.getDefault()).toSymbol()
         textFuelCostL.hint = getString(R.string.settings_fuel_l) + "/" + currencySymbol
@@ -136,6 +146,11 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(intent)
             finishAffinity()
         }
+    }
+
+    private fun login() {
+        val intent = Intent(this, StartUpActivity::class.java)
+        startActivity(intent)
     }
 
     @Suppress("DEPRECATION")
@@ -306,9 +321,10 @@ class SettingsActivity : AppCompatActivity() {
         return radioKm.isChecked
     }
 
-    private fun saveSettings() {
+    private fun saveSettings(authSkip: Boolean? = null) {
         val settingsData = UserSettings(
             isConfigured = true,
+            //authSkipped = authSkip ?: viewModel.settings.value!!.authSkipped, //TODO: remove this
             language = getSelectedLanguage(),
             theme = getSelectedTheme(),
             currency = getSelectedCurrency(),
