@@ -90,9 +90,9 @@ class StartUpActivity : AppCompatActivity() {
 //                    }, logoDuration - 100)
                     showAuthChoiceDialog(googleSignInClient)
                 }
-                else {
+//                else {
                     proceedAfterLogin()
-                }
+//                }
             }
         }
     }
