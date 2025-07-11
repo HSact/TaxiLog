@@ -341,7 +341,7 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         alert.show()
     }
 
-    private suspend fun submit() {
+    private fun submit() {
         viewModel.submit()
         Toast.makeText(activity, getString(R.string.shift_added_successfully), Toast.LENGTH_SHORT)
             .show()

@@ -44,7 +44,7 @@ fun ShiftInputModel.toDomain(meta: ShiftMeta): Shift {
 
     return Shift(
         id = 0,
-        remoteId = null,        //TODO: add remoteId
+        remoteId = null,
         carId = carId,
         meta = meta,
         carSnapshot = CarSnapshot(
@@ -65,7 +65,7 @@ fun ShiftInputModel.toDomain(meta: ShiftMeta): Shift {
             fuelCost = dollarsToCents(fuelCost),
             taxRate = ((taxRate.toDoubleOrNull() ?: 0.0) * 100).toInt()
         ),
-        note = note
+        note = note?.trim()
     )
 }
 
