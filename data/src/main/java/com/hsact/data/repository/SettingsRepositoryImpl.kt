@@ -20,6 +20,9 @@ class SettingsRepositoryImpl @Inject constructor(
     override val isConfigured: Boolean
         get() = sharedPreferences.getBoolean("Is_configured", false)
 
+    override val authSkipped: Boolean
+        get() = sharedPreferences.getBoolean("Auth_skipped", false)
+
     override val deviceId: String
         get() {
             val current = sharedPreferences.getString("Device_id", null)
@@ -105,6 +108,10 @@ class SettingsRepositoryImpl @Inject constructor(
                 else -> throw IllegalArgumentException("Unsupported type")
             }
         }
+    }
+
+    override fun saveAuthSkipped(isAuthSkipped: Boolean) {
+        updateSetting("Auth_skipped", isAuthSkipped)
     }
 
     override fun saveAllSettings(settings: UserSettings) {

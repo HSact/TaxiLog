@@ -149,6 +149,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun login() {
+        viewModel.setAuthSkipped(false)
         val intent = Intent(this, StartUpActivity::class.java)
         startActivity(intent)
     }
@@ -321,10 +322,9 @@ class SettingsActivity : AppCompatActivity() {
         return radioKm.isChecked
     }
 
-    private fun saveSettings(authSkip: Boolean? = null) {
+    private fun saveSettings() {
         val settingsData = UserSettings(
             isConfigured = true,
-            //authSkipped = authSkip ?: viewModel.settings.value!!.authSkipped, //TODO: remove this
             language = getSelectedLanguage(),
             theme = getSelectedTheme(),
             currency = getSelectedCurrency(),

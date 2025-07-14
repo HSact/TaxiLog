@@ -82,12 +82,8 @@ class StartUpActivity : AppCompatActivity() {
                 } else if (googleAccount != null) {
                     // 2. Authenticated in Google, but not in Firebase → request Firebase
                     firebaseAuthWithGoogle(googleAccount.idToken!!)
-                } else if (!settings.authSkipped) {
+                } else if (!viewModel.isAuthSkipped()) {
                     // 3. Not authenticated → begin login process
-//                    Handler(Looper.getMainLooper()).postDelayed({
-//                        val signInIntent = googleSignInClient.signInIntent
-//                        startActivityForResult(signInIntent, RC_SIGN_IN)
-//                    }, logoDuration - 100)
                     showAuthChoiceDialog(googleSignInClient)
                 }
                  else {
@@ -108,6 +104,7 @@ class StartUpActivity : AppCompatActivity() {
                 }, logoDuration - 100)
             }
             .setNegativeButton(getString(R.string.skip)) { _, _ ->
+                viewModel.setAuthSkipped(true)
                 proceedAfterLogin()
             }
             .setCancelable(false)
