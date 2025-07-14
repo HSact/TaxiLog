@@ -10,6 +10,8 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -41,11 +43,30 @@ class StartUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStartUpBinding
     private val logoDuration: Long = 1200
 
+    private lateinit var signInLauncher: ActivityResultLauncher<Intent>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityStartUpBinding.inflate(layoutInflater)
         supportActionBar?.hide()
         setContentView(binding.root)
+
+        signInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data = result.data
+                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                try {
+                    val account = task.getResult(ApiException::class.java)!!
+                    firebaseAuthWithGoogle(account.idToken!!)
+                } catch (e: ApiException) {
+                    Log.w("GoogleSignIn", "Google sign in failed", e)
+                    showRetryDialog()
+                }
+            } else {
+                proceedAfterLogin()
+            }
+        }
+
         viewModel.settings.observe(this) { settings ->
             settings?.let { s ->
                 this.settings = s
@@ -99,8 +120,7 @@ class StartUpActivity : AppCompatActivity() {
             .setMessage(getString(R.string.sign_in_description))
             .setPositiveButton(getString(R.string.sign_in)) { _, _ ->
                 Handler(Looper.getMainLooper()).postDelayed({
-                    val signInIntent = googleSignInClient.signInIntent
-                    startActivityForResult(signInIntent, RC_SIGN_IN)
+                    signInLauncher.launch(googleSignInClient.signInIntent)
                 }, logoDuration - 100)
             }
             .setNegativeButton(getString(R.string.skip)) { _, _ ->
@@ -193,8 +213,7 @@ class StartUpActivity : AppCompatActivity() {
         val googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         Handler(Looper.getMainLooper()).postDelayed({
-            val signInIntent = googleSignInClient.signInIntent
-            startActivityForResult(signInIntent, RC_SIGN_IN)
+            signInLauncher.launch(googleSignInClient.signInIntent)
         }, 500)
     }
 
