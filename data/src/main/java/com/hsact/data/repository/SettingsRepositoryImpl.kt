@@ -12,7 +12,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 class SettingsRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
 ) : SettingsRepository {
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("Settings", Context.MODE_PRIVATE)

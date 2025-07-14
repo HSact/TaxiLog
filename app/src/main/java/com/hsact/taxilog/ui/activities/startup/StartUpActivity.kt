@@ -16,22 +16,30 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.hsact.domain.model.settings.UserSettings
+import com.hsact.taxilog.auth.GoogleAuthClient
+import com.hsact.taxilog.auth.GoogleAuthResult
 import com.hsact.taxilog.databinding.ActivityStartUpBinding
 import com.hsact.taxilog.ui.activities.MainActivity
 import com.hsact.taxilog.ui.activities.settings.SettingsActivity
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class StartUpActivity : AppCompatActivity() {
+    @Inject
+    lateinit var googleAuthClient: GoogleAuthClient
+    private lateinit var signInLauncher: ActivityResultLauncher<Intent>
 
     private companion object {
         const val RC_SIGN_IN = 9001
@@ -43,8 +51,6 @@ class StartUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStartUpBinding
     private val logoDuration: Long = 1200
 
-    private lateinit var signInLauncher: ActivityResultLauncher<Intent>
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityStartUpBinding.inflate(layoutInflater)
@@ -53,16 +59,18 @@ class StartUpActivity : AppCompatActivity() {
 
         signInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                val data = result.data
-                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-                try {
-                    val account = task.getResult(ApiException::class.java)!!
-                    firebaseAuthWithGoogle(account.idToken!!)
-                } catch (e: ApiException) {
-                    Log.w("GoogleSignIn", "Google sign in failed", e)
-                    showRetryDialog()
+                googleAuthClient.handleResult(result.data) { authResult ->
+                    when (authResult) {
+                        is GoogleAuthResult.Success -> {
+                            proceedAfterLogin()
+                        }
+                        is GoogleAuthResult.Error -> {
+                            showRetryDialog()
+                        }
+                    }
                 }
             } else {
+                viewModel.setAuthSkipped(true)
                 proceedAfterLogin()
             }
         }
@@ -89,13 +97,8 @@ class StartUpActivity : AppCompatActivity() {
 
                 binding.imageLogo.animate().setDuration(logoDuration).alpha(1f)
 
-                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.default_web_client_id)) // from google-services.json
-                    .requestEmail()
-                    .build()
                 val firebaseAuth = FirebaseAuth.getInstance()
                 val googleAccount = GoogleSignIn.getLastSignedInAccount(this)
-                val googleSignInClient = GoogleSignIn.getClient(this, gso)
 
                 if (firebaseAuth.currentUser != null) {
                     // 1. User is authenticated in Firebase → proceed
@@ -105,7 +108,7 @@ class StartUpActivity : AppCompatActivity() {
                     firebaseAuthWithGoogle(googleAccount.idToken!!)
                 } else if (!viewModel.isAuthSkipped()) {
                     // 3. Not authenticated → begin login process
-                    showAuthChoiceDialog(googleSignInClient)
+                    showAuthChoiceDialog()
                 }
                  else {
                     proceedAfterLogin()
@@ -114,14 +117,15 @@ class StartUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun showAuthChoiceDialog(googleSignInClient: GoogleSignInClient) {
+    private fun showAuthChoiceDialog() {
         MaterialAlertDialogBuilder(this)
             .setTitle(getString(R.string.sign_in_title))
             .setMessage(getString(R.string.sign_in_description))
             .setPositiveButton(getString(R.string.sign_in)) { _, _ ->
-                Handler(Looper.getMainLooper()).postDelayed({
-                    signInLauncher.launch(googleSignInClient.signInIntent)
-                }, logoDuration - 100)
+                lifecycleScope.launch {
+                    delay(logoDuration - 100)
+                    signInLauncher.launch(googleAuthClient.getSignInIntent())
+                }
             }
             .setNegativeButton(getString(R.string.skip)) { _, _ ->
                 viewModel.setAuthSkipped(true)
