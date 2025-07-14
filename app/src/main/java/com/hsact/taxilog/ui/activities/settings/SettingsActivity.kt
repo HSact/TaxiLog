@@ -3,9 +3,12 @@ package com.hsact.taxilog.ui.activities.settings
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.transition.TransitionManager
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioButton
@@ -13,6 +16,8 @@ import android.widget.RadioGroup
 import android.widget.Spinner
 import android.widget.TableRow
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -20,6 +25,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
@@ -27,15 +33,20 @@ import com.hsact.domain.model.settings.CurrencySymbolMode
 import com.hsact.domain.model.settings.UserSettings
 import com.hsact.domain.model.settings.indexToCurrencySymbolMode
 import com.hsact.taxilog.R
+import com.hsact.taxilog.auth.GoogleAuthClient
+import com.hsact.taxilog.auth.GoogleAuthResult
 import com.hsact.taxilog.databinding.SettingsActivityBinding
 import com.hsact.taxilog.ui.activities.MainActivity
-import com.hsact.taxilog.ui.activities.startup.StartUpActivity
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsActivity : AppCompatActivity() {
+    @Inject
+    lateinit var googleAuthClient: GoogleAuthClient
+    private lateinit var signInLauncher: ActivityResultLauncher<Intent>
 
     private val viewModel: SettingsViewModel by viewModels()
 
@@ -103,12 +114,22 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        val currencySymbol = viewModel.settings.value?.currency?.toSymbol()
-            ?: CurrencySymbolMode.fromLocale(Locale.getDefault()).toSymbol()
-        textFuelCostL.hint = getString(R.string.settings_fuel_l) + "/" + currencySymbol
-        textRentCostL.hint = currencySymbol + "/" + getString(R.string.hint_money_per_shift)
-        textServiceCostL.hint = currencySymbol + "/" + getString(R.string.hint_money_per_km_mi)
-        textGoalPerMonthL.hint = currencySymbol
+        signInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                googleAuthClient.handleResult(result.data) { authResult ->
+                    when (authResult) {
+                        is GoogleAuthResult.Success -> {
+                            buttonSignOut.text = getString(R.string.sign_out)
+                        }
+                        is GoogleAuthResult.Error -> {
+                            showRetryDialog()
+                        }
+                    }
+                }
+            }
+        }
+
+        displayCurrencySymbol()
         updateUiWithSettings()
         updateThemeRadioButtons()
         toggleTableVisibility(switchRent)
@@ -135,6 +156,21 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
+        spinnerCurrency.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selected = parent.getItemAtPosition(position).toString()
+                displayCurrencySymbol(selected)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+            }
+        }
+
         switchRent.setOnClickListener { toggleTableVisibility(switchRent) }
         switchService.setOnClickListener { toggleTableVisibility(switchService) }
         switchTaxes.setOnClickListener { toggleTableVisibility(switchTaxes) }
@@ -148,9 +184,19 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    private fun displayCurrencySymbol(currencySymbol: String = getCurrencySymbol()) {
+        textFuelCostL.hint = getString(R.string.settings_fuel_l) + "/" + currencySymbol
+        textRentCostL.hint = currencySymbol + "/" + getString(R.string.hint_money_per_shift)
+        textServiceCostL.hint = currencySymbol + "/" + getString(R.string.hint_money_per_km_mi)
+        textGoalPerMonthL.hint = currencySymbol
+    }
+
+    private fun getCurrencySymbol(): String = (viewModel.settings.value?.currency?.toSymbol()
+        ?: CurrencySymbolMode.fromLocale(Locale.getDefault()).toSymbol())
+
     private fun login() {
-        val intent = Intent(this, StartUpActivity::class.java)
-        startActivity(intent)
+        viewModel.setAuthSkipped(false)
+        signInLauncher.launch(googleAuthClient.getSignInIntent())
     }
 
     @Suppress("DEPRECATION")
@@ -164,11 +210,34 @@ class SettingsActivity : AppCompatActivity() {
 
         val client = GoogleSignIn.getClient(this, gso)
         client.signOut().addOnCompleteListener {
-            val intent = Intent(this, StartUpActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish()
         }
+    }
+
+    private fun showRetryDialog() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(getString(R.string.authentication_failed))
+            .setMessage(getString(R.string.retry_login_question))
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.retry)) { _, _ ->
+                retryGoogleSignIn()
+            }
+            .setNegativeButton(getString(R.string.cancel)) { _, _ ->
+            }
+            .show()
+    }
+
+    @Suppress("DEPRECATION")
+    private fun retryGoogleSignIn() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        val googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            signInLauncher.launch(googleSignInClient.signInIntent)
+        }, 0)
     }
 
     override fun attachBaseContext(newBase: Context) {
@@ -321,10 +390,9 @@ class SettingsActivity : AppCompatActivity() {
         return radioKm.isChecked
     }
 
-    private fun saveSettings(authSkip: Boolean? = null) {
+    private fun saveSettings() {
         val settingsData = UserSettings(
             isConfigured = true,
-            //authSkipped = authSkip ?: viewModel.settings.value!!.authSkipped, //TODO: remove this
             language = getSelectedLanguage(),
             theme = getSelectedTheme(),
             currency = getSelectedCurrency(),

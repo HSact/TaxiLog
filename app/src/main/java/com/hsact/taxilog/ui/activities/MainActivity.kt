@@ -39,6 +39,9 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            invalidateOptionsMenu()
+        }
 
         val appBarConfiguration = AppBarConfiguration(
             setOf(

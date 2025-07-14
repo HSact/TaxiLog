@@ -2,7 +2,6 @@ package com.hsact.domain.model.settings
 
 data class UserSettings(
     val isConfigured: Boolean = false,
-    val authSkipped: Boolean = false,
     val language: String?,
     val theme: String?,
     val currency: CurrencySymbolMode?,

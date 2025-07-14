@@ -10,26 +10,36 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.hsact.domain.model.settings.UserSettings
+import com.hsact.taxilog.auth.GoogleAuthClient
+import com.hsact.taxilog.auth.GoogleAuthResult
 import com.hsact.taxilog.databinding.ActivityStartUpBinding
 import com.hsact.taxilog.ui.activities.MainActivity
 import com.hsact.taxilog.ui.activities.settings.SettingsActivity
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class StartUpActivity : AppCompatActivity() {
+    @Inject
+    lateinit var googleAuthClient: GoogleAuthClient
+    private lateinit var signInLauncher: ActivityResultLauncher<Intent>
 
     private companion object {
         const val RC_SIGN_IN = 9001
@@ -46,6 +56,25 @@ class StartUpActivity : AppCompatActivity() {
         binding = ActivityStartUpBinding.inflate(layoutInflater)
         supportActionBar?.hide()
         setContentView(binding.root)
+
+        signInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                googleAuthClient.handleResult(result.data) { authResult ->
+                    when (authResult) {
+                        is GoogleAuthResult.Success -> {
+                            proceedAfterLogin()
+                        }
+                        is GoogleAuthResult.Error -> {
+                            showRetryDialog()
+                        }
+                    }
+                }
+            } else {
+                viewModel.setAuthSkipped(true)
+                proceedAfterLogin()
+            }
+        }
+
         viewModel.settings.observe(this) { settings ->
             settings?.let { s ->
                 this.settings = s
@@ -68,13 +97,8 @@ class StartUpActivity : AppCompatActivity() {
 
                 binding.imageLogo.animate().setDuration(logoDuration).alpha(1f)
 
-                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.default_web_client_id)) // from google-services.json
-                    .requestEmail()
-                    .build()
                 val firebaseAuth = FirebaseAuth.getInstance()
                 val googleAccount = GoogleSignIn.getLastSignedInAccount(this)
-                val googleSignInClient = GoogleSignIn.getClient(this, gso)
 
                 if (firebaseAuth.currentUser != null) {
                     // 1. User is authenticated in Firebase → proceed
@@ -82,13 +106,9 @@ class StartUpActivity : AppCompatActivity() {
                 } else if (googleAccount != null) {
                     // 2. Authenticated in Google, but not in Firebase → request Firebase
                     firebaseAuthWithGoogle(googleAccount.idToken!!)
-                } else if (!settings.authSkipped) {
+                } else if (!viewModel.isAuthSkipped()) {
                     // 3. Not authenticated → begin login process
-//                    Handler(Looper.getMainLooper()).postDelayed({
-//                        val signInIntent = googleSignInClient.signInIntent
-//                        startActivityForResult(signInIntent, RC_SIGN_IN)
-//                    }, logoDuration - 100)
-                    showAuthChoiceDialog(googleSignInClient)
+                    showAuthChoiceDialog()
                 }
                  else {
                     proceedAfterLogin()
@@ -97,17 +117,18 @@ class StartUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun showAuthChoiceDialog(googleSignInClient: GoogleSignInClient) {
+    private fun showAuthChoiceDialog() {
         MaterialAlertDialogBuilder(this)
             .setTitle(getString(R.string.sign_in_title))
             .setMessage(getString(R.string.sign_in_description))
             .setPositiveButton(getString(R.string.sign_in)) { _, _ ->
-                Handler(Looper.getMainLooper()).postDelayed({
-                    val signInIntent = googleSignInClient.signInIntent
-                    startActivityForResult(signInIntent, RC_SIGN_IN)
-                }, logoDuration - 100)
+                lifecycleScope.launch {
+                    delay(logoDuration - 100)
+                    signInLauncher.launch(googleAuthClient.getSignInIntent())
+                }
             }
             .setNegativeButton(getString(R.string.skip)) { _, _ ->
+                viewModel.setAuthSkipped(true)
                 proceedAfterLogin()
             }
             .setCancelable(false)
@@ -196,8 +217,7 @@ class StartUpActivity : AppCompatActivity() {
         val googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         Handler(Looper.getMainLooper()).postDelayed({
-            val signInIntent = googleSignInClient.signInIntent
-            startActivityForResult(signInIntent, RC_SIGN_IN)
+            signInLauncher.launch(googleSignInClient.signInIntent)
         }, 500)
     }
 

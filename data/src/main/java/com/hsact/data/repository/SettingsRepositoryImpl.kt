@@ -12,13 +12,16 @@ import java.util.UUID
 import javax.inject.Inject
 
 class SettingsRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
 ) : SettingsRepository {
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("Settings", Context.MODE_PRIVATE)
 
     override val isConfigured: Boolean
         get() = sharedPreferences.getBoolean("Is_configured", false)
+
+    override val authSkipped: Boolean
+        get() = sharedPreferences.getBoolean("Auth_skipped", false)
 
     override val deviceId: String
         get() {
@@ -105,6 +108,10 @@ class SettingsRepositoryImpl @Inject constructor(
                 else -> throw IllegalArgumentException("Unsupported type")
             }
         }
+    }
+
+    override fun saveAuthSkipped(isAuthSkipped: Boolean) {
+        updateSetting("Auth_skipped", isAuthSkipped)
     }
 
     override fun saveAllSettings(settings: UserSettings) {

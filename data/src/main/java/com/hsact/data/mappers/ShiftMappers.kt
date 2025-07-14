@@ -42,6 +42,7 @@ fun CarSnapshotEntity.toDomain(): CarSnapshot {
         name = name,
         mileage = mileage,
         fuelConsumption = fuelConsumption,
+        rentCost = rentCost,
         serviceCost = serviceCost
     )
 }

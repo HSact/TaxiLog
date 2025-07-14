@@ -7,6 +7,7 @@ interface SettingsRepository {
 
     val isConfigured: Boolean
     val deviceId: String
+    val authSkipped: Boolean
     val theme: String?
     val currency: CurrencySymbolMode?
     val language: String?
@@ -24,5 +25,6 @@ interface SettingsRepository {
 
     fun getAllSettings(): UserSettings
     fun updateSetting(key: String, value: Any?)
+    fun saveAuthSkipped(isAuthSkipped: Boolean)
     fun saveAllSettings(settings: UserSettings)
 }
