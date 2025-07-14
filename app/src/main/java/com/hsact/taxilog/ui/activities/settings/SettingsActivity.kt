@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.transition.TransitionManager
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioButton
@@ -103,12 +104,7 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        val currencySymbol = viewModel.settings.value?.currency?.toSymbol()
-            ?: CurrencySymbolMode.fromLocale(Locale.getDefault()).toSymbol()
-        textFuelCostL.hint = getString(R.string.settings_fuel_l) + "/" + currencySymbol
-        textRentCostL.hint = currencySymbol + "/" + getString(R.string.hint_money_per_shift)
-        textServiceCostL.hint = currencySymbol + "/" + getString(R.string.hint_money_per_km_mi)
-        textGoalPerMonthL.hint = currencySymbol
+        displayCurrencySymbol()
         updateUiWithSettings()
         updateThemeRadioButtons()
         toggleTableVisibility(switchRent)
@@ -135,6 +131,21 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
+        spinnerCurrency.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selected = parent.getItemAtPosition(position).toString()
+                displayCurrencySymbol(selected)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+            }
+        }
+
         switchRent.setOnClickListener { toggleTableVisibility(switchRent) }
         switchService.setOnClickListener { toggleTableVisibility(switchService) }
         switchTaxes.setOnClickListener { toggleTableVisibility(switchTaxes) }
@@ -147,6 +158,16 @@ class SettingsActivity : AppCompatActivity() {
             finishAffinity()
         }
     }
+
+    private fun displayCurrencySymbol(currencySymbol: String = getCurrencySymbol()) {
+        textFuelCostL.hint = getString(R.string.settings_fuel_l) + "/" + currencySymbol
+        textRentCostL.hint = currencySymbol + "/" + getString(R.string.hint_money_per_shift)
+        textServiceCostL.hint = currencySymbol + "/" + getString(R.string.hint_money_per_km_mi)
+        textGoalPerMonthL.hint = currencySymbol
+    }
+
+    private fun getCurrencySymbol(): String = (viewModel.settings.value?.currency?.toSymbol()
+        ?: CurrencySymbolMode.fromLocale(Locale.getDefault()).toSymbol())
 
     private fun login() {
         viewModel.setAuthSkipped(false)

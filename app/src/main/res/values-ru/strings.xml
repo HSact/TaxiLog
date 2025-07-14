@@ -142,8 +142,4 @@
     <string name="sign_in_title">Вход в аккаут</string>
     <string name="sign_in_description">Войдите через Google, чтобы включить облачную синхронизацию</string>
     <string name="sign_in">Войти</string>
-    <string-array name="languages">
-        <item>English</item>
-        <item>Русский</item>
-    </string-array>
 </resources>
