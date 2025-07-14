@@ -36,6 +36,7 @@ The app follows a hybrid MVVM pattern with gradual migration to Compose:
 - **Dependency Injection:** Hilt  
 - **Database:** Room
 - **Cloud**: Firebase Auth, Cloud Firestore
+- **Monitoring & Analytics**: Firebase Crashlytics, Google Analytics
 - **UI Charts:** [ComposeCharts](https://github.com/ehsannarmani/ComposeCharts)<br>
 - **Date handling:** ThreeTenABP (`LocalDate`, `LocalDateTime`)  
 - **Others:** ViewModel, Coroutines, Material Design components  
@@ -86,6 +87,7 @@ TaxiLog – это приложение для водителей такси, к
 - **DI:** Hilt  
 - **БД:** Room
 - **Облако**: Firebase Auth, Cloud Firestore
+- **Мониторинг и аналитика**: Firebase Crashlytics, Google Analytics
 - **Графики:** [ComposeCharts](https://github.com/ehsannarmani/ComposeCharts)<br>
 - **Дата и время:** ThreeTenABP (`LocalDate`, `LocalDateTime`)  
 
