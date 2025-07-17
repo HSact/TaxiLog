@@ -78,8 +78,8 @@
     <string name="this_week">Week</string>
     <string name="this_month">Month</string>
     <string name="about_text">https://github.com/HSact/TaxiLog</string>
-    <string name="https_github_com_hsact_taxilog" translatable="false">https://github.com/HSact/TaxiLog</string>
-    <string name="app_repository">"App repository"</string>
+    <string name="privacy_policy_link">https://gist.github.com/HSact/4ad0f5e5ae6a3206819c157ddfe32410</string>
+    <string name="privacy_policy">Privacy policy</string>
     <string name="shift_added_successfully">Shift saved successfully</string>
     <string name="shift_deleted_successfully">Shift %1$s deleted successfully</string>
     <string name="all_shifts_have_been_deleted_successfully">All shifts have been deleted successfully</string>
