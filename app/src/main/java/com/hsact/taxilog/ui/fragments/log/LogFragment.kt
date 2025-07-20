@@ -119,7 +119,7 @@ class LogFragment : Fragment() {
     private fun onPopUpMenuClicked(item: Int, shift: Shift, visibleId: Int) {
         when (item) {
             0 -> editShift(shift, visibleId)
-            1 -> deleteShift(shift)
+            1 -> deleteShift(shift, visibleId)
         }
     }
 
@@ -131,11 +131,11 @@ class LogFragment : Fragment() {
         findNavController().navigate(action)
     }
 
-    private fun deleteShift(shift: Shift) {
+    private fun deleteShift(shift: Shift, visibleId: Int) {
         viewModel.handleIntent(LogIntent.DeleteShift(shift))
         Toast.makeText(
             requireContext(),
-            getString(R.string.shift_deleted_successfully, shift.id.toString()), Toast.LENGTH_SHORT
+            getString(R.string.shift_deleted_successfully, visibleId.toString()), Toast.LENGTH_SHORT
         ).show()
     }
 
