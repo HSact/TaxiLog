@@ -50,8 +50,14 @@ class ShiftSyncManager @Inject constructor(
     private suspend fun syncToFirebase() {
         val localUnsyncedShifts = shiftRepository.getUnsyncedShifts()
         for (localShift in localUnsyncedShifts) {
-            firebaseShiftDataSource.save(localShift)
-            shiftRepository.markAsSynced(localShift.id)
+            val remoteId = firebaseShiftDataSource.save(localShift)
+            if (remoteId != null) {
+                shiftRepository.markAsSynced(localShift.id, remoteId)
+                Log.d("Sync", "Synced local shift: remoteId=$remoteId")
+            }
+            else {
+                Log.w("Sync", "Failed to sync local shift: id=${localShift.id}")
+            }
         }
     }
 

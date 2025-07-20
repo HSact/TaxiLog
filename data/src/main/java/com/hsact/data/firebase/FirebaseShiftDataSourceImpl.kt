@@ -37,14 +37,14 @@ class FirebaseShiftDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun save(shift: Shift) {
+    override suspend fun save(shift: Shift): String? {
         val firebaseShift = shift.toFirebase()
         val documentId = shift.remoteId ?: UUID.randomUUID().toString()
 
         val collection = getUserShiftsCollection()
         if (collection == null) {
             Log.w("FirebaseShift", "No user is logged in. Can't save shift.")
-            return
+            return null
         }
 
         try {
@@ -52,8 +52,10 @@ class FirebaseShiftDataSourceImpl @Inject constructor(
                 .set(firebaseShift)
                 .await()
             Log.d("FirebaseShift", "Shift saved successfully: $documentId")
+            return documentId
         } catch (e: Exception) {
             Log.e("FirebaseShift", "Error saving shift: $documentId", e)
+            return null
         }
     }
 

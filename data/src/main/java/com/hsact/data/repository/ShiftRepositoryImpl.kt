@@ -45,14 +45,14 @@ class ShiftRepositoryImpl @Inject constructor(
     override suspend fun getByRemoteId(remoteId: String) =
         shiftDao.getByRemoteId(remoteId)?.toDomain()
 
-    override suspend fun markAsSynced(id: Int) {
+    override suspend fun markAsSynced(id: Int, remoteId: String) {
         val shift = shiftDao.getShiftById(id)
         if (shift == null) {
             Log.w("ShiftRepository", "Shift with id $id not found")
             return
         }
         val newMeta = shift.meta.copy(isSynced = true)
-        shiftDao.updateShift(shift.copy(meta = newMeta))
+        shiftDao.updateShift(shift.copy(meta = newMeta, remoteId = remoteId))
     }
 
     override suspend fun insertShift(shift: Shift) {
