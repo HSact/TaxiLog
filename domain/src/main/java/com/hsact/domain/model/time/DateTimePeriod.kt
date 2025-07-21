@@ -1,7 +1,7 @@
 package com.hsact.domain.model.time
 
-import java.time.LocalDateTime
 import java.time.Duration
+import java.time.LocalDateTime
 
 data class DateTimePeriod(
     val start: LocalDateTime,

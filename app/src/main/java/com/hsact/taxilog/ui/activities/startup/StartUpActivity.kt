@@ -4,7 +4,6 @@ package com.hsact.taxilog.ui.activities.startup
 
 import android.content.Context
 import android.content.Intent
-import com.hsact.taxilog.R
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -24,6 +23,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.hsact.domain.model.settings.UserSettings
+import com.hsact.taxilog.R
 import com.hsact.taxilog.auth.GoogleAuthClient
 import com.hsact.taxilog.auth.GoogleAuthResult
 import com.hsact.taxilog.databinding.ActivityStartUpBinding

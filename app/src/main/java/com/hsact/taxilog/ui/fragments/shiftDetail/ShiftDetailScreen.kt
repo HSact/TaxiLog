@@ -1,7 +1,5 @@
 package com.hsact.taxilog.ui.fragments.shiftDetail
 
-import androidx.compose.ui.res.stringResource
-import com.hsact.taxilog.R
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,10 +25,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.hsact.domain.model.Shift
 import com.hsact.domain.model.settings.CurrencySymbolMode
+import com.hsact.taxilog.R
 import com.hsact.taxilog.ui.AppTheme
 import com.hsact.taxilog.ui.cards.BaseCard
 import com.hsact.taxilog.ui.shift.ShiftOutputModel

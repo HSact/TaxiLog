@@ -19,7 +19,6 @@ import com.hsact.domain.model.Shift
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentLogBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.getValue
 
 @AndroidEntryPoint
 class LogFragment : Fragment() {

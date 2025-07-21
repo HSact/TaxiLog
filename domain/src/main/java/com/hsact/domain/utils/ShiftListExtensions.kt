@@ -1,10 +1,8 @@
 package com.hsact.domain.utils
 
 import com.hsact.domain.model.Shift
-import com.hsact.domain.model.settings.CurrencySymbolMode
 import java.time.LocalDate
 import java.time.YearMonth
-import java.util.Locale
 
 fun List<Shift>.filterByDateRange(
     startDate: LocalDate? = null,
