@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hsact.data.firebase.ShiftSyncManager
+import com.hsact.data.sync.ShiftSyncManager
 import com.hsact.domain.model.Shift
 import com.hsact.domain.model.ShiftMeta
 import com.hsact.domain.model.settings.UserSettings

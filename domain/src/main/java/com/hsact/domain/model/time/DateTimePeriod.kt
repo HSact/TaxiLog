@@ -1,7 +1,7 @@
 package com.hsact.domain.model.time
 
-import java.time.LocalDateTime
 import java.time.Duration
+import java.time.LocalDateTime
 
 data class DateTimePeriod(
     val start: LocalDateTime,
@@ -9,5 +9,6 @@ data class DateTimePeriod(
 ) {
     val duration: Duration
         get() = Duration.between(start, end)
+
     fun isValid(): Boolean = start.isBefore(end)
 }

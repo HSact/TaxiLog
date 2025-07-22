@@ -6,7 +6,7 @@ import com.hsact.taxilog.ui.shift.ShiftOutputModel
 import java.text.NumberFormat
 import java.time.Duration
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Locale
 
 fun Shift.toUi(locale: Locale, currencySymbol: CurrencySymbolMode): ShiftOutputModel {
     val formatterDate = DateTimeFormatter.ofPattern("dd.MM.yyyy", locale)

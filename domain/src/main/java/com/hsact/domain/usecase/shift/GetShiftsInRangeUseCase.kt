@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 
 class GetShiftsInRangeUseCase(
-    private val repository: ShiftRepository
+    private val repository: ShiftRepository,
 ) {
     suspend operator fun invoke(start: LocalDateTime, end: LocalDateTime): List<Shift> =
         repository.getShiftsInRange(start, end)

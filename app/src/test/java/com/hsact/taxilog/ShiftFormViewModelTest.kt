@@ -1,6 +1,6 @@
 package com.hsact.taxilog
 
-import com.hsact.data.firebase.ShiftSyncManager
+import com.hsact.data.sync.ShiftSyncManager
 import com.hsact.domain.model.settings.CurrencySymbolMode
 import com.hsact.domain.model.settings.UserSettings
 import com.hsact.domain.usecase.settings.GetAllSettingsUseCase

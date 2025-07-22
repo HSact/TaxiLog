@@ -29,6 +29,7 @@ enum class CurrencySymbolMode {
         JPY -> "YEN"
 
     }
+
     companion object {
         fun fromLocale(locale: Locale): CurrencySymbolMode {
             return when (locale.country.uppercase()) {

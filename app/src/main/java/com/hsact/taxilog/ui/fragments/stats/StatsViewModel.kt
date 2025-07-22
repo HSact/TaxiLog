@@ -27,8 +27,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
-import javax.inject.Inject
 import java.util.Locale
+import javax.inject.Inject
 
 @HiltViewModel
 class StatsViewModel @Inject constructor(

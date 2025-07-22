@@ -10,11 +10,11 @@ import android.widget.LinearLayout
 import android.widget.TableLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.hsact.taxilog.databinding.FragmentStatsBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.hsact.taxilog.databinding.FragmentStatsBinding
 import com.hsact.taxilog.ui.components.DatePickerFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

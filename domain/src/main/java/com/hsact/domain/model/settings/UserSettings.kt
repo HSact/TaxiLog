@@ -15,5 +15,5 @@ data class UserSettings(
     val schedule: String?,
     val taxes: Boolean = false,
     val taxRate: String?,
-    val fuelPrice: String?
+    val fuelPrice: String?,
 )

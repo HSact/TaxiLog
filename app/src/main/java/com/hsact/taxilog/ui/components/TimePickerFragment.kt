@@ -9,7 +9,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
     private val clock = Calendar.getInstance()
