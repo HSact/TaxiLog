@@ -9,5 +9,6 @@ data class DateTimePeriod(
 ) {
     val duration: Duration
         get() = Duration.between(start, end)
+
     fun isValid(): Boolean = start.isBefore(end)
 }

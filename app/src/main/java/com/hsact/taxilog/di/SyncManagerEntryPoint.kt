@@ -1,6 +1,6 @@
 package com.hsact.taxilog.di
 
-import com.hsact.data.firebase.ShiftSyncManager
+import com.hsact.data.sync.ShiftSyncManager
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent

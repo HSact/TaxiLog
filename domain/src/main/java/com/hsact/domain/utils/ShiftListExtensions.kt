@@ -6,7 +6,7 @@ import java.time.YearMonth
 
 fun List<Shift>.filterByDateRange(
     startDate: LocalDate? = null,
-    endDate: LocalDate? = null
+    endDate: LocalDate? = null,
 ): List<Shift> {
     return this.filter { shift ->
         val shiftDate = shift.time.period.start.toLocalDate()
@@ -62,7 +62,7 @@ fun List<Shift>.dailyProfit(date: LocalDate): Long {
 }
 
 
-val List<Shift>.profit: List <Long>
+val List<Shift>.profit: List<Long>
     get() = map { it.profit }
 
 val List<Shift>.totalEarnings: Long
@@ -75,7 +75,7 @@ val List<Shift>.totalWash: Long
     get() = sumOf { it.financeInput.wash }
 
 val List<Shift>.totalMileage: Long
-    get() = sumOf { it.carSnapshot.mileage}
+    get() = sumOf { it.carSnapshot.mileage }
 
 val List<Shift>.totalFuelCost: Long
     get() = sumOf { it.financeInput.fuelCost }

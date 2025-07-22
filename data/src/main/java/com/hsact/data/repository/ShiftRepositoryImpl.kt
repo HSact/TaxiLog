@@ -2,17 +2,17 @@ package com.hsact.data.repository
 
 import android.util.Log
 import com.hsact.data.db.ShiftDao
-import com.hsact.data.firebase.FirebaseShiftDataSource
 import com.hsact.data.mappers.toDomain
 import com.hsact.data.mappers.toEntity
 import com.hsact.domain.model.Shift
 import com.hsact.domain.repository.ShiftRepository
+import com.hsact.domain.sync.RemoteShiftController
 import java.time.LocalDateTime
 import javax.inject.Inject
 
 class ShiftRepositoryImpl @Inject constructor(
     private val shiftDao: ShiftDao,
-    private val firebaseShiftDataSource: FirebaseShiftDataSource,
+    private val shiftRemoteController: RemoteShiftController,
 ) : ShiftRepository {
 
     override suspend fun getAllShifts() =
@@ -57,22 +57,39 @@ class ShiftRepositoryImpl @Inject constructor(
 
     override suspend fun insertShift(shift: Shift) {
         shiftDao.insertShift(shift.toEntity())
+        Log.d("ShiftRepository", "Insert local shift: id=${shift.id} remoteId=${shift.remoteId?: "no remoteId"}")
     }
 
-    override suspend fun deleteByLocalId(shift: Shift) {
+    override suspend fun deleteShift(shift: Shift) {
         shiftDao.deleteById(shift.id)
-        Log.d("ShiftRepository", "Remove from Firebase: remoteId=${shift.remoteId} (${shift.remoteId?.length})")
-//        shift.remoteId?.let {
-//            firebaseShiftDataSource.delete(it)
-//        } ?: Log.w("ShiftRepository", "No remoteId to delete from Firebase for shift id=${shift.id}")
+        Log.d("ShiftRepository", "Remove local shift: id=${shift.id} remoteId=${shift.remoteId?: "no remoteId"}")
+        shift.remoteId?.let { remoteId ->
+            try {
+                shiftRemoteController.deleteShift(remoteId)
+                Log.d("ShiftRepository", "Successfully removed remote shift: remoteId=$remoteId")
+            } catch (e: Exception) {
+                Log.e("ShiftRepository", "Error deleting shift remotely", e)
+            }
+        }
     }
 
-    override suspend fun updateShift(shift: Shift) =
+    override suspend fun updateShift(shift: Shift) {
         shiftDao.updateShift(shift.toEntity())
+        Log.d("ShiftRepository", "Update local shift: id=${shift.id} remoteId=${shift.remoteId?: "no remoteId"}")
+        shift.remoteId?.let { remoteId ->
+            try {
+                shiftRemoteController.saveShift(shift)
+                Log.d("ShiftRepository", "Successfully updated remote shift: remoteId=$remoteId")
+            } catch (e: Exception) {
+                Log.e("ShiftRepository", "Error updating shift remotely", e)
+            }
+        }
+    }
 
     override suspend fun deleteAll() {
         shiftDao.deleteAll()
-        firebaseShiftDataSource.deleteAll()
+        Log.d("ShiftRepository", "Deleted all shifts locally")
+        shiftRemoteController.deleteAllShifts()
     }
 
     override suspend fun resetPrimaryKey() =

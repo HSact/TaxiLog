@@ -5,9 +5,9 @@ import com.hsact.domain.repository.ShiftRepository
 
 
 class DeleteShiftUseCase(
-    private val repository: ShiftRepository
+    private val repository: ShiftRepository,
 ) {
     suspend operator fun invoke(shift: Shift) {
-        repository.deleteByLocalId(shift)
+        repository.deleteShift(shift)
     }
 }

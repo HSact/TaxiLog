@@ -12,7 +12,7 @@ interface ShiftRepository {
     suspend fun getByRemoteId(remoteId: String): Shift?
     suspend fun markAsSynced(id: Int, remoteId: String)
     suspend fun insertShift(shift: Shift)
-    suspend fun deleteByLocalId(shift: Shift)
+    suspend fun deleteShift(shift: Shift)
     suspend fun updateShift(shift: Shift)
     suspend fun deleteAll()
     suspend fun resetPrimaryKey()
