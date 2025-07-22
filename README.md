@@ -23,6 +23,7 @@ The app follows a hybrid MVVM pattern with gradual migration to Compose:
 - Shared Preferences handles user settings
 - Firebase Authentication is used for sign-in with Google
 - Firestore is used for syncing shift entries across devices
+- WorkManager is used for background synchronization and deferred upload tasks
 - Synchronization logic is handled in a dedicated `ShiftSyncManager` (upload/download/merge of entries)
 - Structured domain logic with models, repositories, and use cases
 
@@ -102,7 +103,9 @@ TaxiLog – это приложение для водителей такси, к
 - Shared Preferenceses используется для хранения настроек
 - Firebase Authentication используется для входа через Google
 - Cloud Firestore обеспечивает синхронизацию смен между устройствами
+- WorkManager используется для фоновой синхронизации и отложенной отправки данных
 - Синхронизация реализована в отдельном классе `ShiftSyncManager`, который автоматически обрабатывает загрузку, обновление и объединение смен
+- Структурированная доменная логика с моделями, репозиториями и use cases
 
 📥 **Установка**  
 
