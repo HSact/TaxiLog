@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
+internal class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
     private val clock = Calendar.getInstance()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
