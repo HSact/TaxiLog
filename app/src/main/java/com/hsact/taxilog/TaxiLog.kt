@@ -5,7 +5,7 @@ import android.util.Log
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.hsact.domain.sync.RemoteShiftController
-import com.hsact.taxilog.di.ApplicationScope
+import com.hsact.di.ApplicationScope
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

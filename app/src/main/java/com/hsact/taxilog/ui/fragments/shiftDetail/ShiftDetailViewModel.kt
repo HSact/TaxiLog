@@ -7,7 +7,7 @@ import com.hsact.domain.model.Shift
 import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.domain.usecase.shift.DeleteShiftUseCase
 import com.hsact.domain.usecase.shift.GetShiftByIdUseCase
-import com.hsact.taxilog.di.ApplicationScope
+import com.hsact.di.ApplicationScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
