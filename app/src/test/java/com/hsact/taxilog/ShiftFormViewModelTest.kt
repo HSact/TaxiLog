@@ -1,6 +1,5 @@
 package com.hsact.taxilog
 
-import com.hsact.data.sync.ShiftSyncManager
 import com.hsact.domain.model.settings.CurrencySymbolMode
 import com.hsact.domain.model.settings.UserSettings
 import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
@@ -30,7 +29,6 @@ class ShiftFormViewModelTest {
     private val getDeviceIdUseCase = mock<GetDeviceIdUseCase>()
     private val addShiftUseCase = mock<AddShiftUseCase>()
     private val getShiftByIdUseCase = mock<GetShiftByIdUseCase>()
-    private val shiftSyncManager = mock<ShiftSyncManager>()
 
     @Before
     fun setup() {
@@ -60,8 +58,7 @@ class ShiftFormViewModelTest {
             getAllSettingsUseCase,
             getDeviceIdUseCase,
             addShiftUseCase,
-            getShiftByIdUseCase,
-            shiftSyncManager
+            getShiftByIdUseCase
         )
     }
 

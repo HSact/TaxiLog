@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hsact.data.sync.ShiftSyncManager
 import com.hsact.domain.model.Shift
 import com.hsact.domain.model.ShiftMeta
 import com.hsact.domain.model.settings.UserSettings
@@ -34,7 +33,6 @@ class ShiftFormViewModel @Inject constructor(
     private val getDeviceIdUseCase: GetDeviceIdUseCase,
     private val addShiftUseCase: AddShiftUseCase,
     private val getShiftByIdUseCase: GetShiftByIdUseCase,
-    private val shiftSyncManager: ShiftSyncManager,
 ) : ViewModel() {
     private val _uiState = MutableLiveData<UiState>()
     val uiState: LiveData<UiState> get() = _uiState
@@ -169,7 +167,6 @@ class ShiftFormViewModel @Inject constructor(
         val shift: Shift = shiftInput.toDomain(shiftMeta)
         viewModelScope.launch {
             addShiftUseCase(shift.copy(id = uiState.id, remoteId = remoteId))
-            shiftSyncManager.sync()
         }
     }
 
