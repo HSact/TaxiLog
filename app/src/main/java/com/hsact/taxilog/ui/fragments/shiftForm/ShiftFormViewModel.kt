@@ -130,7 +130,7 @@ class ShiftFormViewModel @Inject constructor(
         _uiState.value = currentShift
     }
 
-    fun setMileage(mileage: Double) {
+    fun setMileage(mileage: Double) { //TODO: fix this
         _uiState.value = _uiState.value?.copy(mileage = mileage)
         guessFuelCost()
     }
