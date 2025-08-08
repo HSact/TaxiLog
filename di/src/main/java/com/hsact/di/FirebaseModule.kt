@@ -1,4 +1,4 @@
-package com.hsact.taxilog.di
+package com.hsact.di
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

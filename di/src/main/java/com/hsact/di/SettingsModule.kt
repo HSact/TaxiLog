@@ -1,4 +1,4 @@
-package com.hsact.taxilog.di
+package com.hsact.di
 
 import com.hsact.data.repository.SettingsRepositoryImpl
 import com.hsact.domain.repository.SettingsRepository

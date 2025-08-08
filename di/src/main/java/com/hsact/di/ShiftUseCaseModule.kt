@@ -1,4 +1,4 @@
-package com.hsact.taxilog.di
+package com.hsact.di
 
 import com.hsact.domain.repository.ShiftRepository
 import com.hsact.domain.usecase.shift.AddShiftUseCase
@@ -51,7 +51,7 @@ object ShiftUseCaseModule {
     @Provides
     fun provideGetLastShiftUseCase(
         repository: ShiftRepository
-    ): GetShiftsInRangeUseCase= GetShiftsInRangeUseCase(repository)
+    ): GetShiftsInRangeUseCase = GetShiftsInRangeUseCase(repository)
 
     @Provides
     fun provideGetShiftsInRangeUseCase(

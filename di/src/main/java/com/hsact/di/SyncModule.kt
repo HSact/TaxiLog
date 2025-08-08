@@ -1,4 +1,4 @@
-package com.hsact.taxilog.di
+package com.hsact.di
 
 import com.hsact.data.sync.ShiftRemoteControllerImpl
 import com.hsact.domain.sync.RemoteShiftController

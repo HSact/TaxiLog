@@ -1,4 +1,4 @@
-package com.hsact.taxilog.di
+package com.hsact.di
 
 import com.hsact.domain.repository.SettingsRepository
 import com.hsact.domain.usecase.settings.AuthSkippedUseCase
