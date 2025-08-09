@@ -29,7 +29,7 @@ interface ShiftDao {
     suspend fun getByRemoteId(remoteId: String): ShiftEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertShift(shift: ShiftEntity)
+    suspend fun insertShift(shift: ShiftEntity): Long
 
     @Query("DELETE FROM shiftentity WHERE id = :id")
     suspend fun deleteById(id: Int)

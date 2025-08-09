@@ -52,9 +52,10 @@ class ShiftRepositoryLocalImpl @Inject constructor(
         shiftDao.updateShift(shift.copy(meta = newMeta, remoteId = remoteId))
     }
 
-    override suspend fun insertShift(shift: Shift) {
-        shiftDao.insertShift(shift.toEntity())
-        Log.d("ShiftRepositoryLocal", "Insert local shift: id=${shift.id} remoteId=${shift.remoteId?: "no remoteId"}")
+    override suspend fun insertShift(shift: Shift): Int {
+        val id = shiftDao.insertShift(shift.toEntity())
+        Log.d("ShiftRepositoryLocal", "Insert local shift: id=${id} remoteId=${shift.remoteId?: "no remoteId"}")
+        return id.toInt()
     }
 
     override suspend fun deleteShift(shift: Shift) {

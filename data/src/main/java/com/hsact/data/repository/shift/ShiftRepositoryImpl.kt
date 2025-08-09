@@ -45,8 +45,8 @@ class ShiftRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insertShift(shift: Shift) {
-        shiftRepositoryLocal.insertShift(shift)
-        shiftRepositoryRemote.saveShift(shift)
+        val id = shiftRepositoryLocal.insertShift(shift)
+        shiftRepositoryRemote.saveShift(shift.withId(id))
     }
 
     override suspend fun deleteShift(shift: Shift) {
@@ -78,4 +78,6 @@ class ShiftRepositoryImpl @Inject constructor(
 
     override suspend fun resetPrimaryKey() =
         shiftRepositoryLocal.resetPrimaryKey()
+
+    private fun Shift.withId(id: Int) = copy(id = id)
 }
