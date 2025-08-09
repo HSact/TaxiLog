@@ -3,7 +3,7 @@ package com.hsact.data.sync.worker
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.hsact.data.firebase.FirebaseShiftDataSource
+import com.hsact.data.firebase.datasource.FirebaseShiftDataSource
 import com.hsact.data.sync.ShiftSyncManager
 import com.hsact.domain.usecase.shift.GetShiftByIdUseCase
 import com.hsact.domain.usecase.shift.UpdateShiftUseCase

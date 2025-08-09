@@ -1,7 +1,7 @@
-package com.hsact.di
+package com.hsact.data.di
 
 import com.hsact.data.sync.ShiftRemoteControllerImpl
-import com.hsact.domain.sync.RemoteShiftController
+import com.hsact.data.sync.ShiftRemoteController
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,5 +17,5 @@ abstract class SyncModule {
     @Binds
     abstract fun bindRemoteShiftController(
         impl: ShiftRemoteControllerImpl
-    ): RemoteShiftController
+    ): ShiftRemoteController
 }

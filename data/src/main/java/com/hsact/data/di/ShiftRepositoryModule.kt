@@ -1,6 +1,6 @@
-package com.hsact.di
+package com.hsact.data.di
 
-import com.hsact.data.repository.ShiftRepositoryImpl
+import com.hsact.data.repository.shift.ShiftRepositoryImpl
 import com.hsact.domain.repository.ShiftRepository
 import dagger.Binds
 import dagger.Module

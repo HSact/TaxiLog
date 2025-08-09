@@ -1,7 +1,7 @@
 package com.hsact.data.sync
 
 import android.util.Log
-import com.hsact.data.firebase.FirebaseShiftDataSource
+import com.hsact.data.firebase.datasource.FirebaseShiftDataSource
 import com.hsact.domain.model.Shift
 import com.hsact.domain.repository.ShiftRepository
 import javax.inject.Inject

@@ -1,19 +1,16 @@
-package com.hsact.data.repository
+package com.hsact.data.repository.shift.local
 
 import android.util.Log
 import com.hsact.data.db.ShiftDao
 import com.hsact.data.mappers.toDomain
 import com.hsact.data.mappers.toEntity
 import com.hsact.domain.model.Shift
-import com.hsact.domain.repository.ShiftRepository
-import com.hsact.domain.sync.RemoteShiftController
 import java.time.LocalDateTime
 import javax.inject.Inject
 
-class ShiftRepositoryImpl @Inject constructor(
+class ShiftRepositoryLocalImpl @Inject constructor(
     private val shiftDao: ShiftDao,
-    private val shiftRemoteController: RemoteShiftController,
-) : ShiftRepository {
+) : ShiftRepositoryLocal {
 
     override suspend fun getAllShifts() =
         shiftDao.getAllShifts()
@@ -31,7 +28,7 @@ class ShiftRepositoryImpl @Inject constructor(
 
     override suspend fun getShift(id: Int): Shift? {
         val shiftEntity = shiftDao.getShiftById(id)
-        Log.d("ShiftRepository", "getShift: id=$id, remoteId=${shiftEntity?.remoteId}")
+        Log.d("ShiftRepositoryLocal", "getShift: id=$id, remoteId=${shiftEntity?.remoteId}")
         return shiftEntity?.toDomain()
     }
 
@@ -48,7 +45,7 @@ class ShiftRepositoryImpl @Inject constructor(
     override suspend fun markAsSynced(id: Int, remoteId: String) {
         val shift = shiftDao.getShiftById(id)
         if (shift == null) {
-            Log.w("ShiftRepository", "Shift with id $id not found")
+            Log.w("ShiftRepositoryLocal", "Shift with id $id not found")
             return
         }
         val newMeta = shift.meta.copy(isSynced = true)
@@ -57,39 +54,22 @@ class ShiftRepositoryImpl @Inject constructor(
 
     override suspend fun insertShift(shift: Shift) {
         shiftDao.insertShift(shift.toEntity())
-        Log.d("ShiftRepository", "Insert local shift: id=${shift.id} remoteId=${shift.remoteId?: "no remoteId"}")
+        Log.d("ShiftRepositoryLocal", "Insert local shift: id=${shift.id} remoteId=${shift.remoteId?: "no remoteId"}")
     }
 
     override suspend fun deleteShift(shift: Shift) {
         shiftDao.deleteById(shift.id)
-        Log.d("ShiftRepository", "Remove local shift: id=${shift.id} remoteId=${shift.remoteId?: "no remoteId"}")
-        shift.remoteId?.let { remoteId ->
-            try {
-                shiftRemoteController.deleteShift(remoteId)
-                Log.d("ShiftRepository", "Successfully removed remote shift: remoteId=$remoteId")
-            } catch (e: Exception) {
-                Log.e("ShiftRepository", "Error deleting shift remotely", e)
-            }
-        }
+        Log.d("ShiftRepositoryLocal", "Remove local shift: id=${shift.id} remoteId=${shift.remoteId?: "no remoteId"}")
     }
 
     override suspend fun updateShift(shift: Shift) {
         shiftDao.updateShift(shift.toEntity())
-        Log.d("ShiftRepository", "Update local shift: id=${shift.id} remoteId=${shift.remoteId?: "no remoteId"}")
-        shift.remoteId?.let { remoteId ->
-            try {
-                shiftRemoteController.saveShift(shift)
-                Log.d("ShiftRepository", "Successfully updated remote shift: remoteId=$remoteId")
-            } catch (e: Exception) {
-                Log.e("ShiftRepository", "Error updating shift remotely", e)
-            }
-        }
+        Log.d("ShiftRepositoryLocal", "Update local shift: id=${shift.id} remoteId=${shift.remoteId?: "no remoteId"}")
     }
 
     override suspend fun deleteAll() {
         shiftDao.deleteAll()
-        Log.d("ShiftRepository", "Deleted all shifts locally")
-        shiftRemoteController.deleteAllShifts()
+        Log.d("ShiftRepositoryLocal", "Deleted all shifts locally")
     }
 
     override suspend fun resetPrimaryKey() =

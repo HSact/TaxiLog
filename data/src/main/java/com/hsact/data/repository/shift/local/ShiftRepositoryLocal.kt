@@ -1,10 +1,9 @@
-package com.hsact.domain.repository
+package com.hsact.data.repository.shift.local
 
 import com.hsact.domain.model.Shift
 import java.time.LocalDateTime
 
-interface ShiftRepository {
-    suspend fun sync()
+interface ShiftRepositoryLocal {
     suspend fun getAllShifts(): List<Shift>
     suspend fun getShiftsInRange(start: LocalDateTime?, end: LocalDateTime?): List<Shift>
     suspend fun getShift(id: Int): Shift?

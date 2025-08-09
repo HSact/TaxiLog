@@ -1,4 +1,4 @@
-package com.hsact.data.firebase
+package com.hsact.data.firebase.datasource
 
 import com.hsact.domain.model.Shift
 

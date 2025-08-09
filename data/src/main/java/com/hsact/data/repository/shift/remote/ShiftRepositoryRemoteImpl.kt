@@ -1,4 +1,4 @@
-package com.hsact.data.sync
+package com.hsact.data.repository.shift.remote
 
 import android.content.Context
 import com.hsact.data.sync.worker.FirebaseWorkerManager
@@ -8,9 +8,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ShiftRemoteControllerImpl @Inject constructor(
+class ShiftRepositoryRemoteImpl @Inject constructor(
     @param:ApplicationContext private val context: Context
-) : ShiftRemoteController {
+) : ShiftRepositoryRemote {
     override fun sync() {
         FirebaseWorkerManager.enqueueSync(context)
     }

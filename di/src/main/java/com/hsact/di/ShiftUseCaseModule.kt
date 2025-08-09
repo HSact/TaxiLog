@@ -8,6 +8,7 @@ import com.hsact.domain.usecase.shift.GetAllShiftsUseCase
 import com.hsact.domain.usecase.shift.GetLastShiftUseCase
 import com.hsact.domain.usecase.shift.GetShiftByIdUseCase
 import com.hsact.domain.usecase.shift.GetShiftsInRangeUseCase
+import com.hsact.domain.usecase.shift.SyncShiftsUseCase
 import com.hsact.domain.usecase.shift.UpdateShiftUseCase
 import dagger.Module
 import dagger.Provides
@@ -17,6 +18,11 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 object ShiftUseCaseModule {
+
+    @Provides
+    fun provideSyncShiftsUseCase(
+        repository: ShiftRepository
+    ): SyncShiftsUseCase = SyncShiftsUseCase(repository)
 
     @Provides
     fun provideGetAllShiftsUseCase(

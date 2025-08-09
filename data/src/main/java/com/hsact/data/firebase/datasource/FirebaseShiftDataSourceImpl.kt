@@ -1,9 +1,11 @@
-package com.hsact.data.firebase
+package com.hsact.data.firebase.datasource
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hsact.data.firebase.model.FirebaseShift
+import com.hsact.data.firebase.toDomainOrNull
+import com.hsact.data.firebase.toFirebase
 import com.hsact.domain.model.Shift
 import kotlinx.coroutines.tasks.await
 import java.util.UUID

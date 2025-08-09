@@ -1,4 +1,4 @@
-package com.hsact.di
+package com.hsact.data.di
 
 import com.hsact.data.repository.SettingsRepositoryImpl
 import com.hsact.domain.repository.SettingsRepository
@@ -8,13 +8,13 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+@Suppress("unused")
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class SettingsModule {
 
     @Binds
     @Singleton
-    @Suppress("unused")
     abstract fun bindSettingsRepository(
         impl: SettingsRepositoryImpl
     ): SettingsRepository

@@ -1,4 +1,4 @@
-package com.hsact.di
+package com.hsact.data.di
 
 import android.content.Context
 import androidx.room.Room
