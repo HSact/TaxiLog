@@ -4,8 +4,8 @@ import android.app.Application
 import android.util.Log
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-import com.hsact.domain.sync.RemoteShiftController
-import com.hsact.taxilog.di.ApplicationScope
+import com.hsact.di.ApplicationScope
+import com.hsact.domain.usecase.shift.SyncShiftsUseCase
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -17,7 +17,7 @@ class TaxiLog : Application() {
     @ApplicationScope
     lateinit var applicationScope: CoroutineScope
     @Inject
-    lateinit var remoteShiftController: RemoteShiftController
+    lateinit var syncShiftsUseCase: SyncShiftsUseCase
 
     override fun onCreate() {
         super.onCreate()
@@ -27,7 +27,7 @@ class TaxiLog : Application() {
             val user = auth.currentUser
             if (user != null) {
                 applicationScope.launch {
-                    remoteShiftController.sync()
+                    syncShiftsUseCase()
                 }
             }
         }

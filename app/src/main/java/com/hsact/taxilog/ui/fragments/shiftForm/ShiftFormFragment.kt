@@ -148,7 +148,7 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
                 if (isProgrammaticChange) return
                 val mileageValue = s?.toString()?.toDoubleOrNull()
                 if (mileageValue != null) {
-                    updateShiftField { it.mileage = mileageValue }
+                    updateShiftField { it.copy(mileage = mileageValue) }
                     viewModel.guessFuelCost()
                 } else {
                     editFuelCost.setText("")
@@ -171,26 +171,26 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
             DatePickerFragment.pickDate(
                 this,
                 editDate,
-                onDatePicked = { viewModel.uiState.value?.date = editDate.text.toString() }
+                onDatePicked = { viewModel.setDate(editDate.text.toString()) }
             )
         }
         editStart.setOnClickListener {
             TimePickerFragment.pickTime(
                 this, editStart,
-                onTimePicked = { viewModel.uiState.value?.timeBegin = editStart.text.toString() }
+                onTimePicked = { viewModel.setTimeBegin(editStart.text.toString()) }
             )
         }
         editEnd.setOnClickListener {
             TimePickerFragment.pickTime(
                 this, editEnd,
-                onTimePicked = { viewModel.uiState.value?.timeEnd = editEnd.text.toString() }
+                onTimePicked = { viewModel.setTimeEnd(editEnd.text.toString()) }
             )
         }
         editBreakStart.setOnClickListener {
             TimePickerFragment.pickTime(
                 this, editBreakStart,
                 onTimePicked = {
-                    viewModel.uiState.value?.breakBegin = editBreakStart.text.toString()
+                    viewModel.setBreakBegin(editBreakStart.text.toString())
                 }
             )
         }
@@ -198,7 +198,7 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
             TimePickerFragment.pickTime(
                 this, editBreakEnd,
                 onTimePicked = {
-                    viewModel.uiState.value?.breakEnd = editBreakEnd.text.toString()
+                    viewModel.setBreakEnd(editBreakEnd.text.toString())
                 }
             )
         }
@@ -210,10 +210,10 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         }
     }
 
-    private fun updateShiftField(fieldSetter: (UiState) -> Unit) {
+    private fun updateShiftField(fieldSetter: (UiState) -> UiState) {
         val currentShift = viewModel.uiState.value ?: return
-        fieldSetter(currentShift)
-        viewModel.updateShift(currentShift)
+        val updated = fieldSetter(currentShift)
+        viewModel.updateShift(updated)
     }
 
     private fun updateUI(shift: UiState) {

@@ -18,7 +18,7 @@ class SaveShiftWorker(
         val shift = getShiftByIdUseCase(id) ?: return@withContext Result.failure()
 
         return@withContext try {
-            updateShiftUseCase(shift)
+            firebaseShiftDataSource.save(shift)
             Log.d("UpdateShiftWorker", "Shift updated: $id")
             Result.success()
         } catch (e: Exception) {

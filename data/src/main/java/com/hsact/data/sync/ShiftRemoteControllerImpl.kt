@@ -3,7 +3,6 @@ package com.hsact.data.sync
 import android.content.Context
 import com.hsact.data.sync.worker.FirebaseWorkerManager
 import com.hsact.domain.model.Shift
-import com.hsact.domain.sync.RemoteShiftController
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -11,7 +10,7 @@ import javax.inject.Singleton
 @Singleton
 class ShiftRemoteControllerImpl @Inject constructor(
     @param:ApplicationContext private val context: Context
-) : RemoteShiftController {
+) : ShiftRemoteController {
     override fun sync() {
         FirebaseWorkerManager.enqueueSync(context)
     }

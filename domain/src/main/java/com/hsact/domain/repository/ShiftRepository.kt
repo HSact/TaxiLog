@@ -4,6 +4,7 @@ import com.hsact.domain.model.Shift
 import java.time.LocalDateTime
 
 interface ShiftRepository {
+    suspend fun sync()
     suspend fun getAllShifts(): List<Shift>
     suspend fun getShiftsInRange(start: LocalDateTime?, end: LocalDateTime?): List<Shift>
     suspend fun getShift(id: Int): Shift?

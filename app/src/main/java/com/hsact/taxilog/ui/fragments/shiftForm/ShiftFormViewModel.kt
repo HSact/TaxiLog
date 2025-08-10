@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hsact.data.sync.ShiftSyncManager
 import com.hsact.domain.model.Shift
 import com.hsact.domain.model.ShiftMeta
 import com.hsact.domain.model.settings.UserSettings
@@ -34,7 +33,6 @@ class ShiftFormViewModel @Inject constructor(
     private val getDeviceIdUseCase: GetDeviceIdUseCase,
     private val addShiftUseCase: AddShiftUseCase,
     private val getShiftByIdUseCase: GetShiftByIdUseCase,
-    private val shiftSyncManager: ShiftSyncManager
 ) : ViewModel() {
     private val _uiState = MutableLiveData<UiState>()
     val uiState: LiveData<UiState> get() = _uiState
@@ -110,20 +108,44 @@ class ShiftFormViewModel @Inject constructor(
             note = note
         )
         if (currentShift.onlineTime < 0) {
-            currentShift.onlineTime += hoursToMs(24)
+            currentShift = currentShift.copy(onlineTime = currentShift.onlineTime + hoursToMs(24))
         }
         if (currentShift.breakBegin.isNotEmpty() && currentShift.breakEnd.isNotEmpty()) {
-            currentShift.breakTime =
-                convertTimeToLong(currentShift.breakEnd) - convertTimeToLong(currentShift.breakBegin)
+            currentShift = currentShift.copy(
+                breakTime =
+                    convertTimeToLong(currentShift.breakEnd) - convertTimeToLong(currentShift.breakBegin)
+            )
             if (currentShift.breakTime < 0) {
-                currentShift.breakTime += hoursToMs(24)
+                currentShift = currentShift.copy(breakTime = currentShift.breakTime + hoursToMs(24))
             }
-            currentShift.totalTime = currentShift.onlineTime - currentShift.breakTime
+            currentShift =
+                currentShift.copy(totalTime = currentShift.onlineTime - currentShift.breakTime)
         } else {
-            currentShift.totalTime = currentShift.onlineTime
+            currentShift = currentShift.copy(totalTime = currentShift.onlineTime)
         }
-        currentShift.profit = ((earnings + tips - wash - fuelCost) * 100).roundToInt() / 100.0
+        currentShift =
+            currentShift.copy(profit = ((earnings + tips - wash - fuelCost) * 100).roundToInt() / 100.0)
         _uiState.value = currentShift
+    }
+
+    fun setMileage(mileage: Double) { //TODO: fix this
+        _uiState.value = _uiState.value?.copy(mileage = mileage)
+        guessFuelCost()
+    }
+    fun setDate(date: String) {
+        _uiState.value = _uiState.value?.copy(date = date)
+    }
+    fun setTimeBegin(time: String) {
+        _uiState.value = _uiState.value?.copy(timeBegin = time)
+    }
+    fun setTimeEnd(time: String) {
+        _uiState.value = _uiState.value?.copy(timeEnd = time)
+    }
+    fun setBreakBegin(time: String) {
+        _uiState.value = _uiState.value?.copy(breakBegin = time)
+    }
+    fun setBreakEnd(time: String) {
+        _uiState.value = _uiState.value?.copy(breakEnd = time)
     }
 
     fun submit() {
@@ -145,7 +167,6 @@ class ShiftFormViewModel @Inject constructor(
         val shift: Shift = shiftInput.toDomain(shiftMeta)
         viewModelScope.launch {
             addShiftUseCase(shift.copy(id = uiState.id, remoteId = remoteId))
-            shiftSyncManager.sync()
         }
     }
 

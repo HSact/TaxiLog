@@ -15,7 +15,7 @@ import android.content.Context
  * }
  * ```
  */
-object ContextWrapper {
+internal object ContextWrapper {
     /**
      * Wraps the base context with the preferred locale if it's available.
      * If no preferred locale is set, it simply returns the original context.

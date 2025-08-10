@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 
-class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
+internal class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
     private val calendar = Calendar.getInstance()
     private lateinit var selectedDate: String
     var minDate = ""
