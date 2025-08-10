@@ -6,7 +6,6 @@ import androidx.work.WorkerParameters
 import com.hsact.data.firebase.datasource.FirebaseShiftDataSource
 import com.hsact.data.sync.ShiftSyncManager
 import com.hsact.domain.usecase.shift.GetShiftByIdUseCase
-import com.hsact.domain.usecase.shift.UpdateShiftUseCase
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
@@ -14,7 +13,7 @@ import dagger.hilt.components.SingletonComponent
 
 abstract class BaseFirebaseWorker(
     context: Context,
-    workerParams: WorkerParameters
+    workerParams: WorkerParameters,
 ) : CoroutineWorker(context, workerParams) {
 
     @EntryPoint
@@ -33,12 +32,6 @@ abstract class BaseFirebaseWorker(
     @InstallIn(SingletonComponent::class)
     interface GetShiftByIdUseCaseEntryPoint {
         fun getShiftByIdUseCase(): GetShiftByIdUseCase
-    }
-
-    @EntryPoint
-    @InstallIn(SingletonComponent::class)
-    interface UpdateShiftUseCaseEntryPoint {
-        fun updateShiftUseCase(): UpdateShiftUseCase
     }
 
     protected val shiftSyncManager: ShiftSyncManager by lazy {
@@ -60,12 +53,5 @@ abstract class BaseFirebaseWorker(
             applicationContext,
             GetShiftByIdUseCaseEntryPoint::class.java
         ).getShiftByIdUseCase()
-    }
-
-    protected val updateShiftUseCase: UpdateShiftUseCase by lazy {
-        EntryPointAccessors.fromApplication(
-            applicationContext,
-            UpdateShiftUseCaseEntryPoint::class.java
-        ).updateShiftUseCase()
     }
 }
