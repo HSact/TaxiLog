@@ -14,6 +14,7 @@
         android:padding="@dimen/layout_padding_regular"
         tools:context=".ui.fragments.stats.StatsFragment">
 
+        <!-- Dates selection -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,6 +72,7 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
+        <!-- If empty -->
         <TextView
             android:id="@+id/textListIsEmpty"
             android:layout_width="match_parent"
@@ -81,6 +83,7 @@
             android:textSize="16sp"
             android:visibility="gone" />
 
+        <!-- Shift count -->
         <LinearLayout
             android:id="@+id/layoutCount"
             android:layout_width="match_parent"
@@ -107,235 +110,249 @@
                 android:textSize="@dimen/statsTextSize" />
         </LinearLayout>
 
+        <!-- Average card -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/linearShift"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:id="@+id/average_card"
             app:strokeWidth="0dp"
-            app:strokeColor="@android:color/transparent"
-            app:cardBackgroundColor="?attr/colorBackgroundFloating"
-            android:orientation="vertical">
-        <TableLayout
-            android:id="@+id/table_layout"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="12dp"
+            app:cardBackgroundColor="?attr/colorBackgroundFloating">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/layout_padding_regular">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/average"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="8dp" />
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:stretchColumns="0">
+
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/textAv_duration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/shift_duration"
+                            android:textSize="@dimen/statsTextSize" />
+
+                        <TextView
+                            android:id="@+id/textAv_duration_val"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/n_a"
+                            android:textSize="@dimen/statsTextSize" />
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/textAv_fuel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/fuel_cost"
+                            android:textSize="@dimen/statsTextSize" />
+
+                        <TextView
+                            android:id="@+id/textAv_fuel_val"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/n_a"
+                            android:textSize="@dimen/statsTextSize" />
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/textAv_er_ph"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/earnings_per_hour"
+                            android:textSize="@dimen/statsTextSize" />
+
+                        <TextView
+                            android:id="@+id/textAv_er_ph_val"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/n_a"
+                            android:textSize="@dimen/statsTextSize" />
+                    </TableRow>
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/textAv_mileage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mileage"
+                            android:textSize="@dimen/statsTextSize" />
+
+                        <TextView
+                            android:id="@+id/textAv_mileage_val"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/n_a"
+                            android:textSize="@dimen/statsTextSize" />
+                    </TableRow>
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/textAv_profit_ph"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/profit_per_hour"
+                            android:textSize="@dimen/statsTextSize" />
+
+                        <TextView
+                            android:id="@+id/textAv_profit_ph_val"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/n_a"
+                            android:textSize="@dimen/statsTextSize" />
+                    </TableRow>
+                </TableLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Total card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/layout_padding_regular"
-            android:stretchColumns="0"
-            android:visibility="visible">
+            android:layout_marginTop="16dp"
+            android:id="@+id/total_card"
+            app:strokeWidth="0dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="12dp"
+            app:cardBackgroundColor="?attr/colorBackgroundFloating">
 
-            <TableRow
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/layout_padding_regular">
 
                 <TextView
-                    android:id="@+id/textAv_er_ph"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/average_earnings_per_hour"
-                    android:textSize="@dimen/statsTextSize" />
+                    android:text="@string/total"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="8dp" />
 
-                <TextView
-                    android:id="@+id/textAv_er_ph_val"
-                    android:layout_width="wrap_content"
+                <TableLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/n_a"
-                    android:textSize="@dimen/statsTextSize" />
-            </TableRow>
+                    android:stretchColumns="0">
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/textTotal_duration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/shift_duration"
+                            android:textSize="@dimen/statsTextSize" />
 
-                <TextView
-                    android:id="@+id/textAv_profit_ph"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/average_profit_per_hour"
-                    android:textSize="@dimen/statsTextSize" />
+                        <TextView
+                            android:id="@+id/textTotal_duration_val"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/n_a"
+                            android:textSize="@dimen/statsTextSize" />
+                    </TableRow>
 
-                <TextView
-                    android:id="@+id/textAv_profit_ph_val"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/n_a"
-                    android:textSize="@dimen/statsTextSize" />
-            </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/textTotal_fuel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/fuel_cost"
+                            android:textSize="@dimen/statsTextSize" />
 
-                <TextView
-                    android:id="@+id/textAv_duration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/average_shift_duration"
-                    android:textSize="@dimen/statsTextSize" />
+                        <TextView
+                            android:id="@+id/textTotal_fuel_val"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/n_a"
+                            android:textSize="@dimen/statsTextSize" />
+                    </TableRow>
 
-                <TextView
-                    android:id="@+id/textAv_duration_val"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/n_a"
-                    android:textSize="@dimen/statsTextSize" />
-            </TableRow>
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/textTotal_wash"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/wash_cost"
+                            android:textSize="@dimen/statsTextSize" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/textTotal_wash_val"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/n_a"
+                            android:textSize="@dimen/statsTextSize" />
+                    </TableRow>
 
-                <TextView
-                    android:id="@+id/textAv_mileage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/average_mileage"
-                    android:textSize="@dimen/statsTextSize" />
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/textTotalEarnings"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/earnings"
+                            android:textSize="@dimen/statsTextSize" />
 
-                <TextView
-                    android:id="@+id/textAv_mileage_val"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/n_a"
-                    android:textSize="@dimen/statsTextSize" />
-            </TableRow>
+                        <TextView
+                            android:id="@+id/textTotalEarnings_val"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/n_a"
+                            android:textSize="@dimen/statsTextSize" />
+                    </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/textTotal_mileage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mileage"
+                            android:textSize="@dimen/statsTextSize" />
 
-                <TextView
-                    android:id="@+id/textAv_fuel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/average_fuel"
-                    android:textSize="@dimen/statsTextSize" />
+                        <TextView
+                            android:id="@+id/textTotal_mileage_val"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/n_a"
+                            android:textSize="@dimen/statsTextSize" />
+                    </TableRow>
 
-                <TextView
-                    android:id="@+id/textAv_fuel_val"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/n_a"
-                    android:textSize="@dimen/statsTextSize" />
-            </TableRow>
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/textTotalProfit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/profit"
+                            android:textSize="@dimen/statsTextSize" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/textTotalProfit_val"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/n_a"
+                            android:textSize="@dimen/statsTextSize" />
+                    </TableRow>
+                </TableLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-                <TextView
-                    android:id="@+id/textTotal_duration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/total_shift_duration"
-                    android:textSize="@dimen/statsTextSize" />
-
-                <TextView
-                    android:id="@+id/textTotal_duration_val"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/n_a"
-                    android:textSize="@dimen/statsTextSize" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textTotal_mileage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/total_mileage"
-                    android:textSize="@dimen/statsTextSize" />
-
-                <TextView
-                    android:id="@+id/textTotal_mileage_val"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/n_a"
-                    android:textSize="@dimen/statsTextSize" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textTotal_fuel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/total_fuel"
-                    android:textSize="@dimen/statsTextSize" />
-
-                <TextView
-                    android:id="@+id/textTotal_fuel_val"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/n_a"
-                    android:textSize="@dimen/statsTextSize" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textTotal_wash"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/total_wash"
-                    android:textSize="@dimen/statsTextSize" />
-
-                <TextView
-                    android:id="@+id/textTotal_wash_val"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/n_a"
-                    android:textSize="@dimen/statsTextSize" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textTotalEarnings"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/total_earnings"
-                    android:textSize="@dimen/statsTextSize" />
-
-                <TextView
-                    android:id="@+id/textTotalEarnings_val"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/n_a"
-                    android:textSize="@dimen/statsTextSize" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textTotalProfit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/total_profit"
-                    android:textSize="@dimen/statsTextSize" />
-
-                <TextView
-                    android:id="@+id/textTotalProfit_val"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/n_a"
-                    android:textSize="@dimen/statsTextSize" />
-            </TableRow>
-        </TableLayout>
-    </com.google.android.material.card.MaterialCardView>
         <Space
             android:layout_width="match_parent"
-            android:layout_height="120dp"/>
+            android:layout_height="120dp" />
     </LinearLayout>
 </ScrollView>

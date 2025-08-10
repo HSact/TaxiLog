@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.TableLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -27,8 +27,9 @@ class StatsFragment : Fragment() {
 
     private var _binding: FragmentStatsBinding? = null
     private val binding get() = _binding!!
-    private lateinit var tableLayout: TableLayout
     private lateinit var countLayout: LinearLayout
+    private lateinit var averageCard: CardView
+    private lateinit var totalCard: CardView
     private lateinit var textListIsEmpty: TextView
     private lateinit var butDatePickBegin: EditText
     private lateinit var butDatePickEnd: EditText
@@ -96,13 +97,15 @@ class StatsFragment : Fragment() {
     private fun displayInfo(uiState: UiState) {
         val shifts = viewModel.shifts.value
         if (shifts.isEmpty()) {
-            tableLayout.visibility = View.GONE
             countLayout.visibility = View.GONE
             textListIsEmpty.visibility = View.VISIBLE
+            averageCard.visibility = View.GONE
+            totalCard.visibility = View.GONE
             return
         }
         textListIsEmpty.visibility = View.GONE
-        tableLayout.visibility = View.VISIBLE
+        averageCard.visibility = View.VISIBLE
+        totalCard.visibility = View.VISIBLE
         countLayout.visibility = View.VISIBLE
         textShiftsCount.text = uiState.shiftsCount
         textAvErPh.text = uiState.avErPh
@@ -119,8 +122,9 @@ class StatsFragment : Fragment() {
     }
 
     private fun bindItems() {
-        tableLayout = binding.tableLayout
         countLayout = binding.layoutCount
+        averageCard = binding.averageCard
+        totalCard = binding.totalCard
         butDatePickBegin = binding.buttonDatePickBegin
         butDatePickEnd = binding.buttonDatePickEnd
         textListIsEmpty = binding.textListIsEmpty

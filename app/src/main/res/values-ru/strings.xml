@@ -8,7 +8,6 @@
     <string name="title_about">О приложении</string>
     <string name="title_new_shift">Новая смена</string>
     <string name="title_my_shifts">Смены</string>
-    <string name="select_language">Выберите язык</string>
     <string name="settings_interface">Интерфейс</string>
     <string name="settings_language">Язык</string>
     <string name="settings_theme">Тема</string>
@@ -54,20 +53,8 @@
     <string name="you_haven_t_set_goal_yet">Вы пока не определили цель</string>
     <string name="your_goal_per_month">Ваша цель %s в месяц</string>
     <string name="n_a">N/A</string>
-    <string name="hours">часов</string>
     <string name="shifts_count">Всего смен:</string>
-    <string name="average_earnings_per_hour">Средняя выручка</string>
-    <string name="average_profit_per_hour">Средняя прибыль</string>
-    <string name="average_shift_duration">Среднее время смены</string>
-    <string name="average_mileage">Средний пробег</string>
-    <string name="total_shift_duration">Общее время смен</string>
-    <string name="total_mileage">Общий пробег</string>
-    <string name="total_wash">Общие траты на мойку</string>
-    <string name="total_earnings">Общая сумма выручки</string>
-    <string name="total_profit">Общая прибыль</string>
     <string name="edit_or_delete_shift">"Редактировать или удалить смену №"</string>
-    <string name="total_fuel">Общие траты на топливо</string>
-    <string name="average_fuel">Средние траты на топливо</string>
     <string name="settings_fuel_price">Цена топлива</string>
     <string name="list_is_empty">Нет смен за этот период</string>
     <string name="edit">Редактировать</string>
@@ -78,14 +65,11 @@
     <string name="day">День</string>
     <string name="this_week">Неделя</string>
     <string name="this_month">Месяц</string>
-    <string name="about_text">https://github.com/HSact/TaxiLog</string>
     <string name="privacy_policy_link">https://gist.github.com/HSact/4879da5ee7ffc776eaee348cc712e507</string>
     <string name="privacy_policy">Политика конфиденциальности</string>
     <string name="shift_added_successfully">Смена успешно сохранена</string>
     <string name="shift_deleted_successfully">Смена %1$s удалена успешно</string>
     <string name="all_shifts_have_been_deleted_successfully">Все смены были успешно удалены</string>
-    <string name="break_start_is_empty">Заполните время начала перерыва</string>
-    <string name="break_end_is_empty">Заполните время конца перерыва</string>
     <string name="earnings_is_empty">Выручка не заполнена</string>
     <string name="fuel_cost_is_empty">Стоимость топлива не заполнена</string>
     <string name="mileage_is_empty">Пробег не заполнен</string>
@@ -94,14 +78,7 @@
     <string name="nope">Потом</string>
     <string name="looks_like_its_a_first_launch_lets_set_it_up">Похоже, это первый запуск.\nДавайте всё настроим!</string>
     <string name="submit">Подвтерждение</string>
-    <string name="error">Ошибка</string>
-    <string name="edit_invalid_data">Ошибка! Неверные данные</string>
-    <string name="shift_edited_successfully">Смена успешно отредактирована</string>
     <string name="of">из</string>
-    <string name="title_shift_editing">Редактирование смены</string>
-    <string name="save">Сохранить</string>
-    <string name="editShiftHours">Часы</string>
-    <string name="nothing_changed">Ничего не изменилось</string>
     <string name="start">Начало</string>
     <string name="end">Конец</string>
     <string name="start_date">От</string>
@@ -143,4 +120,7 @@
     <string name="sign_in_title">Вход в аккаут</string>
     <string name="sign_in_description">Войдите через Google, чтобы включить облачную синхронизацию</string>
     <string name="sign_in">Войти</string>
+    <string name="average">В среднем</string>
+    <string name="shift_duration">Продолжительность смены</string>
+    <string name="wash_cost">Стоимость мойки</string>
 </resources>
