@@ -68,6 +68,10 @@ class LogFragment : Fragment() {
                     }
                 }
             )
+            // Restore the RecyclerView scroll state
+            viewModel.recyclerViewState?.let { state ->
+                binding.recyclerView.layoutManager?.onRestoreInstanceState(state)
+            }
         }
 
         val menuHost = requireActivity() as MenuHost
@@ -92,6 +96,14 @@ class LogFragment : Fragment() {
                 }
             }
         }, viewLifecycleOwner)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        //Saving the RecyclerView scroll state
+        binding.recyclerView.layoutManager
+            ?.onSaveInstanceState()
+            ?.let { viewModel.recyclerViewState = it }
     }
 
     override fun onResume() {

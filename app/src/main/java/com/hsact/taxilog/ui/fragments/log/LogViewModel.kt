@@ -1,5 +1,6 @@
 package com.hsact.taxilog.ui.fragments.log
 
+import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,6 +28,8 @@ class LogViewModel @Inject constructor(
 
     private val _shifts = MutableLiveData<List<Shift>>()
     val shifts: LiveData<List<Shift>> = _shifts
+
+    var recyclerViewState: Parcelable? = null           //For saving the RecyclerView scroll state
 
     init {
         viewModelScope.launch {
