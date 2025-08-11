@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/layout_padding_regular"
-    app:strokeWidth="0dp"
-    app:strokeColor="@android:color/transparent"
-    app:cardElevation="0dp"
-    app:cardBackgroundColor="?attr/colorBackgroundFloating"
-    android:orientation="vertical"
     android:clickable="true"
     android:focusable="true"
-    android:longClickable="true">
+    android:longClickable="true"
+    android:orientation="vertical"
+    app:cardBackgroundColor="?attr/colorBackgroundFloating"
+    app:cardElevation="0dp"
+    app:strokeColor="@android:color/transparent"
+    app:strokeWidth="0dp">
 
     <TableLayout
         android:id="@+id/tableShift"
@@ -29,16 +29,22 @@
 
             <TextView
                 android:id="@+id/textId0"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:gravity="start"
                 android:text="@string/id"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textId1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                android:gravity="end"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textSize="18sp" />
 
@@ -50,16 +56,22 @@
 
             <TextView
                 android:id="@+id/textDate0"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:gravity="start"
                 android:text="@string/date"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textDate1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                android:gravity="end"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textSize="18sp" />
 
@@ -71,16 +83,22 @@
 
             <TextView
                 android:id="@+id/textTime0"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:gravity="start"
                 android:text="@string/time"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textTime1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                android:gravity="end"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textSize="18sp" />
         </TableRow>
@@ -91,16 +109,22 @@
 
             <TextView
                 android:id="@+id/textEarnings0"
-                android:layout_width="194dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:gravity="start"
                 android:text="@string/earnings"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textEarnings1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                android:gravity="end"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textSize="18sp" />
         </TableRow>
@@ -111,16 +135,22 @@
 
             <TextView
                 android:id="@+id/textWash0"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:gravity="start"
                 android:text="@string/wash"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textWash1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                android:gravity="end"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textSize="18sp" />
         </TableRow>
@@ -131,16 +161,22 @@
 
             <TextView
                 android:id="@+id/textFuel0"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:gravity="start"
                 android:text="@string/fuel"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textFuel1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                android:gravity="end"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textSize="18sp" />
         </TableRow>
@@ -151,16 +187,22 @@
 
             <TextView
                 android:id="@+id/textMileage0"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:gravity="start"
                 android:text="@string/mileage"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textMileage1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                android:gravity="end"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textSize="18sp" />
         </TableRow>
@@ -171,16 +213,22 @@
 
             <TextView
                 android:id="@+id/textPerHour0"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:gravity="start"
                 android:text="@string/per_hour"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textPerHour1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                android:gravity="end"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textSize="18sp" />
         </TableRow>
@@ -191,16 +239,22 @@
 
             <TextView
                 android:id="@+id/textProfit0"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:gravity="start"
                 android:text="@string/profit"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textProfit1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                android:gravity="end"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textSize="18sp" />
         </TableRow>
