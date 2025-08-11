@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -88,19 +88,19 @@
             android:id="@+id/layoutCount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/table_row_padding_first"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/table_row_padding_first">
 
             <TextView
                 android:id="@+id/textShifts_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:text="@string/shifts_count"
-                android:textSize="@dimen/statsTextSize"
-                android:layout_marginEnd="8dp" />
+                android:textSize="@dimen/statsTextSize" />
 
             <TextView
                 android:id="@+id/textShifts_count_val"
@@ -112,14 +112,14 @@
 
         <!-- Average card -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/average_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:id="@+id/average_card"
-            app:strokeWidth="0dp"
-            app:cardElevation="4dp"
+            app:cardBackgroundColor="?attr/colorBackgroundFloating"
             app:cardCornerRadius="12dp"
-            app:cardBackgroundColor="?attr/colorBackgroundFloating">
+            app:cardElevation="4dp"
+            app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -130,10 +130,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:text="@string/average"
-                    android:textStyle="bold"
                     android:textSize="18sp"
-                    android:layout_marginBottom="8dp" />
+                    android:textStyle="bold" />
 
                 <TableLayout
                     android:layout_width="match_parent"
@@ -141,10 +141,13 @@
                     android:stretchColumns="0">
 
                     <TableRow>
+
                         <TextView
                             android:id="@+id/textAv_duration"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:gravity="start"
                             android:text="@string/shift_duration"
                             android:textSize="@dimen/statsTextSize" />
 
@@ -152,15 +155,20 @@
                             android:id="@+id/textAv_duration_val"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:gravity="end"
                             android:text="@string/n_a"
                             android:textSize="@dimen/statsTextSize" />
                     </TableRow>
 
                     <TableRow>
+
                         <TextView
                             android:id="@+id/textAv_fuel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:gravity="start"
                             android:text="@string/fuel_cost"
                             android:textSize="@dimen/statsTextSize" />
 
@@ -168,14 +176,20 @@
                             android:id="@+id/textAv_fuel_val"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:gravity="end"
                             android:text="@string/n_a"
                             android:textSize="@dimen/statsTextSize" />
                     </TableRow>
+
                     <TableRow>
+
                         <TextView
                             android:id="@+id/textAv_wash"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:gravity="start"
                             android:text="@string/wash_cost"
                             android:textSize="@dimen/statsTextSize" />
 
@@ -183,14 +197,20 @@
                             android:id="@+id/textAv_wash_val"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:gravity="end"
                             android:text="@string/n_a"
                             android:textSize="@dimen/statsTextSize" />
                     </TableRow>
+
                     <TableRow>
+
                         <TextView
                             android:id="@+id/textAv_er_ph"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:gravity="start"
                             android:text="@string/earnings_per_hour"
                             android:textSize="@dimen/statsTextSize" />
 
@@ -198,29 +218,20 @@
                             android:id="@+id/textAv_er_ph_val"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:gravity="end"
                             android:text="@string/n_a"
                             android:textSize="@dimen/statsTextSize" />
                     </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:id="@+id/textAv_mileage"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/mileage"
-                            android:textSize="@dimen/statsTextSize" />
 
-                        <TextView
-                            android:id="@+id/textAv_mileage_val"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/n_a"
-                            android:textSize="@dimen/statsTextSize" />
-                    </TableRow>
                     <TableRow>
+
                         <TextView
                             android:id="@+id/textAv_profit_ph"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:gravity="start"
                             android:text="@string/profit_per_hour"
                             android:textSize="@dimen/statsTextSize" />
 
@@ -228,6 +239,29 @@
                             android:id="@+id/textAv_profit_ph_val"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:gravity="end"
+                            android:text="@string/n_a"
+                            android:textSize="@dimen/statsTextSize" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:id="@+id/textAv_mileage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:gravity="start"
+                            android:text="@string/mileage"
+                            android:textSize="@dimen/statsTextSize" />
+
+                        <TextView
+                            android:id="@+id/textAv_mileage_val"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:gravity="end"
                             android:text="@string/n_a"
                             android:textSize="@dimen/statsTextSize" />
                     </TableRow>
@@ -237,14 +271,14 @@
 
         <!-- Total card -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/total_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:id="@+id/total_card"
-            app:strokeWidth="0dp"
-            app:cardElevation="4dp"
+            app:cardBackgroundColor="?attr/colorBackgroundFloating"
             app:cardCornerRadius="12dp"
-            app:cardBackgroundColor="?attr/colorBackgroundFloating">
+            app:cardElevation="4dp"
+            app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -255,10 +289,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:text="@string/total"
-                    android:textStyle="bold"
                     android:textSize="18sp"
-                    android:layout_marginBottom="8dp" />
+                    android:textStyle="bold" />
 
                 <TableLayout
                     android:layout_width="match_parent"
@@ -266,10 +300,13 @@
                     android:stretchColumns="0">
 
                     <TableRow>
+
                         <TextView
                             android:id="@+id/textTotal_duration"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:gravity="start"
                             android:text="@string/shift_duration"
                             android:textSize="@dimen/statsTextSize" />
 
@@ -277,16 +314,21 @@
                             android:id="@+id/textTotal_duration_val"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:gravity="end"
                             android:text="@string/n_a"
                             android:textSize="@dimen/statsTextSize" />
                     </TableRow>
 
 
                     <TableRow>
+
                         <TextView
                             android:id="@+id/textTotal_fuel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:gravity="start"
                             android:text="@string/fuel_cost"
                             android:textSize="@dimen/statsTextSize" />
 
@@ -294,15 +336,20 @@
                             android:id="@+id/textTotal_fuel_val"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:gravity="end"
                             android:text="@string/n_a"
                             android:textSize="@dimen/statsTextSize" />
                     </TableRow>
 
                     <TableRow>
+
                         <TextView
                             android:id="@+id/textTotal_wash"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:gravity="start"
                             android:text="@string/wash_cost"
                             android:textSize="@dimen/statsTextSize" />
 
@@ -310,15 +357,20 @@
                             android:id="@+id/textTotal_wash_val"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:gravity="end"
                             android:text="@string/n_a"
                             android:textSize="@dimen/statsTextSize" />
                     </TableRow>
 
                     <TableRow>
+
                         <TextView
                             android:id="@+id/textTotalEarnings"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:gravity="start"
                             android:text="@string/earnings"
                             android:textSize="@dimen/statsTextSize" />
 
@@ -326,31 +378,20 @@
                             android:id="@+id/textTotalEarnings_val"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:gravity="end"
                             android:text="@string/n_a"
                             android:textSize="@dimen/statsTextSize" />
                     </TableRow>
 
                     <TableRow>
-                        <TextView
-                            android:id="@+id/textTotal_mileage"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/mileage"
-                            android:textSize="@dimen/statsTextSize" />
 
-                        <TextView
-                            android:id="@+id/textTotal_mileage_val"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/n_a"
-                            android:textSize="@dimen/statsTextSize" />
-                    </TableRow>
-
-                    <TableRow>
                         <TextView
                             android:id="@+id/textTotalProfit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:gravity="start"
                             android:text="@string/profit"
                             android:textSize="@dimen/statsTextSize" />
 
@@ -358,6 +399,29 @@
                             android:id="@+id/textTotalProfit_val"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:gravity="end"
+                            android:text="@string/n_a"
+                            android:textSize="@dimen/statsTextSize" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:id="@+id/textTotal_mileage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:gravity="start"
+                            android:text="@string/mileage"
+                            android:textSize="@dimen/statsTextSize" />
+
+                        <TextView
+                            android:id="@+id/textTotal_mileage_val"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:gravity="end"
                             android:text="@string/n_a"
                             android:textSize="@dimen/statsTextSize" />
                     </TableRow>

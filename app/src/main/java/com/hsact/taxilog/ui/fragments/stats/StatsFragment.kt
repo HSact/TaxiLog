@@ -22,7 +22,6 @@ import java.util.Locale
 
 @AndroidEntryPoint
 class StatsFragment : Fragment() {
-
     private val viewModel: StatsViewModel by viewModels()
 
     private var _binding: FragmentStatsBinding? = null
