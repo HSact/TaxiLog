@@ -35,7 +35,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/number"
-                android:textSize="18sp" />
+                android:textSize="@dimen/cardTextSize" />
 
             <TextView
                 android:id="@+id/textId1"
@@ -44,7 +44,7 @@
                 android:layout_gravity="end"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:textSize="18sp" />
+                android:textSize="@dimen/cardTextSize" />
 
         </TableRow>
 
@@ -60,7 +60,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/date"
-                android:textSize="18sp" />
+                android:textSize="@dimen/cardTextSize" />
 
             <TextView
                 android:id="@+id/textDate1"
@@ -69,7 +69,7 @@
                 android:layout_gravity="end"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:textSize="18sp" />
+                android:textSize="@dimen/cardTextSize" />
 
         </TableRow>
 
@@ -85,7 +85,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/time"
-                android:textSize="18sp" />
+                android:textSize="@dimen/cardTextSize" />
 
             <TextView
                 android:id="@+id/textTime1"
@@ -94,7 +94,7 @@
                 android:layout_gravity="end"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:textSize="18sp" />
+                android:textSize="@dimen/cardTextSize" />
         </TableRow>
 
         <TableRow
@@ -109,7 +109,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/earnings"
-                android:textSize="18sp" />
+                android:textSize="@dimen/cardTextSize" />
 
             <TextView
                 android:id="@+id/textEarnings1"
@@ -118,7 +118,7 @@
                 android:layout_gravity="end"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:textSize="18sp" />
+                android:textSize="@dimen/cardTextSize" />
         </TableRow>
 
         <TableRow
@@ -133,7 +133,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/wash"
-                android:textSize="18sp" />
+                android:textSize="@dimen/cardTextSize" />
 
             <TextView
                 android:id="@+id/textWash1"
@@ -142,7 +142,7 @@
                 android:layout_gravity="end"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:textSize="18sp" />
+                android:textSize="@dimen/cardTextSize" />
         </TableRow>
 
         <TableRow
@@ -157,7 +157,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/fuel"
-                android:textSize="18sp" />
+                android:textSize="@dimen/cardTextSize" />
 
             <TextView
                 android:id="@+id/textFuel1"
@@ -166,7 +166,7 @@
                 android:layout_gravity="end"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:textSize="18sp" />
+                android:textSize="@dimen/cardTextSize" />
         </TableRow>
 
         <TableRow
@@ -181,7 +181,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/mileage"
-                android:textSize="18sp" />
+                android:textSize="@dimen/cardTextSize" />
 
             <TextView
                 android:id="@+id/textMileage1"
@@ -190,7 +190,7 @@
                 android:layout_gravity="end"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:textSize="18sp" />
+                android:textSize="@dimen/cardTextSize" />
         </TableRow>
 
         <TableRow
@@ -205,7 +205,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/per_hour"
-                android:textSize="18sp" />
+                android:textSize="@dimen/cardTextSize" />
 
             <TextView
                 android:id="@+id/textPerHour1"
@@ -214,7 +214,7 @@
                 android:layout_gravity="end"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:textSize="18sp" />
+                android:textSize="@dimen/cardTextSize" />
         </TableRow>
 
         <TableRow
@@ -229,7 +229,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/profit"
-                android:textSize="18sp" />
+                android:textSize="@dimen/cardTextSize" />
 
             <TextView
                 android:id="@+id/textProfit1"
@@ -238,7 +238,7 @@
                 android:layout_gravity="end"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:textSize="18sp" />
+                android:textSize="@dimen/cardTextSize" />
         </TableRow>
     </TableLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -100,14 +100,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="@string/shifts_count"
-                android:textSize="@dimen/statsTextSize" />
+                android:textSize="@dimen/cardTextSize" />
 
             <TextView
                 android:id="@+id/textShifts_count_val"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/n_a"
-                android:textSize="@dimen/statsTextSize" />
+                android:textSize="@dimen/cardTextSize" />
         </LinearLayout>
 
         <!-- Average card -->
@@ -149,7 +149,7 @@
                             android:layout_gravity="start"
                             android:gravity="start"
                             android:text="@string/shift_duration"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
 
                         <TextView
                             android:id="@+id/textAv_duration_val"
@@ -158,7 +158,7 @@
                             android:layout_gravity="end"
                             android:gravity="end"
                             android:text="@string/n_a"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
                     </TableRow>
 
                     <TableRow>
@@ -170,7 +170,7 @@
                             android:layout_gravity="start"
                             android:gravity="start"
                             android:text="@string/fuel_cost"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
 
                         <TextView
                             android:id="@+id/textAv_fuel_val"
@@ -179,7 +179,7 @@
                             android:layout_gravity="end"
                             android:gravity="end"
                             android:text="@string/n_a"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
                     </TableRow>
 
                     <TableRow>
@@ -191,7 +191,7 @@
                             android:layout_gravity="start"
                             android:gravity="start"
                             android:text="@string/wash_cost"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
 
                         <TextView
                             android:id="@+id/textAv_wash_val"
@@ -200,7 +200,7 @@
                             android:layout_gravity="end"
                             android:gravity="end"
                             android:text="@string/n_a"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
                     </TableRow>
 
                     <TableRow>
@@ -212,7 +212,7 @@
                             android:layout_gravity="start"
                             android:gravity="start"
                             android:text="@string/earnings_per_hour"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
 
                         <TextView
                             android:id="@+id/textAv_er_ph_val"
@@ -221,7 +221,7 @@
                             android:layout_gravity="end"
                             android:gravity="end"
                             android:text="@string/n_a"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
                     </TableRow>
 
                     <TableRow>
@@ -233,7 +233,7 @@
                             android:layout_gravity="start"
                             android:gravity="start"
                             android:text="@string/profit_per_hour"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
 
                         <TextView
                             android:id="@+id/textAv_profit_ph_val"
@@ -242,7 +242,7 @@
                             android:layout_gravity="end"
                             android:gravity="end"
                             android:text="@string/n_a"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
                     </TableRow>
 
                     <TableRow>
@@ -254,7 +254,7 @@
                             android:layout_gravity="start"
                             android:gravity="start"
                             android:text="@string/mileage"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
 
                         <TextView
                             android:id="@+id/textAv_mileage_val"
@@ -263,7 +263,7 @@
                             android:layout_gravity="end"
                             android:gravity="end"
                             android:text="@string/n_a"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
                     </TableRow>
                 </TableLayout>
             </LinearLayout>
@@ -308,7 +308,7 @@
                             android:layout_gravity="start"
                             android:gravity="start"
                             android:text="@string/shift_duration"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
 
                         <TextView
                             android:id="@+id/textTotal_duration_val"
@@ -317,7 +317,7 @@
                             android:layout_gravity="end"
                             android:gravity="end"
                             android:text="@string/n_a"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
                     </TableRow>
 
 
@@ -330,7 +330,7 @@
                             android:layout_gravity="start"
                             android:gravity="start"
                             android:text="@string/fuel_cost"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
 
                         <TextView
                             android:id="@+id/textTotal_fuel_val"
@@ -339,7 +339,7 @@
                             android:layout_gravity="end"
                             android:gravity="end"
                             android:text="@string/n_a"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
                     </TableRow>
 
                     <TableRow>
@@ -351,7 +351,7 @@
                             android:layout_gravity="start"
                             android:gravity="start"
                             android:text="@string/wash_cost"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
 
                         <TextView
                             android:id="@+id/textTotal_wash_val"
@@ -360,7 +360,7 @@
                             android:layout_gravity="end"
                             android:gravity="end"
                             android:text="@string/n_a"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
                     </TableRow>
 
                     <TableRow>
@@ -372,7 +372,7 @@
                             android:layout_gravity="start"
                             android:gravity="start"
                             android:text="@string/earnings"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
 
                         <TextView
                             android:id="@+id/textTotalEarnings_val"
@@ -381,7 +381,7 @@
                             android:layout_gravity="end"
                             android:gravity="end"
                             android:text="@string/n_a"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
                     </TableRow>
 
                     <TableRow>
@@ -393,7 +393,7 @@
                             android:layout_gravity="start"
                             android:gravity="start"
                             android:text="@string/profit"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
 
                         <TextView
                             android:id="@+id/textTotalProfit_val"
@@ -402,7 +402,7 @@
                             android:layout_gravity="end"
                             android:gravity="end"
                             android:text="@string/n_a"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
                     </TableRow>
 
                     <TableRow>
@@ -414,7 +414,7 @@
                             android:layout_gravity="start"
                             android:gravity="start"
                             android:text="@string/mileage"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
 
                         <TextView
                             android:id="@+id/textTotal_mileage_val"
@@ -423,7 +423,7 @@
                             android:layout_gravity="end"
                             android:gravity="end"
                             android:text="@string/n_a"
-                            android:textSize="@dimen/statsTextSize" />
+                            android:textSize="@dimen/cardTextSize" />
                     </TableRow>
                 </TableLayout>
             </LinearLayout>
