@@ -171,7 +171,21 @@
                             android:text="@string/n_a"
                             android:textSize="@dimen/statsTextSize" />
                     </TableRow>
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/textAv_wash"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/wash_cost"
+                            android:textSize="@dimen/statsTextSize" />
 
+                        <TextView
+                            android:id="@+id/textAv_wash_val"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/n_a"
+                            android:textSize="@dimen/statsTextSize" />
+                    </TableRow>
                     <TableRow>
                         <TextView
                             android:id="@+id/textAv_er_ph"

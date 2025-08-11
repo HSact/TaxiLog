@@ -44,6 +44,7 @@ class StatsFragment : Fragment() {
     private lateinit var textTotalEarnings: TextView
     private lateinit var textTotalProfit: TextView
     private lateinit var textAvFuel: TextView
+    private lateinit var textAvWash: TextView
     private lateinit var textTotalFuel: TextView
 
     override fun onCreateView(
@@ -119,6 +120,7 @@ class StatsFragment : Fragment() {
         textTotalProfit.text = uiState.totalProfit
         textAvFuel.text = uiState.avFuel
         textTotalFuel.text = uiState.totalFuel
+        textAvWash.text = uiState.avWash
     }
 
     private fun bindItems() {
@@ -139,6 +141,7 @@ class StatsFragment : Fragment() {
         textTotalEarnings = binding.textTotalEarningsVal
         textTotalProfit = binding.textTotalProfitVal
         textAvFuel = binding.textAvFuelVal
+        textAvWash = binding.textAvWashVal
         textTotalFuel = binding.textTotalFuelVal
     }
 }
