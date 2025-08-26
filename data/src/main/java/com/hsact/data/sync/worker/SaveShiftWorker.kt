@@ -15,14 +15,17 @@ class SaveShiftWorker(
         val id = inputData.getInt("shiftId", -1)
         if (id == -1) return@withContext Result.failure()
 
-        val shift = getShiftByIdUseCase(id) ?: return@withContext Result.failure()
+        val shift = shiftRepository.getShift(id) ?: return@withContext Result.failure()
 
         return@withContext try {
-            firebaseShiftDataSource.save(shift)
-            Log.d("UpdateShiftWorker", "Shift updated: $id")
+            val remoteId = firebaseShiftDataSource.save(shift)
+            if (remoteId != null) {
+                shiftRepository.markAsSynced(id, remoteId)
+            }
+            Log.d("SaveShiftWorker", "Shift $id saved. Remote id: $remoteId")
             Result.success()
         } catch (e: Exception) {
-            Log.e("UpdateShiftWorker", "Update shift error: $id", e)
+            Log.e("SaveShiftWorker", "Save shift error: $id", e)
             Result.retry()
         }
     }

@@ -21,7 +21,7 @@ class RecyclerAdapter(
     RecyclerView.Adapter<RecyclerAdapter.ShiftViewHolder>() {
     inner class ShiftViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val textId: TextView = itemView.findViewById(R.id.textId1)
+        val textId: TextView = itemView.findViewById(R.id.textShiftNumber1)
         val textDate: TextView = itemView.findViewById(R.id.textDate1)
         val textTime: TextView = itemView.findViewById(R.id.textTime1)
         val textEarnings: TextView = itemView.findViewById(R.id.textEarnings1)
