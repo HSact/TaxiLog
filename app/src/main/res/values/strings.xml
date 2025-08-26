@@ -124,6 +124,7 @@
     <string name="shift_duration">Shift duration</string>
     <string name="wash_cost">Wash cost</string>
     <string name="number">Number</string>
+    <string name="shift_number">Shift #</string>
 
     <string-array name="languages">
         <item>English</item>
