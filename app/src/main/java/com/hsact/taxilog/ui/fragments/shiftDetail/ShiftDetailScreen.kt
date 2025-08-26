@@ -258,7 +258,7 @@ private fun LabelValueRow(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = label,
-            style = MaterialTheme.typography.bodyLarge)
+            style = MaterialTheme.typography.bodyMedium)
         Text(text = value,
             style = MaterialTheme.typography.bodyLarge)
     }
