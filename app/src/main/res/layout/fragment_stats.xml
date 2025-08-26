@@ -146,8 +146,8 @@
                             android:id="@+id/textAv_duration"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:gravity="start"
+                            android:layout_gravity="start||center_vertical"
+                            android:gravity="start||center_vertical"
                             android:text="@string/shift_duration"
                             android:textAppearance="?attr/textAppearanceBodyMedium" />
 
@@ -167,8 +167,8 @@
                             android:id="@+id/textAv_fuel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:gravity="start"
+                            android:layout_gravity="start||center_vertical"
+                            android:gravity="start||center_vertical"
                             android:text="@string/fuel_cost"
                             android:textAppearance="?attr/textAppearanceBodyMedium" />
 
@@ -188,8 +188,8 @@
                             android:id="@+id/textAv_wash"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:gravity="start"
+                            android:layout_gravity="start||center_vertical"
+                            android:gravity="start||center_vertical"
                             android:text="@string/wash_cost"
                             android:textAppearance="?attr/textAppearanceBodyMedium" />
 
@@ -209,8 +209,8 @@
                             android:id="@+id/textAv_er_ph"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:gravity="start"
+                            android:layout_gravity="start||center_vertical"
+                            android:gravity="start||center_vertical"
                             android:text="@string/earnings_per_hour"
                             android:textAppearance="?attr/textAppearanceBodyMedium" />
 
@@ -230,8 +230,8 @@
                             android:id="@+id/textAv_profit_ph"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:gravity="start"
+                            android:layout_gravity="start||center_vertical"
+                            android:gravity="start||center_vertical"
                             android:text="@string/profit_per_hour"
                             android:textAppearance="?attr/textAppearanceBodyMedium" />
 
@@ -251,8 +251,8 @@
                             android:id="@+id/textAv_mileage"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:gravity="start"
+                            android:layout_gravity="start||center_vertical"
+                            android:gravity="start||center_vertical"
                             android:text="@string/mileage"
                             android:textAppearance="?attr/textAppearanceBodyMedium" />
 
@@ -305,8 +305,8 @@
                             android:id="@+id/textTotal_duration"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:gravity="start"
+                            android:layout_gravity="start||center_vertical"
+                            android:gravity="start||center_vertical"
                             android:text="@string/shifts_duration"
                             android:textAppearance="?attr/textAppearanceBodyMedium" />
 
@@ -327,8 +327,8 @@
                             android:id="@+id/textTotal_fuel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:gravity="start"
+                            android:layout_gravity="start||center_vertical"
+                            android:gravity="start||center_vertical"
                             android:text="@string/fuel_cost"
                             android:textAppearance="?attr/textAppearanceBodyMedium" />
 
@@ -348,8 +348,8 @@
                             android:id="@+id/textTotal_wash"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:gravity="start"
+                            android:layout_gravity="start||center_vertical"
+                            android:gravity="start||center_vertical"
                             android:text="@string/wash_cost"
                             android:textAppearance="?attr/textAppearanceBodyMedium" />
 
@@ -369,8 +369,8 @@
                             android:id="@+id/textTotalEarnings"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:gravity="start"
+                            android:layout_gravity="start||center_vertical"
+                            android:gravity="start||center_vertical"
                             android:text="@string/earnings"
                             android:textAppearance="?attr/textAppearanceBodyMedium" />
 
@@ -390,8 +390,8 @@
                             android:id="@+id/textTotalProfit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:gravity="start"
+                            android:layout_gravity="start||center_vertical"
+                            android:gravity="start||center_vertical"
                             android:text="@string/profit"
                             android:textAppearance="?attr/textAppearanceBodyMedium" />
 
@@ -411,8 +411,8 @@
                             android:id="@+id/textTotal_mileage"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:gravity="start"
+                            android:layout_gravity="start||center_vertical"
+                            android:gravity="start||center_vertical"
                             android:text="@string/mileage"
                             android:textAppearance="?attr/textAppearanceBodyMedium" />
 
