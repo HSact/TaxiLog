@@ -307,7 +307,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
                             android:gravity="start"
-                            android:text="@string/shift_duration"
+                            android:text="@string/shifts_duration"
                             android:textAppearance="?attr/textAppearanceBodyMedium" />
 
                         <TextView

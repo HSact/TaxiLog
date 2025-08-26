@@ -122,6 +122,7 @@
     <string name="sign_in">Sign in</string>
     <string name="average">Average</string>
     <string name="shift_duration">Shift duration</string>
+    <string name="shifts_duration">Shifts duration</string>
     <string name="wash_cost">Wash cost</string>
     <string name="number">Number</string>
     <string name="shift_number">Shift #</string>

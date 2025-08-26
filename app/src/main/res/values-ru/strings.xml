@@ -44,7 +44,7 @@
     <string name="date">Дата</string>
     <string name="costs">Траты</string>
     <string name="time">Время</string>
-    <string name="total">Итого</string>
+    <string name="total">Всего</string>
     <string name="per_hour">В час</string>
     <string name="new_shift">Добавить смену</string>
     <string name="profit">Прибыль</string>
@@ -122,6 +122,7 @@
     <string name="sign_in">Войти</string>
     <string name="average">В среднем</string>
     <string name="shift_duration">Продолжительность смены</string>
+    <string name="shifts_duration">Продолжительность смен</string>
     <string name="wash_cost">Стоимость мойки</string>
     <string name="number">Номер</string>
     <string name="shift_number">Смена №</string>
