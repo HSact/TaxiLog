@@ -116,7 +116,7 @@ fun MonthGraphCard(chartData: StateFlow<List<Double>>, goalData: StateFlow<Doubl
                 maxValue = max * 1.0,
                 modifier = Modifier
                     .heightIn(max = 300.dp)
-                    .padding(top = 52.dp)
+                    .padding(top = 40.dp)
             )
     }
 }
