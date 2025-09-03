@@ -26,13 +26,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.hsact.domain.model.Shift
 import com.hsact.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.R
 import com.hsact.taxilog.ui.AppTheme
 import com.hsact.taxilog.ui.cards.BaseCard
+import com.hsact.taxilog.ui.components.CardHeader
+import com.hsact.taxilog.ui.components.LabelValueRow
 import com.hsact.taxilog.ui.shift.ShiftOutputModel
 import com.hsact.taxilog.ui.shift.mappers.toUi
 import java.util.Locale
@@ -130,24 +131,10 @@ fun ShiftDetailScreen(
 }
 
 @Composable
-fun Header(
-    text: String,
-    modifier: Modifier = Modifier,
-) {
-    Text(
-        text = text,
-        modifier = modifier
-            .fillMaxWidth(),
-        color = MaterialTheme.colorScheme.onBackground,
-        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
-    )
-}
-
-@Composable
 fun CarCard(ui: ShiftOutputModel) {
     BaseCard {
         Column {
-            Header(text = stringResource(R.string.car))
+            CardHeader(text = stringResource(R.string.car))
             Space()
             if (ui.carName.isNotBlank()) {
                 LabelValueRow(
@@ -171,7 +158,7 @@ fun CarCard(ui: ShiftOutputModel) {
 fun TimeCard(ui: ShiftOutputModel) {
     BaseCard {
         Column {
-            Header(text = stringResource(R.string.time))
+            CardHeader(text = stringResource(R.string.time))
             Space()
             LabelValueRow(
                 label = stringResource(R.string.date),
@@ -202,7 +189,7 @@ fun TimeCard(ui: ShiftOutputModel) {
 fun FinanceCard(shiftData: Shift, ui: ShiftOutputModel) {
     BaseCard {
         Column {
-            Header(text = stringResource(R.string.finance))
+            CardHeader(text = stringResource(R.string.finance))
             Space()
             LabelValueRow(stringResource(R.string.earnings), ui.earnings)
             LabelValueRow(stringResource(R.string.earnings_per_hour), ui.earningsPerHour)
@@ -237,30 +224,11 @@ fun OtherCard(ui: ShiftOutputModel) {
     if (!ui.note.isNullOrBlank()) {
         BaseCard {
             Column {
-                Header(text = stringResource(R.string.note))
+                CardHeader(text = stringResource(R.string.note))
                 Space()
                 Text(ui.note)
             }
         }
-    }
-}
-
-@Composable
-private fun LabelValueRow(
-    label: String,
-    value: String,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 2.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(text = label,
-            style = MaterialTheme.typography.bodyMedium)
-        Text(text = value,
-            style = MaterialTheme.typography.bodyLarge)
     }
 }
 

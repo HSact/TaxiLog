@@ -10,8 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.hsact.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.databinding.FragmentHomeBinding
-import com.hsact.taxilog.ui.cards.DrawGoalCard
-import com.hsact.taxilog.ui.cards.DrawLastShiftCard
+import com.hsact.taxilog.ui.cards.CardGoal
+import com.hsact.taxilog.ui.cards.CardLastShift
 import com.hsact.taxilog.ui.cards.MonthGraphCard
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -43,13 +43,13 @@ class HomeFragment : Fragment() {
         card2 = binding.card2
         card3 = binding.card3
         card1.setContent {
-            DrawGoalCard(
+            CardGoal(
                 viewModel.settings.goalPerMonth?.toFloatOrNull() ?: 0f,
                 viewModel.shiftListThisMonth
             )
         }
         card2.setContent {
-            DrawLastShiftCard(
+            CardLastShift(
                 viewModel.lastShift, viewModel.settings.currency ?: CurrencySymbolMode.fromLocale(
                     Locale.getDefault()
                 )
