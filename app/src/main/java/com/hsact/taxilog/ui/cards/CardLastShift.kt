@@ -27,7 +27,7 @@ fun CardLastShift(shift: StateFlow<Shift?>, symbolMode: CurrencySymbolMode) {
     BaseCard {
         Column {
             CardHeader(text = stringResource(R.string.last_shift))
-            Space()
+            Spacer(Modifier.height(8.dp))
             LabelValueRow(stringResource(R.string.date), lastShiftUi?.dateBegin ?: "")
             LabelValueRow(stringResource(R.string.earnings), lastShiftUi?.earnings ?: "")
             LabelValueRow(stringResource(R.string.costs), lastShiftUi?.totalExpenses ?: "")
@@ -54,9 +54,4 @@ private fun CardPreview() {
             )
         )
     }
-}
-
-@Composable
-private fun Space() {
-    Spacer(Modifier.height(8.dp))
 }
