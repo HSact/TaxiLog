@@ -15,7 +15,7 @@ import com.hsact.domain.utils.DeprecatedDateFormatter
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentGoalsBinding
 import com.hsact.taxilog.ui.cards.DrawDayWeekMonthProgressCard
-import com.hsact.taxilog.ui.cards.DrawDaysInMonthCard
+import com.hsact.taxilog.ui.cards.DaysInMonthCard
 import com.hsact.taxilog.ui.components.DatePickerFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
@@ -61,7 +61,7 @@ class GoalsFragment : Fragment() {
             DrawDayWeekMonthProgressCard(viewModel.goalDataState)
         }
         card2.setContent {
-            DrawDaysInMonthCard(viewModel.daysData, viewModel.date)
+            DaysInMonthCard(viewModel.daysInMonthCardState)
         }
         super.onViewCreated(view, savedInstanceState)
     }
@@ -70,7 +70,7 @@ class GoalsFragment : Fragment() {
         DatePickerFragment.pickDate(context = this, editObj = editObj) {
             viewModel.setDate(editObj.text.toString())
             card1.setContent { DrawDayWeekMonthProgressCard(viewModel.goalDataState) }
-            card2.setContent { DrawDaysInMonthCard(viewModel.daysData, viewModel.date) }
+            card2.setContent { DaysInMonthCard(viewModel.daysInMonthCardState) }
         }
     }
 
@@ -94,8 +94,7 @@ class GoalsFragment : Fragment() {
         card2.isVisible = true
     }
 
-    private fun bindItems()
-    {
+    private fun bindItems() {
         buttonDatePicker = binding.buttonDatePick
         textAssignedGoal = binding.textAssignedGoal
     }

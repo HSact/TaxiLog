@@ -45,10 +45,10 @@ fun List<Shift>.weeklyProfitByDay(date: LocalDate): List<Long> {
             !d.isBefore(startOfWeek) && !d.isAfter(endOfWeek)
         }
         .groupBy {
-            it.time.period.start.dayOfWeek.value % 7 // Пн = 1 … Вс = 7 → Пн = 1, ..., Вс = 0
+            it.time.period.start.dayOfWeek.value % 7 // Monday = 1 … Sunday = 7 → Monday = 1, ..., Sunday = 0
         }
 
-    return List(7) { index -> // 0 = Пн, 6 = Вс
+    return List(7) { index -> // 0 = Monday, 6 = Sunday
         grouped[index + 1]?.sumOf { it.profit } ?: 0L
     }
 }
