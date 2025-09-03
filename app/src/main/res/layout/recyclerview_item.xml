@@ -67,6 +67,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_gravity="start|center_vertical"
+                    android:gravity="start|center_vertical"
                     android:text="@string/date"
                     android:textAppearance="?attr/textAppearanceBodyMedium" />
 
@@ -91,6 +93,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_gravity="start|center_vertical"
+                    android:gravity="start|center_vertical"
                     android:text="@string/time"
                     android:textAppearance="?attr/textAppearanceBodyMedium" />
 
@@ -115,6 +119,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_gravity="start|center_vertical"
+                    android:gravity="start|center_vertical"
                     android:text="@string/earnings"
                     android:textAppearance="?attr/textAppearanceBodyMedium" />
 
@@ -139,6 +145,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_gravity="start|center_vertical"
+                    android:gravity="start|center_vertical"
                     android:text="@string/wash"
                     android:textAppearance="?attr/textAppearanceBodyMedium" />
 
@@ -163,6 +171,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_gravity="start|center_vertical"
+                    android:gravity="start|center_vertical"
                     android:text="@string/fuel"
                     android:textAppearance="?attr/textAppearanceBodyMedium" />
 
@@ -187,6 +197,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_gravity="start|center_vertical"
+                    android:gravity="start|center_vertical"
                     android:text="@string/mileage"
                     android:textAppearance="?attr/textAppearanceBodyMedium" />
 
@@ -211,6 +223,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_gravity="start|center_vertical"
+                    android:gravity="start|center_vertical"
                     android:text="@string/per_hour"
                     android:textAppearance="?attr/textAppearanceBodyMedium" />
 
@@ -242,6 +256,8 @@
                     android:id="@+id/textProfit1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:gravity="start|center_vertical"
                     android:text="$85"
                     android:textAppearance="?attr/textAppearanceBodyLarge"
                     tools:ignore="HardcodedText" />

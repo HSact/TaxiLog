@@ -3,16 +3,13 @@ package com.hsact.taxilog.ui.cards
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -25,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hsact.taxilog.R
+import com.hsact.taxilog.ui.components.CardHeader
 import com.hsact.taxilog.ui.fragments.goals.GoalDataState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -87,38 +85,30 @@ fun DrawDayWeekMonthProgressCard(goalData: StateFlow<GoalDataState>) {
     )
 
     BaseCard {
-        CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
-            Column {
-                Text(
-                    text = stringResource(R.string.month_graph, goalMonth),
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                        .padding(bottom = 5.dp)
-                )
-                ProgressColumn(
-                    stringDay,
-                    goalDay,
-                    animatedProgressDay.value,
-                    progressDay,
-                    progressDayP
-                )
-                ProgressColumn(
-                    stringWeek,
-                    goalWeek,
-                    animatedProgressWeek.value,
-                    progressWeek,
-                    progressWeekP
-                )
-                ProgressColumn(
-                    stringMonth,
-                    goalMonth,
-                    animatedProgressMonth.value,
-                    progressMonth,
-                    progressMonthP
-                )
-            }
+        Column {
+            CardHeader(stringResource(R.string.month_graph, goalMonth))
+            Spacer(modifier = Modifier.height(8.dp))
+            ProgressColumn(
+                stringDay,
+                goalDay,
+                animatedProgressDay.value,
+                progressDay,
+                progressDayP
+            )
+            ProgressColumn(
+                stringWeek,
+                goalWeek,
+                animatedProgressWeek.value,
+                progressWeek,
+                progressWeekP
+            )
+            ProgressColumn(
+                stringMonth,
+                goalMonth,
+                animatedProgressMonth.value,
+                progressMonth,
+                progressMonthP
+            )
         }
     }
 }

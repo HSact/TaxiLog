@@ -51,7 +51,6 @@
     <string name="id">ID</string>
     <string name="delete_all">Удалить все</string>
     <string name="you_haven_t_set_goal_yet">Вы пока не определили цель</string>
-    <string name="your_goal_per_month">Ваша цель %s в месяц</string>
     <string name="n_a">N/A</string>
     <string name="shifts_count">Всего смен:</string>
     <string name="edit_or_delete_shift">"Редактировать или удалить смену №"</string>
@@ -126,4 +125,5 @@
     <string name="wash_cost">Стоимость мойки</string>
     <string name="number">Номер</string>
     <string name="shift_number">Смена №</string>
+    <string name="goal_per_month">Цель в месяц</string>
 </resources>

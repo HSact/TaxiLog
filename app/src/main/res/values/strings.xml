@@ -50,7 +50,6 @@
     <string name="id">ID</string>
     <string name="delete_all">Delete all</string>
     <string name="you_haven_t_set_goal_yet">You haven\'t set a goal yet</string>
-    <string name="your_goal_per_month">Your goal is %s per month</string>
     <string name="n_a">N/A</string>
     <string name="shifts_count">Shifts count:</string>
     <string name="edit_or_delete_shift">"Edit or delete shift #"</string>
@@ -126,6 +125,7 @@
     <string name="wash_cost">Wash cost</string>
     <string name="number">Number</string>
     <string name="shift_number">Shift #</string>
+    <string name="goal_per_month">Goal per month</string>
 
     <string-array name="languages">
         <item>English</item>

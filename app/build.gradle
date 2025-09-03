@@ -20,8 +20,8 @@ android {
         applicationId "com.hsact.taxilog"
         minSdk 26
         targetSdk 36
-        versionCode 4
-        versionName "1.3.7"
+        versionCode 5
+        versionName "1.3.8"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
@@ -65,8 +65,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.9.2'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.2'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.9.3'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.3'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.9.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.9.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -85,14 +85,14 @@ dependencies {
     ksp "com.google.dagger:hilt-compiler:2.57.1"
     ksp "androidx.room:room-compiler:2.7.2"
     implementation "androidx.hilt:hilt-work:1.2.0"
-    implementation(platform("androidx.compose:compose-bom:2025.08.00"))
+    implementation(platform("androidx.compose:compose-bom:2025.08.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation "androidx.compose.ui:ui-tooling:1.9.0"
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.9.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.9.3")
     implementation("androidx.activity:activity-compose:1.10.1")
-    implementation("io.github.ehsannarmani:compose-charts:0.1.10")
+    implementation("io.github.ehsannarmani:compose-charts:0.1.11")
     testImplementation 'junit:junit:4.13.2'
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
     testImplementation("org.mockito:mockito-core:5.19.0")

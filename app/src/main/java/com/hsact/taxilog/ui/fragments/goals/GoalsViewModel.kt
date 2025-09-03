@@ -41,6 +41,9 @@ class GoalsViewModel @Inject constructor(
     private val _daysData = MutableStateFlow(MutableList(31) { 0.0 })
     val daysData: StateFlow<List<Double>> = _daysData
 
+    private val _daysInMonthCardState = MutableStateFlow(DaysInMonthCardState("", emptyList()))
+    val daysInMonthCardState: StateFlow<DaysInMonthCardState> = _daysInMonthCardState
+
     init {
         updateData()
     }
@@ -58,6 +61,10 @@ class GoalsViewModel @Inject constructor(
             )
             calculateDaysData()
             defineGoals()
+            _daysInMonthCardState.value = DaysInMonthCardState(
+                date = _date.value,
+                days = _daysData.value
+            )
         }
     }
 

@@ -3,19 +3,12 @@ package com.hsact.taxilog.ui.cards
 import androidx.compose.animation.core.EaseInOutCubic
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -25,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hsact.taxilog.R
+import com.hsact.taxilog.ui.components.CardHeader
 import ir.ehsannarmani.compose_charts.LineChart
 import ir.ehsannarmani.compose_charts.models.AnimationMode
 import ir.ehsannarmani.compose_charts.models.GridProperties
@@ -86,52 +80,44 @@ fun MonthGraphCard(chartData: StateFlow<List<Double>>, goalData: StateFlow<Doubl
     val viewRange = ViewRange(0, LocalDate.now().dayOfMonth)
 
     BaseCard {
-        CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
-            Text(
-                text = stringResource(R.string.month_graph),
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentWidth(Alignment.CenterHorizontally)
-            )
-            if (chartState.isNotEmpty())
-                LineChart(
-                    data =
-                        listOf(
-                            Line(
-                                label = progressName,
-                                values = trimmedChartState,
-                                color = SolidColor(colorGraphLine),
-                                firstGradientFillColor = colorGraphLine.copy(alpha = .5f),
-                                secondGradientFillColor = Color.Transparent,
-                                strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
-                                gradientAnimationDelay = 1000,
-                                drawStyle = ir.ehsannarmani.compose_charts.models.DrawStyle.Stroke(
-                                    width = 2.dp
-                                ),
-                                viewRange = viewRange
+        CardHeader(stringResource(R.string.month_graph))
+        if (chartState.isNotEmpty())
+            LineChart(
+                data =
+                    listOf(
+                        Line(
+                            label = progressName,
+                            values = trimmedChartState,
+                            color = SolidColor(colorGraphLine),
+                            firstGradientFillColor = colorGraphLine.copy(alpha = .5f),
+                            secondGradientFillColor = Color.Transparent,
+                            strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
+                            gradientAnimationDelay = 1000,
+                            drawStyle = ir.ehsannarmani.compose_charts.models.DrawStyle.Stroke(
+                                width = 2.dp
                             ),
-                            Line(
-                                label = goalName,
-                                values = List(daysInMonth) { goal },
-                                color = SolidColor(Color.Red),
-                            )
+                            viewRange = viewRange
                         ),
-                    animationMode = AnimationMode.Together(
-                        delayBuilder = {
-                            it * 500L
-                        }),
-                    gridProperties = gridProperties,
-                    indicatorProperties = indicatorProperties,
-                    labelHelperProperties = labelHelperProperties,
-                    labelProperties = labelProperties,
-                    minValue = min,
-                    maxValue = max * 1.0,
-                    modifier = Modifier
-                        .heightIn(max = 300.dp)
-                        .padding(top = 50.dp)
-                )
-        }
+                        Line(
+                            label = goalName,
+                            values = List(daysInMonth) { goal },
+                            color = SolidColor(Color.Red),
+                        )
+                    ),
+                animationMode = AnimationMode.Together(
+                    delayBuilder = {
+                        it * 500L
+                    }),
+                gridProperties = gridProperties,
+                indicatorProperties = indicatorProperties,
+                labelHelperProperties = labelHelperProperties,
+                labelProperties = labelProperties,
+                minValue = min,
+                maxValue = max * 1.0,
+                modifier = Modifier
+                    .heightIn(max = 300.dp)
+                    .padding(top = 40.dp)
+            )
     }
 }
 

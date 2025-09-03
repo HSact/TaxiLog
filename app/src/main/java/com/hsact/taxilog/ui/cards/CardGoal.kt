@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -14,7 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -25,9 +23,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hsact.domain.model.Shift
 import com.hsact.domain.utils.totalProfit
 import com.hsact.taxilog.R
+import com.hsact.taxilog.ui.components.CardHeader
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.text.NumberFormat
@@ -35,17 +35,13 @@ import java.util.Locale
 import kotlin.math.roundToInt
 
 @Composable
-fun DrawGoalCard(
+fun CardGoal(
     monthGoal: Float,
     shiftListFlow: StateFlow<List<Shift>>
 ) {
-    //val shiftState by shiftData.collectAsStateWithLifecycle()
-    //val goal = shiftState["goal"]?.toFloatOrNull() ?: 1f
     val goal = monthGoal
-    val shiftList = shiftListFlow.collectAsState().value
+    val shiftList = shiftListFlow.collectAsStateWithLifecycle().value
     val totalProfit = shiftList.totalProfit.toFloat() / 100
-
-    //val goalCurrent = shiftState["goalCurrent"]?.toFloatOrNull() ?: 0f
     val rawProgress: Float = if (goal != 0f) {
         (totalProfit / goal).coerceIn(0f, 1f)
     } else {
@@ -72,22 +68,16 @@ fun DrawGoalCard(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                Text(
-                    text = stringResource(R.string.your_goal_per_month, formattedGoal),
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                )
+                CardHeader(stringResource(R.string.goal_per_month, formattedGoal))
                 Text(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
-                        .padding(top = 20.dp),
+                        .padding(top = 8.dp),
                     text = "$totalProfit $stringOf $formattedGoal"
                 )
                 LinearProgressIndicator(
                     modifier = Modifier
-                        .height(10.dp)
+                        .height(12.dp)
                         .fillMaxWidth(),
                     progress = { animatedProgress },
                     color = Color(0xFFE8BD00),
@@ -116,5 +106,4 @@ private fun CardPreview() {
             )
         )
     }
-    //DrawGoalCard(previewData)
 }

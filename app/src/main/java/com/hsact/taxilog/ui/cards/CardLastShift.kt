@@ -1,18 +1,10 @@
 package com.hsact.taxilog.ui.cards
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,47 +13,27 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hsact.domain.model.Shift
 import com.hsact.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.R
+import com.hsact.taxilog.ui.components.CardHeader
+import com.hsact.taxilog.ui.components.LabelValueRow
 import com.hsact.taxilog.ui.shift.mappers.toUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.Locale
 
 @Composable
-fun DrawLastShiftCard(shift: StateFlow<Shift?>, symbolMode: CurrencySymbolMode) {
+fun CardLastShift(shift: StateFlow<Shift?>, symbolMode: CurrencySymbolMode) {
     val lastShift = shift.collectAsStateWithLifecycle()
     val lastShiftUi = lastShift.value?.toUi(Locale.getDefault(), symbolMode)
     BaseCard {
-        CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
-            Text(
-                text = stringResource(R.string.last_shift),
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentWidth(Alignment.CenterHorizontally)
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 30.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Column {
-                    Text(text = stringResource(R.string.date))
-                    Text(text = stringResource(R.string.earnings))
-                    Text(text = stringResource(R.string.costs))
-                    Text(text = stringResource(R.string.time))
-                    Text(text = stringResource(R.string.profit))
-                    Text(text = stringResource(R.string.per_hour))
-                }
-                Column {
-                    Text(text = lastShiftUi?.dateBegin ?: "")
-                    Text(text = lastShiftUi?.earnings ?: "")
-                    Text(text = lastShiftUi?.totalExpenses ?: "")
-                    Text(text = lastShiftUi?.duration ?: "")
-                    Text(text = lastShiftUi?.profit ?: "")
-                    Text(text = lastShiftUi?.earningsPerHour ?: "")
-                }
-            }
+        Column {
+            CardHeader(text = stringResource(R.string.last_shift))
+            Spacer(Modifier.height(8.dp))
+            LabelValueRow(stringResource(R.string.date), lastShiftUi?.dateBegin ?: "")
+            LabelValueRow(stringResource(R.string.earnings), lastShiftUi?.earnings ?: "")
+            LabelValueRow(stringResource(R.string.costs), lastShiftUi?.totalExpenses ?: "")
+            LabelValueRow(stringResource(R.string.time), lastShiftUi?.duration ?: "")
+            LabelValueRow(stringResource(R.string.profit), lastShiftUi?.profit ?: "")
+            LabelValueRow(stringResource(R.string.per_hour), lastShiftUi?.earningsPerHour ?: "")
         }
     }
 }
@@ -82,8 +54,4 @@ private fun CardPreview() {
             )
         )
     }
-    /*DrawLastShiftCard(
-        //shiftData = previewData,
-        shiftList = MutableStateFlow(emptyList())
-    )*/
 }

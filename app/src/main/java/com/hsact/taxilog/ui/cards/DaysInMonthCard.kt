@@ -1,18 +1,11 @@
 package com.hsact.taxilog.ui.cards
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -20,6 +13,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hsact.taxilog.ui.components.CardHeader
+import com.hsact.taxilog.ui.fragments.goals.DaysInMonthCardState
 import ir.ehsannarmani.compose_charts.ColumnChart
 import ir.ehsannarmani.compose_charts.models.BarProperties
 import ir.ehsannarmani.compose_charts.models.Bars
@@ -34,10 +29,10 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
-fun DrawDaysInMonthCard(daysData: StateFlow<List<Double>>, pickedDate: StateFlow <String>) {
-
-    val days by daysData.collectAsStateWithLifecycle()
-    val date by pickedDate.collectAsStateWithLifecycle()
+fun DaysInMonthCard(data: StateFlow<DaysInMonthCardState>) {
+    val dataState by data.collectAsStateWithLifecycle()
+    val days = dataState.days
+    val date = dataState.date
     val isDarkTheme = isSystemInDarkTheme()
     val textStyle: TextStyle = if (isDarkTheme) TextStyle(color = Color.White)
     else TextStyle(color = Color.Black)
@@ -81,48 +76,39 @@ fun DrawDaysInMonthCard(daysData: StateFlow<List<Double>>, pickedDate: StateFlow
             )
         }
 
-
     BaseCard {
-        CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
-            Text(
-                text = currentMonth,
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentWidth(Alignment.CenterHorizontally)
-            )
-            ColumnChart(
-                modifier = Modifier
-                    .heightIn(max = 300.dp)
-                    .padding(top = 50.dp),
-                data =
-                    bars,
-                labelProperties = labelProperties,
-                barProperties = BarProperties(
-                    thickness = 5.dp,
-                    cornerRadius = Bars.Data.Radius.Rectangle(topRight = 6.dp, topLeft = 6.dp),
-                    spacing = 1.dp,
-                ),
-                indicatorProperties = indicatorProperties,
-                gridProperties = gridProperties,
-                labelHelperProperties = labelHelperProperties,
-            )
-        }
+        CardHeader(currentMonth)
+        ColumnChart(
+            modifier = Modifier
+                .heightIn(max = 300.dp)
+                .padding(top = 52.dp),
+            data =
+                bars,
+            labelProperties = labelProperties,
+            barProperties = BarProperties(
+                thickness = 5.dp,
+                cornerRadius = Bars.Data.Radius.Rectangle(topRight = 6.dp, topLeft = 6.dp),
+                spacing = 1.dp,
+            ),
+            indicatorProperties = indicatorProperties,
+            gridProperties = gridProperties,
+            labelHelperProperties = labelHelperProperties,
+        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun CardPreview() {
-    val previewData = remember {
+    val previewState = remember {
         MutableStateFlow(
-            listOf(
-                0.0, 2.0, 3.0, 7.0, 10.0, 12.0, 18.0, 25.0, 27.0, 30.0
+            DaysInMonthCardState(
+                date = "01.01.2020",
+                days = listOf(
+                    0.0, 2.0, 3.0, 7.0, 10.0, 12.0, 18.0, 25.0, 27.0, 30.0
+                )
             )
         )
     }
-    val dateFlow = remember {
-        MutableStateFlow("01.01.2020")
-    }
-    DrawDaysInMonthCard(previewData, dateFlow)
+    DaysInMonthCard(previewState)
 }
