@@ -13,6 +13,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hsact.domain.utils.DeprecatedDateFormatter
 import com.hsact.taxilog.ui.components.CardHeader
 import com.hsact.taxilog.ui.fragments.goals.DaysInMonthCardState
 import ir.ehsannarmani.compose_charts.ColumnChart
@@ -59,10 +60,9 @@ fun DaysInMonthCard(data: StateFlow<DaysInMonthCardState>) {
         textStyle = textStyle,
     )
     val locale = Locale.getDefault()
-    val formatter = DateTimeFormatter.ofPattern("LLLL", locale)
     val inputFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.getDefault())
     val parsedDate = LocalDate.parse(date, inputFormatter)
-    var currentMonth = parsedDate.format(formatter)
+    var currentMonth = parsedDate.format(DeprecatedDateFormatter)
     if (locale.language == "ru") {
         currentMonth = currentMonth.replaceFirstChar { it.uppercase(locale) }
     }
@@ -81,7 +81,7 @@ fun DaysInMonthCard(data: StateFlow<DaysInMonthCardState>) {
         ColumnChart(
             modifier = Modifier
                 .heightIn(max = 300.dp)
-                .padding(top = 50.dp),
+                .padding(top = 52.dp),
             data =
                 bars,
             labelProperties = labelProperties,
