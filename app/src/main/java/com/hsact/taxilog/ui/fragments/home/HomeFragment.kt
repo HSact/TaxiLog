@@ -23,9 +23,9 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var card1: ComposeView
-    private lateinit var card2: ComposeView
-    private lateinit var card3: ComposeView
+    private lateinit var cardGoal: ComposeView
+    private lateinit var cardLastShift: ComposeView
+    private lateinit var cardMonthGraph: ComposeView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,25 +39,38 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        card1 = binding.card1
-        card2 = binding.card2
-        card3 = binding.card3
-        card1.setContent {
+        cardGoal = binding.card1
+        cardLastShift = binding.card2
+        cardMonthGraph = binding.card3
+        cardGoal.setContent {
             CardGoal(
                 viewModel.settings.goalPerMonth?.toFloatOrNull() ?: 0f,
                 viewModel.shiftListThisMonth
             )
         }
-        card2.setContent {
+        cardLastShift.setContent {
             CardLastShift(
-                viewModel.lastShift, viewModel.settings.currency ?: CurrencySymbolMode.fromLocale(
-                    Locale.getDefault()
+                viewModel.lastShift,
+                viewModel.settings.currency ?: CurrencySymbolMode.fromLocale(Locale.getDefault())
+            ) {
+                val action = HomeFragmentDirections.actionNavigationHomeToShiftDetails(
+                    shiftId = viewModel.lastShift.value?.id ?: -1,
+                    visibleId = -1
                 )
-            )
+                findNavController().navigate(action)
+            }
         }
-        card3.setContent { MonthGraphCard(viewModel.chartData, viewModel.goalData) }
+        cardMonthGraph.setContent { MonthGraphCard(viewModel.chartData, viewModel.goalData) }
         binding.fabNewShift.extend()
         binding.fabNewShift.setOnClickListener { newShift() }
+
+        cardLastShift.setOnClickListener {
+            val action = HomeFragmentDirections.actionNavigationHomeToShiftDetails(
+                shiftId = viewModel.lastShift.value?.id ?: -1,
+                visibleId = -1
+            )
+            findNavController().navigate(action)
+        }
     }
 
     override fun onDestroyView() {
