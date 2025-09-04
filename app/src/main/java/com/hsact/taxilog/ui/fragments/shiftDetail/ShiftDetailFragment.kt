@@ -50,7 +50,11 @@ class ShiftDetailFragment : Fragment() {
         val composeView = ComposeView(requireContext()).apply {
             setContent {
                 val state by viewModel.shift.collectAsState()
-                ShiftDetailScreen(state, viewModel.settings.currency,{ editShift() }, { deleteShift() })
+                ShiftDetailScreen(
+                    state,
+                    viewModel.settings.currency,
+                    { editShift() },
+                    { deleteShift() })
             }
         }
         container.addView(composeView)
@@ -60,7 +64,8 @@ class ShiftDetailFragment : Fragment() {
         super.onResume()
         MainActivity.botNav.isVisible = false
         (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
-            getString(R.string.title_shift_detail, visibleId)
+            if (visibleId != -1) getString(R.string.title_shift_detail, visibleId)
+            else getString(R.string.last_shift)
     }
 
     override fun onPause() {

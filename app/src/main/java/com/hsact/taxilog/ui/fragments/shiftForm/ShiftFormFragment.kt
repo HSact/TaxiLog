@@ -159,7 +159,8 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         if (shiftId != -1) {
             viewModel.loadShift(shiftId)
             (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
-                getString(R.string.title_edit_shift, visibleId)
+                if (visibleId != -1) getString(R.string.title_edit_shift, visibleId)
+                else getString(R.string.last_shift)
         } else {
             (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
                 getString(R.string.title_new_shift)
