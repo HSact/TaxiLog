@@ -35,7 +35,7 @@ private var stringWeek = ""
 private var stringMonth = ""
 
 @Composable
-fun DrawDayWeekMonthProgressCard(goalData: StateFlow<GoalDataState>) {
+fun CardDayWeekMonthProgress(goalData: StateFlow<GoalDataState>) {
     stringOf = stringResource(R.string.of)
     stringDay = stringResource(R.string.day)
     stringWeek = stringResource(R.string.this_week)
@@ -176,5 +176,5 @@ private fun CardPreview() {
             )
         )
     }
-    DrawDayWeekMonthProgressCard(previewData)
+    CardDayWeekMonthProgress(previewData)
 }
