@@ -30,14 +30,15 @@ import ir.ehsannarmani.compose_charts.models.ViewRange
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
+import java.util.Locale
 
 @Composable
-fun MonthGraphCard(chartData: StateFlow<List<Double>>, goalData: StateFlow<Double>) {
+fun CardGoalProgress(chartData: StateFlow<List<Double>>, goalData: StateFlow<Double>) {
     val chartState by chartData.collectAsStateWithLifecycle()
     val goal by goalData.collectAsState()
     val daysInMonth = LocalDate.now().lengthOfMonth()
     val trimmedChartState = chartState.take(daysInMonth)
-    var max = chartState.maxOrNull() ?: 0.0
+    val max = maxOf(chartState.maxOrNull() ?: 0.0, goal)
     val min = chartState.minOrNull()?.takeIf { it <= 0.0 } ?: 0.0
     val progressName = stringResource(R.string.progress)
     val goalName = stringResource(R.string.goal)
@@ -46,10 +47,6 @@ fun MonthGraphCard(chartData: StateFlow<List<Double>>, goalData: StateFlow<Doubl
     else TextStyle(color = Color.Black)
 
     val colorGraphLine = Color(0xFFFBD323)
-
-    if (max < goal) {
-        max = goal
-    }
 
     val labelHelperProperties = LabelHelperProperties(
         enabled = true,
@@ -76,6 +73,13 @@ fun MonthGraphCard(chartData: StateFlow<List<Double>>, goalData: StateFlow<Doubl
     val indicatorProperties = HorizontalIndicatorProperties(
         enabled = true,
         textStyle = textStyle,
+        indicators = GraphIndicatorHelper.buildIndicators(min, max),
+        contentBuilder = {
+            GraphIndicatorHelper.formatIndicatorValue(
+                it,
+                locale = Locale.getDefault()
+            )
+        }
     )
     val viewRange = ViewRange(0, LocalDate.now().dayOfMonth)
 
@@ -131,5 +135,5 @@ private fun CardPreview() {
             )
         )
     }
-    MonthGraphCard(previewData, MutableStateFlow(0.0))
+    CardGoalProgress(previewData, MutableStateFlow(0.0))
 }
