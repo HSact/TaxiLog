@@ -29,7 +29,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
-fun DaysInMonthCard(data: StateFlow<DaysInMonthCardState>) {
+fun CardDaysInMonth(data: StateFlow<DaysInMonthCardState>) {
     val dataState by data.collectAsStateWithLifecycle()
     val days = dataState.days
     val date = dataState.date
@@ -57,6 +57,13 @@ fun DaysInMonthCard(data: StateFlow<DaysInMonthCardState>) {
     val indicatorProperties = HorizontalIndicatorProperties(
         enabled = true,
         textStyle = textStyle,
+        indicators = GraphIndicatorHelper.buildIndicators(0.0, days.max()),
+        contentBuilder = {
+            GraphIndicatorHelper.formatIndicatorValue(
+                it,
+                locale = Locale.getDefault()
+            )
+        }
     )
     val locale = Locale.getDefault()
     val formatter = DateTimeFormatter.ofPattern("LLLL", locale)
@@ -110,5 +117,5 @@ private fun CardPreview() {
             )
         )
     }
-    DaysInMonthCard(previewState)
+    CardDaysInMonth(previewState)
 }

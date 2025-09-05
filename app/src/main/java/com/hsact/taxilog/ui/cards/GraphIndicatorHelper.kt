@@ -1,6 +1,7 @@
 package com.hsact.taxilog.ui.cards
 
 import java.util.Locale
+import kotlin.math.roundToLong
 
 internal object GraphIndicatorHelper {
     fun buildIndicators(
@@ -13,10 +14,16 @@ internal object GraphIndicatorHelper {
     }
 
     fun formatIndicatorValue(value: Double, locale: Locale): String {
-        val rounded = value.toLong()
-        val suffix = if (locale.language == "ru") " 000" else "k"
-        return if (rounded >= 5000) {
-            "${rounded / 1000}${suffix}"
+        val rounded = value.roundToLong()
+        return if (rounded >= 1000) {
+            val thousands = rounded / 1000.0
+            val formatted = if (thousands % 1.0 == 0.0) {
+                thousands.toInt().toString()
+            } else {
+                String.format(locale, "%.1f", thousands)
+            }
+            val suffix = if (locale.language == "ru") " тыс" else "k"
+            "$formatted$suffix"
         } else {
             rounded.toString()
         }
