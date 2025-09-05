@@ -1,5 +1,6 @@
 package com.hsact.taxilog.ui.cards
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -21,10 +22,14 @@ import kotlinx.coroutines.flow.StateFlow
 import java.util.Locale
 
 @Composable
-fun CardLastShift(shift: StateFlow<Shift?>, symbolMode: CurrencySymbolMode) {
+fun CardLastShift(
+    shift: StateFlow<Shift?>,
+    symbolMode: CurrencySymbolMode,
+    onClick: () -> Unit
+) {
     val lastShift = shift.collectAsStateWithLifecycle()
     val lastShiftUi = lastShift.value?.toUi(Locale.getDefault(), symbolMode)
-    BaseCard {
+    BaseCard(modifier = Modifier.clickable(onClick = onClick)) {
         Column {
             CardHeader(text = stringResource(R.string.last_shift))
             Spacer(Modifier.height(8.dp))

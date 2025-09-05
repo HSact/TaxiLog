@@ -15,6 +15,9 @@
             android:id="@+id/action_homeFragment_to_addShift"
             app:destination="@id/shiftForm" />
         <action
+            android:id="@+id/action_navigation_home_to_shiftDetails"
+            app:destination="@id/shiftDetailFragment" />
+        <action
             android:id="@+id/action_navigation_home_to_settingsActivity"
             app:destination="@id/settingsActivity" />
     </fragment>

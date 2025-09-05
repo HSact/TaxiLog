@@ -26,6 +26,8 @@ import com.hsact.taxilog.ui.components.CardHeader
 import com.hsact.taxilog.ui.fragments.goals.GoalDataState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.text.NumberFormat
+import java.util.Locale
 
 private var stringOf = ""
 private var stringDay = ""
@@ -33,7 +35,7 @@ private var stringWeek = ""
 private var stringMonth = ""
 
 @Composable
-fun DrawDayWeekMonthProgressCard(goalData: StateFlow<GoalDataState>) {
+fun CardDayWeekMonthProgress(goalData: StateFlow<GoalDataState>) {
     stringOf = stringResource(R.string.of)
     stringDay = stringResource(R.string.day)
     stringWeek = stringResource(R.string.this_week)
@@ -88,21 +90,21 @@ fun DrawDayWeekMonthProgressCard(goalData: StateFlow<GoalDataState>) {
         Column {
             CardHeader(stringResource(R.string.month_graph, goalMonth))
             Spacer(modifier = Modifier.height(8.dp))
-            ProgressColumn(
+            GoalProgressIndicator(
                 stringDay,
                 goalDay,
                 animatedProgressDay.value,
                 progressDay,
                 progressDayP
             )
-            ProgressColumn(
+            GoalProgressIndicator(
                 stringWeek,
                 goalWeek,
                 animatedProgressWeek.value,
                 progressWeek,
                 progressWeekP
             )
-            ProgressColumn(
+            GoalProgressIndicator(
                 stringMonth,
                 goalMonth,
                 animatedProgressMonth.value,
@@ -114,13 +116,15 @@ fun DrawDayWeekMonthProgressCard(goalData: StateFlow<GoalDataState>) {
 }
 
 @Composable
-private fun ProgressColumn(
+private fun GoalProgressIndicator(
     period: String,
     goal: Float,
     animatedProgress: Float,
     progress: Float,
     progressP: Float,
 ) {
+    val formattedProgress = NumberFormat.getNumberInstance(Locale.getDefault()).format(progress)
+    val formattedGoal = NumberFormat.getNumberInstance(Locale.getDefault()).format(goal)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -134,7 +138,7 @@ private fun ProgressColumn(
         Text(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally),
-            text = "$progress $stringOf $goal"
+            text = "$formattedProgress $stringOf $formattedGoal"
         )
         LinearProgressIndicator(
             modifier = Modifier
@@ -172,5 +176,5 @@ private fun CardPreview() {
             )
         )
     }
-    DrawDayWeekMonthProgressCard(previewData)
+    CardDayWeekMonthProgress(previewData)
 }

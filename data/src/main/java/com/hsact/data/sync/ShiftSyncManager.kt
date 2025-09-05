@@ -15,6 +15,15 @@ class ShiftSyncManager @Inject constructor(
         syncToFirebase()
     }
 
+    suspend fun syncShift(id: Int) {
+        val shift = shiftRepository.getShift(id) ?: return
+        val remoteId = firebaseShiftDataSource.save(shift)
+        if (remoteId != null) {
+            shiftRepository.markAsSynced(id, remoteId)
+            Log.d("Sync", "Synced single shift: id=$id remoteId=$remoteId")
+        }
+    }
+
     private suspend fun syncFromFirebase() {
         val remoteShifts = firebaseShiftDataSource.getAll()
         val remoteIds = remoteShifts.mapNotNull { it.remoteId }.toSet()

@@ -37,7 +37,7 @@ import kotlin.math.roundToInt
 @Composable
 fun CardGoal(
     monthGoal: Float,
-    shiftListFlow: StateFlow<List<Shift>>
+    shiftListFlow: StateFlow<List<Shift>>,
 ) {
     val goal = monthGoal
     val shiftList = shiftListFlow.collectAsStateWithLifecycle().value
@@ -49,6 +49,8 @@ fun CardGoal(
     }
     var progress by remember { mutableFloatStateOf(0f) }
     var formattedGoal = NumberFormat.getNumberInstance(Locale.getDefault()).format(goal)
+    val formattedTotalProfit =
+        NumberFormat.getNumberInstance(Locale.getDefault()).format(totalProfit)
     if (goal == 1f) {
         formattedGoal = "N/A"
     }
@@ -73,7 +75,7 @@ fun CardGoal(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .padding(top = 8.dp),
-                    text = "$totalProfit $stringOf $formattedGoal"
+                    text = "$formattedTotalProfit $stringOf $formattedGoal"
                 )
                 LinearProgressIndicator(
                     modifier = Modifier

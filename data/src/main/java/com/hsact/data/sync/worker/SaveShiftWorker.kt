@@ -14,15 +14,8 @@ class SaveShiftWorker(
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         val id = inputData.getInt("shiftId", -1)
         if (id == -1) return@withContext Result.failure()
-
-        val shift = shiftRepository.getShift(id) ?: return@withContext Result.failure()
-
         return@withContext try {
-            val remoteId = firebaseShiftDataSource.save(shift)
-            if (remoteId != null) {
-                shiftRepository.markAsSynced(id, remoteId)
-            }
-            Log.d("SaveShiftWorker", "Shift $id saved. Remote id: $remoteId")
+            shiftSyncManager.syncShift(id)
             Result.success()
         } catch (e: Exception) {
             Log.e("SaveShiftWorker", "Save shift error: $id", e)
