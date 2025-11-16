@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputLayout
@@ -72,9 +73,12 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
     private var _binding: FragmentShiftFormBinding? = null
     private val binding get() = _binding!!
 
+    private val botNav: BottomNavigationView?
+        get() = (activity as? MainActivity)?.getBottomNav()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MainActivity.botNav.isVisible = false
         arguments?.let {
             shiftId = it.getInt("shiftId", -1)
             visibleId = it.getInt("visibleId", -1)
@@ -141,6 +145,7 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        botNav?.isVisible = false
         mileageWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -283,8 +288,8 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         editDateL = binding.buttonDatePickL
         editStartL = binding.buttonTimeStartL
         editEndL = binding.buttonTimeEndL
-        editBreakStartL = binding.buttonTimeStartL
-        editBreakEndL = binding.buttonTimeEndL
+        editBreakStartL = binding.buttonTimeStartBrakeL
+        editBreakEndL = binding.buttonTimeEndBrakeL
         editEarningsL = binding.editTextEarningsL
         editTipsL = binding.editTextTipsL
         editWashL = binding.editTextWashL
@@ -347,17 +352,18 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         Toast.makeText(activity, getString(R.string.shift_added_successfully), Toast.LENGTH_SHORT)
             .show()
         findNavController().navigate(R.id.action_shiftForm_to_home_fragment)
-        MainActivity.botNav.isVisible = true
+        botNav?.isVisible = true
     }
 
     override fun onResume() {
-        MainActivity.botNav.isVisible = false
         super.onResume()
+        botNav?.isVisible = false
     }
 
-    override fun onDestroy() {
-        MainActivity.botNav.isVisible = true
-        super.onDestroy()
+    override fun onDestroyView() {
+        botNav?.isVisible = true
+        _binding = null
+        super.onDestroyView()
     }
 
     private fun switchBrake() {

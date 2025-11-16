@@ -23,18 +23,17 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    companion object {
-        lateinit var botNav: BottomNavigationView
-    }
-
     private lateinit var binding: ActivityMainBinding
+
+    fun getBottomNav(): BottomNavigationView? {
+        return if (::binding.isInitialized) binding.navView else null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val navView: BottomNavigationView = binding.navView
-        botNav = navView
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
