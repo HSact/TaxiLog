@@ -13,6 +13,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hsact.taxilog.R
 import com.hsact.taxilog.ui.activities.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,12 +22,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class ShiftDetailFragment : Fragment() {
     private val viewModel: ShiftDetailViewModel by viewModels()
 
+    private val botNav: BottomNavigationView?
+        get() = (activity as? MainActivity)?.getBottomNav()
+
     private var shiftId: Int = -1
     private var visibleId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MainActivity.botNav.isVisible = false
         arguments?.let {
             shiftId = it.getInt("shiftId", -1)
             visibleId = it.getInt("visibleId", -1)
@@ -42,6 +45,7 @@ class ShiftDetailFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        botNav?.isVisible = false
         if (shiftId != -1) {
             viewModel.loadShift(shiftId)
         }
@@ -62,7 +66,7 @@ class ShiftDetailFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        MainActivity.botNav.isVisible = false
+        botNav?.isVisible = false
         (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
             if (visibleId != -1) getString(R.string.title_shift_detail, visibleId)
             else getString(R.string.last_shift)
@@ -70,7 +74,7 @@ class ShiftDetailFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        MainActivity.botNav.isVisible = true
+        botNav?.isVisible = true
     }
 
     fun editShift() {
