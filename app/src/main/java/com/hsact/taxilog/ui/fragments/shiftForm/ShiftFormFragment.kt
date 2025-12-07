@@ -337,7 +337,7 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
     private fun showSubmitMessage(warningCode: String) {
         val alert = MaterialAlertDialogBuilder(requireContext())
         alert.setTitle(getString(R.string.submit))
-        alert.setPositiveButton(R.string.ok) { dialog, id ->
+        alert.setPositiveButton(R.string.ok) { _, _ ->
             viewLifecycleOwner.lifecycleScope.launch {
                 submit()
             }
@@ -349,7 +349,9 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
 
     private fun submit() {
         viewModel.submit()
-        Toast.makeText(activity, getString(R.string.shift_added_successfully), Toast.LENGTH_SHORT)
+        Toast.makeText(activity,
+            getString(R.string.shift_added_successfully),
+            Toast.LENGTH_SHORT)
             .show()
         findNavController().navigate(R.id.action_shiftForm_to_home_fragment)
         botNav?.isVisible = true

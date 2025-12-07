@@ -38,15 +38,23 @@ class HomeViewModel @Inject constructor(
     val goalData: StateFlow<Double> = _goalData
 
     init {
+        // Подписка на последнюю смену
         viewModelScope.launch {
-            _lastShift.value = getLastShiftUseCase.invoke()
+            getLastShiftUseCase()
+                .collect { last ->
+                    _lastShift.value = last
+                }
+        }
+        // Подписка на список смен в этом месяце
+        viewModelScope.launch {
             val startOfMonth = YearMonth.now().atDay(1).atStartOfDay()
             val endOfMonth = YearMonth.now().atEndOfMonth().atTime(LocalTime.MAX)
-            _shiftListThisMonth.value = getShiftsInRangeUseCase.invoke(
-                startOfMonth,
-                endOfMonth
-            )
-            calculateChart()
+
+            getShiftsInRangeUseCase(startOfMonth, endOfMonth)
+                .collect { list ->
+                    _shiftListThisMonth.value = list
+                    calculateChart()    // пересчёт графика при каждом изменении
+                }
         }
     }
 

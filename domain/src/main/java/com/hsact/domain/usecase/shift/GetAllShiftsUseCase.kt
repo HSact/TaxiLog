@@ -2,9 +2,10 @@ package com.hsact.domain.usecase.shift
 
 import com.hsact.domain.model.Shift
 import com.hsact.domain.repository.ShiftRepository
+import kotlinx.coroutines.flow.Flow
 
 class GetAllShiftsUseCase(
     private val repository: ShiftRepository,
 ) {
-    suspend operator fun invoke(): List<Shift> = repository.getAllShifts()
+    operator fun invoke(): Flow<List<Shift>> = repository.getAllShifts()
 }

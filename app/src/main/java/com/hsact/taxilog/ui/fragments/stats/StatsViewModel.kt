@@ -24,6 +24,7 @@ import com.hsact.taxilog.ui.shift.mappers.metersToKilometers
 import com.hsact.taxilog.ui.shift.mappers.minutesToHours
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -35,11 +36,12 @@ class StatsViewModel @Inject constructor(
     private val getAllSettingsUseCase: GetAllSettingsUseCase,
     private val getShiftsInRangeUseCase: GetShiftsInRangeUseCase,
 ) : ViewModel() {
+
     private val _shifts = MutableStateFlow<List<Shift>>(emptyList())
-    val shifts: MutableStateFlow<List<Shift>> = _shifts
+    val shifts: StateFlow<List<Shift>> = _shifts
 
     private val _uiState = MutableStateFlow(UiState())
-    val uiState: MutableStateFlow<UiState> = _uiState
+    val uiState: StateFlow<UiState> = _uiState
 
     private val now = LocalDateTime.now()
     private val currentDate = now.toLocalDate()
@@ -57,28 +59,37 @@ class StatsViewModel @Inject constructor(
 
     fun updateShifts(locale: Locale) {
         viewModelScope.launch {
-            _shifts.value = getShiftsInRangeUseCase.invoke(
+            getShiftsInRangeUseCase(
                 startDate.toLocalDate().atStartOfDay(),
                 endDate.toLocalDate().plusDays(1).atStartOfDay()
-            )
-            val currency = getCurrencySymbol()?: CurrencySymbolMode.fromLocale(locale)
-            val shiftValue = _shifts.value
-            _uiState.value = UiState(
-                shiftsCount = shiftValue.size.toString(),
-                avErPh = shiftValue.averageEarningsPerHour.centsToCurrency(locale, currency),
-                avProfitPh = shiftValue.averageProfitPerHour.centsToCurrency(locale, currency),
-                avDuration = shiftValue.averageDuration.minutesToHours(locale),
-                avMileage = shiftValue.averageMileage.metersToKilometers(locale),
-                avFuel = shiftValue.averageFuelCost.centsToCurrency(locale, currency),
-                avWash = shiftValue.averageWash.centsToCurrency(locale, currency),
-                totalDuration = shiftValue.totalTime.minutesToHours(locale),
-                totalMileage = shiftValue.totalMileage.metersToKilometers(locale),
-                totalFuel = shiftValue.totalFuelCost.centsToCurrency(locale, currency),
-                totalWash = shiftValue.totalWash.centsToCurrency(locale, currency),
-                totalEarnings = shiftValue.totalEarnings.centsToCurrency(locale, currency),
-                totalProfit = shiftValue.totalProfit.centsToCurrency(locale, currency),
-            )
+            ).collect { list ->
+                _shifts.value = list
+                val currency = getCurrencySymbol() ?: CurrencySymbolMode.fromLocale(locale)
+                _uiState.value = buildUiState(list, locale, currency)
+            }
         }
+    }
+
+    private fun buildUiState(
+        shiftValue: List<Shift>,
+        locale: Locale,
+        currency: CurrencySymbolMode
+    ): UiState {
+        return UiState(
+            shiftsCount = shiftValue.size.toString(),
+            avErPh = shiftValue.averageEarningsPerHour.centsToCurrency(locale, currency),
+            avProfitPh = shiftValue.averageProfitPerHour.centsToCurrency(locale, currency),
+            avDuration = shiftValue.averageDuration.minutesToHours(locale),
+            avMileage = shiftValue.averageMileage.metersToKilometers(locale),
+            avFuel = shiftValue.averageFuelCost.centsToCurrency(locale, currency),
+            avWash = shiftValue.averageWash.centsToCurrency(locale, currency),
+            totalDuration = shiftValue.totalTime.minutesToHours(locale),
+            totalMileage = shiftValue.totalMileage.metersToKilometers(locale),
+            totalFuel = shiftValue.totalFuelCost.centsToCurrency(locale, currency),
+            totalWash = shiftValue.totalWash.centsToCurrency(locale, currency),
+            totalEarnings = shiftValue.totalEarnings.centsToCurrency(locale, currency),
+            totalProfit = shiftValue.totalProfit.centsToCurrency(locale, currency),
+        )
     }
 
     private fun getCurrencySymbol(): CurrencySymbolMode? {

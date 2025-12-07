@@ -6,21 +6,22 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.hsact.data.db.entities.ShiftEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ShiftDao {
 
     @Query("SELECT * FROM shiftentity ORDER BY id DESC")
-    suspend fun getAllShifts(): List<ShiftEntity>
+    fun getAllShifts(): Flow<List<ShiftEntity>>
 
     @Query("SELECT * FROM ShiftEntity WHERE (:start IS NULL OR period_start >= :start) AND (:end IS NULL OR period_end <= :end)")
-    suspend fun getShiftsInRange(start: String?, end: String?): List<ShiftEntity>
+    fun getShiftsInRange(start: String?, end: String?): Flow<List<ShiftEntity>>
 
     @Query("SELECT * FROM shiftentity WHERE id = :id LIMIT 1")
-    suspend fun getShiftById(id: Int): ShiftEntity?
+    fun getShiftById(id: Int): Flow<ShiftEntity?>
 
     @Query("SELECT * FROM shiftentity ORDER BY id DESC LIMIT 1")
-    suspend fun getLastShift(): ShiftEntity?
+    fun getLastShift(): Flow<ShiftEntity?>
 
     @Query("SELECT * FROM shiftentity WHERE meta_isSynced = 0")
     suspend fun getUnsyncedShifts(): List<ShiftEntity>

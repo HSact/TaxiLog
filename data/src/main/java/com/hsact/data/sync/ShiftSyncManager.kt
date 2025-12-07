@@ -4,6 +4,7 @@ import android.util.Log
 import com.hsact.data.firebase.datasource.FirebaseShiftDataSource
 import com.hsact.domain.model.Shift
 import com.hsact.domain.repository.ShiftRepository
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class ShiftSyncManager @Inject constructor(
@@ -16,7 +17,7 @@ class ShiftSyncManager @Inject constructor(
     }
 
     suspend fun syncShift(id: Int) {
-        val shift = shiftRepository.getShift(id) ?: return
+        val shift = shiftRepository.getShift(id).first() ?: return
         val remoteId = firebaseShiftDataSource.save(shift)
         if (remoteId != null) {
             shiftRepository.markAsSynced(id, remoteId)
@@ -45,7 +46,7 @@ class ShiftSyncManager @Inject constructor(
         }
 
         // Removing shifts from local, which are not in Firebase — but only if isSynced == true
-        val allLocal = shiftRepository.getAllShifts()
+        val allLocal = shiftRepository.getAllShifts().first()
         val toDelete = allLocal.filter { local ->
             val remoteId = local.remoteId
             remoteId != null && local.meta.isSynced && remoteId !in remoteIds

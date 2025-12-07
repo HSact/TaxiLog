@@ -28,7 +28,9 @@ class ShiftDetailViewModel @Inject constructor(
     val settings = getAllSettingsUseCase()
     fun loadShift(shiftId: Int) {
         viewModelScope.launch {
-            _shift.value = getShiftByIdUseCase(shiftId)
+            getShiftByIdUseCase(shiftId).collect { shift ->
+                _shift.value = shift
+            }
         }
     }
     fun deleteShift() {

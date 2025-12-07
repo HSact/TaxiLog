@@ -19,6 +19,7 @@ import com.hsact.domain.utils.toShortTime
 import com.hsact.taxilog.ui.shift.ShiftInputModel
 import com.hsact.taxilog.ui.shift.mappers.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -215,10 +216,7 @@ class ShiftFormViewModel @Inject constructor(
 
     fun loadShift(id: Int) {
         viewModelScope.launch {
-            val shift = getShiftByIdUseCase(id)
-            if (shift == null) {
-                return@launch
-            }
+            val shift = getShiftByIdUseCase(id).first() ?: return@launch
             _uiState.value = UiState(
                 id = shift.id,
                 editShift = shift,

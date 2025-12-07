@@ -1,14 +1,15 @@
 package com.hsact.domain.repository
 
 import com.hsact.domain.model.Shift
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDateTime
 
 interface ShiftRepository {
     suspend fun sync()
-    suspend fun getAllShifts(): List<Shift>
-    suspend fun getShiftsInRange(start: LocalDateTime?, end: LocalDateTime?): List<Shift>
-    suspend fun getShift(id: Int): Shift?
-    suspend fun getLastShift(): Shift?
+    fun getAllShifts(): Flow<List<Shift>>
+    fun getShiftsInRange(start: LocalDateTime?, end: LocalDateTime?): Flow<List<Shift>>
+    fun getShift(id: Int): Flow<Shift?>
+    fun getLastShift(): Flow<Shift?>
     suspend fun getUnsyncedShifts(): List<Shift>
     suspend fun getByRemoteId(remoteId: String): Shift?
     suspend fun markAsSynced(id: Int, remoteId: String)

@@ -12,6 +12,7 @@ import com.hsact.domain.usecase.shift.DeleteAllShiftsUseCase
 import com.hsact.domain.usecase.shift.DeleteShiftUseCase
 import com.hsact.domain.usecase.shift.GetAllShiftsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -48,20 +49,20 @@ class LogViewModel @Inject constructor(
     private fun deleteAllShifts() {
         viewModelScope.launch {
             deleteAllShiftsUseCase.invoke()
-            _shifts.value = getAllShiftsUseCase()
+            _shifts.value = getAllShiftsUseCase().first()
         }
     }
 
     private fun deleteShift(shift: Shift) {
         viewModelScope.launch {
             deleteShiftUseCase(shift)
-            _shifts.value = getAllShiftsUseCase()
+            _shifts.value = getAllShiftsUseCase().first()
         }
     }
 
     private fun updateList() {
         viewModelScope.launch {
-            _shifts.value = getAllShiftsUseCase()
+            _shifts.value = getAllShiftsUseCase().first()
         }
     }
 }
