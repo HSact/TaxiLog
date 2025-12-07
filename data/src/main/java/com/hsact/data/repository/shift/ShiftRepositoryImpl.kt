@@ -5,6 +5,7 @@ import com.hsact.data.repository.shift.local.ShiftRepositoryLocal
 import com.hsact.data.repository.shift.remote.ShiftRepositoryRemote
 import com.hsact.domain.model.Shift
 import com.hsact.domain.repository.ShiftRepository
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -17,21 +18,21 @@ class ShiftRepositoryImpl @Inject constructor(
         shiftRepositoryRemote.sync()
     }
 
-    override suspend fun getAllShifts() =
+    override fun getAllShifts() =
         shiftRepositoryLocal.getAllShifts()
 
-    override suspend fun getShiftsInRange(
+    override fun getShiftsInRange(
         start: LocalDateTime?,
         end: LocalDateTime?,
-    ): List<Shift> {
+    ): Flow<List<Shift>> {
         return shiftRepositoryLocal.getShiftsInRange(start, end)
     }
 
-    override suspend fun getShift(id: Int): Shift? {
+    override fun getShift(id: Int): Flow<Shift?> {
         return shiftRepositoryLocal.getShift(id)
     }
 
-    override suspend fun getLastShift() =
+    override fun getLastShift() =
         shiftRepositoryLocal.getLastShift()
 
     override suspend fun getUnsyncedShifts() =

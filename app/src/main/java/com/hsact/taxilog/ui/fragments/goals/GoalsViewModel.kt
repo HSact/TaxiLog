@@ -30,7 +30,7 @@ class GoalsViewModel @Inject constructor(
 
     private val settings: UserSettings = getAllSettingsUseCase.invoke()
     private val _shifts = MutableStateFlow<List<Shift>>(emptyList())
-    val shifts: StateFlow<List<Shift?>> = _shifts
+    val shifts: StateFlow<List<Shift>> = _shifts
 
     private val _date = MutableStateFlow("")
     val date: StateFlow<String> = _date
@@ -41,32 +41,9 @@ class GoalsViewModel @Inject constructor(
     private val _daysData = MutableStateFlow(MutableList(31) { 0.0 })
     val daysData: StateFlow<List<Double>> = _daysData
 
-    private val _daysInMonthCardState = MutableStateFlow(DaysInMonthCardState("", emptyList()))
+    private val _daysInMonthCardState =
+        MutableStateFlow(DaysInMonthCardState("", emptyList()))
     val daysInMonthCardState: StateFlow<DaysInMonthCardState> = _daysInMonthCardState
-
-    init {
-        updateData()
-    }
-
-    private fun updateData() {
-        _date.value = _dateLD.value.format(DeprecatedDateFormatter)
-        viewModelScope.launch {
-            val yearMonth = YearMonth.from(_dateLD.value)
-            val startOfMonth = yearMonth.atDay(1).atStartOfDay()
-            val endOfMonth = yearMonth.atEndOfMonth().atTime(LocalTime.MAX)
-
-            _shifts.value = getShiftsInRangeUseCase.invoke(
-                startOfMonth,
-                endOfMonth
-            )
-            calculateDaysData()
-            defineGoals()
-            _daysInMonthCardState.value = DaysInMonthCardState(
-                date = _date.value,
-                days = _daysData.value
-            )
-        }
-    }
 
     private val _goalDataState = MutableStateFlow(GoalDataState())
     val goalDataState: StateFlow<GoalDataState> = _goalDataState
@@ -77,6 +54,35 @@ class GoalsViewModel @Inject constructor(
     private var goalWeek: Double = -1.0
     private var goalDay: Double = -1.0
 
+    init {
+        updateData()
+    }
+
+
+    private fun updateData() {
+        _date.value = _dateLD.value.format(DeprecatedDateFormatter)
+        viewModelScope.launch {
+            val yearMonth = YearMonth.from(_dateLD.value)
+            val startOfMonth = yearMonth.atDay(1).atStartOfDay()
+            val endOfMonth = yearMonth.atEndOfMonth().atTime(LocalTime.MAX)
+
+            getShiftsInRangeUseCase(startOfMonth, endOfMonth)
+                .collect { list ->
+
+                    _shifts.value = list
+
+                    calculateDaysData()
+                    defineGoals()
+
+                    _daysInMonthCardState.value = DaysInMonthCardState(
+                        date = _date.value,
+                        days = _daysData.value
+                    )
+                }
+        }
+    }
+
+
     fun setDate(date: String) {
         _dateLD.value = LocalDate.parse(date, DeprecatedDateFormatter)
         updateData()
@@ -84,7 +90,9 @@ class GoalsViewModel @Inject constructor(
 
     fun calculateDaysData() {
         _daysData.value =
-            _shifts.value.monthlyProfitByDay(_dateLD.value).centsToDollars().toMutableList()
+            _shifts.value.monthlyProfitByDay(_dateLD.value)
+                .centsToDollars()
+                .toMutableList()
     }
 
     fun defineGoals() {
@@ -100,7 +108,7 @@ class GoalsViewModel @Inject constructor(
             "7/0" -> 30.0
             "6/1" -> 25.7
             "5/2" -> 21.4
-            else -> 30.0
+            else  -> 30.0
         }
         goalDay = goalMonth / denominatorDay
 
@@ -115,15 +123,9 @@ class GoalsViewModel @Inject constructor(
             dayProgress = dayProfitSum.centsToDollars(),
             weekProgress = weekProfitSum.centsToDollars(),
             monthProgress = monthProfitSum.centsToDollars(),
-            todayPercent = roundTo2(
-                dayProfitSum.centsToDollars() * 100 / goalDay
-            ),
-            weekPercent = roundTo2(
-                weekProfitSum.centsToDollars() * 100 / goalWeek
-            ),
-            monthPercent = roundTo2(
-                monthProfitSum.centsToDollars() * 100 / goalMonth
-            )
+            todayPercent = roundTo2(dayProfitSum.centsToDollars() * 100 / goalDay),
+            weekPercent = roundTo2(weekProfitSum.centsToDollars() * 100 / goalWeek),
+            monthPercent = roundTo2(monthProfitSum.centsToDollars() * 100 / goalMonth)
         )
     }
 

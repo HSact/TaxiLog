@@ -5,6 +5,9 @@ import com.hsact.data.db.ShiftDao
 import com.hsact.data.mappers.toDomain
 import com.hsact.data.mappers.toEntity
 import com.hsact.domain.model.Shift
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -12,28 +15,33 @@ class ShiftRepositoryLocalImpl @Inject constructor(
     private val shiftDao: ShiftDao,
 ) : ShiftRepositoryLocal {
 
-    override suspend fun getAllShifts() =
+    override fun getAllShifts(): Flow<List<Shift>> =
         shiftDao.getAllShifts()
-            .map { it.toDomain() }
+            .map { list -> list.map { it.toDomain() } }
 
-    override suspend fun getShiftsInRange(
+    override fun getShiftsInRange(
         start: LocalDateTime?,
         end: LocalDateTime?,
-    ): List<Shift> {
-        val startString = start?.toString() // ISO-8601
+    ): Flow<List<Shift>> {
+        val startString = start?.toString()
         val endString = end?.toString()
-        val entities = shiftDao.getShiftsInRange(startString, endString)
-        return entities.map { it.toDomain() }
+        return shiftDao.getShiftsInRange(startString, endString)
+            .map { list -> list.map { it.toDomain() } }
     }
 
-    override suspend fun getShift(id: Int): Shift? {
-        val shiftEntity = shiftDao.getShiftById(id)
-        Log.d("ShiftRepositoryLocal", "getShift: id=$id, remoteId=${shiftEntity?.remoteId}")
-        return shiftEntity?.toDomain()
-    }
+    override fun getShift(id: Int): Flow<Shift?> =
+        shiftDao.getShiftById(id)
+            .map { entity ->
+                Log.d(
+                    "ShiftRepositoryLocal",
+                    "getShift: id=$id, remoteId=${entity?.remoteId}"
+                )
+                entity?.toDomain()
+            }
 
-    override suspend fun getLastShift() =
-        shiftDao.getLastShift()?.toDomain()
+    override fun getLastShift(): Flow<Shift?> =
+        shiftDao.getLastShift()
+            .map { it?.toDomain() }
 
     override suspend fun getUnsyncedShifts() =
         shiftDao.getUnsyncedShifts()
@@ -43,7 +51,7 @@ class ShiftRepositoryLocalImpl @Inject constructor(
         shiftDao.getByRemoteId(remoteId)?.toDomain()
 
     override suspend fun markAsSynced(id: Int, remoteId: String) {
-        val shift = shiftDao.getShiftById(id)
+        val shift = shiftDao.getShiftById(id).first()
         if (shift == null) {
             Log.w("ShiftRepositoryLocal", "Shift with id $id not found")
             return
