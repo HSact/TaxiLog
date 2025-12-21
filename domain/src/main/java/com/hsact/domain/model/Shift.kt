@@ -15,7 +15,8 @@ data class Shift(
     val note: String? = null,
 ) {
     val carExpenses: Long
-        get() = carSnapshot.rentCost + carSnapshot.serviceCost
+        get() = carSnapshot.rentCost + carSnapshot.serviceCost * carSnapshot.mileage / 1000
+
 
     val consumption: Long
         get() = (carSnapshot.fuelConsumption * carSnapshot.mileage) / 100_000
