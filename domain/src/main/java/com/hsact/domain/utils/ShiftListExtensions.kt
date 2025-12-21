@@ -68,6 +68,9 @@ val List<Shift>.profit: List<Long>
 val List<Shift>.totalEarnings: Long
     get() = sumOf { it.financeInput.earnings }
 
+val List<Shift>.totalEarningsAndTips: Long
+    get() = sumOf { it.financeInput.earningsAndTips }
+
 val List<Shift>.totalTips: Long
     get() = sumOf { it.financeInput.tips }
 

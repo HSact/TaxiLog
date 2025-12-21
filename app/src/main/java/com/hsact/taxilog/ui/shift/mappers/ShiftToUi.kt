@@ -39,7 +39,8 @@ fun Shift.toUi(locale: Locale, currencySymbol: CurrencySymbolMode): ShiftOutputM
         fuelCost = financeInput.fuelCost.centsToCurrency(locale, currencySymbol),
         fuelConsumption = consumption.millilitersToLiters(locale),
         rent = carSnapshot.rentCost.centsToCurrency(locale, currencySymbol),
-        serviceCost = carSnapshot.serviceCost.centsToCurrency(locale, currencySymbol),
+        serviceCost = (carSnapshot.serviceCost * carSnapshot.mileage / 1000)
+            .centsToCurrency(locale, currencySymbol),
         tax = financeInput.tax.centsToCurrency(locale, currencySymbol),
         totalExpenses = totalExpenses.centsToCurrency(locale, currencySymbol),
         profit = profit.centsToCurrency(locale, currencySymbol),
