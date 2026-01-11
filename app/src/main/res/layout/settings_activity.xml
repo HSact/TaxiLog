@@ -325,7 +325,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingTop="@dimen/table_row_padding_regular"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/textRentCost"
@@ -375,7 +375,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:paddingTop="@dimen/table_row_padding_regular"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/textServiceCost"
@@ -521,7 +521,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:paddingTop="@dimen/table_row_padding_regular"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/textTaxRate"
