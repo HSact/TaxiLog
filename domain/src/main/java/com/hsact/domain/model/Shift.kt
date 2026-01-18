@@ -25,7 +25,11 @@ data class Shift(
         get() = carExpenses + financeInput.wash + financeInput.fuelCost + financeInput.tax
 
     val earningsPerHour: Long
-        get() = financeInput.earnings / time.totalDuration.toHours()
+        get() {
+            val minutes = time.totalDuration.toMinutes()
+            if (minutes <= 0) return 0
+            return (financeInput.earnings * 60) / minutes
+        }
 
     val earningsPerKm: Long
         get() = if (carSnapshot.mileage > 0)
@@ -36,7 +40,11 @@ data class Shift(
         get() = financeInput.earnings + financeInput.tips - financeInput.tax - financeInput.wash - financeInput.fuelCost - carExpenses
 
     val profitPerHour: Long
-        get() = profit / time.totalDuration.toHours()
+        get() {
+            val minutes = time.totalDuration.toMinutes()
+            if (minutes <= 0) return 0
+            return (profit * 60) / minutes
+        }
 
     val profitMarginPercent: Int
         get() = if (financeInput.earnings + financeInput.tips > 0)
