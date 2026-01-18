@@ -132,9 +132,9 @@ class SettingsActivity : AppCompatActivity() {
         displayCurrencySymbol()
         updateUiWithSettings()
         updateThemeRadioButtons()
-        toggleTableVisibility(switchRent)
-        toggleTableVisibility(switchService)
-        toggleTableVisibility(switchTaxes)
+        updateTableVisibility(switchRent)
+        updateTableVisibility(switchService)
+        updateTableVisibility(switchTaxes)
 
         if (savedInstanceState != null) {
             if (savedInstanceState.getBoolean("IS_VISIBLE_RENT", true)) {
@@ -171,9 +171,9 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        switchRent.setOnClickListener { toggleTableVisibility(switchRent) }
-        switchService.setOnClickListener { toggleTableVisibility(switchService) }
-        switchTaxes.setOnClickListener { toggleTableVisibility(switchTaxes) }
+        switchRent.setOnCheckedChangeListener { _, _ -> toggleTableVisibility(switchRent) }
+        switchService.setOnCheckedChangeListener { _, _ -> toggleTableVisibility(switchService) }
+        switchTaxes.setOnCheckedChangeListener { _, _ -> toggleTableVisibility(switchTaxes) }
 
         buttonApply.setOnClickListener {
             applySettings()
@@ -386,9 +386,7 @@ class SettingsActivity : AppCompatActivity() {
         return ""
     }
 
-    private fun isKmUnitSelected(): Boolean {
-        return radioKm.isChecked
-    }
+    private val isKmUnitSelected get() = radioKm.isChecked
 
     private fun saveSettings() {
         val settingsData = UserSettings(
@@ -396,7 +394,7 @@ class SettingsActivity : AppCompatActivity() {
             language = getSelectedLanguage(),
             theme = getSelectedTheme(),
             currency = getSelectedCurrency(),
-            isKmUnit = isKmUnitSelected(),
+            isKmUnit = isKmUnitSelected,
             consumption = textConsumption.text.toString(),
             rented = switchRent.isChecked,
             rentCost = textRentCost.text.toString(),
@@ -411,30 +409,29 @@ class SettingsActivity : AppCompatActivity() {
         viewModel.saveSettings(settingsData)
     }
 
-    private fun toggleTableVisibility(switch: MaterialSwitch) {
+    private fun updateTableVisibility(switch: MaterialSwitch) {
         val table: TableRow = when (switch) {
-            binding.switchRent -> {
-                binding.TableRent
-            }
-
-            binding.switchService -> {
-                binding.TableService
-            }
-
-            binding.switchTaxes -> {
-                binding.TableTaxes
-            }
-
+            binding.switchRent -> binding.TableRent
+            binding.switchService -> binding.TableService
+            binding.switchTaxes -> binding.TableTaxes
             else -> return
         }
-        animateHeightChange(table)
+
+        val visibility = if (switch.isChecked) View.VISIBLE else View.GONE
+        table.visibility = visibility
     }
 
-    private fun animateHeightChange(view: View) {
-        val parentLayout = view.parent as ViewGroup
-        val visibility = if (view.isVisible) View.GONE else View.VISIBLE
+    private fun toggleTableVisibility(switch: MaterialSwitch) {
+        val table: TableRow = when (switch) {
+            binding.switchRent -> binding.TableRent
+            binding.switchService -> binding.TableService
+            binding.switchTaxes -> binding.TableTaxes
+            else -> return
+        }
+
+        val parentLayout = table.parent as ViewGroup
         TransitionManager.beginDelayedTransition(parentLayout)
-        view.visibility = visibility
+        table.visibility = if (switch.isChecked) View.VISIBLE else View.GONE
     }
 
     private fun getSelectedCurrency(): CurrencySymbolMode {
