@@ -63,14 +63,6 @@ class HomeFragment : Fragment() {
         cardMonthGraph.setContent { CardGoalProgress(viewModel.chartData, viewModel.goalData) }
         binding.fabNewShift.extend()
         binding.fabNewShift.setOnClickListener { newShift() }
-
-        cardLastShift.setOnClickListener {
-            val action = HomeFragmentDirections.actionNavigationHomeToShiftDetails(
-                shiftId = viewModel.lastShift.value?.id ?: -1,
-                visibleId = -1
-            )
-            findNavController().navigate(action)
-        }
     }
 
     override fun onDestroyView() {
