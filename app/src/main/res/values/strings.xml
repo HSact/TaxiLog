@@ -100,6 +100,7 @@
     <string name="car_name">Car name</string>
     <string name="duration">Duration</string>
     <string name="tax">Tax</string>
+    <string name="taxes">Taxes</string>
     <string name="currency">Currency</string>
     <string name="earnings_per_hour">Earnings/h</string>
     <string name="rent">Rent</string>
