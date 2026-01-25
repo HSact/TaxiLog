@@ -77,6 +77,9 @@ val List<Shift>.totalTips: Long
 val List<Shift>.totalWash: Long
     get() = sumOf { it.financeInput.wash }
 
+val List<Shift>.totalService: Long
+    get() = sumOf { it.serviceCost }
+
 val List<Shift>.totalMileage: Long
     get() = sumOf { it.carSnapshot.mileage }
 

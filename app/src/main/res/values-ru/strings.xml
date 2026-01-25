@@ -101,6 +101,7 @@
     <string name="car_name">Название</string>
     <string name="duration">Продолжительность</string>
     <string name="tax">Налог</string>
+    <string name="taxes">Налоги</string>
     <string name="currency">Валюта</string>
     <string name="earnings_per_hour">Выручка/ч</string>
     <string name="rent">Аренда</string>

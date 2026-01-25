@@ -31,7 +31,7 @@ import java.util.Locale
 @Composable
 fun CardDaysInMonth(data: StateFlow<DaysInMonthCardState>) {
     val dataState by data.collectAsStateWithLifecycle()
-    val days = dataState.days
+    val days = dataState.days.map { it.coerceAtLeast(0.0) }
     val date = dataState.date
     val isDarkTheme = isSystemInDarkTheme()
     val textStyle: TextStyle = if (isDarkTheme) TextStyle(color = Color.White)
@@ -78,7 +78,7 @@ fun CardDaysInMonth(data: StateFlow<DaysInMonthCardState>) {
             Bars(
                 label = if (index % 2 == 0) (index + 1).toString() else " ",
                 values = listOf(
-                    Bars.Data(value = days[index], color = SolidColor(colorGraphLine))
+                    Bars.Data(value = days.getOrElse(index) { 0.0 }, color = SolidColor(colorGraphLine))
                 )
             )
         }

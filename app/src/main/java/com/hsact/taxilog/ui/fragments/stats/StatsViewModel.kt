@@ -11,13 +11,18 @@ import com.hsact.domain.utils.averageDuration
 import com.hsact.domain.utils.averageEarningsPerHour
 import com.hsact.domain.utils.averageFuelCost
 import com.hsact.domain.utils.averageMileage
+import com.hsact.domain.utils.averageProfit
 import com.hsact.domain.utils.averageProfitPerHour
 import com.hsact.domain.utils.averageWash
+import com.hsact.domain.utils.totalCarExpenses
 import com.hsact.domain.utils.totalEarnings
 import com.hsact.domain.utils.totalFuelCost
 import com.hsact.domain.utils.totalMileage
 import com.hsact.domain.utils.totalProfit
+import com.hsact.domain.utils.totalService
+import com.hsact.domain.utils.totalTax
 import com.hsact.domain.utils.totalTime
+import com.hsact.domain.utils.totalTips
 import com.hsact.domain.utils.totalWash
 import com.hsact.taxilog.ui.shift.mappers.centsToCurrency
 import com.hsact.taxilog.ui.shift.mappers.metersToKilometers
@@ -43,42 +48,61 @@ class StatsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState
 
-    private val now = LocalDateTime.now()
-    private val currentDate = now.toLocalDate()
-    private val firstDayOfMonth = now.toLocalDate().withDayOfMonth(1)
-    var startDate: String = firstDayOfMonth.format(DeprecatedDateFormatter)
-    var endDate: String = currentDate.format(DeprecatedDateFormatter)
-
     fun defineDates() {
+        val state = _uiState.value
+        if (state.startDate.isNotBlank() && state.endDate.isNotBlank()) {
+            return
+        }
         val now = LocalDateTime.now()
         val currentDate = now.toLocalDate()
         val firstDayOfMonth = now.toLocalDate().withDayOfMonth(1)
-        startDate = firstDayOfMonth.format(DeprecatedDateFormatter)
-        endDate = currentDate.format(DeprecatedDateFormatter)
+        _uiState.value = _uiState.value.copy(
+            startDate = firstDayOfMonth.format(DeprecatedDateFormatter),
+            endDate = currentDate.format(DeprecatedDateFormatter),
+        )
+    }
+
+    fun onBeginDateChange(date: String) {
+        _uiState.value = _uiState.value.copy(
+            startDate = date
+        )
+    }
+
+    fun onEndDateChange(date: String) {
+        _uiState.value = _uiState.value.copy(
+            endDate = date
+        )
     }
 
     fun updateShifts(locale: Locale) {
+        val startDate = _uiState.value.startDate
+        val endDate = _uiState.value.endDate
         viewModelScope.launch {
             getShiftsInRangeUseCase(
-                startDate.toLocalDate().atStartOfDay(),
-                endDate.toLocalDate().plusDays(1).atStartOfDay()
+                startDate.localDate.atStartOfDay(),
+                endDate.localDate.plusDays(1).atStartOfDay()
             ).collect { list ->
                 _shifts.value = list
-                val currency = getCurrencySymbol() ?: CurrencySymbolMode.fromLocale(locale)
-                _uiState.value = buildUiState(list, locale, currency)
+                val currency = currencySymbol ?: CurrencySymbolMode.fromLocale(locale)
+                _uiState.value = buildUiState(_uiState.value.startDate, _uiState.value.endDate,list, locale, currency)
             }
         }
     }
 
     private fun buildUiState(
+        startDate: String,
+        endDate: String,
         shiftValue: List<Shift>,
         locale: Locale,
         currency: CurrencySymbolMode
     ): UiState {
         return UiState(
+            startDate = startDate,
+            endDate = endDate,
             shiftsCount = shiftValue.size.toString(),
             avErPh = shiftValue.averageEarningsPerHour.centsToCurrency(locale, currency),
             avProfitPh = shiftValue.averageProfitPerHour.centsToCurrency(locale, currency),
+            avProfit = shiftValue.averageProfit.centsToCurrency(locale, currency),
             avDuration = shiftValue.averageDuration.minutesToHours(locale),
             avMileage = shiftValue.averageMileage.metersToKilometers(locale),
             avFuel = shiftValue.averageFuelCost.centsToCurrency(locale, currency),
@@ -87,16 +111,18 @@ class StatsViewModel @Inject constructor(
             totalMileage = shiftValue.totalMileage.metersToKilometers(locale),
             totalFuel = shiftValue.totalFuelCost.centsToCurrency(locale, currency),
             totalWash = shiftValue.totalWash.centsToCurrency(locale, currency),
+            totalService = shiftValue.totalService.centsToCurrency(locale, currency),
             totalEarnings = shiftValue.totalEarnings.centsToCurrency(locale, currency),
             totalProfit = shiftValue.totalProfit.centsToCurrency(locale, currency),
+            totalTips = shiftValue.totalTips.centsToCurrency(locale, currency),
+            totalTax = shiftValue.totalTax.centsToCurrency(locale, currency),
+            totalCarExpenses = shiftValue.totalCarExpenses.centsToCurrency(locale, currency),
         )
     }
 
-    private fun getCurrencySymbol(): CurrencySymbolMode? {
-        return getAllSettingsUseCase.invoke().currency
-    }
+    private val currencySymbol: CurrencySymbolMode?
+        get() = getAllSettingsUseCase.invoke().currency
 
-    private fun String.toLocalDate(): LocalDate {
-        return LocalDate.parse(this, DeprecatedDateFormatter)
-    }
+    private val String.localDate: LocalDate
+        get() = LocalDate.parse(this, DeprecatedDateFormatter)
 }

@@ -35,13 +35,18 @@ class StatsFragment : Fragment() {
     private lateinit var textShiftsCount: TextView
     private lateinit var textAvErPh: TextView
     private lateinit var textAvProfitPh: TextView
+    private lateinit var textAvProfit: TextView
     private lateinit var textAvDuration: TextView
     private lateinit var textAvMileage: TextView
     private lateinit var textTotalDuration: TextView
     private lateinit var textTotalMileage: TextView
     private lateinit var textTotalWash: TextView
+    private lateinit var textTotalService: TextView
     private lateinit var textTotalEarnings: TextView
     private lateinit var textTotalProfit: TextView
+    private lateinit var textTotalTips: TextView
+    private lateinit var textTotalTax: TextView
+    private lateinit var textTotalCarExpenses: TextView
     private lateinit var textAvFuel: TextView
     private lateinit var textAvWash: TextView
     private lateinit var textTotalFuel: TextView
@@ -55,16 +60,29 @@ class StatsFragment : Fragment() {
         val root: View = binding.root
         bindItems()
         lifecycleScope.launch {
+            viewModel.defineDates()
             viewModel.updateShifts(Locale.getDefault())
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { uiState ->
-                    displayInfo(uiState)
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.uiState.collect { uiState ->
+
+                        if (!butDatePickBegin.isFocused &&
+                            butDatePickBegin.text.toString() != uiState.startDate
+                        ) {
+                            butDatePickBegin.setText(uiState.startDate)
+                        }
+
+                        if (!butDatePickEnd.isFocused &&
+                            butDatePickEnd.text.toString() != uiState.endDate
+                        ) {
+                            butDatePickEnd.setText(uiState.endDate)
+                        }
+
+                        displayInfo(uiState)
+                    }
                 }
             }
         }
-        viewModel.defineDates()
-        butDatePickBegin.setText(viewModel.startDate)
-        butDatePickEnd.setText(viewModel.endDate)
         butDatePickBegin.setOnClickListener { pickDate(butDatePickBegin) }
         butDatePickEnd.setOnClickListener { pickDate(butDatePickEnd) }
         return root
@@ -79,9 +97,9 @@ class StatsFragment : Fragment() {
             onDatePicked = {
                 val date = editObj.text.toString()
                 if (editObj == butDatePickBegin) {
-                    viewModel.startDate = date
+                    viewModel.onBeginDateChange(date)
                 } else if (editObj == butDatePickEnd) {
-                    viewModel.endDate = date
+                    viewModel.onEndDateChange(date)
                 }
                 viewModel.updateShifts(Locale.getDefault())
             }
@@ -110,13 +128,18 @@ class StatsFragment : Fragment() {
         textShiftsCount.text = uiState.shiftsCount
         textAvErPh.text = uiState.avErPh
         textAvProfitPh.text = uiState.avProfitPh
+        textAvProfit.text = uiState.avProfit
         textAvDuration.text = uiState.avDuration
         textAvMileage.text = uiState.avMileage
         textTotalDuration.text = uiState.totalDuration
         textTotalMileage.text = uiState.totalMileage
         textTotalWash.text = uiState.totalWash
+        textTotalService.text = uiState.totalService
         textTotalEarnings.text = uiState.totalEarnings
         textTotalProfit.text = uiState.totalProfit
+        textTotalTips.text = uiState.totalTips
+        textTotalTax.text = uiState.totalTax
+        textTotalCarExpenses.text = uiState.totalCarExpenses
         textAvFuel.text = uiState.avFuel
         textTotalFuel.text = uiState.totalFuel
         textAvWash.text = uiState.avWash
@@ -132,13 +155,18 @@ class StatsFragment : Fragment() {
         textShiftsCount = binding.textShiftsCountVal
         textAvErPh = binding.textAvErPhVal
         textAvProfitPh = binding.textAvProfitPhVal
+        textAvProfit = binding.textAvProfitVal
         textAvDuration = binding.textAvDurationVal
         textAvMileage = binding.textAvMileageVal
         textTotalDuration = binding.textTotalDurationVal
         textTotalMileage = binding.textTotalMileageVal
         textTotalWash = binding.textTotalWashVal
+        textTotalService = binding.textTotalServiceVal
         textTotalEarnings = binding.textTotalEarningsVal
         textTotalProfit = binding.textTotalProfitVal
+        textTotalTips = binding.textTotalTipsVal
+        textTotalTax = binding.textTotalTaxVal
+        textTotalCarExpenses = binding.textTotalCarExpensesVal
         textAvFuel = binding.textAvFuelVal
         textAvWash = binding.textAvWashVal
         textTotalFuel = binding.textTotalFuelVal
