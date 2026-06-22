@@ -46,7 +46,7 @@ class StatsFragment : Fragment() {
     private lateinit var textTotalProfit: TextView
     private lateinit var textTotalTips: TextView
     private lateinit var textTotalTax: TextView
-    private lateinit var textTotalCarExpenses: TextView
+    private lateinit var textTotalExpenses: TextView
     private lateinit var textAvFuel: TextView
     private lateinit var textAvWash: TextView
     private lateinit var textTotalFuel: TextView
@@ -139,7 +139,7 @@ class StatsFragment : Fragment() {
         textTotalProfit.text = uiState.totalProfit
         textTotalTips.text = uiState.totalTips
         textTotalTax.text = uiState.totalTax
-        textTotalCarExpenses.text = uiState.totalCarExpenses
+        textTotalExpenses.text = uiState.totalExpenses
         textAvFuel.text = uiState.avFuel
         textTotalFuel.text = uiState.totalFuel
         textAvWash.text = uiState.avWash
@@ -166,7 +166,7 @@ class StatsFragment : Fragment() {
         textTotalProfit = binding.textTotalProfitVal
         textTotalTips = binding.textTotalTipsVal
         textTotalTax = binding.textTotalTaxVal
-        textTotalCarExpenses = binding.textTotalCarExpensesVal
+        textTotalExpenses = binding.textTotalExpensesVal
         textAvFuel = binding.textAvFuelVal
         textAvWash = binding.textAvWashVal
         textTotalFuel = binding.textTotalFuelVal

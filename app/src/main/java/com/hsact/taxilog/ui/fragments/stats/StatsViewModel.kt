@@ -14,8 +14,8 @@ import com.hsact.domain.utils.averageMileage
 import com.hsact.domain.utils.averageProfit
 import com.hsact.domain.utils.averageProfitPerHour
 import com.hsact.domain.utils.averageWash
-import com.hsact.domain.utils.totalCarExpenses
 import com.hsact.domain.utils.totalEarnings
+import com.hsact.domain.utils.totalExpenses
 import com.hsact.domain.utils.totalFuelCost
 import com.hsact.domain.utils.totalMileage
 import com.hsact.domain.utils.totalProfit
@@ -43,6 +43,8 @@ class StatsViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _shifts = MutableStateFlow<List<Shift>>(emptyList())
+
+
     val shifts: StateFlow<List<Shift>> = _shifts
 
     private val _uiState = MutableStateFlow(UiState())
@@ -116,7 +118,7 @@ class StatsViewModel @Inject constructor(
             totalProfit = shiftValue.totalProfit.centsToCurrency(locale, currency),
             totalTips = shiftValue.totalTips.centsToCurrency(locale, currency),
             totalTax = shiftValue.totalTax.centsToCurrency(locale, currency),
-            totalCarExpenses = shiftValue.totalCarExpenses.centsToCurrency(locale, currency),
+            totalExpenses = shiftValue.totalExpenses.centsToCurrency(locale, currency),
         )
     }
 
