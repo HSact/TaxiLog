@@ -13,7 +13,7 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "TaxiLog"
-include ':app'
-include ':domain'
-include ':data'
-include ':di'
+include(":app")
+include(":domain")
+include(":data")
+include(":di")
