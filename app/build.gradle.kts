@@ -8,7 +8,8 @@ plugins {
     alias(libs.plugins.crashlytics)
 }
 
-val vName = "1.4.0" // match defaultConfig.versionName
+val vName = "1.4.1"
+val vCode = 13
 android {
     namespace = "com.hsact.taxilog"
     compileSdk = libs.versions.compileSdk.get().toInt()
@@ -17,7 +18,7 @@ android {
         applicationId = "com.hsact.taxilog"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 12
+        versionCode = vCode
         versionName = vName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
