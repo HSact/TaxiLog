@@ -1,16 +1,14 @@
-import com.android.build.gradle.internal.api.BaseVariantOutputImpl
-
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt)
     alias(libs.plugins.navigation.safeargs)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
-    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.services)
     alias(libs.plugins.crashlytics)
 }
 
+val vName = "1.4.0" // match defaultConfig.versionName
 android {
     namespace = "com.hsact.taxilog"
     compileSdk = libs.versions.compileSdk.get().toInt()
@@ -20,18 +18,9 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 12
-        versionName = "1.4.0"
+        versionName = vName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    applicationVariants.all {
-        val variant = this
-        outputs.all {
-            val output = this as BaseVariantOutputImpl
-            val outputFileName = "TaxiLog_v${variant.versionName}.apk"
-            output.outputFileName = outputFileName
-        }
     }
 
     buildTypes {
@@ -49,13 +38,18 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-
     buildFeatures {
         compose = true
         viewBinding = true
+        buildConfig = true
+    }
+}
+
+androidComponents {
+    onVariants { variant ->
+        variant.outputs.forEach { output ->
+            output.outputFileName.set("TaxiLog_v$vName.apk")
+        }
     }
 }
 
@@ -80,6 +74,7 @@ dependencies {
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+    ksp(libs.hilt.metadata.fix)
     implementation(libs.androidx.hilt.work)
 
     implementation(platform(libs.firebase.bom))
