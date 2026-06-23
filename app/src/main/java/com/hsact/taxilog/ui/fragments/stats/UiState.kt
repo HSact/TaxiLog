@@ -19,6 +19,6 @@ data class UiState(
     val totalProfit: String = "",
     val totalTips: String = "",
     val totalTax: String = "",
-    val totalCarExpenses: String = "",
+    val totalExpenses: String = "",
     val totalFuel: String = "",
 )
