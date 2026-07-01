@@ -128,6 +128,15 @@
     <string name="shift_number">Shift #</string>
     <string name="goal_per_month">Goal per month</string>
 
+    <string name="about_app_description">TaxiLog is a simple and efficient tool designed specifically for taxi drivers to track their shifts, earnings, and expenses.</string>
+    <string name="about_app_purpose">The app helps you keep a detailed log of your work, analyze your financial performance, and stay on track with your monthly goals.</string>
+    <string name="about_features_title">Key Features:</string>
+    <string name="about_feature_1">• Easy shift logging (time, mileage, earnings)</string>
+    <string name="about_feature_2">• Automatic expense calculation (fuel, rent, service, taxes)</string>
+    <string name="about_feature_3">• Performance statistics and charts</string>
+    <string name="about_feature_4">• Monthly goal tracking</string>
+    <string name="about_feature_5">• Cloud synchronization</string>
+
     <string-array name="languages">
         <item>English</item>
         <item>Русский</item>
