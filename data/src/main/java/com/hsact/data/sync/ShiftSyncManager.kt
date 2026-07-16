@@ -42,6 +42,10 @@ class ShiftSyncManager @Inject constructor(
             } else if (localShift.meta.updatedAt < remoteShift.meta.updatedAt) {
                 shiftRepository.updateShift(shiftWithSynced.copy(id = localShift.id))
                 Log.d("Sync", "Updated remote shift: $remoteId")
+            } else if (!localShift.meta.isSynced) {
+                // If timestamps are equal but local is not marked as synced, fix it
+                shiftRepository.markAsSynced(localShift.id, remoteId)
+                Log.d("Sync", "Marked identical shift as synced: $remoteId")
             }
         }
 

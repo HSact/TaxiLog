@@ -45,7 +45,7 @@ fun ShiftMeta.toFirebase(): FirebaseShiftMeta = FirebaseShiftMeta(
     createdAt = createdAt.toString(),
     updatedAt = updatedAt.toString(),
     lastModifiedBy = lastModifiedBy,
-    isSynced = isSynced
+    isSynced = true
 )
 
 fun FirebaseShiftMeta.toDomain(): ShiftMeta = ShiftMeta(
