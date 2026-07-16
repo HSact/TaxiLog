@@ -12,6 +12,13 @@ import com.hsact.domain.model.car.CarSnapshot
 import com.hsact.domain.model.time.DateTimePeriod
 import com.hsact.domain.model.time.ShiftTime
 
+/**
+ * Mappers for converting between Domain and Firebase data models.
+ */
+
+/**
+ * Converts a domain [Shift] model to a [FirebaseShift] DTO for network operations.
+ */
 fun Shift.toFirebase(): FirebaseShift = FirebaseShift(
     id = id,
     remoteId = remoteId,
@@ -24,6 +31,12 @@ fun Shift.toFirebase(): FirebaseShift = FirebaseShift(
     note = note
 )
 
+/**
+ * Converts a [FirebaseShift] DTO to a domain [Shift] model.
+ *
+ * @param forceRemoteId Optional remote ID to override the one in the DTO (useful when using document IDs).
+ * @return A [Shift] object or null if critical fields are missing.
+ */
 fun FirebaseShift.toDomainOrNull(forceRemoteId: String? = null): Shift? {
     if (meta == null || carSnapshot == null || period == null || financeInput == null) return null
     return Shift(
@@ -41,6 +54,11 @@ fun FirebaseShift.toDomainOrNull(forceRemoteId: String? = null): Shift? {
     )
 }
 
+/**
+ * Converts [ShiftMeta] to its Firebase DTO equivalent.
+ *
+ * Note: [isSynced] is explicitly set to true when mapping to Firebase.
+ */
 fun ShiftMeta.toFirebase(): FirebaseShiftMeta = FirebaseShiftMeta(
     createdAt = createdAt.toString(),
     updatedAt = updatedAt.toString(),
@@ -48,6 +66,9 @@ fun ShiftMeta.toFirebase(): FirebaseShiftMeta = FirebaseShiftMeta(
     isSynced = true
 )
 
+/**
+ * Converts [FirebaseShiftMeta] DTO back to the domain [ShiftMeta] model.
+ */
 fun FirebaseShiftMeta.toDomain(): ShiftMeta = ShiftMeta(
     createdAt = createdAt?.let { java.time.LocalDateTime.parse(it) } ?: java.time.LocalDateTime.now(),
     updatedAt = updatedAt?.let { java.time.LocalDateTime.parse(it) } ?: java.time.LocalDateTime.now(),
