@@ -10,7 +10,7 @@
     android:focusable="true"
     android:longClickable="true"
     android:orientation="vertical"
-    app:cardBackgroundColor="?attr/colorBackgroundFloating"
+    app:cardBackgroundColor="@color/card_background"
     app:cardElevation="0dp"
     app:strokeColor="@android:color/transparent"
     app:strokeWidth="0dp">

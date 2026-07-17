@@ -60,8 +60,9 @@
         android:text="@string/new_shift"
         android:icon="@android:drawable/ic_input_add"
         android:contentDescription="@string/new_shift"
+        android:textColor="?attr/colorOnPrimary"
         app:iconPadding="8dp"
-        app:backgroundTint="?android:attr/colorBackground"
+        app:backgroundTint="?attr/colorPrimary"
         app:iconTint="?attr/colorOnPrimary"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
         tools:ignore="ImageContrastCheck" />

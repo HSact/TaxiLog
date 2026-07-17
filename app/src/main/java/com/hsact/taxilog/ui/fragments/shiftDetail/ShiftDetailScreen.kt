@@ -77,7 +77,7 @@ fun ShiftDetailScreen(
                             onClick = onEditClick,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text(text = stringResource(R.string.edit), color = textButtonColor)
+                            Text(text = stringResource(R.string.edit), color = Color.Black)
                         }
                         Spacer(modifier = Modifier.width(16.dp))
                         Button(
