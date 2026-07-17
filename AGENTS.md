@@ -32,7 +32,7 @@ Implements the repository interfaces defined in the `:domain` module.
 The UI layer, following the **MVVM** pattern.
 - **UI Framework**: **Jetpack Compose** (Preferred for all new code). Legacy **XML Views** exist in the project but should not be used for new features.
 - **ViewModels**: Manage UI state and interact with Use Cases.
-- **State Management**: **StateFlow** (Preferred). Legacy **LiveData** exists in some ViewModels.
+- **State Management**: **StateFlow** (Preferred).
 
 ### 4. `:di` (Android Library)
 Centralized Dependency Injection module using **Hilt**.
@@ -91,7 +91,7 @@ The app follows a strict **Offline-First** approach with Unidirectional Data Flo
 
 When assisting with this project:
 - **Persona Role**: Act as a Senior Developer. Be concise, prioritize safety (don't break offline data), and follow Clean Architecture.
-- **Use Modern Stack for New Code**: All new UI components must be written in **Jetpack Compose**. Use **StateFlow** or **SharedFlow** instead of LiveData for state management in new ViewModels.
+- **Use Modern Stack for New Code**: All new UI components must be written in **Jetpack Compose**. Use **StateFlow** or **SharedFlow** for state management in new ViewModels.
 - **Prioritize Clean Architecture**: If adding a new feature, start with the `:domain` models and use cases.
 - **Maintain Consistency**: Check existing mappers and repository implementations before creating new ones.
 - **Check DI**: Ensure new components are properly annotated with `@Inject` and provided in Hilt modules if needed.

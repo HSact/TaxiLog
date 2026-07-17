@@ -15,7 +15,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -170,8 +172,13 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
             (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
                 getString(R.string.title_new_shift)
         }
-        viewModel.uiState.observe(viewLifecycleOwner)
-        { shift -> updateUI(shift) }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { shift ->
+                    updateUI(shift)
+                }
+            }
+        }
 
         editDate.setOnClickListener {
             DatePickerFragment.pickDate(
@@ -217,7 +224,7 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
     }
 
     private fun updateShiftField(fieldSetter: (UiState) -> UiState) {
-        val currentShift = viewModel.uiState.value ?: return
+        val currentShift = viewModel.uiState.value
         val updated = fieldSetter(currentShift)
         viewModel.updateShift(updated)
     }
@@ -233,7 +240,7 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         if (!shift.note.isEmpty()) {
             editNote.setText(shift.note)
         }
-        if (viewModel.uiState.value?.fuelCost != 0.0) {
+        if (viewModel.uiState.value.fuelCost != 0.0) {
             editFuelCost.setText(shift.fuelCost.toString())
         }
         if (editBreakStart.text.isNotEmpty() || editBreakEnd.text.isNotEmpty()) {
@@ -328,8 +335,8 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         showSubmitMessage(
             getString(
                 R.string.you_earn_in_hours,
-                viewModel.uiState.value?.profit.toString(),
-                (viewModel.uiState.value?.totalTime ?: 0).millisToHours(Locale.getDefault())
+                viewModel.uiState.value.profit.toString(),
+                viewModel.uiState.value.totalTime.millisToHours(Locale.getDefault())
             )
         )
     }

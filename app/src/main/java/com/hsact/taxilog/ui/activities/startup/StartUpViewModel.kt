@@ -1,12 +1,13 @@
 package com.hsact.taxilog.ui.activities.startup
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hsact.domain.model.settings.UserSettings
 import com.hsact.domain.usecase.settings.AuthSkippedUseCase
 import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -14,8 +15,8 @@ class StartUpViewModel @Inject constructor(
     getAllSettingsUseCase: GetAllSettingsUseCase,
     private val authSkippedUseCase: AuthSkippedUseCase,
 ): ViewModel() {
-    private val _settings = MutableLiveData<UserSettings>()
-    val settings: LiveData<UserSettings> = _settings
+    private val _settings = MutableStateFlow<UserSettings?>(null)
+    val settings: StateFlow<UserSettings?> = _settings.asStateFlow()
     init {
         _settings.value = getAllSettingsUseCase()
     }

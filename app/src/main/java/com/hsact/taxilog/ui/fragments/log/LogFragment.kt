@@ -12,6 +12,9 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -19,6 +22,7 @@ import com.hsact.domain.model.Shift
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentLogBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LogFragment : Fragment() {
@@ -42,35 +46,37 @@ class LogFragment : Fragment() {
         requireActivity().title = getString(R.string.title_my_shifts)
 
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        viewModel.shifts.observe(viewLifecycleOwner) { shiftList ->
-            if (shiftList.isNullOrEmpty()) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.list_is_empty),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            val shiftListWithVisibleId = shiftList.mapIndexed { index, shift ->
-                Pair(shiftList.size - index, shift)
-            }
-            binding.recyclerView.adapter = RecyclerAdapter(
-                shiftListWithVisibleId,
-                settings = viewModel.settings.value!!,
-                onItemClick = { visibleId, shift ->
-                    viewModel.shifts.value?.firstOrNull { it.id == shift.id }?.let {
-                        onClickElement(shift, visibleId)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.shifts.collect { shiftList ->
+                    if (shiftList.isEmpty() && viewModel.settings.value != null) {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.list_is_empty),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-                },
-                onItemMenuClick = { visibleId, shift ->
-                    viewModel.shifts.value?.firstOrNull { it.id == shift.id }?.let {
-                        onLongClickElement(shift, visibleId)
+
+                    if (viewModel.settings.value != null) {
+                        val shiftListWithVisibleId = shiftList.mapIndexed { index, shift ->
+                            Pair(shiftList.size - index, shift)
+                        }
+                        binding.recyclerView.adapter = RecyclerAdapter(
+                            shiftListWithVisibleId,
+                            settings = viewModel.settings.value!!,
+                            onItemClick = { visibleId, shift ->
+                                onClickElement(shift, visibleId)
+                            },
+                            onItemMenuClick = { visibleId, shift ->
+                                onLongClickElement(shift, visibleId)
+                            }
+                        )
+                        // Restore the RecyclerView scroll state
+                        viewModel.recyclerViewState?.let { state ->
+                            binding.recyclerView.layoutManager?.onRestoreInstanceState(state)
+                        }
                     }
                 }
-            )
-            // Restore the RecyclerView scroll state
-            viewModel.recyclerViewState?.let { state ->
-                binding.recyclerView.layoutManager?.onRestoreInstanceState(state)
             }
         }
 
