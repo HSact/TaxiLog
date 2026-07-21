@@ -9,30 +9,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hsact.taxilog.R
-import com.hsact.taxilog.ui.activities.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ShiftDetailFragment : Fragment() {
     private val viewModel: ShiftDetailViewModel by viewModels()
 
-    private val botNav: BottomNavigationView?
-        get() = (activity as? MainActivity)?.getBottomNav()
-
     private var shiftId: Int = -1
-    private var visibleId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             shiftId = it.getInt("shiftId", -1)
-            visibleId = it.getInt("visibleId", -1)
         }
     }
 
@@ -45,7 +39,6 @@ class ShiftDetailFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        botNav?.isVisible = false
         if (shiftId != -1) {
             viewModel.loadShift(shiftId)
         }
@@ -53,7 +46,7 @@ class ShiftDetailFragment : Fragment() {
         val container = view.findViewById<FrameLayout>(R.id.compose_container)
         val composeView = ComposeView(requireContext()).apply {
             setContent {
-                val state by viewModel.shift.collectAsState()
+                val state by viewModel.uiState.collectAsState()
                 ShiftDetailScreen(
                     state,
                     viewModel.settings.currency,
@@ -62,29 +55,38 @@ class ShiftDetailFragment : Fragment() {
             }
         }
         container.addView(composeView)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.sequenceNumber.collect { number ->
+                if (number != null) {
+                    (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
+                        getString(R.string.title_shift_detail, number)
+                }
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        botNav?.isVisible = false
+        val currentNumber = viewModel.sequenceNumber.value
         (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
-            if (visibleId != -1) getString(R.string.title_shift_detail, visibleId)
-            else getString(R.string.last_shift)
+            if (currentNumber != null && currentNumber != -1) getString(R.string.title_shift_detail, currentNumber)
+            else getString(R.string.shift)
     }
 
-    override fun onPause() {
-        super.onPause()
-        botNav?.isVisible = true
-    }
-
+    /**
+     * Navigates to the shift form to edit the current shift.
+     */
     fun editShift() {
         val action = ShiftDetailFragmentDirections.actionShiftDetailFragmentToShiftForm(
-            shiftId = shiftId,
-            visibleId = visibleId
+            shiftId = shiftId
         )
         findNavController().navigate(action)
     }
 
+    /**
+     * Deletes the current shift and returns to the previous screen.
+     */
     fun deleteShift() {
         viewModel.deleteShift()
         findNavController().popBackStack()

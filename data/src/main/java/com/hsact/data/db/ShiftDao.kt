@@ -20,6 +20,13 @@ interface ShiftDao {
     @Query("SELECT * FROM shiftentity WHERE id = :id LIMIT 1")
     fun getShiftById(id: Int): Flow<ShiftEntity?>
 
+    /**
+     * Returns the sequence number of a shift based on its ID.
+     * The sequence number is calculated as the count of shifts with an ID less than or equal to the given ID.
+     */
+    @Query("SELECT COUNT(*) FROM shiftentity WHERE id <= :id")
+    fun getShiftSequenceNumber(id: Int): Flow<Int>
+
     @Query("SELECT * FROM shiftentity ORDER BY id DESC LIMIT 1")
     fun getLastShift(): Flow<ShiftEntity?>
 

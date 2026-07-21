@@ -12,14 +12,18 @@ import com.hsact.taxilog.R
 import com.hsact.taxilog.ui.shift.mappers.toUi
 import java.util.Locale
 
+/**
+ * Adapter for the shift log list.
+ * Displays shifts with a calculated sequence number for the user.
+ */
 class RecyclerAdapter(
-    private val items: List<Pair<Int, Shift>>,
+    private val items: List<Shift>,
     private val settings: UserSettings,
-    private val onItemClick: (visibleId: Int, shift: Shift) -> Unit,
-    private val onItemMenuClick: (visibleId: Int, shift: Shift) -> Unit,
+    private val onItemClick: (shift: Shift) -> Unit,
+    private val onItemMenuClick: (visibleNumber: Int, shift: Shift) -> Unit,
 ) :
     RecyclerView.Adapter<RecyclerAdapter.ShiftViewHolder>() {
-    inner class ShiftViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ShiftViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val textId: TextView = itemView.findViewById(R.id.textShiftNumber1)
         val textDate: TextView = itemView.findViewById(R.id.textDate1)
@@ -41,11 +45,12 @@ class RecyclerAdapter(
 
     override fun onBindViewHolder(holder: ShiftViewHolder, index: Int) {
         val locale = Locale.getDefault()
-        val shift = items[index].second.toUi(
+        val shift = items[index].toUi(
             locale,
             settings.currency ?: CurrencySymbolMode.fromLocale(Locale.getDefault())
         )
-        holder.textId.text = (items.size - index).toString()
+        val visibleNumber = itemCount - index
+        holder.textId.text = visibleNumber.toString()
         holder.textDate.text = shift.dateBegin
         holder.textTime.text = shift.duration
         holder.textEarnings.text = shift.earnings
@@ -56,12 +61,11 @@ class RecyclerAdapter(
         holder.textProfit.text = shift.profit
 
         holder.itemView.setOnClickListener {
-            onItemClick(items[index].first, items[index].second)
-            true
+            onItemClick(items[index])
         }
 
         holder.itemView.setOnLongClickListener {
-            onItemMenuClick(items[index].first, items[index].second)
+            onItemMenuClick(visibleNumber, items[index])
             true
         }
     }

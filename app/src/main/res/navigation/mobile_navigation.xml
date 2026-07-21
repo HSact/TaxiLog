@@ -13,10 +13,18 @@
 
         <action
             android:id="@+id/action_homeFragment_to_addShift"
-            app:destination="@id/shiftForm" />
+            app:destination="@id/shiftForm"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_navigation_home_to_shiftDetails"
-            app:destination="@id/shiftDetailFragment" />
+            app:destination="@id/shiftDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_navigation_home_to_settingsActivity"
             app:destination="@id/settingsActivity" />
@@ -40,13 +48,13 @@
         tools:layout="@layout/fragment_shift_form">
         <action
             android:id="@+id/action_shiftForm_to_home_fragment"
-            app:destination="@id/navigation_home" />
+            app:destination="@id/navigation_home"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
         <argument
             android:name="shiftId"
-            app:argType="integer"
-            app:defaultValue="-1" />
-        <argument
-            android:name="visibleId"
             app:argType="integer"
             app:defaultValue="-1" />
     </fragment>
@@ -57,10 +65,18 @@
         tools:layout="@layout/fragment_log">
         <action
             android:id="@+id/action_logFragment_to_shiftDetails"
-            app:destination="@id/shiftDetailFragment" />
+            app:destination="@id/shiftDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_logFragment_to_shiftForm"
-            app:destination="@id/shiftForm" />
+            app:destination="@id/shiftForm"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -71,22 +87,26 @@
             android:name="shiftId"
             app:argType="integer"
             app:defaultValue="-1" />
-        <argument
-            android:name="visibleId"
-            app:argType="integer"
-            app:defaultValue="-1" />
         <action
             android:id="@+id/action_shiftDetailFragment_to_shiftForm"
-            app:destination="@id/shiftForm" />
+            app:destination="@id/shiftForm"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <action
         android:id="@+id/action_global_navigation_home"
-        app:destination="@id/navigation_home" />
+        app:destination="@id/navigation_home"
+        app:enterAnim="@anim/fade_in"
+        app:exitAnim="@anim/fade_out" />
 
     <action
         android:id="@+id/action_global_navigation_log"
-        app:destination="@id/navigation_log" />
+        app:destination="@id/navigation_log"
+        app:enterAnim="@anim/fade_in"
+        app:exitAnim="@anim/fade_out" />
     <activity
         android:id="@+id/settingsActivity"
         android:name="com.hsact.taxilog.ui.activities.settings.SettingsActivity"

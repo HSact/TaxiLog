@@ -58,17 +58,14 @@ class LogFragment : Fragment() {
                     }
 
                     if (viewModel.settings.value != null) {
-                        val shiftListWithVisibleId = shiftList.mapIndexed { index, shift ->
-                            Pair(shiftList.size - index, shift)
-                        }
                         binding.recyclerView.adapter = RecyclerAdapter(
-                            shiftListWithVisibleId,
+                            shiftList,
                             settings = viewModel.settings.value!!,
-                            onItemClick = { visibleId, shift ->
-                                onClickElement(shift, visibleId)
+                            onItemClick = { shift ->
+                                onClickElement(shift)
                             },
-                            onItemMenuClick = { visibleId, shift ->
-                                onLongClickElement(shift, visibleId)
+                            onItemMenuClick = { visibleNumber, shift ->
+                                onLongClickElement(shift, visibleNumber)
                             }
                         )
                         // Restore the RecyclerView scroll state
@@ -117,42 +114,55 @@ class LogFragment : Fragment() {
         viewModel.handleIntent(LogIntent.UpdateList)
     }
 
-    private fun onClickElement(shift: Shift, visibleId: Int) {
+    /**
+     * Handles navigation to the shift details screen.
+     * @param shift The selected shift.
+     */
+    private fun onClickElement(shift: Shift) {
         val action = LogFragmentDirections.actionLogFragmentToShiftDetails(
-            shiftId = shift.id,
-            visibleId = visibleId
+            shiftId = shift.id
         )
         findNavController().navigate(action)
     }
 
-    private fun onLongClickElement(shift: Shift, visibleId: Int) {
+    /**
+     * Shows a context menu for editing or deleting a shift.
+     * @param shift The selected shift.
+     * @param visibleNumber The sequence number to show to the user.
+     */
+    private fun onLongClickElement(shift: Shift, visibleNumber: Int) {
         val items = arrayOf(getString(R.string.edit), getString(R.string.delete))
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("${getString(R.string.edit_or_delete_shift)} ${visibleId}?")
-            .setItems(items) { _, which -> onPopUpMenuClicked(which, shift, visibleId) }
+            .setTitle("${getString(R.string.edit_or_delete_shift)} $visibleNumber?")
+            .setItems(items) { _, which -> onPopUpMenuClicked(which, shift, visibleNumber) }
             .show()
     }
 
-    private fun onPopUpMenuClicked(item: Int, shift: Shift, visibleId: Int) {
+    private fun onPopUpMenuClicked(item: Int, shift: Shift, visibleNumber: Int) {
         when (item) {
-            0 -> editShift(shift, visibleId)
-            1 -> deleteShift(shift, visibleId)
+            0 -> editShift(shift)
+            1 -> deleteShift(shift, visibleNumber)
         }
     }
 
-    private fun editShift(shift: Shift, visibleId: Int) {
+    /**
+     * Navigates to the shift form to edit the selected shift.
+     */
+    private fun editShift(shift: Shift) {
         val action = LogFragmentDirections.actionLogFragmentToShiftForm(
-            shiftId = shift.id,
-            visibleId = visibleId
+            shiftId = shift.id
         )
         findNavController().navigate(action)
     }
 
-    private fun deleteShift(shift: Shift, visibleId: Int) {
+    /**
+     * Deletes the selected shift and shows a confirmation toast.
+     */
+    private fun deleteShift(shift: Shift, visibleNumber: Int) {
         viewModel.handleIntent(LogIntent.DeleteShift(shift))
         Toast.makeText(
             requireContext(),
-            getString(R.string.shift_deleted_successfully, visibleId.toString()), Toast.LENGTH_SHORT
+            getString(R.string.shift_deleted_successfully, visibleNumber.toString()), Toast.LENGTH_SHORT
         ).show()
     }
 

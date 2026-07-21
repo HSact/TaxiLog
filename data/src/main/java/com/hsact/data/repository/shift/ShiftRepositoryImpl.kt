@@ -29,7 +29,11 @@ class ShiftRepositoryImpl @Inject constructor(
     }
 
     override fun getShift(id: Int): Flow<Shift?> {
-        return shiftRepositoryLocal.getShift(id)
+        return shiftRepositoryLocal.getShiftById(id)
+    }
+
+    override fun getShiftSequenceNumber(id: Int): Flow<Int> {
+        return shiftRepositoryLocal.getShiftSequenceNumberById(id)
     }
 
     override fun getLastShift() =

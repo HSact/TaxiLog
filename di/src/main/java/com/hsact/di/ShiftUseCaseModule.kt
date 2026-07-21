@@ -7,6 +7,7 @@ import com.hsact.domain.usecase.shift.DeleteShiftUseCase
 import com.hsact.domain.usecase.shift.GetAllShiftsUseCase
 import com.hsact.domain.usecase.shift.GetLastShiftUseCase
 import com.hsact.domain.usecase.shift.GetShiftByIdUseCase
+import com.hsact.domain.usecase.shift.GetShiftSequenceNumberUseCase
 import com.hsact.domain.usecase.shift.GetShiftsInRangeUseCase
 import com.hsact.domain.usecase.shift.SyncShiftsUseCase
 import com.hsact.domain.usecase.shift.UpdateShiftUseCase
@@ -35,6 +36,11 @@ object ShiftUseCaseModule {
     ): GetShiftByIdUseCase = GetShiftByIdUseCase(repository)
 
     @Provides
+    fun provideGetShiftSequenceNumberUseCase(
+        repository: ShiftRepository
+    ): GetShiftSequenceNumberUseCase = GetShiftSequenceNumberUseCase(repository)
+
+    @Provides
     fun provideAddShiftUseCase(
         repository: ShiftRepository
     ): AddShiftUseCase = AddShiftUseCase(repository)
@@ -47,20 +53,20 @@ object ShiftUseCaseModule {
     @Provides
     fun provideUpdateShiftUseCase(
         repository: ShiftRepository
-    ): DeleteAllShiftsUseCase = DeleteAllShiftsUseCase(repository)
+    ): UpdateShiftUseCase = UpdateShiftUseCase(repository)
 
     @Provides
     fun provideDeleteAllShiftsUseCase(
         repository: ShiftRepository
-    ): GetLastShiftUseCase = GetLastShiftUseCase(repository)
+    ): DeleteAllShiftsUseCase = DeleteAllShiftsUseCase(repository)
 
     @Provides
     fun provideGetLastShiftUseCase(
         repository: ShiftRepository
-    ): GetShiftsInRangeUseCase = GetShiftsInRangeUseCase(repository)
+    ): GetLastShiftUseCase = GetLastShiftUseCase(repository)
 
     @Provides
     fun provideGetShiftsInRangeUseCase(
         repository: ShiftRepository
-    ): UpdateShiftUseCase = UpdateShiftUseCase(repository)
+    ): GetShiftsInRangeUseCase = GetShiftsInRangeUseCase(repository)
 }

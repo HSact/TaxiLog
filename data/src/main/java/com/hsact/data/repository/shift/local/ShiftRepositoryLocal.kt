@@ -7,7 +7,11 @@ import java.time.LocalDateTime
 interface ShiftRepositoryLocal {
     fun getAllShifts(): Flow<List<Shift>>
     fun getShiftsInRange(start: LocalDateTime?, end: LocalDateTime?): Flow<List<Shift>>
-    fun getShift(id: Int): Flow<Shift?>
+    fun getShiftById(id: Int): Flow<Shift?>
+    /**
+     * Returns the sequence number of a shift (based on creation order) reactively.
+     */
+    fun getShiftSequenceNumberById(id: Int): Flow<Int>
     fun getLastShift(): Flow<Shift?>
     suspend fun getUnsyncedShifts(): List<Shift>
     suspend fun getByRemoteId(remoteId: String): Shift?
