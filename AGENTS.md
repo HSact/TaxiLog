@@ -97,3 +97,4 @@ When assisting with this project:
 - **Check DI**: Ensure new components are properly annotated with `@Inject` and provided in Hilt modules if needed.
 - **Lifecycle Awareness**: Use `viewModelScope` for coroutines in ViewModels and `collectAsStateWithLifecycle` in Compose.
 - **Documentation**: Provide **KDoc** for all new classes, interfaces, and non-obvious public methods. KDoc for internal or private methods is only required if the logic is complex.
+- **Theming & Colors**: Do not hardcode colors (e.g., `Color.Black`, `Color(0xFF...)`). Always use theme-aware colors from `MaterialTheme.colorScheme` (e.g., `onSurface`, `primary`) to ensure support for both light and dark themes.
