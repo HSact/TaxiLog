@@ -9,13 +9,16 @@ import com.hsact.domain.usecase.shift.GetLastShiftUseCase
 import com.hsact.domain.usecase.shift.GetShiftsInRangeUseCase
 import com.hsact.domain.utils.centsToDollars
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 import java.time.YearMonth
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     getAllSettingsUseCase: GetAllSettingsUseCase,
@@ -70,13 +73,15 @@ class HomeViewModel @Inject constructor(
         }
         // Подписка на список смен для календаря (выбранный месяц)
         viewModelScope.launch {
-            calendarMonth.collect { month ->
-                val start = month.atDay(1).atStartOfDay()
-                val end = month.atEndOfMonth().atTime(LocalTime.MAX)
-                getShiftsInRangeUseCase(start, end).collect { list ->
+            calendarMonth
+                .flatMapLatest { month ->
+                    val start = month.atDay(1).atStartOfDay()
+                    val end = month.atEndOfMonth().atTime(LocalTime.MAX)
+                    getShiftsInRangeUseCase(start, end)
+                }
+                .collect { list ->
                     _calendarShifts.value = list
                 }
-            }
         }
     }
 

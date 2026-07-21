@@ -1,5 +1,8 @@
 package com.hsact.taxilog.ui.cards
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,10 +23,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -105,6 +110,19 @@ private fun CalendarGrid(
     val daysInMonth = month.lengthOfMonth()
     val firstDayOfMonth = month.atDay(1).dayOfWeek
 
+    val scale = remember { Animatable(0f) }
+
+    LaunchedEffect(month) {
+        scale.snapTo(0f)
+        scale.animateTo(
+            targetValue = 1f,
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessMediumLow
+            )
+        )
+    }
+
     // Calculate offset based on firstDayOfWeek
     val offset = ((firstDayOfMonth.value - firstDayOfWeek.value) + 7) % 7
 
@@ -153,6 +171,10 @@ private fun CalendarGrid(
                                 Box(
                                     modifier = Modifier
                                         .size(36.dp)
+                                        .graphicsLayer {
+                                            scaleX = scale.value
+                                            scaleY = scale.value
+                                        }
                                         .background(MaterialTheme.colorScheme.secondary, CircleShape)
                                         .clickable { onShiftsClick(dayShifts) },
                                     contentAlignment = Alignment.Center
