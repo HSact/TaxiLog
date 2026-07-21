@@ -42,10 +42,12 @@
     <string name="last_shift">Last shift</string>
     <string name="date">Date</string>
     <string name="costs">Costs</string>
+    <string name="calendar">Calendar</string>
     <string name="time">Time</string>
     <string name="total">Total</string>
     <string name="per_hour">Per hour</string>
     <string name="new_shift">New shift</string>
+    <string name="shift">Shift</string>
     <string name="profit">Profit</string>
     <string name="id">ID</string>
     <string name="delete_all">Delete all</string>
@@ -127,6 +129,7 @@
     <string name="number">Number</string>
     <string name="shift_number">Shift #</string>
     <string name="goal_per_month">Goal per month</string>
+    <string name="select_shift">Select shift</string>
 
     <string name="about_app_description">TaxiLog is a simple and efficient tool designed specifically for taxi drivers to track their shifts, earnings, and expenses.</string>
     <string name="about_app_purpose">The app helps you keep a detailed log of your work, analyze your financial performance, and stay on track with your monthly goals.</string>
