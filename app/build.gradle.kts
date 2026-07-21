@@ -8,8 +8,8 @@ plugins {
     alias(libs.plugins.crashlytics)
 }
 
-val vName = "1.4.1"
-val vCode = 13
+val vName = "1.5.0"
+val vCode = 14
 android {
     namespace = "com.hsact.taxilog"
     compileSdk = libs.versions.compileSdk.get().toInt()
