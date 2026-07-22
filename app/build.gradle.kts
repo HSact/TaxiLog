@@ -9,7 +9,7 @@ plugins {
 }
 
 val vName = "1.5.0"
-val vCode = 14
+val vCode = 15
 android {
     namespace = "com.hsact.taxilog"
     compileSdk = libs.versions.compileSdk.get().toInt()

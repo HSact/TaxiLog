@@ -10,6 +10,7 @@
     <string name="title_my_shifts">Смены</string>
     <string name="settings_interface">Интерфейс</string>
     <string name="settings_language">Язык</string>
+    <string name="settings_first_day_of_week">Первый день недели</string>
     <string name="settings_theme">Тема</string>
     <string name="settings_auto">Авто</string>
     <string name="settings_light">Светлая</string>
@@ -130,6 +131,16 @@
     <string name="shift_number">Смена №</string>
     <string name="goal_per_month">Цель в месяц</string>
     <string name="select_shift">Выберите смену</string>
+
+    <string-array name="days_of_week">
+        <item>Понедельник</item>
+        <item>Вторник</item>
+        <item>Среда</item>
+        <item>Четверг</item>
+        <item>Пятница</item>
+        <item>Суббота</item>
+        <item>Воскресенье</item>
+    </string-array>
 
     <string name="about_app_description">TaxiLog — это простой и эффективный инструмент, разработанный специально для водителей такси для отслеживания смен, доходов и расходов.</string>
     <string name="about_app_purpose">Приложение помогает вести детальный учет вашей работы, анализировать финансовые показатели и следить за выполнением ежемесячных целей.</string>

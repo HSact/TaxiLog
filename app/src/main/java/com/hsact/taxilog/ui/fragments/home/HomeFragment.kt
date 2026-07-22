@@ -56,6 +56,7 @@ class HomeFragment : Fragment() {
             CardCalendar(
                 viewModel.calendarMonth,
                 viewModel.calendarShifts,
+                viewModel.settings.firstDayOfWeek,
                 { viewModel.onPreviousMonth() },
                 { viewModel.onNextMonth() }
             ) { shifts ->

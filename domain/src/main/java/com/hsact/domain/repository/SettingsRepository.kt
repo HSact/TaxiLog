@@ -22,6 +22,7 @@ interface SettingsRepository {
     val schedule: String?
     val taxes: Boolean
     val taxRate: String?
+    val firstDayOfWeek: Int
 
     fun getAllSettings(): UserSettings
     fun updateSetting(key: String, value: Any?)

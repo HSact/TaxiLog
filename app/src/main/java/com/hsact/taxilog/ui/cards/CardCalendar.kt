@@ -39,6 +39,7 @@ import com.hsact.domain.model.Shift
 import com.hsact.taxilog.R
 import com.hsact.taxilog.ui.components.CardHeader
 import kotlinx.coroutines.flow.StateFlow
+import java.time.DayOfWeek
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.time.temporal.WeekFields
@@ -47,6 +48,7 @@ import java.time.temporal.WeekFields
 fun CardCalendar(
     calendarMonthFlow: StateFlow<YearMonth>,
     shiftsFlow: StateFlow<List<Shift>>,
+    firstDayOfWeek: Int,
     onPreviousMonth: () -> Unit,
     onNextMonth: () -> Unit,
     onShiftsClick: (List<Shift>) -> Unit,
@@ -94,7 +96,7 @@ fun CardCalendar(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            CalendarGrid(month, shiftList, onShiftsClick)
+            CalendarGrid(month, shiftList, firstDayOfWeek, onShiftsClick)
         }
     }
 }
@@ -103,10 +105,15 @@ fun CardCalendar(
 private fun CalendarGrid(
     month: YearMonth,
     shifts: List<Shift>,
+    firstDayOfWeekSetting: Int,
     onShiftsClick: (List<Shift>) -> Unit,
 ) {
     val locale = LocalConfiguration.current.locales[0]
-    val firstDayOfWeek = WeekFields.of(locale).firstDayOfWeek
+    val firstDayOfWeek = if (firstDayOfWeekSetting > 0) {
+        DayOfWeek.of(firstDayOfWeekSetting)
+    } else {
+        WeekFields.of(locale).firstDayOfWeek
+    }
     val daysInMonth = month.lengthOfMonth()
     val firstDayOfMonth = month.atDay(1).dayOfWeek
 

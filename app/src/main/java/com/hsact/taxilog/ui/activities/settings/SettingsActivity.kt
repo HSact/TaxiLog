@@ -39,6 +39,7 @@ import com.hsact.taxilog.databinding.SettingsActivityBinding
 import com.hsact.taxilog.ui.activities.MainActivity
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.temporal.WeekFields
 import java.util.Locale
 import javax.inject.Inject
 
@@ -59,6 +60,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var switchTaxes: MaterialSwitch
 
     private lateinit var spinnerLang: Spinner
+    private lateinit var spinnerFirstDayOfWeek: Spinner
     private lateinit var spinnerCurrency: Spinner
     private lateinit var radioTheme: RadioGroup
     private lateinit var radioDefault: RadioButton
@@ -252,6 +254,7 @@ class SettingsActivity : AppCompatActivity() {
         switchTaxes = binding.switchTaxes
 
         spinnerLang = binding.spinnerLang
+        spinnerFirstDayOfWeek = binding.spinnerFirstDayOfWeek
         spinnerCurrency = binding.spinnerCurrency
 
         radioTheme = binding.radioTheme
@@ -294,6 +297,14 @@ class SettingsActivity : AppCompatActivity() {
     private fun updateUiWithSettings() {
         val settings = viewModel.settings.value ?: return
         setupLanguageSpinner(settings.language)
+        
+        val firstDayValue = if (settings.firstDayOfWeek > 0) {
+            settings.firstDayOfWeek
+        } else {
+            WeekFields.of(Locale.getDefault()).firstDayOfWeek.value
+        }
+        spinnerFirstDayOfWeek.setSelection(firstDayValue - 1)
+
         setupCurrencySpinner(settings.currency)
         if (!(settings.isConfigured)) {
             return
@@ -404,7 +415,8 @@ class SettingsActivity : AppCompatActivity() {
             schedule = getSelectedSchedule(),
             taxes = switchTaxes.isChecked,
             taxRate = textTaxRate.text.toString(),
-            fuelPrice = textFuelCost.text.toString()
+            fuelPrice = textFuelCost.text.toString(),
+            firstDayOfWeek = spinnerFirstDayOfWeek.selectedItemPosition + 1
         )
         viewModel.saveSettings(settingsData)
     }

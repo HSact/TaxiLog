@@ -92,7 +92,10 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
-                    android:text="@string/settings_language" />
+                    android:maxWidth="1dp"
+                    android:paddingEnd="16dp"
+                    android:text="@string/settings_language"
+                    tools:ignore="RtlSymmetry" />
 
                 <Spinner
                     android:id="@+id/spinnerLang"
@@ -114,12 +117,44 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/textFirstDayOfWeek"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:maxWidth="1dp"
+                    android:paddingEnd="16dp"
+                    android:text="@string/settings_first_day_of_week"
+                    tools:ignore="RtlSymmetry" />
+
+                <Spinner
+                    android:id="@+id/spinnerFirstDayOfWeek"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:dropDownWidth="wrap_content"
+                    android:entries="@array/days_of_week"
+                    android:gravity="center_vertical"
+                    android:minWidth="190dp"
+                    android:minHeight="40dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:minHeight="50dp"
+                android:orientation="horizontal">
+
+                <TextView
                     android:id="@+id/textSelectCurrency"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
-                    android:text="@string/currency" />
+                    android:maxWidth="1dp"
+                    android:paddingEnd="16dp"
+                    android:text="@string/currency"
+                    tools:ignore="RtlSymmetry" />
 
                 <Spinner
                     android:id="@+id/spinnerCurrency"
@@ -145,7 +180,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="@string/settings_theme" />
+                    android:maxWidth="1dp"
+                    android:paddingEnd="16dp"
+                    android:text="@string/settings_theme"
+                    tools:ignore="RtlSymmetry" />
 
                 <RadioGroup
                     android:id="@+id/radioTheme"
@@ -461,7 +499,10 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
-                    android:text="@string/settings_schedule" />
+                    android:maxWidth="1dp"
+                    android:paddingEnd="16dp"
+                    android:text="@string/settings_schedule"
+                    tools:ignore="RtlSymmetry" />
 
                 <RadioGroup
                     android:id="@+id/radioSchedule"

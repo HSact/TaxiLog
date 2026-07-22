@@ -77,6 +77,9 @@ class SettingsRepositoryImpl @Inject constructor(
     override val taxRate: String?
         get() = sharedPreferences.getString("Tax_rate", null)
 
+    override val firstDayOfWeek: Int
+        get() = sharedPreferences.getInt("FirstDayOfWeek", 0)
+
     override fun getAllSettings(): UserSettings {
         return UserSettings(
             isConfigured = isConfigured,
@@ -93,7 +96,8 @@ class SettingsRepositoryImpl @Inject constructor(
             schedule = schedule,
             taxes = taxes,
             taxRate = taxRate,
-            fuelPrice = fuelPrice
+            fuelPrice = fuelPrice,
+            firstDayOfWeek = firstDayOfWeek
         )
     }
 
@@ -130,5 +134,6 @@ class SettingsRepositoryImpl @Inject constructor(
         updateSetting("Taxes", settings.taxes)
         updateSetting("Tax_rate", settings.taxRate)
         updateSetting("Fuel_price", settings.fuelPrice)
+        updateSetting("FirstDayOfWeek", settings.firstDayOfWeek)
     }
 }
