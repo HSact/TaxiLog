@@ -15,16 +15,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputLayout
 import com.hsact.domain.model.settings.CurrencySymbolMode
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentShiftFormBinding
-import com.hsact.taxilog.ui.activities.MainActivity
 import com.hsact.taxilog.ui.components.DatePickerFragment
 import com.hsact.taxilog.ui.components.TimePickerFragment
 import com.hsact.taxilog.ui.shift.mappers.millisToHours
@@ -38,7 +38,6 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
     private val viewModel: ShiftFormViewModel by viewModels()
 
     private var shiftId: Int = -1
-    private var visibleId: Int = -1
 
     private lateinit var scrollView: ScrollView
     private lateinit var editDate: EditText
@@ -73,15 +72,10 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
     private var _binding: FragmentShiftFormBinding? = null
     private val binding get() = _binding!!
 
-    private val botNav: BottomNavigationView?
-        get() = (activity as? MainActivity)?.getBottomNav()
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             shiftId = it.getInt("shiftId", -1)
-            visibleId = it.getInt("visibleId", -1)
         }
     }
 
@@ -145,7 +139,6 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        botNav?.isVisible = false
         mileageWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -163,15 +156,30 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         editMileage.addTextChangedListener(mileageWatcher)
         if (shiftId != -1) {
             viewModel.loadShift(shiftId)
-            (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
-                if (visibleId != -1) getString(R.string.title_edit_shift, visibleId)
-                else getString(R.string.last_shift)
         } else {
             (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
                 getString(R.string.title_new_shift)
         }
-        viewModel.uiState.observe(viewLifecycleOwner)
-        { shift -> updateUI(shift) }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { shift ->
+                    updateUI(shift)
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.sequenceNumber.collect { number ->
+                    if (number != null && number != -1) {
+                        (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
+                            getString(R.string.title_edit_shift, number)
+                    } else if (shiftId != -1) {
+                        (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
+                            getString(R.string.last_shift)
+                    }
+                }
+            }
+        }
 
         editDate.setOnClickListener {
             DatePickerFragment.pickDate(
@@ -217,7 +225,7 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
     }
 
     private fun updateShiftField(fieldSetter: (UiState) -> UiState) {
-        val currentShift = viewModel.uiState.value ?: return
+        val currentShift = viewModel.uiState.value
         val updated = fieldSetter(currentShift)
         viewModel.updateShift(updated)
     }
@@ -233,7 +241,7 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         if (!shift.note.isEmpty()) {
             editNote.setText(shift.note)
         }
-        if (viewModel.uiState.value?.fuelCost != 0.0) {
+        if (viewModel.uiState.value.fuelCost != 0.0) {
             editFuelCost.setText(shift.fuelCost.toString())
         }
         if (editBreakStart.text.isNotEmpty() || editBreakEnd.text.isNotEmpty()) {
@@ -328,12 +336,15 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         showSubmitMessage(
             getString(
                 R.string.you_earn_in_hours,
-                viewModel.uiState.value?.profit.toString(),
-                (viewModel.uiState.value?.totalTime ?: 0).millisToHours(Locale.getDefault())
+                viewModel.uiState.value.profit.toString(),
+                viewModel.uiState.value.totalTime.millisToHours(Locale.getDefault())
             )
         )
     }
 
+    /**
+     * Shows a confirmation dialog before submitting the shift data.
+     */
     private fun showSubmitMessage(warningCode: String) {
         val alert = MaterialAlertDialogBuilder(requireContext())
         alert.setTitle(getString(R.string.submit))
@@ -347,6 +358,9 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         alert.show()
     }
 
+    /**
+     * Submits the shift data to the database and navigates back to the home screen.
+     */
     private fun submit() {
         viewModel.submit()
         Toast.makeText(activity,
@@ -354,16 +368,9 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
             Toast.LENGTH_SHORT)
             .show()
         findNavController().navigate(R.id.action_shiftForm_to_home_fragment)
-        botNav?.isVisible = true
-    }
-
-    override fun onResume() {
-        super.onResume()
-        botNav?.isVisible = false
     }
 
     override fun onDestroyView() {
-        botNav?.isVisible = true
         _binding = null
         super.onDestroyView()
     }

@@ -29,7 +29,7 @@ class ShiftRepositoryLocalImpl @Inject constructor(
             .map { list -> list.map { it.toDomain() } }
     }
 
-    override fun getShift(id: Int): Flow<Shift?> =
+    override fun getShiftById(id: Int): Flow<Shift?> =
         shiftDao.getShiftById(id)
             .map { entity ->
                 Log.d(
@@ -38,6 +38,9 @@ class ShiftRepositoryLocalImpl @Inject constructor(
                 )
                 entity?.toDomain()
             }
+
+    override fun getShiftSequenceNumberById(id: Int): Flow<Int> =
+        shiftDao.getShiftSequenceNumber(id)
 
     override fun getLastShift(): Flow<Shift?> =
         shiftDao.getLastShift()

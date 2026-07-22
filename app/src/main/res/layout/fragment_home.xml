@@ -22,7 +22,7 @@
             tools:context=".ui.fragments.home.HomeFragment">
 
             <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/card_1"
+                android:id="@+id/card_last_shift"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -31,7 +31,7 @@
                 android:layout_height="16dp" />
 
             <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/card_2"
+                android:id="@+id/card_goal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -40,7 +40,16 @@
                 android:layout_height="16dp" />
 
             <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/card_3"
+                android:id="@+id/card_calendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
+
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/card_graph"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -60,8 +69,9 @@
         android:text="@string/new_shift"
         android:icon="@android:drawable/ic_input_add"
         android:contentDescription="@string/new_shift"
+        android:textColor="?attr/colorOnPrimary"
         app:iconPadding="8dp"
-        app:backgroundTint="?android:attr/colorBackground"
+        app:backgroundTint="?attr/colorPrimary"
         app:iconTint="?attr/colorOnPrimary"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
         tools:ignore="ImageContrastCheck" />

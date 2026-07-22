@@ -8,8 +8,8 @@ plugins {
     alias(libs.plugins.crashlytics)
 }
 
-val vName = "1.4.1"
-val vCode = 13
+val vName = "1.5.0"
+val vCode = 15
 android {
     namespace = "com.hsact.taxilog"
     compileSdk = libs.versions.compileSdk.get().toInt()
@@ -62,7 +62,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
@@ -92,6 +91,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.material.icons.core)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.compose.charts)
@@ -102,7 +102,6 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.kotlin)
-    testImplementation(libs.androidx.core.testing)
 
     debugImplementation(libs.androidx.ui.tooling)
     

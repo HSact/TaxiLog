@@ -1,8 +1,6 @@
 package com.hsact.taxilog.ui.fragments.shiftForm
 
 import android.annotation.SuppressLint
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.domain.model.Shift
@@ -12,6 +10,7 @@ import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.domain.usecase.settings.GetDeviceIdUseCase
 import com.hsact.domain.usecase.shift.AddShiftUseCase
 import com.hsact.domain.usecase.shift.GetShiftByIdUseCase
+import com.hsact.domain.usecase.shift.GetShiftSequenceNumberUseCase
 import com.hsact.domain.utils.DeprecatedDateFormatter
 import com.hsact.domain.utils.centsToDollars
 import com.hsact.domain.utils.toShortDate
@@ -19,6 +18,9 @@ import com.hsact.domain.utils.toShortTime
 import com.hsact.taxilog.ui.shift.ShiftInputModel
 import com.hsact.taxilog.ui.shift.mappers.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -34,9 +36,16 @@ class ShiftFormViewModel @Inject constructor(
     private val getDeviceIdUseCase: GetDeviceIdUseCase,
     private val addShiftUseCase: AddShiftUseCase,
     private val getShiftByIdUseCase: GetShiftByIdUseCase,
+    private val getShiftSequenceNumberUseCase: GetShiftSequenceNumberUseCase,
 ) : ViewModel() {
-    private val _uiState = MutableLiveData<UiState>()
-    val uiState: LiveData<UiState> get() = _uiState
+    private val _uiState = MutableStateFlow(UiState())
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    private val _sequenceNumber = MutableStateFlow<Int?>(null)
+    /**
+     * The reactive sequence number of the shift for display.
+     */
+    val sequenceNumber: StateFlow<Int?> = _sequenceNumber
 
     val settings: UserSettings = getAllSettingsUseCase.invoke()
 
@@ -65,11 +74,14 @@ class ShiftFormViewModel @Inject constructor(
         _uiState.value = uiState
     }
 
+    /**
+     * Attempts to guess the fuel cost based on mileage, fuel price, and consumption settings.
+     */
     fun guessFuelCost() {
         if (!settings.isConfigured) return
-        if (_uiState.value?.mileage == 0.0) return
+        if (_uiState.value.mileage == 0.0) return
         if (settings.fuelPrice.isNullOrEmpty() || settings.consumption.isNullOrEmpty()) return
-        var currentShift = _uiState.value ?: return
+        var currentShift = _uiState.value
         val fuelPrice: Double = (settings.fuelPrice!!).toDouble()
         val consumption = (settings.consumption!!).toDouble()
         if (fuelPrice == 0.0 || consumption == 0.0) {
@@ -86,10 +98,16 @@ class ShiftFormViewModel @Inject constructor(
         _uiState.value = currentShift
     }
 
+    /**
+     * Updates the current UI state with the provided [UiState].
+     */
     fun updateShift(shift: UiState) {
         _uiState.value = shift
     }
 
+    /**
+     * Calculates the shift profit and total time based on input values.
+     */
     fun calculateShift(
         earnings: Double,
         tips: Double,
@@ -98,7 +116,7 @@ class ShiftFormViewModel @Inject constructor(
         mileage: Double,
         note: String,
     ) {
-        var currentShift = _uiState.value ?: return
+        var currentShift = _uiState.value
         currentShift = currentShift.copy(
             onlineTime = convertTimeToLong(currentShift.timeEnd) - convertTimeToLong(currentShift.timeBegin),
             mileage = mileage,
@@ -130,27 +148,30 @@ class ShiftFormViewModel @Inject constructor(
     }
 
     fun setMileage(mileage: Double) { //TODO: fix this
-        _uiState.value = _uiState.value?.copy(mileage = mileage)
+        _uiState.value = _uiState.value.copy(mileage = mileage)
         guessFuelCost()
     }
     fun setDate(date: String) {
-        _uiState.value = _uiState.value?.copy(date = date)
+        _uiState.value = _uiState.value.copy(date = date)
     }
     fun setTimeBegin(time: String) {
-        _uiState.value = _uiState.value?.copy(timeBegin = time)
+        _uiState.value = _uiState.value.copy(timeBegin = time)
     }
     fun setTimeEnd(time: String) {
-        _uiState.value = _uiState.value?.copy(timeEnd = time)
+        _uiState.value = _uiState.value.copy(timeEnd = time)
     }
     fun setBreakBegin(time: String) {
-        _uiState.value = _uiState.value?.copy(breakBegin = time)
+        _uiState.value = _uiState.value.copy(breakBegin = time)
     }
     fun setBreakEnd(time: String) {
-        _uiState.value = _uiState.value?.copy(breakEnd = time)
+        _uiState.value = _uiState.value.copy(breakEnd = time)
     }
 
+    /**
+     * Submits the shift data (insert or update) and pushes to remote if configured.
+     */
     fun submit() {
-        val uiState = _uiState.value ?: return
+        val uiState = _uiState.value
         val shiftInput = buildShiftInputModel(uiState)
         val deviceId = getDeviceIdUseCase.invoke()
         val remoteId =
@@ -214,7 +235,16 @@ class ShiftFormViewModel @Inject constructor(
         return (n * 100).roundToInt() / 100.toDouble()
     }
 
+    /**
+     * Loads the shift data and its sequence number reactively.
+     * @param id The technical ID of the shift.
+     */
     fun loadShift(id: Int) {
+        viewModelScope.launch {
+            getShiftSequenceNumberUseCase(id).collect { number ->
+                _sequenceNumber.value = number
+            }
+        }
         viewModelScope.launch {
             val shift = getShiftByIdUseCase(id).first() ?: return@launch
             _uiState.value = UiState(

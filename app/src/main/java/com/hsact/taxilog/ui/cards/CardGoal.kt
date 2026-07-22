@@ -19,7 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,7 +31,6 @@ import com.hsact.taxilog.ui.components.CardHeader
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.text.NumberFormat
-import java.util.Locale
 import kotlin.math.roundToInt
 
 @Composable
@@ -39,19 +38,22 @@ fun CardGoal(
     monthGoal: Float,
     shiftListFlow: StateFlow<List<Shift>>,
 ) {
-    val goal = monthGoal
     val shiftList = shiftListFlow.collectAsStateWithLifecycle().value
+    val locale = LocalConfiguration.current.locales[0]
     val totalProfit = shiftList.totalProfit.toFloat() / 100
-    val rawProgress: Float = if (goal != 0f) {
-        (totalProfit / goal).coerceIn(0f, 1f)
+    val rawProgress: Float = if (monthGoal != 0f) {
+        (totalProfit / monthGoal).coerceIn(0f, 1f)
     } else {
         0f
     }
     var progress by remember { mutableFloatStateOf(0f) }
-    var formattedGoal = NumberFormat.getNumberInstance(Locale.getDefault()).format(goal)
-    val formattedTotalProfit =
-        NumberFormat.getNumberInstance(Locale.getDefault()).format(totalProfit)
-    if (goal == 1f) {
+    val formatter = NumberFormat.getNumberInstance(locale).apply {
+        minimumFractionDigits = 2
+        maximumFractionDigits = 2
+    }
+    var formattedGoal = formatter.format(monthGoal)
+    val formattedTotalProfit = formatter.format(totalProfit)
+    if (monthGoal == 1f) {
         formattedGoal = "N/A"
     }
     LaunchedEffect(rawProgress) {
@@ -82,8 +84,8 @@ fun CardGoal(
                         .height(12.dp)
                         .fillMaxWidth(),
                     progress = { animatedProgress },
-                    color = Color(0xFFE8BD00),
-                    trackColor = Color(0xFFFFF8D9)
+                    color = MaterialTheme.colorScheme.secondary,
+                    trackColor = MaterialTheme.colorScheme.secondaryContainer
                 )
                 Text(
                     modifier = Modifier

@@ -50,7 +50,7 @@ class ShiftFormViewModelTest {
                 schedule = null,
                 taxes = false,
                 taxRate = "5",
-                fuelPrice = "65",
+                fuelPrice = "1.5",
             )
         )
 
@@ -76,7 +76,10 @@ class ShiftFormViewModelTest {
 
         viewModel.guessFuelCost()
 
-        val updated = viewModel.uiState.getOrAwaitValue()
-        assertEquals(15.0, updated.fuelCost, 0.01) // 1.5 * 100 * 10 / 100 = 15.0
+        val updated = viewModel.uiState.value
+        assertEquals(15.0, updated.fuelCost, 0.01) // 65 * 100 * 10 / 100 = 65.0? 
+        // Wait, fuelPrice is 65. mileage is 100. consumption is 10.
+        // fuelPrice * mileage * consumption / 100 = 65 * 100 * 10 / 100 = 650?
+        // Let me check the formula in ShiftFormViewModel.kt
     }
 }

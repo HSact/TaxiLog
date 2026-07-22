@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -25,10 +27,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    fun getBottomNav(): BottomNavigationView? {
-        return if (::binding.isInitialized) binding.navView else null
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -41,6 +39,11 @@ class MainActivity : AppCompatActivity() {
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            val isBottomNavVisible = when (destination.id) {
+                R.id.shiftForm, R.id.shiftDetailFragment -> false
+                else -> true
+            }
+            setBottomNavVisible(isBottomNavVisible)
             invalidateOptionsMenu()
         }
 
@@ -51,6 +54,24 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        navView.setOnItemSelectedListener { item ->
+            val options = NavOptions.Builder()
+                .setEnterAnim(R.anim.fade_in)
+                .setExitAnim(R.anim.fade_out)
+                .setPopEnterAnim(R.anim.fade_in)
+                .setPopExitAnim(R.anim.fade_out)
+                .setLaunchSingleTop(true)
+                .setPopUpTo(navController.graph.startDestinationId, false, saveState = true)
+                .setRestoreState(true)
+                .build()
+
+            if (item.itemId != navController.currentDestination?.id) {
+                navController.navigate(item.itemId, null, options)
+            }
+            true
+        }
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val navBarHeight = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
             view.setPadding(0, 0, 0, navBarHeight)
@@ -94,5 +115,30 @@ class MainActivity : AppCompatActivity() {
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(ContextWrapper.wrapContext(newBase))
+    }
+
+    /**
+     * Animates the BottomNavigationView visibility.
+     * Slides down to hide, slides up to show.
+     */
+    private fun setBottomNavVisible(visible: Boolean) {
+        val navView: BottomNavigationView = binding.navView
+        val duration = resources.getInteger(R.integer.anim_duration_short).toLong()
+
+        if (visible) {
+            navView.animate()
+                .translationY(0f)
+                .setDuration(duration)
+                .withStartAction { navView.isVisible = true }
+                .start()
+        } else {
+            // Handle case where height is not yet measured (e.g. rapid navigation on startup)
+            val height = if (navView.height > 0) navView.height.toFloat() else 200f
+            navView.animate()
+                .translationY(height)
+                .setDuration(duration)
+                .withEndAction { navView.isVisible = false }
+                .start()
+        }
     }
 }

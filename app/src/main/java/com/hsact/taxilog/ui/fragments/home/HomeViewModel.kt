@@ -9,13 +9,16 @@ import com.hsact.domain.usecase.shift.GetLastShiftUseCase
 import com.hsact.domain.usecase.shift.GetShiftsInRangeUseCase
 import com.hsact.domain.utils.centsToDollars
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 import java.time.YearMonth
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     getAllSettingsUseCase: GetAllSettingsUseCase,
@@ -30,6 +33,18 @@ class HomeViewModel @Inject constructor(
 
     private val _shiftListThisMonth = MutableStateFlow<List<Shift>>(emptyList())
     val shiftListThisMonth: StateFlow<List<Shift>> = _shiftListThisMonth
+
+    private val _calendarMonth = MutableStateFlow(YearMonth.now())
+    val calendarMonth: StateFlow<YearMonth> = _calendarMonth
+
+    private val _calendarShifts = MutableStateFlow<List<Shift>>(emptyList())
+    val calendarShifts: StateFlow<List<Shift>> = _calendarShifts
+
+    private val _shiftsForSelection = MutableStateFlow<List<Shift>>(emptyList())
+    /**
+     * The list of shifts currently selected for the user to choose from (e.g. in a BottomSheet).
+     */
+    val shiftsForSelection: StateFlow<List<Shift>> = _shiftsForSelection
 
     private val _chartData = MutableStateFlow(emptyList<Double>())
     val chartData: StateFlow<List<Double>> = _chartData
@@ -56,6 +71,33 @@ class HomeViewModel @Inject constructor(
                     calculateChart()    // пересчёт графика при каждом изменении
                 }
         }
+        // Подписка на список смен для календаря (выбранный месяц)
+        viewModelScope.launch {
+            calendarMonth
+                .flatMapLatest { month ->
+                    val start = month.atDay(1).atStartOfDay()
+                    val end = month.atEndOfMonth().atTime(LocalTime.MAX)
+                    getShiftsInRangeUseCase(start, end)
+                }
+                .collect { list ->
+                    _calendarShifts.value = list
+                }
+        }
+    }
+
+    fun onPreviousMonth() {
+        _calendarMonth.value = _calendarMonth.value.minusMonths(1)
+    }
+
+    fun onNextMonth() {
+        _calendarMonth.value = _calendarMonth.value.plusMonths(1)
+    }
+
+    /**
+     * Sets the shifts to be displayed for selection in the BottomSheet.
+     */
+    fun selectShifts(shifts: List<Shift>) {
+        _shiftsForSelection.value = shifts
     }
 
     fun calculateChart() {

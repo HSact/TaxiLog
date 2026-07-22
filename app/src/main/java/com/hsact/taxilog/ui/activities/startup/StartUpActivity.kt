@@ -47,6 +47,7 @@ class StartUpActivity : AppCompatActivity() {
 
     private val viewModel: StartUpViewModel by viewModels()
     private lateinit var settings: UserSettings
+    private var isInitialized = false
 
     private lateinit var binding: ActivityStartUpBinding
     private val logoDuration: Long = 1200
@@ -75,21 +76,25 @@ class StartUpActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.settings.observe(this) { settings ->
-            settings?.let { s ->
-                this.settings = s
-                val theme: String = s.theme ?: getCurrentTheme()
+        lifecycleScope.launch {
+            viewModel.settings.collect { settings ->
+                if (settings == null || isInitialized) return@collect
+                isInitialized = true
+
+                this@StartUpActivity.settings = settings
+                val theme: String = settings.theme ?: getCurrentTheme()
                 setTheme(theme)
+
                 binding.imageLogo.alpha = 0f
                 binding.buttonOkay.setOnClickListener {
-                    val intent = Intent(this, SettingsActivity::class.java)
+                    val intent = Intent(this@StartUpActivity, SettingsActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
                 }
 
                 binding.buttonNope.setOnClickListener {
-                    val intent = Intent(this, MainActivity::class.java)
+                    val intent = Intent(this@StartUpActivity, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
@@ -98,7 +103,7 @@ class StartUpActivity : AppCompatActivity() {
                 binding.imageLogo.animate().setDuration(logoDuration).alpha(1f)
 
                 val firebaseAuth = FirebaseAuth.getInstance()
-                val googleAccount = GoogleSignIn.getLastSignedInAccount(this)
+                val googleAccount = GoogleSignIn.getLastSignedInAccount(this@StartUpActivity)
 
                 if (firebaseAuth.currentUser != null) {
                     // 1. User is authenticated in Firebase → proceed
@@ -109,8 +114,7 @@ class StartUpActivity : AppCompatActivity() {
                 } else if (!viewModel.isAuthSkipped()) {
                     // 3. Not authenticated → begin login process
                     showAuthChoiceDialog()
-                }
-                 else {
+                } else {
                     proceedAfterLogin()
                 }
             }

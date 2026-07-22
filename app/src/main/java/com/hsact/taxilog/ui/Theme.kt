@@ -18,24 +18,42 @@ fun appColorScheme(isDarkTheme: Boolean): ColorScheme {
     return if (isDarkTheme) {
         darkColorScheme(
             primary = colorFromRes(context, R.color.yellow_3),
-            onPrimary = colorFromRes(context, R.color.white),
+            onPrimary = colorFromRes(context, R.color.black),
+            primaryContainer = colorFromRes(context, R.color.gray_800),
+            onPrimaryContainer = colorFromRes(context, R.color.yellow_3),
             secondary = colorFromRes(context, R.color.yellow_3),
-            onSecondary = colorFromRes(context, R.color.white),
+            onSecondary = colorFromRes(context, R.color.black),
+            secondaryContainer = colorFromRes(context, R.color.yellow_1),
+            onSecondaryContainer = colorFromRes(context, R.color.yellow_3),
+            tertiary = colorFromRes(context, R.color.gray_700),
+            onTertiary = colorFromRes(context, R.color.white),
             background = colorFromRes(context, R.color.black),
-            surface = colorFromRes(context, R.color.dark_gray),
             onBackground = colorFromRes(context, R.color.white),
-            onSurface = colorFromRes(context, R.color.hint_night)
+            surface = colorFromRes(context, R.color.dark_gray),
+            onSurface = colorFromRes(context, R.color.white),
+            surfaceVariant = colorFromRes(context, R.color.gray_800),
+            onSurfaceVariant = colorFromRes(context, R.color.gray_300),
+            outline = colorFromRes(context, R.color.gray_600)
         )
     } else {
         lightColorScheme(
             primary = colorFromRes(context, R.color.yellow_4),
             onPrimary = colorFromRes(context, R.color.black),
+            primaryContainer = colorFromRes(context, R.color.yellow_1),
+            onPrimaryContainer = colorFromRes(context, R.color.yellow_4),
             secondary = colorFromRes(context, R.color.yellow_4),
             onSecondary = colorFromRes(context, R.color.black),
-            background = colorFromRes(context, R.color.light_gray),
-            surface = colorFromRes(context, R.color.light_gray),
+            secondaryContainer = colorFromRes(context, R.color.yellow_1),
+            onSecondaryContainer = colorFromRes(context, R.color.yellow_4),
+            tertiary = colorFromRes(context, R.color.gray_600),
+            onTertiary = colorFromRes(context, R.color.white),
+            background = colorFromRes(context, R.color.gray_100),
             onBackground = colorFromRes(context, R.color.black),
-            onSurface = colorFromRes(context, R.color.hint_day)
+            surface = colorFromRes(context, R.color.white),
+            onSurface = colorFromRes(context, R.color.black),
+            surfaceVariant = colorFromRes(context, R.color.gray_200),
+            onSurfaceVariant = colorFromRes(context, R.color.gray_700),
+            outline = colorFromRes(context, R.color.gray_400)
         )
     }
 }
@@ -58,24 +76,29 @@ fun CardTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
+    val context = LocalContext.current
     val baseColorScheme = appColorScheme(darkTheme)
 
     val cardColorScheme = baseColorScheme.copy(
         primary = colorFromRes(
-            LocalContext.current,
-            if (darkTheme) R.color.dark_gray else R.color.white
+            context,
+            if (darkTheme) R.color.gray_900 else R.color.white
         ),
         onPrimary = colorFromRes(
-            LocalContext.current,
+            context,
             if (darkTheme) R.color.white else R.color.black
         ),
         surface = colorFromRes(
-            LocalContext.current,
-            if (darkTheme) R.color.dark_gray else R.color.white
+            context,
+            if (darkTheme) R.color.gray_900 else R.color.white
         ),
         onSurface = colorFromRes(
-            LocalContext.current,
-            if (darkTheme) R.color.hint_night else R.color.hint_day
+            context,
+            if (darkTheme) R.color.white else R.color.black
+        ),
+        onBackground = colorFromRes(
+            context,
+            if (darkTheme) R.color.white else R.color.black
         )
     )
 

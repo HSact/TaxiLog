@@ -3,11 +3,11 @@ package com.hsact.taxilog.ui.fragments.shiftDetail
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hsact.domain.model.Shift
+import com.hsact.di.ApplicationScope
 import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.domain.usecase.shift.DeleteShiftUseCase
 import com.hsact.domain.usecase.shift.GetShiftByIdUseCase
-import com.hsact.di.ApplicationScope
+import com.hsact.domain.usecase.shift.GetShiftSequenceNumberUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,24 +19,50 @@ import javax.inject.Inject
 class ShiftDetailViewModel @Inject constructor(
     private val getAllSettingsUseCase: GetAllSettingsUseCase,
     private val getShiftByIdUseCase: GetShiftByIdUseCase,
+    private val getShiftSequenceNumberUseCase: GetShiftSequenceNumberUseCase,
     private val deleteShiftUseCase: DeleteShiftUseCase,
     @param:ApplicationScope private val applicationScope: CoroutineScope,
 ): ViewModel() {
-    private val _shift = MutableStateFlow<Shift?>(null)
-    val shift: StateFlow<Shift?> = _shift
+    private val _uiState = MutableStateFlow<ShiftDetailUiState>(ShiftDetailUiState.Loading)
+    /**
+     * The reactive UI state of the shift detail screen.
+     */
+    val uiState: StateFlow<ShiftDetailUiState> = _uiState
+
+    private val _sequenceNumber = MutableStateFlow<Int?>(null)
+    /**
+     * The reactive sequence number of the shift for display to the user.
+     */
+    val sequenceNumber: StateFlow<Int?> = _sequenceNumber
 
     val settings = getAllSettingsUseCase()
+
+    /**
+     * Loads the shift data and its sequence number reactively.
+     * @param shiftId The technical ID of the shift to load.
+     */
     fun loadShift(shiftId: Int) {
         viewModelScope.launch {
+            getShiftSequenceNumberUseCase(shiftId).collect { number ->
+                _sequenceNumber.value = number
+            }
+        }
+
+        viewModelScope.launch {
             getShiftByIdUseCase(shiftId).collect { shift ->
-                _shift.value = shift
+                _uiState.value = if (shift != null) {
+                    ShiftDetailUiState.Success(shift)
+                } else {
+                    ShiftDetailUiState.NotFound
+                }
             }
         }
     }
     fun deleteShift() {
         applicationScope.launch {
             try {
-                _shift.value?.let { deleteShiftUseCase(it) }
+                val currentShift = (uiState.value as? ShiftDetailUiState.Success)?.shift
+                currentShift?.let { deleteShiftUseCase(it) }
             } catch (e: Exception) {
                 Log.e("ShiftDetail", "Error deleting shift", e)
             }

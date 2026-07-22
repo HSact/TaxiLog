@@ -16,4 +16,5 @@ data class UserSettings(
     val taxes: Boolean = false,
     val taxRate: String?,
     val fuelPrice: String?,
+    val firstDayOfWeek: Int = 0,
 )
