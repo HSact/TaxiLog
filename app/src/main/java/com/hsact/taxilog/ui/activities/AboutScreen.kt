@@ -1,7 +1,6 @@
 package com.hsact.taxilog.ui.activities
 
 import android.content.Intent
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +16,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -29,8 +27,6 @@ import com.hsact.taxilog.R
 fun AboutScreenContent() {
     val context = LocalContext.current
     val privacyPolicyLink = stringResource(R.string.privacy_policy_link)
-    val isDark = isSystemInDarkTheme()
-    val textButtonColor = if (isDark) Color.Black else Color.White
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -94,12 +90,12 @@ fun AboutScreenContent() {
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             ) {
                 Text(
-                    text = stringResource(R.string.privacy_policy),
-                    color = textButtonColor
+                    text = stringResource(R.string.privacy_policy)
                 )
             }
         }

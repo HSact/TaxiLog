@@ -137,6 +137,11 @@ private fun CalendarGrid(
         (0..6).map { firstDayOfWeek + it.toLong() }
     }
 
+    // Pre-calculate shifts by date for performance
+    val shiftsByDate = remember(shifts) {
+        shifts.groupBy { it.time.period.start.toLocalDate() }
+    }
+
     Column {
         // Day labels
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -171,7 +176,7 @@ private fun CalendarGrid(
                     ) {
                         if (dayNum in 1..daysInMonth) {
                             val date = month.atDay(dayNum)
-                            val dayShifts = shifts.filter { it.time.period.start.toLocalDate() == date }
+                            val dayShifts = shiftsByDate[date] ?: emptyList()
                             val hasShift = dayShifts.isNotEmpty()
 
                             if (hasShift) {
