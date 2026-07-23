@@ -2,8 +2,8 @@ package com.hsact.data.sync
 
 import android.util.Log
 import com.hsact.data.firebase.datasource.FirebaseShiftDataSource
+import com.hsact.data.repository.shift.local.ShiftRepositoryLocal
 import com.hsact.domain.model.Shift
-import com.hsact.domain.repository.ShiftRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
@@ -15,7 +15,7 @@ import javax.inject.Inject
  */
 class ShiftSyncManager @Inject constructor(
     private val firebaseShiftDataSource: FirebaseShiftDataSource,
-    private val shiftRepository: ShiftRepository,
+    private val shiftRepositoryLocal: ShiftRepositoryLocal,
 ) {
     /**
      * Performs a full synchronization cycle.
@@ -37,10 +37,10 @@ class ShiftSyncManager @Inject constructor(
      * @param id The local ID of the shift to synchronize.
      */
     suspend fun syncShift(id: Int) {
-        val shift = shiftRepository.getShift(id).first() ?: return
+        val shift = shiftRepositoryLocal.getShiftById(id).first() ?: return
         val remoteId = firebaseShiftDataSource.save(shift)
         if (remoteId != null) {
-            shiftRepository.markAsSynced(id, remoteId)
+            shiftRepositoryLocal.markAsSynced(id, remoteId)
             Log.d("Sync", "Synced single shift: id=$id remoteId=$remoteId")
         }
     }
@@ -61,33 +61,33 @@ class ShiftSyncManager @Inject constructor(
 
             for (remoteShift in remoteShifts) {
                 val remoteId = remoteShift.remoteId ?: continue
-                val localShift = shiftRepository.getByRemoteId(remoteId)
+                val localShift = shiftRepositoryLocal.getByRemoteId(remoteId)
 
                 val newMeta = remoteShift.meta.copy(isSynced = true)
                 val shiftWithSynced = remoteShift.copy(meta = newMeta)
 
                 if (localShift == null) {
-                    shiftRepository.insertShift(shiftWithSynced.withNewId())
+                    shiftRepositoryLocal.insertShift(shiftWithSynced.withNewId())
                     Log.d("Sync", "Inserted remote shift: $remoteId")
                 } else if (localShift.meta.updatedAt < remoteShift.meta.updatedAt) {
-                    shiftRepository.updateShift(shiftWithSynced.copy(id = localShift.id))
+                    shiftRepositoryLocal.updateShift(shiftWithSynced.copy(id = localShift.id))
                     Log.d("Sync", "Updated remote shift: $remoteId")
                 } else if (!localShift.meta.isSynced) {
                     // If timestamps are equal but local is not marked as synced, fix it
-                    shiftRepository.markAsSynced(localShift.id, remoteId)
+                    shiftRepositoryLocal.markAsSynced(localShift.id, remoteId)
                     Log.d("Sync", "Marked identical shift as synced: $remoteId")
                 }
             }
 
             // Removing shifts from local, which are not in Firebase — but only if isSynced == true
-            val allLocal = shiftRepository.getAllShifts().first()
+            val allLocal = shiftRepositoryLocal.getAllShifts().first()
             val toDelete = allLocal.filter { local ->
                 val remoteId = local.remoteId
                 remoteId != null && local.meta.isSynced && remoteId !in remoteIds
             }
 
             for (shift in toDelete) {
-                shiftRepository.deleteShift(shift)
+                shiftRepositoryLocal.deleteShift(shift)
                 Log.d("Sync", "Deleted orphaned shift: remoteId=${shift.remoteId}")
             }
         } catch (e: Exception) {
@@ -103,11 +103,11 @@ class ShiftSyncManager @Inject constructor(
      */
     private suspend fun syncToFirebase() {
         try {
-            val localUnsyncedShifts = shiftRepository.getUnsyncedShifts()
+            val localUnsyncedShifts = shiftRepositoryLocal.getUnsyncedShifts()
             for (localShift in localUnsyncedShifts) {
                 val remoteId = firebaseShiftDataSource.save(localShift)
                 if (remoteId != null) {
-                    shiftRepository.markAsSynced(localShift.id, remoteId)
+                    shiftRepositoryLocal.markAsSynced(localShift.id, remoteId)
                     Log.d("Sync", "Synced local shift: remoteId=$remoteId")
                 } else {
                     Log.w("Sync", "Failed to sync local shift: id=${localShift.id}")

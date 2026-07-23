@@ -6,6 +6,7 @@ import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.domain.usecase.settings.GetDeviceIdUseCase
 import com.hsact.domain.usecase.shift.AddShiftUseCase
 import com.hsact.domain.usecase.shift.GetShiftByIdUseCase
+import com.hsact.domain.usecase.shift.GetShiftSequenceNumberUseCase
 import com.hsact.taxilog.ui.fragments.shiftForm.ShiftFormViewModel
 import com.hsact.taxilog.ui.fragments.shiftForm.UiState
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +30,7 @@ class ShiftFormViewModelTest {
     private val getDeviceIdUseCase = mock<GetDeviceIdUseCase>()
     private val addShiftUseCase = mock<AddShiftUseCase>()
     private val getShiftByIdUseCase = mock<GetShiftByIdUseCase>()
+    private val getShiftSequenceNumberUseCase = mock<GetShiftSequenceNumberUseCase>()
 
     @Before
     fun setup() {
@@ -58,7 +60,8 @@ class ShiftFormViewModelTest {
             getAllSettingsUseCase,
             getDeviceIdUseCase,
             addShiftUseCase,
-            getShiftByIdUseCase
+            getShiftByIdUseCase,
+            getShiftSequenceNumberUseCase
         )
     }
 
