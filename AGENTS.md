@@ -16,7 +16,8 @@ This document serves as a comprehensive overview of the TaxiLog project architec
 The project follows **Clean Architecture** principles and is divided into four main Gradle modules:
 
 ### 1. `:domain` (Pure Kotlin)
-The core of the application. It contains business logic and is independent of any frameworks (Android, Firebase, etc.).
+The core of the application. It contains business logic and is independent of any frameworks (Android, Firebase, DI frameworks, etc.).
+- **Pure Kotlin**: This module must not contain any external dependencies, including DI annotations like `@Inject` or libraries like `javax.inject`.
 - **Models**: Business entities like `Shift`, `ShiftMeta`, `CarSnapshot`.
 - **Repository Interfaces**: Define the contracts for data operations (e.g., `ShiftRepository`).
 - **Use Cases**: Single-action classes that encapsulate specific business rules (e.g., `AddShiftUseCase`, `SyncShiftsUseCase`).
@@ -92,9 +93,11 @@ The app follows a strict **Offline-First** approach with Unidirectional Data Flo
 When assisting with this project:
 - **Persona Role**: Act as a Senior Developer. Be concise, prioritize safety (don't break offline data), and follow Clean Architecture.
 - **Use Modern Stack for New Code**: All new UI components must be written in **Jetpack Compose**. Use **StateFlow** or **SharedFlow** for state management in new ViewModels.
-- **Prioritize Clean Architecture**: If adding a new feature, start with the `:domain` models and use cases.
+- **Prioritize Clean Architecture**: If adding a new feature, start with the `:domain` models and use cases. Keep the `:domain` module "pure" — no Android dependencies and no DI annotations (@Inject).
 - **Maintain Consistency**: Check existing mappers and repository implementations before creating new ones.
-- **Check DI**: Ensure new components are properly annotated with `@Inject` and provided in Hilt modules if needed.
+- **Check DI**: 
+    - For `:data` and `:app` layers: use `@Inject` on constructors.
+    - For `:domain` layer: do **not** use `@Inject`. Instead, register domain classes (like Use Cases) manually in the `:di` module using `@Provides` methods.
 - **Lifecycle Awareness**: Use `viewModelScope` for coroutines in ViewModels and `collectAsStateWithLifecycle` in Compose.
 - **Documentation**: Provide **KDoc** for all new classes, interfaces, and non-obvious public methods. KDoc for internal or private methods is only required if the logic is complex.
 - **Theming & Colors**: Do not hardcode colors (e.g., `Color.Black`, `Color(0xFF...)`). Always use theme-aware colors from `MaterialTheme.colorScheme` (e.g., `onSurface`, `primary`) to ensure support for both light and dark themes.
