@@ -1,4 +1,4 @@
-package com.hsact.taxilog.ui.activities.settings
+package com.hsact.taxilog.ui.fragments.settings
 
 import android.os.Bundle
 import android.transition.TransitionManager

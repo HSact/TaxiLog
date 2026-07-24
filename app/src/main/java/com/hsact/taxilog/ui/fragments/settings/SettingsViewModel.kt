@@ -1,4 +1,4 @@
-package com.hsact.taxilog.ui.activities.settings
+package com.hsact.taxilog.ui.fragments.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

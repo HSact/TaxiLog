@@ -113,7 +113,7 @@
         app:exitAnim="@anim/fade_out" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.hsact.taxilog.ui.activities.settings.SettingsFragment"
+        android:name="com.hsact.taxilog.ui.fragments.settings.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>
