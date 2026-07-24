@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.hsact.taxilog.ui.activities.startup
 
 import android.content.Context

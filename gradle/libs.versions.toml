@@ -2,7 +2,7 @@
 compileSdk = "37"
 minSdk = "26"
 targetSdk = "37"
-agp = "9.3.0"
+agp = "9.3.1"
 kotlin = "2.4.10"
 coreKtx = "1.19.0"
 junit = "4.13.2"
@@ -29,7 +29,6 @@ composeCharts = "1.0.0"
 mockito = "5.23.0"
 mockitoKotlin = "6.3.0"
 ksp = "2.3.9"
-javaxInject = "1"
 credentials = "1.6.0"
 googleid = "1.2.0"
 
@@ -37,7 +36,6 @@ googleid = "1.2.0"
 androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }
 androidx-credentials-play-services-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentials" }
 googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
-javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javaxInject" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
