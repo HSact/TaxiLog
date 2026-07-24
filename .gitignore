@@ -1,16 +1,24 @@
+# IDE and Project
 *.iml
 .gradle
 /local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+/.idea/
+.kotlin/
+.artifacts/
 .DS_Store
+Thumbs.db
+
+# Build artifacts
 /build
 /captures
+/out
 .externalNativeBuild
 .cxx
-local.properties
+
+# Secrets and configs
 **/google-services.json
+
+# Logs and temporary files
+*.log
+*.temp
+*.tmp
