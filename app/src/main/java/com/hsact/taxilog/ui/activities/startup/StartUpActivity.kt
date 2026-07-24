@@ -17,7 +17,6 @@ import com.hsact.taxilog.R
 import com.hsact.taxilog.auth.GoogleAuthClient
 import com.hsact.taxilog.databinding.ActivityStartUpBinding
 import com.hsact.taxilog.ui.activities.MainActivity
-import com.hsact.taxilog.ui.activities.settings.SettingsActivity
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -66,7 +65,8 @@ class StartUpActivity : AppCompatActivity() {
 
             binding.imageLogo.alpha = 0f
             binding.buttonOkay.setOnClickListener {
-                val intent = Intent(this@StartUpActivity, SettingsActivity::class.java)
+                val intent = Intent(this@StartUpActivity, MainActivity::class.java)
+                intent.putExtra("NAVIGATE_TO_SETTINGS", true)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out)

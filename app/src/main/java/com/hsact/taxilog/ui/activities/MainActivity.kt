@@ -18,7 +18,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.ActivityMainBinding
-import com.hsact.taxilog.ui.activities.settings.SettingsActivity
 import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val isBottomNavVisible = when (destination.id) {
-                R.id.shiftForm, R.id.shiftDetailFragment -> false
+                R.id.shiftForm, R.id.shiftDetailFragment, R.id.settingsFragment -> false
                 else -> true
             }
             setBottomNavVisible(isBottomNavVisible)
@@ -77,12 +76,25 @@ class MainActivity : AppCompatActivity() {
             view.setPadding(0, 0, 0, navBarHeight)
             insets
         }
+
+        if (savedInstanceState == null && intent.getBooleanExtra("NAVIGATE_TO_SETTINGS", false)) {
+            navController.navigate(R.id.settingsFragment, null, getSlideNavOptions())
+        }
+    }
+
+    private fun getSlideNavOptions(): NavOptions {
+        return NavOptions.Builder()
+            .setEnterAnim(R.anim.slide_in_right)
+            .setExitAnim(R.anim.slide_out_left)
+            .setPopEnterAnim(R.anim.slide_in_left)
+            .setPopExitAnim(R.anim.slide_out_right)
+            .build()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         val currentDestination = navController.currentDestination?.id
-        return if (currentDestination == R.id.shiftDetailFragment) {
+        return if (currentDestination == R.id.shiftDetailFragment || currentDestination == R.id.settingsFragment) {
             false
         } else {
             menuInflater.inflate(R.menu.menu_main, menu)
@@ -94,8 +106,11 @@ class MainActivity : AppCompatActivity() {
 
         return when (item.itemId) {
             R.id.action_settings -> {
-                val settingsIntent = Intent(this, SettingsActivity::class.java)
-                startActivity(settingsIntent)
+                findNavController(R.id.nav_host_fragment_activity_main).navigate(
+                    R.id.settingsFragment,
+                    null,
+                    getSlideNavOptions()
+                )
                 true
             }
 

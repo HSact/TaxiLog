@@ -26,8 +26,12 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
         <action
-            android:id="@+id/action_navigation_home_to_settingsActivity"
-            app:destination="@id/settingsActivity" />
+            android:id="@+id/action_navigation_home_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -107,9 +111,9 @@
         app:destination="@id/navigation_log"
         app:enterAnim="@anim/fade_in"
         app:exitAnim="@anim/fade_out" />
-    <activity
-        android:id="@+id/settingsActivity"
-        android:name="com.hsact.taxilog.ui.activities.settings.SettingsActivity"
-        android:label="settings_activity"
-        tools:layout="@layout/settings_activity" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.hsact.taxilog.ui.activities.settings.SettingsFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>
