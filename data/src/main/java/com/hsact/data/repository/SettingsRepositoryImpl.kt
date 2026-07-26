@@ -109,7 +109,8 @@ class SettingsRepositoryImpl @Inject constructor(
                 is Int -> putInt(key, value)
                 is Float -> putFloat(key, value)
                 is Long -> putLong(key, value)
-                else -> throw IllegalArgumentException("Unsupported type")
+                null -> remove(key)
+                else -> throw IllegalArgumentException("Unsupported type: ${value.javaClass.name}")
             }
         }
     }

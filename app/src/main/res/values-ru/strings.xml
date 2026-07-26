@@ -117,8 +117,11 @@
     <string name="authentication_failed">Ошибка авторизации</string>
     <string name="sign_out">Выйти</string>
     <string name="not_signed_in">Вход не выполнен</string>
-    <string name="retry_login_question">Повторить попытку?</string>
+    <string name="retry_login_question">Что-то пошло не так. Повторить попытку?</string>
     <string name="retry">Повторить</string>
+    <string name="no_google_accounts">Нет Google аккаунтов</string>
+    <string name="add_account_instruction">На этом устройстве не найдено Google аккаунтов. Пожалуйста, добавьте аккаунт в настройках или продолжите без синхронизации.</string>
+    <string name="go_to_settings">Настройки</string>
     <string name="skip">Пропустить</string>
     <string name="sign_in_title">Вход в аккаут</string>
     <string name="sign_in_description">Войдите через Google, чтобы включить облачную синхронизацию</string>
@@ -150,4 +153,5 @@
     <string name="about_feature_3">• Статистика и графики</string>
     <string name="about_feature_4">• Отслеживание ежемесячных целей</string>
     <string name="about_feature_5">• Облачная синхронизация</string>
+    <string name="liter_short">л</string>
 </resources>

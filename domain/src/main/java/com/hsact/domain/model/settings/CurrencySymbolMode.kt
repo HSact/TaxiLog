@@ -13,6 +13,12 @@ enum class CurrencySymbolMode {
         JPY -> "¥"
     }
 
+    val isPrefix: Boolean
+        get() = when (this) {
+            USD, GBP, JPY -> true
+            RUB, EUR -> false
+        }
+
     fun toIndex(): Int = when (this) {
         USD -> 0
         EUR -> 1

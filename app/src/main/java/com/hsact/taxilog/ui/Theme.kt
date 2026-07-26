@@ -19,11 +19,11 @@ fun appColorScheme(isDarkTheme: Boolean): ColorScheme {
         darkColorScheme(
             primary = colorFromRes(context, R.color.yellow_3),
             onPrimary = colorFromRes(context, R.color.black),
-            primaryContainer = colorFromRes(context, R.color.gray_800),
-            onPrimaryContainer = colorFromRes(context, R.color.yellow_3),
+            primaryContainer = colorFromRes(context, R.color.yellow_4),
+            onPrimaryContainer = colorFromRes(context, R.color.black),
             secondary = colorFromRes(context, R.color.yellow_3),
             onSecondary = colorFromRes(context, R.color.black),
-            secondaryContainer = colorFromRes(context, R.color.yellow_1),
+            secondaryContainer = colorFromRes(context, R.color.gray_800),
             onSecondaryContainer = colorFromRes(context, R.color.yellow_3),
             tertiary = colorFromRes(context, R.color.gray_700),
             onTertiary = colorFromRes(context, R.color.white),
@@ -31,7 +31,7 @@ fun appColorScheme(isDarkTheme: Boolean): ColorScheme {
             onBackground = colorFromRes(context, R.color.white),
             surface = colorFromRes(context, R.color.dark_gray),
             onSurface = colorFromRes(context, R.color.white),
-            surfaceVariant = colorFromRes(context, R.color.gray_800),
+            surfaceVariant = colorFromRes(context, R.color.gray_900),
             onSurfaceVariant = colorFromRes(context, R.color.gray_300),
             outline = colorFromRes(context, R.color.gray_600)
         )

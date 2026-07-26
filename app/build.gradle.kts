@@ -91,6 +91,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.compose.charts)
+    implementation(libs.coil.compose)
 
     implementation(libs.kotlin.test)
 
