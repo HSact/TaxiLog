@@ -23,7 +23,7 @@
     <string name="settings_rent_cost">Rent cost</string>
     <string name="settings_calculate_service">Consider car service</string>
     <string name="settings_service_cost_per_km">Service cost</string>
-    <string name="settings_plan">Goal</string>
+    <string name="settings_plan">Work</string>
     <string name="settings_goal_per_month">Goal per month</string>
     <string name="settings_schedule">Schedule</string>
     <string name="settings_calculate_taxes">Calculate taxes</string>

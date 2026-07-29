@@ -24,7 +24,7 @@
     <string name="settings_rent_cost">Стоимость аренды</string>
     <string name="settings_calculate_service">Учитывать стоимость обслуживания авто</string>
     <string name="settings_service_cost_per_km">Стоимость обслуживания</string>
-    <string name="settings_plan">План</string>
+    <string name="settings_plan">Работа</string>
     <string name="settings_goal_per_month">Цель заработка в месяц</string>
     <string name="settings_schedule">График</string>
     <string name="settings_calculate_taxes">Расчитывать налоги</string>
