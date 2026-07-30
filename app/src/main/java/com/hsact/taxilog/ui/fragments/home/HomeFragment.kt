@@ -32,18 +32,21 @@ class HomeFragment : Fragment() {
     private lateinit var cardCalendar: ComposeView
     private lateinit var cardLastShift: ComposeView
     private lateinit var cardMonthGraph: ComposeView
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
         return root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         cardGoal = binding.cardGoal
         cardCalendar = binding.cardCalendar
@@ -56,7 +59,7 @@ class HomeFragment : Fragment() {
                 viewModel.shiftListThisMonth,
                 onSetGoalClick = {
                     findNavController().navigate(R.id.settingsFragment)
-                }
+                },
             )
         }
         cardCalendar.setContent {
@@ -66,7 +69,7 @@ class HomeFragment : Fragment() {
                 viewModel.calendarShifts,
                 settings.firstDayOfWeek,
                 { viewModel.onPreviousMonth() },
-                { viewModel.onNextMonth() }
+                { viewModel.onNextMonth() },
             ) { shifts ->
                 handleShiftsClick(shifts)
             }
@@ -75,11 +78,12 @@ class HomeFragment : Fragment() {
             val settings by viewModel.settings.collectAsStateWithLifecycle()
             CardLastShift(
                 viewModel.lastShift,
-                settings.currency ?: CurrencySymbolMode.fromLocale(LocalLocale.current.platformLocale)
+                settings.currency ?: CurrencySymbolMode.fromLocale(LocalLocale.current.platformLocale),
             ) {
-                val action = HomeFragmentDirections.actionNavigationHomeToShiftDetails(
-                    shiftId = viewModel.lastShift.value?.id ?: -1
-                )
+                val action =
+                    HomeFragmentDirections.actionNavigationHomeToShiftDetails(
+                        shiftId = viewModel.lastShift.value?.id ?: -1,
+                    )
                 findNavController().navigate(action)
             }
         }
@@ -94,10 +98,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun newShift() {
-        val action = HomeFragmentDirections
-            .actionHomeFragmentToAddShift(
-                shiftId = -1
-            )
+        val action =
+            HomeFragmentDirections
+                .actionHomeFragmentToAddShift(
+                    shiftId = -1,
+                )
         findNavController().navigate(action)
     }
 
@@ -120,9 +125,10 @@ class HomeFragment : Fragment() {
      * Navigates to the shift detail screen.
      */
     fun navigateToShiftDetail(shiftId: Int) {
-        val action = HomeFragmentDirections.actionNavigationHomeToShiftDetails(
-            shiftId = shiftId
-        )
+        val action =
+            HomeFragmentDirections.actionNavigationHomeToShiftDetails(
+                shiftId = shiftId,
+            )
         findNavController().navigate(action)
     }
 }

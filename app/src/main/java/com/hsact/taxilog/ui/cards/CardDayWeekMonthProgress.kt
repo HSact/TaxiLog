@@ -71,20 +71,23 @@ fun CardDayWeekMonthProgress(goalData: StateFlow<GoalDataState>) {
         progressMonthAnimated.floatValue = progressMonthP / 100
     }
 
-    val animatedProgressDay = animateFloatAsState(
-        targetValue = progressDayAnimated.floatValue.coerceIn(0f, 1f),
-        animationSpec = tween(durationMillis = animationDuration)
-    )
+    val animatedProgressDay =
+        animateFloatAsState(
+            targetValue = progressDayAnimated.floatValue.coerceIn(0f, 1f),
+            animationSpec = tween(durationMillis = animationDuration),
+        )
 
-    val animatedProgressWeek = animateFloatAsState(
-        targetValue = progressWeekAnimated.floatValue.coerceIn(0f, 1f),
-        animationSpec = tween(durationMillis = animationDuration)
-    )
+    val animatedProgressWeek =
+        animateFloatAsState(
+            targetValue = progressWeekAnimated.floatValue.coerceIn(0f, 1f),
+            animationSpec = tween(durationMillis = animationDuration),
+        )
 
-    val animatedProgressMonth = animateFloatAsState(
-        targetValue = progressMonthAnimated.floatValue.coerceIn(0f, 1f),
-        animationSpec = tween(durationMillis = animationDuration)
-    )
+    val animatedProgressMonth =
+        animateFloatAsState(
+            targetValue = progressMonthAnimated.floatValue.coerceIn(0f, 1f),
+            animationSpec = tween(durationMillis = animationDuration),
+        )
 
     BaseCard {
         Column {
@@ -95,21 +98,21 @@ fun CardDayWeekMonthProgress(goalData: StateFlow<GoalDataState>) {
                 goalDay,
                 animatedProgressDay.value,
                 progressDay,
-                progressDayP
+                progressDayP,
             )
             GoalProgressIndicator(
                 stringWeek,
                 goalWeek,
                 animatedProgressWeek.value,
                 progressWeek,
-                progressWeekP
+                progressWeekP,
             )
             GoalProgressIndicator(
                 stringMonth,
                 goalMonth,
                 animatedProgressMonth.value,
                 progressMonth,
-                progressMonthP
+                progressMonthP,
             )
         }
     }
@@ -126,32 +129,37 @@ private fun GoalProgressIndicator(
     val formattedProgress = NumberFormat.getNumberInstance(Locale.getDefault()).format(progress)
     val formattedGoal = NumberFormat.getNumberInstance(Locale.getDefault()).format(goal)
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 0.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 0.dp),
     ) {
         Text(
-            modifier = Modifier
-                .align(Alignment.Start),
-            text = period
+            modifier =
+                Modifier
+                    .align(Alignment.Start),
+            text = period,
         )
         Text(
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally),
-            text = "$formattedProgress $stringOf $formattedGoal"
+            modifier =
+                Modifier
+                    .align(Alignment.CenterHorizontally),
+            text = "$formattedProgress $stringOf $formattedGoal",
         )
         LinearProgressIndicator(
-            modifier = Modifier
-                .height(10.dp)
-                .fillMaxWidth(),
+            modifier =
+                Modifier
+                    .height(10.dp)
+                    .fillMaxWidth(),
             progress = { animatedProgress },
             color = Color(0xFFE8BD00),
-            trackColor = Color(0xFFFFF8D9)
+            trackColor = Color(0xFFFFF8D9),
         )
         Text(
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally),
-            text = ("${"%.1f".format(progressP)}%")
+            modifier =
+                Modifier
+                    .align(Alignment.CenterHorizontally),
+            text = ("${"%.1f".format(progressP)}%"),
         )
     }
 }
@@ -161,20 +169,21 @@ private fun GoalProgressIndicator(
 private fun CardPreview() {
     val goal = 100.0
     val goalCurrent = 50.0
-    val previewData = remember {
-        MutableStateFlow(
-            GoalDataState(
-                dayProgress = goalCurrent,
-                weekProgress = goalCurrent,
-                monthProgress = goalCurrent,
-                dayGoal = goal,
-                weekGoal = goal,
-                monthGoal = goal,
-                todayPercent = 70.0,
-                weekPercent = 60.0,
-                monthPercent = 40.0
+    val previewData =
+        remember {
+            MutableStateFlow(
+                GoalDataState(
+                    dayProgress = goalCurrent,
+                    weekProgress = goalCurrent,
+                    monthProgress = goalCurrent,
+                    dayGoal = goal,
+                    weekGoal = goal,
+                    monthGoal = goal,
+                    todayPercent = 70.0,
+                    weekPercent = 60.0,
+                    monthPercent = 40.0,
+                ),
             )
-        )
-    }
+        }
     CardDayWeekMonthProgress(previewData)
 }

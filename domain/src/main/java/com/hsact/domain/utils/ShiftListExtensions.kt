@@ -7,21 +7,22 @@ import java.time.YearMonth
 fun List<Shift>.filterByDateRange(
     startDate: LocalDate? = null,
     endDate: LocalDate? = null,
-): List<Shift> {
-    return this.filter { shift ->
-        val shiftDate = shift.time.period.start.toLocalDate()
+): List<Shift> =
+    this.filter { shift ->
+        val shiftDate = shift.time.period.start
+            .toLocalDate()
         val afterStart = startDate?.let { !shiftDate.isBefore(it) } != false
         val beforeEnd = endDate?.let { !shiftDate.isAfter(it) } != false
         afterStart && beforeEnd
     }
-}
 
 fun List<Shift>.monthlyProfitByDay(date: LocalDate): List<Long> {
     val yearMonth = YearMonth.from(date)
     val daysInMonth = yearMonth.lengthOfMonth()
 
     val shiftsInMonth = this.filter {
-        val d = it.time.period.start.toLocalDate()
+        val d = it.time.period.start
+            .toLocalDate()
         d.monthValue == date.monthValue && d.year == date.year
     }
 
@@ -41,26 +42,25 @@ fun List<Shift>.weeklyProfitByDay(date: LocalDate): List<Long> {
 
     val grouped = this
         .filter {
-            val d = it.time.period.start.toLocalDate()
+            val d = it.time.period.start
+                .toLocalDate()
             !d.isBefore(startOfWeek) && !d.isAfter(endOfWeek)
-        }
-        .groupBy {
+        }.groupBy {
             it.time.period.start.dayOfWeek.value % 7 // Monday = 1 … Sunday = 7 → Monday = 1, ..., Sunday = 0
         }
 
-    return List(7) { index -> // 0 = Monday, 6 = Sunday
+    return List(7) { index ->
+        // 0 = Monday, 6 = Sunday
         grouped[index + 1]?.sumOf { it.profit } ?: 0L
     }
 }
 
-fun List<Shift>.dailyProfit(date: LocalDate): Long {
-    return this
+fun List<Shift>.dailyProfit(date: LocalDate): Long =
+    this
         .filter {
-            it.time.period.start.toLocalDate() == date
-        }
-        .sumOf { it.profit }
-}
-
+            it.time.period.start
+                .toLocalDate() == date
+        }.sumOf { it.profit }
 
 val List<Shift>.profit: List<Long>
     get() = map { it.profit }

@@ -10,7 +10,6 @@ import org.junit.Test
 import java.time.LocalDateTime
 
 class ShiftMapperTest {
-
     @Test
     fun `ShiftEntity is correctly mapped to Shift domain model`() {
         val entity = ShiftEntity(
@@ -21,31 +20,31 @@ class ShiftMapperTest {
                 createdAt = LocalDateTime.of(2025, 1, 1, 10, 0),
                 updatedAt = LocalDateTime.of(2025, 1, 2, 12, 0),
                 lastModifiedBy = "device-001",
-                isSynced = true
+                isSynced = true,
             ),
             carSnapshot = CarSnapshotEntity(
                 name = "Toyota",
                 mileage = 100000,
                 fuelConsumption = 10000,
                 rentCost = 3500,
-                serviceCost = 200
+                serviceCost = 200,
             ),
             period = DateTimePeriodEntity(
                 start = LocalDateTime.of(2025, 1, 3, 8, 0),
-                end = LocalDateTime.of(2025, 1, 3, 18, 0)
+                end = LocalDateTime.of(2025, 1, 3, 18, 0),
             ),
             rest = DateTimePeriodEntity(
                 start = LocalDateTime.of(2025, 1, 3, 12, 0),
-                end = LocalDateTime.of(2025, 1, 3, 12, 30)
+                end = LocalDateTime.of(2025, 1, 3, 12, 30),
             ),
             financeInput = ShiftFinanceInputEntity(
                 earnings = 5000,
                 tips = 500,
                 taxRate = 5,
                 wash = 200,
-                fuelCost = 1000
+                fuelCost = 1000,
             ),
-            note = "Some notes"
+            note = "Some notes",
         )
 
         val result = entity.toDomain()
@@ -59,6 +58,7 @@ class ShiftMapperTest {
         assertEquals(entity.financeInput.earnings, result.financeInput.earnings)
         assertEquals(entity.rest?.start, result.time.rest?.start)
     }
+
     @Test
     fun `ShiftEntity toDomain and back toEntity results in equal ShiftEntity`() {
         val original = ShiftEntity(
@@ -69,31 +69,31 @@ class ShiftMapperTest {
                 createdAt = LocalDateTime.of(2025, 1, 1, 10, 0),
                 updatedAt = LocalDateTime.of(2025, 1, 2, 12, 0),
                 lastModifiedBy = "device-001",
-                isSynced = true
+                isSynced = true,
             ),
             carSnapshot = CarSnapshotEntity(
                 name = "Toyota",
                 mileage = 100000,
                 fuelConsumption = 10000,
                 rentCost = 3500,
-                serviceCost = 200
+                serviceCost = 200,
             ),
             period = DateTimePeriodEntity(
                 start = LocalDateTime.of(2025, 1, 3, 8, 0),
-                end = LocalDateTime.of(2025, 1, 3, 18, 0)
+                end = LocalDateTime.of(2025, 1, 3, 18, 0),
             ),
             rest = DateTimePeriodEntity(
                 start = LocalDateTime.of(2025, 1, 3, 12, 0),
-                end = LocalDateTime.of(2025, 1, 3, 12, 30)
+                end = LocalDateTime.of(2025, 1, 3, 12, 30),
             ),
             financeInput = ShiftFinanceInputEntity(
                 earnings = 5000,
                 tips = 500,
                 taxRate = 5,
                 wash = 200,
-                fuelCost = 1000
+                fuelCost = 1000,
             ),
-            note = "Round-trip test"
+            note = "Round-trip test",
         )
 
         val roundTripped = original.toDomain().toEntity()

@@ -19,54 +19,36 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 object ShiftUseCaseModule {
+    @Provides
+    fun provideSyncShiftsUseCase(repository: ShiftRepository): SyncShiftsUseCase = SyncShiftsUseCase(repository)
 
     @Provides
-    fun provideSyncShiftsUseCase(
-        repository: ShiftRepository
-    ): SyncShiftsUseCase = SyncShiftsUseCase(repository)
+    fun provideGetAllShiftsUseCase(repository: ShiftRepository): GetAllShiftsUseCase = GetAllShiftsUseCase(repository)
 
     @Provides
-    fun provideGetAllShiftsUseCase(
-        repository: ShiftRepository
-    ): GetAllShiftsUseCase = GetAllShiftsUseCase(repository)
+    fun provideGetShiftByIdUseCase(repository: ShiftRepository): GetShiftByIdUseCase = GetShiftByIdUseCase(repository)
 
     @Provides
-    fun provideGetShiftByIdUseCase(
-        repository: ShiftRepository
-    ): GetShiftByIdUseCase = GetShiftByIdUseCase(repository)
+    fun provideGetShiftSequenceNumberUseCase(repository: ShiftRepository): GetShiftSequenceNumberUseCase =
+        GetShiftSequenceNumberUseCase(repository)
 
     @Provides
-    fun provideGetShiftSequenceNumberUseCase(
-        repository: ShiftRepository
-    ): GetShiftSequenceNumberUseCase = GetShiftSequenceNumberUseCase(repository)
+    fun provideAddShiftUseCase(repository: ShiftRepository): AddShiftUseCase = AddShiftUseCase(repository)
 
     @Provides
-    fun provideAddShiftUseCase(
-        repository: ShiftRepository
-    ): AddShiftUseCase = AddShiftUseCase(repository)
+    fun provideDeleteShiftUseCase(repository: ShiftRepository): DeleteShiftUseCase = DeleteShiftUseCase(repository)
 
     @Provides
-    fun provideDeleteShiftUseCase(
-        repository: ShiftRepository
-    ): DeleteShiftUseCase = DeleteShiftUseCase(repository)
+    fun provideUpdateShiftUseCase(repository: ShiftRepository): UpdateShiftUseCase = UpdateShiftUseCase(repository)
 
     @Provides
-    fun provideUpdateShiftUseCase(
-        repository: ShiftRepository
-    ): UpdateShiftUseCase = UpdateShiftUseCase(repository)
+    fun provideDeleteAllShiftsUseCase(repository: ShiftRepository): DeleteAllShiftsUseCase =
+        DeleteAllShiftsUseCase(repository)
 
     @Provides
-    fun provideDeleteAllShiftsUseCase(
-        repository: ShiftRepository
-    ): DeleteAllShiftsUseCase = DeleteAllShiftsUseCase(repository)
+    fun provideGetLastShiftUseCase(repository: ShiftRepository): GetLastShiftUseCase = GetLastShiftUseCase(repository)
 
     @Provides
-    fun provideGetLastShiftUseCase(
-        repository: ShiftRepository
-    ): GetLastShiftUseCase = GetLastShiftUseCase(repository)
-
-    @Provides
-    fun provideGetShiftsInRangeUseCase(
-        repository: ShiftRepository
-    ): GetShiftsInRangeUseCase = GetShiftsInRangeUseCase(repository)
+    fun provideGetShiftsInRangeUseCase(repository: ShiftRepository): GetShiftsInRangeUseCase =
+        GetShiftsInRangeUseCase(repository)
 }

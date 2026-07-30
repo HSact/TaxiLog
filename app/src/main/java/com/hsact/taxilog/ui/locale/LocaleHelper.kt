@@ -5,18 +5,21 @@ import androidx.core.os.LocaleListCompat
 import com.hsact.domain.usecase.settings.UpdateSettingUseCase
 import javax.inject.Inject
 
-class LocaleHelper @Inject constructor(
-    private val updateSettingUseCase: UpdateSettingUseCase
-) {
-    private val languageKey = "My_Lang"
+class LocaleHelper
+    @Inject
+    constructor(
+        private val updateSettingUseCase: UpdateSettingUseCase,
+    ) {
+        private val languageKey = "My_Lang"
 
-    fun setLocale(lang: String?) {
-        updateSettingUseCase(languageKey, lang)
-        val appLocales = if (lang != null) {
-            LocaleListCompat.forLanguageTags(lang)
-        } else {
-            LocaleListCompat.getEmptyLocaleList()
+        fun setLocale(lang: String?) {
+            updateSettingUseCase(languageKey, lang)
+            val appLocales =
+                if (lang != null) {
+                    LocaleListCompat.forLanguageTags(lang)
+                } else {
+                    LocaleListCompat.getEmptyLocaleList()
+                }
+            AppCompatDelegate.setApplicationLocales(appLocales)
         }
-        AppCompatDelegate.setApplicationLocales(appLocales)
     }
-}

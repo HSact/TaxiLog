@@ -63,9 +63,9 @@ fun ShiftDetailScreen(
             targetState = uiState,
             transitionSpec = {
                 fadeIn(animationSpec = tween(400)) togetherWith
-                        fadeOut(animationSpec = tween(400))
+                    fadeOut(animationSpec = tween(400))
             },
-            label = "ShiftDetailTransition"
+            label = "ShiftDetailTransition",
         ) { state ->
             when (state) {
                 is ShiftDetailUiState.Loading -> {
@@ -76,18 +76,18 @@ fun ShiftDetailScreen(
                         shift = state.shift,
                         currencySymbolMode = currencySymbolMode,
                         onEditClick = onEditClick,
-                        onDeleteConfirmed = onDeleteConfirmed
+                        onDeleteConfirmed = onDeleteConfirmed,
                     )
                 }
                 is ShiftDetailUiState.NotFound -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         Text(
                             text = stringResource(R.string.no_shift_data),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onBackground
+                            color = MaterialTheme.colorScheme.onBackground,
                         )
                     }
                 }
@@ -105,17 +105,19 @@ private fun ShiftDetailContent(
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
     val locale = LocalConfiguration.current.locales[0]
-    val ui = shift.toUi(
-        locale,
-        currencySymbolMode ?: CurrencySymbolMode.fromLocale(locale)
-    )
+    val ui =
+        shift.toUi(
+            locale,
+            currencySymbolMode ?: CurrencySymbolMode.fromLocale(locale),
+        )
     val textButtonColor = if (isSystemInDarkTheme()) Color.Black else Color.White
 
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         item { Spacer(Modifier.height(8.dp)) }
         item { CarCard(ui) }
@@ -124,14 +126,15 @@ private fun ShiftDetailContent(
         item { OtherCard(ui) }
         item {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.Center
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                horizontalArrangement = Arrangement.Center,
             ) {
                 Button(
                     onClick = onEditClick,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 ) {
                     Text(text = stringResource(R.string.edit), color = Color.Black)
                 }
@@ -139,9 +142,10 @@ private fun ShiftDetailContent(
                 Button(
                     onClick = { showDeleteDialog = true },
                     modifier = Modifier.weight(1f),
-                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error
-                    )
+                    colors =
+                        androidx.compose.material3.ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.error,
+                        ),
                 ) {
                     Text(text = stringResource(R.string.delete), color = textButtonColor)
                 }
@@ -160,7 +164,7 @@ private fun ShiftDetailContent(
                     onClick = {
                         showDeleteDialog = false
                         onDeleteConfirmed()
-                    }
+                    },
                 ) {
                     Text(text = stringResource(R.string.delete))
                 }
@@ -169,49 +173,55 @@ private fun ShiftDetailContent(
                 TextButton(onClick = { showDeleteDialog = false }) {
                     Text(text = stringResource(R.string.cancel))
                 }
-            }
+            },
         )
     }
 }
 
 @Composable
 private fun ShiftDetailShimmer() {
-    val shimmerColors = listOf(
-        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
-        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f),
-        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
-    )
+    val shimmerColors =
+        listOf(
+            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
+            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f),
+            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
+        )
 
     val transition = rememberInfiniteTransition(label = "shimmer")
-    val translateAnim = transition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1000f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1000),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "shimmerTranslate"
-    )
+    val translateAnim =
+        transition.animateFloat(
+            initialValue = 0f,
+            targetValue = 1000f,
+            animationSpec =
+                infiniteRepeatable(
+                    animation = tween(durationMillis = 1000),
+                    repeatMode = RepeatMode.Restart,
+                ),
+            label = "shimmerTranslate",
+        )
 
-    val brush = Brush.linearGradient(
-        colors = shimmerColors,
-        start = Offset.Zero,
-        end = Offset(x = translateAnim.value, y = translateAnim.value)
-    )
+    val brush =
+        Brush.linearGradient(
+            colors = shimmerColors,
+            start = Offset.Zero,
+            end = Offset(x = translateAnim.value, y = translateAnim.value),
+        )
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Spacer(Modifier.height(8.dp))
         repeat(4) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp)
-                    .background(brush, RoundedCornerShape(12.dp))
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(120.dp)
+                        .background(brush, RoundedCornerShape(12.dp)),
             )
         }
     }
@@ -226,16 +236,16 @@ fun CarCard(ui: ShiftOutputModel) {
             if (ui.carName.isNotBlank()) {
                 LabelValueRow(
                     label = stringResource(R.string.car_name),
-                    value = ui.carName
+                    value = ui.carName,
                 )
             }
             LabelValueRow(
                 label = stringResource(R.string.mileage),
-                value = ui.mileageKm
+                value = ui.mileageKm,
             )
             LabelValueRow(
                 label = stringResource(R.string.fuel),
-                value = ui.fuelConsumption
+                value = ui.fuelConsumption,
             )
         }
     }
@@ -249,31 +259,36 @@ fun TimeCard(ui: ShiftOutputModel) {
             Space()
             LabelValueRow(
                 label = stringResource(R.string.date),
-                value = if (ui.dateBegin == ui.dateEnd)
-                    ui.dateBegin
-                else
-                    "${ui.dateBegin} - ${ui.dateEnd}"
+                value =
+                    if (ui.dateBegin == ui.dateEnd) {
+                        ui.dateBegin
+                    } else {
+                        "${ui.dateBegin} - ${ui.dateEnd}"
+                    },
             )
             LabelValueRow(
                 label = stringResource(R.string.time),
-                value = "${ui.timeBegin} - ${ui.timeEnd}"
+                value = "${ui.timeBegin} - ${ui.timeEnd}",
             )
             if (ui.timeRestBegin.isNotBlank() && ui.timeRestEnd.isNotBlank()) {
                 LabelValueRow(
                     label = stringResource(R.string.rest),
-                    value = "${ui.timeRestBegin} – ${ui.timeRestEnd}"
+                    value = "${ui.timeRestBegin} – ${ui.timeRestEnd}",
                 )
             }
             LabelValueRow(
                 label = stringResource(R.string.duration),
-                value = ui.duration
+                value = ui.duration,
             )
         }
     }
 }
 
 @Composable
-fun FinanceCard(shiftData: Shift, ui: ShiftOutputModel) {
+fun FinanceCard(
+    shiftData: Shift,
+    ui: ShiftOutputModel,
+) {
     BaseCard {
         Column {
             CardHeader(text = stringResource(R.string.finance))

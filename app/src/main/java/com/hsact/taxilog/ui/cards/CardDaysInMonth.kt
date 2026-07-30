@@ -34,37 +34,45 @@ fun CardDaysInMonth(data: StateFlow<DaysInMonthCardState>) {
     val days = dataState.days.map { it.coerceAtLeast(0.0) }
     val date = dataState.date
     val isDarkTheme = isSystemInDarkTheme()
-    val textStyle: TextStyle = if (isDarkTheme) TextStyle(color = Color.White)
-    else TextStyle(color = Color.Black)
+    val textStyle: TextStyle =
+        if (isDarkTheme) {
+            TextStyle(color = Color.White)
+        } else {
+            TextStyle(color = Color.Black)
+        }
 
     if (days.isEmpty()) {
         return
     }
 
     val colorGraphLine = Color(0xFFFBD323)
-    val labelProperties = LabelProperties(
-        enabled = true,
-        textStyle = textStyle,
-        rotation = LabelProperties.Rotation(degree = 0f)
-    )
-    val labelHelperProperties = LabelHelperProperties(
-        enabled = false,
-        textStyle = textStyle
-    )
-    val gridProperties = GridProperties(
-        enabled = false,
-    )
-    val indicatorProperties = HorizontalIndicatorProperties(
-        enabled = true,
-        textStyle = textStyle,
-        indicators = GraphIndicatorHelper.buildIndicators(0.0, days.max()),
-        contentBuilder = {
-            GraphIndicatorHelper.formatIndicatorValue(
-                it,
-                locale = Locale.getDefault()
-            )
-        }
-    )
+    val labelProperties =
+        LabelProperties(
+            enabled = true,
+            textStyle = textStyle,
+            rotation = LabelProperties.Rotation(degree = 0f),
+        )
+    val labelHelperProperties =
+        LabelHelperProperties(
+            enabled = false,
+            textStyle = textStyle,
+        )
+    val gridProperties =
+        GridProperties(
+            enabled = false,
+        )
+    val indicatorProperties =
+        HorizontalIndicatorProperties(
+            enabled = true,
+            textStyle = textStyle,
+            indicators = GraphIndicatorHelper.buildIndicators(0.0, days.max()),
+            contentBuilder = {
+                GraphIndicatorHelper.formatIndicatorValue(
+                    it,
+                    locale = Locale.getDefault(),
+                )
+            },
+        )
     val locale = Locale.getDefault()
     val formatter = DateTimeFormatter.ofPattern("LLLL", locale)
     val inputFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.getDefault())
@@ -77,26 +85,29 @@ fun CardDaysInMonth(data: StateFlow<DaysInMonthCardState>) {
         List(parsedDate.lengthOfMonth()) { index ->
             Bars(
                 label = if (index % 2 == 0) (index + 1).toString() else " ",
-                values = listOf(
-                    Bars.Data(value = days.getOrElse(index) { 0.0 }, color = SolidColor(colorGraphLine))
-                )
+                values =
+                    listOf(
+                        Bars.Data(value = days.getOrElse(index) { 0.0 }, color = SolidColor(colorGraphLine)),
+                    ),
             )
         }
 
     BaseCard {
         CardHeader(currentMonth)
         ColumnChart(
-            modifier = Modifier
-                .heightIn(max = 300.dp)
-                .padding(top = 52.dp),
+            modifier =
+                Modifier
+                    .heightIn(max = 300.dp)
+                    .padding(top = 52.dp),
             data =
-                bars,
+            bars,
             labelProperties = labelProperties,
-            barProperties = BarProperties(
-                thickness = 5.dp,
-                cornerRadius = Bars.Data.Radius.Rectangle(topRight = 6.dp, topLeft = 6.dp),
-                spacing = 1.dp,
-            ),
+            barProperties =
+                BarProperties(
+                    thickness = 5.dp,
+                    cornerRadius = Bars.Data.Radius.Rectangle(topRight = 6.dp, topLeft = 6.dp),
+                    spacing = 1.dp,
+                ),
             indicatorProperties = indicatorProperties,
             gridProperties = gridProperties,
             labelHelperProperties = labelHelperProperties,
@@ -107,15 +118,26 @@ fun CardDaysInMonth(data: StateFlow<DaysInMonthCardState>) {
 @Preview(showBackground = true)
 @Composable
 private fun CardPreview() {
-    val previewState = remember {
-        MutableStateFlow(
-            DaysInMonthCardState(
-                date = "01.01.2020",
-                days = listOf(
-                    0.0, 2.0, 3.0, 7.0, 10.0, 12.0, 18.0, 25.0, 27.0, 30.0
-                )
+    val previewState =
+        remember {
+            MutableStateFlow(
+                DaysInMonthCardState(
+                    date = "01.01.2020",
+                    days =
+                        listOf(
+                            0.0,
+                            2.0,
+                            3.0,
+                            7.0,
+                            10.0,
+                            12.0,
+                            18.0,
+                            25.0,
+                            27.0,
+                            30.0,
+                        ),
+                ),
             )
-        )
-    }
+        }
     CardDaysInMonth(previewState)
 }

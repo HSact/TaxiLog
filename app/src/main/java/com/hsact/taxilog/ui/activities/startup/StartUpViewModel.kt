@@ -14,28 +14,33 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class StartUpViewModel @Inject constructor(
-    getSettingsFlowUseCase: GetSettingsFlowUseCase,
-    private val authSkippedUseCase: AuthSkippedUseCase,
-    getAuthStateUseCase: GetAuthStateUseCase,
-): ViewModel() {
-    /**
-     * Reactive user settings used for initial app setup (theme, locale).
-     */
-    val settings: StateFlow<UserSettings> = getSettingsFlowUseCase()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), UserSettings.default)
+class StartUpViewModel
+    @Inject
+    constructor(
+        getSettingsFlowUseCase: GetSettingsFlowUseCase,
+        private val authSkippedUseCase: AuthSkippedUseCase,
+        getAuthStateUseCase: GetAuthStateUseCase,
+    ) : ViewModel() {
+        /**
+         * Reactive user settings used for initial app setup (theme, locale).
+         */
+        val settings: StateFlow<UserSettings> =
+            getSettingsFlowUseCase()
+                .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), UserSettings.default)
 
-    val authState: StateFlow<AuthState> = getAuthStateUseCase()
-        .map { user ->
-            if (user != null) AuthState.Authenticated(user)
-            else AuthState.NotAuthenticated
+        val authState: StateFlow<AuthState> =
+            getAuthStateUseCase()
+                .map { user ->
+                    if (user != null) {
+                        AuthState.Authenticated(user)
+                    } else {
+                        AuthState.NotAuthenticated
+                    }
+                }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AuthState.Loading)
+
+        fun isAuthSkipped(): Boolean = authSkippedUseCase.isAuthSkipped()
+
+        fun setAuthSkipped(isSkipped: Boolean) {
+            authSkippedUseCase.setAuthSkipped(isSkipped)
         }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AuthState.Loading)
-
-    fun isAuthSkipped(): Boolean {
-        return authSkippedUseCase.isAuthSkipped()
     }
-    fun setAuthSkipped(isSkipped: Boolean) {
-        authSkippedUseCase.setAuthSkipped(isSkipped)
-    }
-}

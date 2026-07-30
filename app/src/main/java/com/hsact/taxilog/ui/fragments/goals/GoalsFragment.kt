@@ -29,7 +29,6 @@ import java.time.LocalDateTime
 
 @AndroidEntryPoint
 class GoalsFragment : Fragment() {
-
     private var _binding: FragmentGoalsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: GoalsViewModel by viewModels()
@@ -42,9 +41,8 @@ class GoalsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-
         _binding = FragmentGoalsBinding.inflate(inflater, container, false)
         val root: View = binding.root
         bindItems()
@@ -60,7 +58,7 @@ class GoalsFragment : Fragment() {
                     actionText = getString(R.string.settings_label),
                     onAction = {
                         findNavController().navigate(R.id.settingsFragment)
-                    }
+                    },
                 )
             }
         }
@@ -75,7 +73,10 @@ class GoalsFragment : Fragment() {
         return root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.goalMonthString.collect { goal ->
@@ -107,7 +108,7 @@ class GoalsFragment : Fragment() {
 
     private fun displayMonthGoal(goalMonthString: String?) {
         val isEmpty = goalMonthString.isNullOrEmpty()
-        
+
         binding.emptyStateCompose.isVisible = isEmpty
         buttonDatePicker.isVisible = !isEmpty
         card1.isVisible = !isEmpty
@@ -117,6 +118,7 @@ class GoalsFragment : Fragment() {
     private fun bindItems() {
         buttonDatePicker = binding.buttonDatePick
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

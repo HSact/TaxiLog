@@ -10,25 +10,26 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AboutActivity @Inject constructor() : AppCompatActivity() {
+class AboutActivity
+    @Inject
+    constructor() : AppCompatActivity() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_about)
+            val toolbar: Toolbar = findViewById(R.id.toolbar)
+            setSupportActionBar(toolbar)
+            supportActionBar?.title = getString(R.string.title_about)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_about)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.title = getString(R.string.title_about)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        findViewById<ComposeView>(R.id.compose_view_about).setContent {
-            AppTheme {
-                AboutScreenContent()
+            findViewById<ComposeView>(R.id.compose_view_about).setContent {
+                AppTheme {
+                    AboutScreenContent()
+                }
             }
         }
-    }
 
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressedDispatcher.onBackPressed()
-        return super.onSupportNavigateUp()
+        override fun onSupportNavigateUp(): Boolean {
+            onBackPressedDispatcher.onBackPressed()
+            return super.onSupportNavigateUp()
+        }
     }
-}

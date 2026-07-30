@@ -14,22 +14,21 @@ import com.hsact.domain.model.time.ShiftTime
 
 /**
  * Mappers for converting between Domain and Firebase data models.
- */
-
-/**
+ *
  * Converts a domain [Shift] model to a [FirebaseShift] DTO for network operations.
  */
-fun Shift.toFirebase(): FirebaseShift = FirebaseShift(
-    id = id,
-    remoteId = remoteId,
-    carId = carId,
-    meta = meta.toFirebase(),
-    carSnapshot = carSnapshot.toFirebase(),
-    period = time.period.toFirebase(),
-    rest = time.rest?.toFirebase(),
-    financeInput = financeInput.toFirebase(),
-    note = note
-)
+fun Shift.toFirebase(): FirebaseShift =
+    FirebaseShift(
+        id = id,
+        remoteId = remoteId,
+        carId = carId,
+        meta = meta.toFirebase(),
+        carSnapshot = carSnapshot.toFirebase(),
+        period = time.period.toFirebase(),
+        rest = time.rest?.toFirebase(),
+        financeInput = financeInput.toFirebase(),
+        note = note,
+    )
 
 /**
  * Converts a [FirebaseShift] DTO to a domain [Shift] model.
@@ -47,10 +46,10 @@ fun FirebaseShift.toDomainOrNull(forceRemoteId: String? = null): Shift? {
         carSnapshot = carSnapshot.toDomain(),
         time = ShiftTime(
             period = period.toDomain(),
-            rest = rest?.toDomain()
+            rest = rest?.toDomain(),
         ),
         financeInput = financeInput.toDomain(),
-        note = note
+        note = note,
     )
 }
 
@@ -59,61 +58,69 @@ fun FirebaseShift.toDomainOrNull(forceRemoteId: String? = null): Shift? {
  *
  * Note: [isSynced] is explicitly set to true when mapping to Firebase.
  */
-fun ShiftMeta.toFirebase(): FirebaseShiftMeta = FirebaseShiftMeta(
-    createdAt = createdAt.toString(),
-    updatedAt = updatedAt.toString(),
-    lastModifiedBy = lastModifiedBy,
-    isSynced = true
-)
+fun ShiftMeta.toFirebase(): FirebaseShiftMeta =
+    FirebaseShiftMeta(
+        createdAt = createdAt.toString(),
+        updatedAt = updatedAt.toString(),
+        lastModifiedBy = lastModifiedBy,
+        isSynced = true,
+    )
 
 /**
  * Converts [FirebaseShiftMeta] DTO back to the domain [ShiftMeta] model.
  */
-fun FirebaseShiftMeta.toDomain(): ShiftMeta = ShiftMeta(
-    createdAt = createdAt?.let { java.time.LocalDateTime.parse(it) } ?: java.time.LocalDateTime.now(),
-    updatedAt = updatedAt?.let { java.time.LocalDateTime.parse(it) } ?: java.time.LocalDateTime.now(),
-    lastModifiedBy = lastModifiedBy ?: "",
-    isSynced = isSynced ?: false
-)
+fun FirebaseShiftMeta.toDomain(): ShiftMeta =
+    ShiftMeta(
+        createdAt = createdAt?.let { java.time.LocalDateTime.parse(it) } ?: java.time.LocalDateTime.now(),
+        updatedAt = updatedAt?.let { java.time.LocalDateTime.parse(it) } ?: java.time.LocalDateTime.now(),
+        lastModifiedBy = lastModifiedBy ?: "",
+        isSynced = isSynced ?: false,
+    )
 
-fun CarSnapshot.toFirebase(): FirebaseCarSnapshot = FirebaseCarSnapshot(
-    name = name,
-    mileage = mileage,
-    fuelConsumption = fuelConsumption,
-    rentCost = rentCost,
-    serviceCost = serviceCost
-)
+fun CarSnapshot.toFirebase(): FirebaseCarSnapshot =
+    FirebaseCarSnapshot(
+        name = name,
+        mileage = mileage,
+        fuelConsumption = fuelConsumption,
+        rentCost = rentCost,
+        serviceCost = serviceCost,
+    )
 
-fun FirebaseCarSnapshot.toDomain(): CarSnapshot = CarSnapshot(
-    name = name ?: "",
-    mileage = mileage ?: 0,
-    fuelConsumption = fuelConsumption ?: 0,
-    rentCost = rentCost ?: 0,
-    serviceCost = serviceCost ?: 0
-)
+fun FirebaseCarSnapshot.toDomain(): CarSnapshot =
+    CarSnapshot(
+        name = name ?: "",
+        mileage = mileage ?: 0,
+        fuelConsumption = fuelConsumption ?: 0,
+        rentCost = rentCost ?: 0,
+        serviceCost = serviceCost ?: 0,
+    )
 
-fun DateTimePeriod.toFirebase(): FirebaseDateTimePeriod = FirebaseDateTimePeriod(
-    start = start.toString(),
-    end = end.toString()
-)
+fun DateTimePeriod.toFirebase(): FirebaseDateTimePeriod =
+    FirebaseDateTimePeriod(
+        start = start.toString(),
+        end = end.toString(),
+    )
 
-fun FirebaseDateTimePeriod.toDomain(): DateTimePeriod = DateTimePeriod(
-    start = start?.let { java.time.LocalDateTime.parse(it) } ?: java.time.LocalDateTime.now(),
-    end = end?.let { java.time.LocalDateTime.parse(it) } ?: java.time.LocalDateTime.now()
-)
+fun FirebaseDateTimePeriod.toDomain(): DateTimePeriod =
+    DateTimePeriod(
+        start = start?.let { java.time.LocalDateTime.parse(it) } ?: java.time.LocalDateTime.now(),
+        end = end?.let { java.time.LocalDateTime.parse(it) } ?: java.time.LocalDateTime.now(),
+    )
 
-fun ShiftFinanceInput.toFirebase(): FirebaseFinanceInput = FirebaseFinanceInput(
-    earnings = earnings,
-    tips = tips,
-    taxRate = taxRate,
-    wash = wash,
-    fuelCost = fuelCost
-)
+fun ShiftFinanceInput.toFirebase(): FirebaseFinanceInput =
+    FirebaseFinanceInput(
+        earnings = earnings,
+        tips = tips,
+        taxRate = taxRate,
+        wash = wash,
+        fuelCost = fuelCost,
+    )
 
-fun FirebaseFinanceInput.toDomain(): ShiftFinanceInput = ShiftFinanceInput(
-    earnings = earnings ?: 0,
-    tips = tips ?: 0,
-    taxRate = taxRate ?: 0,
-    wash = wash ?: 0,
-    fuelCost = fuelCost ?: 0
-)
+fun FirebaseFinanceInput.toDomain(): ShiftFinanceInput =
+    ShiftFinanceInput(
+        earnings = earnings ?: 0,
+        tips = tips ?: 0,
+        taxRate = taxRate ?: 0,
+        wash = wash ?: 0,
+        fuelCost = fuelCost ?: 0,
+    )

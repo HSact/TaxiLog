@@ -20,53 +20,55 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LogViewModel @Inject constructor(
-    getSettingsFlowUseCase: GetSettingsFlowUseCase,
-    private val getAllShiftsUseCase: GetAllShiftsUseCase,
-    private val deleteShiftUseCase: DeleteShiftUseCase,
-    private val deleteAllShiftsUseCase: DeleteAllShiftsUseCase,
-) : ViewModel() {
+class LogViewModel
+    @Inject
+    constructor(
+        getSettingsFlowUseCase: GetSettingsFlowUseCase,
+        private val getAllShiftsUseCase: GetAllShiftsUseCase,
+        private val deleteShiftUseCase: DeleteShiftUseCase,
+        private val deleteAllShiftsUseCase: DeleteAllShiftsUseCase,
+    ) : ViewModel() {
+        /**
+         * Reactive user settings used for formatting currency and units in the shifts log.
+         */
+        val settings: StateFlow<UserSettings> =
+            getSettingsFlowUseCase()
+                .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), UserSettings.default)
 
-    /**
-     * Reactive user settings used for formatting currency and units in the shifts log.
-     */
-    val settings: StateFlow<UserSettings> = getSettingsFlowUseCase()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), UserSettings.default)
+        private val _shifts = MutableStateFlow<List<Shift>>(emptyList())
+        val shifts: StateFlow<List<Shift>> = _shifts.asStateFlow()
 
-    private val _shifts = MutableStateFlow<List<Shift>>(emptyList())
-    val shifts: StateFlow<List<Shift>> = _shifts.asStateFlow()
+        var recyclerViewState: Parcelable? = null // For saving the RecyclerView scroll state
 
-    var recyclerViewState: Parcelable? = null           //For saving the RecyclerView scroll state
+        init {
+            updateList()
+        }
 
-    init {
-        updateList()
-    }
+        fun handleIntent(intent: LogIntent) {
+            when (intent) {
+                is LogIntent.UpdateList -> updateList()
+                is LogIntent.DeleteShift -> deleteShift(intent.shift)
+                is LogIntent.DeleteAllShifts -> deleteAllShifts()
+            }
+        }
 
-    fun handleIntent(intent: LogIntent) {
-        when (intent) {
-            is LogIntent.UpdateList -> updateList()
-            is LogIntent.DeleteShift -> deleteShift(intent.shift)
-            is LogIntent.DeleteAllShifts -> deleteAllShifts()
+        private fun deleteAllShifts() {
+            viewModelScope.launch {
+                deleteAllShiftsUseCase.invoke()
+                _shifts.value = getAllShiftsUseCase().first()
+            }
+        }
+
+        private fun deleteShift(shift: Shift) {
+            viewModelScope.launch {
+                deleteShiftUseCase(shift)
+                _shifts.value = getAllShiftsUseCase().first()
+            }
+        }
+
+        private fun updateList() {
+            viewModelScope.launch {
+                _shifts.value = getAllShiftsUseCase().first()
+            }
         }
     }
-
-    private fun deleteAllShifts() {
-        viewModelScope.launch {
-            deleteAllShiftsUseCase.invoke()
-            _shifts.value = getAllShiftsUseCase().first()
-        }
-    }
-
-    private fun deleteShift(shift: Shift) {
-        viewModelScope.launch {
-            deleteShiftUseCase(shift)
-            _shifts.value = getAllShiftsUseCase().first()
-        }
-    }
-
-    private fun updateList() {
-        viewModelScope.launch {
-            _shifts.value = getAllShiftsUseCase().first()
-        }
-    }
-}

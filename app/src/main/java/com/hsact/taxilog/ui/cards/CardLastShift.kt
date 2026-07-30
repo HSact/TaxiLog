@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.StateFlow
 fun CardLastShift(
     shift: StateFlow<Shift?>,
     symbolMode: CurrencySymbolMode,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     val lastShift = shift.collectAsStateWithLifecycle()
     val locale = LocalConfiguration.current.locales[0]
@@ -46,7 +46,7 @@ fun CardLastShift(
         Column {
             CardHeader(text = stringResource(R.string.last_shift))
             Spacer(Modifier.height(8.dp))
-            
+
             if (lastShiftValue != null) {
                 val lastShiftUi = lastShiftValue.toUi(locale, symbolMode)
                 LabelValueRow(stringResource(R.string.date), lastShiftUi.dateBegin)
@@ -57,23 +57,24 @@ fun CardLastShift(
                 LabelValueRow(stringResource(R.string.per_hour), lastShiftUi.earningsPerHour)
             } else {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.List,
                         contentDescription = null,
                         modifier = Modifier.size(40.dp),
-                        tint = MaterialTheme.colorScheme.primary
+                        tint = MaterialTheme.colorScheme.primary,
                     )
                     Spacer(Modifier.size(8.dp))
                     Text(
                         text = stringResource(R.string.home_no_shifts_yet),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
@@ -93,8 +94,8 @@ private fun CardPreview() {
                 "costs" to na,
                 "time" to na,
                 "total" to na,
-                "perHour" to na
-            )
+                "perHour" to na,
+            ),
         )
     }
 }

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
  * The sequence number represents the order of shift creation (1-based).
  */
 class GetShiftSequenceNumberUseCase(
-    private val repository: ShiftRepository
+    private val repository: ShiftRepository,
 ) {
     /**
      * Invokes the use case to get the sequence number for the given shift ID.

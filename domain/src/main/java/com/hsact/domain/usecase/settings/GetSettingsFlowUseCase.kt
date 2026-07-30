@@ -17,7 +17,5 @@ class GetSettingsFlowUseCase(
      * Invokes the use case to get the settings flow.
      * @return A [Flow] of [UserSettings].
      */
-    operator fun invoke(): Flow<UserSettings> {
-        return repository.getSettingsFlow()
-    }
+    operator fun invoke(): Flow<UserSettings> = repository.getSettingsFlow()
 }

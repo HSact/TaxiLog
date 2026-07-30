@@ -13,24 +13,17 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 object AuthUseCaseModule {
+    @Provides
+    fun provideGetAuthStateUseCase(repository: AuthRepository): GetAuthStateUseCase = GetAuthStateUseCase(repository)
 
     @Provides
-    fun provideGetAuthStateUseCase(
-        repository: AuthRepository
-    ): GetAuthStateUseCase = GetAuthStateUseCase(repository)
+    fun provideGetCurrentUserUseCase(repository: AuthRepository): GetCurrentUserUseCase =
+        GetCurrentUserUseCase(repository)
 
     @Provides
-    fun provideGetCurrentUserUseCase(
-        repository: AuthRepository
-    ): GetCurrentUserUseCase = GetCurrentUserUseCase(repository)
+    fun provideSignInWithGoogleUseCase(repository: AuthRepository): SignInWithGoogleUseCase =
+        SignInWithGoogleUseCase(repository)
 
     @Provides
-    fun provideSignInWithGoogleUseCase(
-        repository: AuthRepository
-    ): SignInWithGoogleUseCase = SignInWithGoogleUseCase(repository)
-
-    @Provides
-    fun provideSignOutUseCase(
-        repository: AuthRepository
-    ): SignOutUseCase = SignOutUseCase(repository)
+    fun provideSignOutUseCase(repository: AuthRepository): SignOutUseCase = SignOutUseCase(repository)
 }

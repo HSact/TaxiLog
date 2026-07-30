@@ -6,11 +6,9 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 
-fun LocalDate.getStartOfWeek(): LocalDate =
-    this.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+fun LocalDate.getStartOfWeek(): LocalDate = this.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
 
-fun LocalDate.getEndOfWeek(): LocalDate =
-    this.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+fun LocalDate.getEndOfWeek(): LocalDate = this.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
 
 fun LocalDateTime.toShortDate(): String {
     val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")

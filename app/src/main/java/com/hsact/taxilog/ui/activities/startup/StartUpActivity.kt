@@ -10,8 +10,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import androidx.credentials.exceptions.NoCredentialException
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.hsact.domain.model.settings.UserSettings
 import com.hsact.taxilog.R
@@ -28,6 +28,10 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class StartUpActivity : AppCompatActivity() {
+
+    companion object {
+        private const val LOGO_DURATION: Long = 1200
+    }
     @Inject
     lateinit var googleAuthClient: GoogleAuthClient
 
@@ -39,7 +43,6 @@ class StartUpActivity : AppCompatActivity() {
     private var currentDialog: Dialog? = null
 
     private lateinit var binding: ActivityStartUpBinding
-    private val logoDuration: Long = 1200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,12 +52,13 @@ class StartUpActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             // Wait for both settings to be loaded and AuthState to be determined (not Loading)
-            val initializationFlow = combine(
-                viewModel.settings.filterNotNull(),
-                viewModel.authState.filter { it !is AuthState.Loading }
-            ) { settings, authState ->
-                Pair(settings, authState)
-            }
+            val initializationFlow =
+                combine(
+                    viewModel.settings.filterNotNull(),
+                    viewModel.authState.filter { it !is AuthState.Loading },
+                ) { settings, authState ->
+                    Pair(settings, authState)
+                }
 
             initializationFlow.collect { (settings, authState) ->
                 handleInitialization(settings, authState)
@@ -86,11 +90,14 @@ class StartUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleInitialization(settings: UserSettings, authState: AuthState) {
+    private fun handleInitialization(
+        settings: UserSettings,
+        authState: AuthState,
+    ) {
         if (isNavigating) return
 
         this.settings = settings
-        
+
         if (!isInitialized) {
             isInitialized = true
             applyInitialSetup(settings)
@@ -127,13 +134,16 @@ class StartUpActivity : AppCompatActivity() {
             navigateToMain(false)
         }
 
-        binding.imageLogo.animate().setDuration(logoDuration).alpha(1f)
+        binding.imageLogo
+            .animate()
+            .setDuration(LOGO_DURATION)
+            .alpha(1f)
     }
 
     private fun navigateToMain(toSettings: Boolean) {
         if (isNavigating) return
         isNavigating = true
-        
+
         val intent = Intent(this, MainActivity::class.java)
         if (toSettings) intent.putExtra("NAVIGATE_TO_SETTINGS", true)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -144,27 +154,26 @@ class StartUpActivity : AppCompatActivity() {
     private fun showAuthChoiceDialog() {
         if (currentDialog?.isShowing == true || isNavigating) return
 
-        currentDialog = MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.sign_in_title))
-            .setMessage(getString(R.string.sign_in_description))
-            .setPositiveButton(getString(R.string.sign_in)) { _, _ ->
-                lifecycleScope.launch {
-                    delay(logoDuration - 100)
-                    signInWithGoogle()
-                }
-            }
-            .setNegativeButton(getString(R.string.skip)) { _, _ ->
-                viewModel.setAuthSkipped(true)
-                // proceedAfterLogin will be called via collect when settings update or next emit
-                proceedAfterLogin()
-            }
-            .setCancelable(false)
-            .show()
+        currentDialog =
+            MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.sign_in_title))
+                .setMessage(getString(R.string.sign_in_description))
+                .setPositiveButton(getString(R.string.sign_in)) { _, _ ->
+                    lifecycleScope.launch {
+                        delay(LOGO_DURATION - 100)
+                        signInWithGoogle()
+                    }
+                }.setNegativeButton(getString(R.string.skip)) { _, _ ->
+                    viewModel.setAuthSkipped(true)
+                    // proceedAfterLogin will be called via collect when settings update or next emit
+                    proceedAfterLogin()
+                }.setCancelable(false)
+                .show()
     }
 
     private fun proceedAfterLogin() {
         if (isNavigating) return
-        
+
         if (settings.isConfigured) {
             isNavigating = true
             Handler(Looper.getMainLooper()).postDelayed({
@@ -172,7 +181,7 @@ class StartUpActivity : AppCompatActivity() {
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-            }, logoDuration)
+            }, LOGO_DURATION)
         } else {
             setUp()
         }
@@ -192,20 +201,21 @@ class StartUpActivity : AppCompatActivity() {
             isAuthInProgress = true
             try {
                 val result = googleAuthClient.signInAndAuthenticate(this@StartUpActivity)
-                result.onSuccess { user ->
-                    Log.d(
-                        "GoogleSignIn",
-                        "signInWithGoogle:success. Email: ${user.email}"
-                    )
-                    // Navigation will happen via initializationFlow.collect
-                }.onFailure { e ->
-                    Log.w("GoogleSignIn", "CredentialManager sign in failed", e)
-                    if (e is NoCredentialException) {
-                        showNoAccountDialog()
-                    } else {
-                        showRetryDialog()
+                result
+                    .onSuccess { user ->
+                        Log.d(
+                            "GoogleSignIn",
+                            "signInWithGoogle:success. Email: ${user.email}",
+                        )
+                        // Navigation will happen via initializationFlow.collect
+                    }.onFailure { e ->
+                        Log.w("GoogleSignIn", "CredentialManager sign in failed", e)
+                        if (e is NoCredentialException) {
+                            showNoAccountDialog()
+                        } else {
+                            showRetryDialog()
+                        }
                     }
-                }
             } finally {
                 isAuthInProgress = false
             }
@@ -215,58 +225,57 @@ class StartUpActivity : AppCompatActivity() {
     private fun showNoAccountDialog() {
         if (isNavigating) return
         currentDialog?.dismiss()
-        
-        currentDialog = MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.no_google_accounts))
-            .setMessage(getString(R.string.add_account_instruction))
-            .setPositiveButton(getString(R.string.go_to_settings)) { _, _ ->
-                try {
-                    val intent = Intent(android.provider.Settings.ACTION_ADD_ACCOUNT)
-                    intent.putExtra(android.provider.Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
-                    startActivity(intent)
-                } catch (e: Exception) {
-                    Log.e("StartUpActivity", "Could not open account settings", e)
-                }
-            }
-            .setNegativeButton(getString(R.string.skip)) { _, _ ->
-                viewModel.setAuthSkipped(true)
-                proceedAfterLogin()
-            }
-            .setCancelable(false)
-            .show()
+
+        currentDialog =
+            MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.no_google_accounts))
+                .setMessage(getString(R.string.add_account_instruction))
+                .setPositiveButton(getString(R.string.go_to_settings)) { _, _ ->
+                    try {
+                        val intent = Intent(android.provider.Settings.ACTION_ADD_ACCOUNT)
+                        intent.putExtra(android.provider.Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
+                        startActivity(intent)
+                    } catch (e: Exception) {
+                        Log.e("StartUpActivity", "Could not open account settings", e)
+                    }
+                }.setNegativeButton(getString(R.string.skip)) { _, _ ->
+                    viewModel.setAuthSkipped(true)
+                    proceedAfterLogin()
+                }.setCancelable(false)
+                .show()
     }
 
     private fun showRetryDialog() {
         if (isNavigating) return
         currentDialog?.dismiss()
 
-        currentDialog = MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.authentication_failed))
-            .setMessage(getString(R.string.retry_login_question))
-            .setCancelable(false)
-            .setPositiveButton(getString(R.string.retry)) { _, _ ->
-                signInWithGoogle()
-            }
-            .setNegativeButton(getString(R.string.cancel)) { _, _ ->
-                finish()
-            }
-            .show()
+        currentDialog =
+            MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.authentication_failed))
+                .setMessage(getString(R.string.retry_login_question))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.retry)) { _, _ ->
+                    signInWithGoogle()
+                }.setNegativeButton(getString(R.string.cancel)) { _, _ ->
+                    finish()
+                }.show()
     }
 
     private fun getCurrentTheme(): String {
         val currentTheme = AppCompatDelegate.getDefaultNightMode()
-        if (currentTheme == 1) {
-            return "light"
+        return when (currentTheme) {
+            1 -> "light"
+            2 -> "dark"
+            else -> "default"
         }
-        if (currentTheme == 2) {
-            return "dark"
-        }
-        return "default"
     }
 
     private fun setUp() {
         binding.SetUpLayout.alpha = 0f
         binding.LogoLayout.isVisible = false
-        binding.SetUpLayout.animate().setDuration(logoDuration).alpha(1f)
+        binding.SetUpLayout
+            .animate()
+            .setDuration(LOGO_DURATION)
+            .alpha(1f)
     }
 }

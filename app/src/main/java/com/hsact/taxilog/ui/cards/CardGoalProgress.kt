@@ -45,134 +45,190 @@ import java.time.LocalDate
 import java.util.Locale
 
 @Composable
-fun CardGoalProgress(chartData: StateFlow<List<Double>>, goalData: StateFlow<Double>) {
+fun CardGoalProgress(
+    chartData: StateFlow<List<Double>>,
+    goalData: StateFlow<Double>,
+) {
     val chartState by chartData.collectAsStateWithLifecycle()
     val goal by goalData.collectAsStateWithLifecycle()
     val daysInMonth = LocalDate.now().lengthOfMonth()
     val trimmedChartState = chartState.take(daysInMonth)
-    
+
     val hasData = trimmedChartState.any { it > 0.0 }
-    
+
     val max = maxOf(chartState.maxOrNull() ?: 0.0, goal)
     val min = chartState.minOrNull()?.takeIf { it <= 0.0 } ?: 0.0
     val progressName = stringResource(R.string.progress)
     val goalName = stringResource(R.string.goal)
     val isDarkTheme = isSystemInDarkTheme()
-    val textStyle: TextStyle = if (isDarkTheme) TextStyle(color = Color.White)
-    else TextStyle(color = Color.Black)
+    val textStyle: TextStyle =
+        if (isDarkTheme) {
+            TextStyle(color = Color.White)
+        } else {
+            TextStyle(color = Color.Black)
+        }
 
     val colorGraphLine = Color(0xFFFBD323)
 
-    val labelHelperProperties = LabelHelperProperties(
-        enabled = hasData,
-        textStyle = textStyle
-    )
-
-    val labels = chartState.mapIndexed {
-            index, value,
-        ->
-        if (index % 2 == 0 && index < LocalDate.now().lengthOfMonth()) (index + 1).toString()
-        else " "
-    }
-
-    val labelProperties = LabelProperties(
-        enabled = hasData,
-        textStyle = textStyle,
-        labels = labels,
-        rotation = LabelProperties.Rotation(degree = 0f)
-    )
-
-    val gridProperties = GridProperties(
-        enabled = false,
-    )
-    val indicatorProperties = HorizontalIndicatorProperties(
-        enabled = hasData,
-        textStyle = textStyle,
-        indicators = GraphIndicatorHelper.buildIndicators(min, max),
-        contentBuilder = {
-            GraphIndicatorHelper.formatIndicatorValue(
-                it,
-                locale = Locale.getDefault()
-            )
+    val labels =
+        chartState.mapIndexed { index, _ ->
+            if (index % 2 == 0 && index < LocalDate.now().lengthOfMonth()) {
+                (index + 1).toString()
+            } else {
+                " "
+            }
         }
-    )
+
     val viewRange = ViewRange(0, LocalDate.now().dayOfMonth)
 
     BaseCard {
         CardHeader(stringResource(R.string.month_graph))
         if (!hasData) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Info,
-                    contentDescription = null,
-                    modifier = Modifier.size(48.dp),
-                    tint = MaterialTheme.colorScheme.primary
-                )
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    text = stringResource(R.string.stats_empty_description),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 32.dp)
-                )
-            }
+            EmptyChartPlaceholder()
         } else {
-            LineChart(
-                data =
-                    listOf(
-                        Line(
-                            label = progressName,
-                            values = trimmedChartState,
-                            color = SolidColor(colorGraphLine),
-                            firstGradientFillColor = colorGraphLine.copy(alpha = .5f),
-                            secondGradientFillColor = Color.Transparent,
-                            strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
-                            gradientAnimationDelay = 1000,
-                            drawStyle = ir.ehsannarmani.compose_charts.models.DrawStyle.Stroke(
-                                width = 2.dp
-                            ),
-                            viewRange = viewRange
-                        ),
-                        Line(
-                            label = goalName,
-                            values = List(daysInMonth) { goal },
-                            color = SolidColor(Color.Red),
-                        )
-                    ),
-                animationMode = AnimationMode.Together(
-                    delayBuilder = {
-                        it * 500L
-                    }),
-                gridProperties = gridProperties,
-                indicatorProperties = indicatorProperties,
-                labelHelperProperties = labelHelperProperties,
-                labelProperties = labelProperties,
-                minValue = min,
-                maxValue = max * 1.0,
-                modifier = Modifier
-                    .heightIn(max = 300.dp)
-                    .padding(top = 40.dp)
+            GoalLineChart(
+                trimmedChartState = trimmedChartState,
+                goal = goal,
+                progressName = progressName,
+                goalName = goalName,
+                colorGraphLine = colorGraphLine,
+                textStyle = textStyle,
+                min = min,
+                max = max,
+                hasData = hasData,
+                labels = labels,
+                viewRange = viewRange,
+                daysInMonth = daysInMonth,
             )
         }
     }
 }
 
+@Composable
+private fun EmptyChartPlaceholder() {
+    Column(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(200.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Icon(
+            imageVector = Icons.Default.Info,
+            contentDescription = null,
+            modifier = Modifier.size(48.dp),
+            tint = MaterialTheme.colorScheme.primary,
+        )
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text = stringResource(R.string.stats_empty_description),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 32.dp),
+        )
+    }
+}
+
+@Composable
+private fun GoalLineChart(
+    trimmedChartState: List<Double>,
+    goal: Double,
+    progressName: String,
+    goalName: String,
+    colorGraphLine: Color,
+    textStyle: TextStyle,
+    min: Double,
+    max: Double,
+    hasData: Boolean,
+    labels: List<String>,
+    viewRange: ViewRange,
+    daysInMonth: Int,
+) {
+    val gridProperties = GridProperties(enabled = false)
+    val indicatorProperties =
+        HorizontalIndicatorProperties(
+            enabled = hasData,
+            textStyle = textStyle,
+            indicators = GraphIndicatorHelper.buildIndicators(min, max),
+            contentBuilder = {
+                GraphIndicatorHelper.formatIndicatorValue(
+                    it,
+                    locale = Locale.getDefault(),
+                )
+            },
+        )
+    val labelHelperProperties = LabelHelperProperties(enabled = hasData, textStyle = textStyle)
+    val labelProperties =
+        LabelProperties(
+            enabled = hasData,
+            textStyle = textStyle,
+            labels = labels,
+            rotation = LabelProperties.Rotation(degree = 0f),
+        )
+
+    LineChart(
+        data =
+            listOf(
+                Line(
+                    label = progressName,
+                    values = trimmedChartState,
+                    color = SolidColor(colorGraphLine),
+                    firstGradientFillColor = colorGraphLine.copy(alpha = .5f),
+                    secondGradientFillColor = Color.Transparent,
+                    strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
+                    gradientAnimationDelay = 1000,
+                    drawStyle =
+                        ir.ehsannarmani.compose_charts.models.DrawStyle.Stroke(
+                            width = 2.dp,
+                        ),
+                    viewRange = viewRange,
+                ),
+                Line(
+                    label = goalName,
+                    values = List(daysInMonth) { goal },
+                    color = SolidColor(Color.Red),
+                ),
+            ),
+        animationMode =
+            AnimationMode.Together(
+                delayBuilder = {
+                    it * 500L
+                },
+            ),
+        gridProperties = gridProperties,
+        indicatorProperties = indicatorProperties,
+        labelHelperProperties = labelHelperProperties,
+        labelProperties = labelProperties,
+        minValue = min,
+        maxValue = max * 1.0,
+        modifier =
+            Modifier
+                .heightIn(max = 300.dp)
+                .padding(top = 40.dp),
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun CardPreview() {
-    val previewData = remember {
-        MutableStateFlow(
-            listOf(
-                0.0, 2.0, 3.0, 7.0, 10.0, 12.0, 18.0, 25.0, 27.0, 30.0
+    val previewData =
+        remember {
+            MutableStateFlow(
+                listOf(
+                    0.0,
+                    2.0,
+                    3.0,
+                    7.0,
+                    10.0,
+                    12.0,
+                    18.0,
+                    25.0,
+                    27.0,
+                    30.0,
+                ),
             )
-        )
-    }
+        }
     CardGoalProgress(previewData, MutableStateFlow(0.0))
 }

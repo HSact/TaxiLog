@@ -21,10 +21,10 @@ class RecyclerAdapter(
     private val settings: UserSettings,
     private val onItemClick: (shift: Shift) -> Unit,
     private val onItemMenuClick: (visibleNumber: Int, shift: Shift) -> Unit,
-) :
-    RecyclerView.Adapter<RecyclerAdapter.ShiftViewHolder>() {
-    class ShiftViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
+) : RecyclerView.Adapter<RecyclerAdapter.ShiftViewHolder>() {
+    class ShiftViewHolder(
+        itemView: View,
+    ) : RecyclerView.ViewHolder(itemView) {
         val textId: TextView = itemView.findViewById(R.id.textShiftNumber1)
         val textDate: TextView = itemView.findViewById(R.id.textDate1)
         val textTime: TextView = itemView.findViewById(R.id.textTime1)
@@ -36,19 +36,27 @@ class RecyclerAdapter(
         val textProfit: TextView = itemView.findViewById(R.id.textProfit1)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShiftViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): ShiftViewHolder {
         val itemView =
-            LayoutInflater.from(parent.context)
+            LayoutInflater
+                .from(parent.context)
                 .inflate(R.layout.recyclerview_item, parent, false)
         return ShiftViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: ShiftViewHolder, index: Int) {
+    override fun onBindViewHolder(
+        holder: ShiftViewHolder,
+        index: Int,
+    ) {
         val locale = Locale.getDefault()
-        val shift = items[index].toUi(
-            locale,
-            settings.currency ?: CurrencySymbolMode.fromLocale(Locale.getDefault())
-        )
+        val shift =
+            items[index].toUi(
+                locale,
+                settings.currency ?: CurrencySymbolMode.fromLocale(Locale.getDefault()),
+            )
         val visibleNumber = itemCount - index
         holder.textId.text = visibleNumber.toString()
         holder.textDate.text = shift.dateBegin
@@ -70,7 +78,5 @@ class RecyclerAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
+    override fun getItemCount(): Int = items.size
 }

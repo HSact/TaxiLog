@@ -17,5 +17,5 @@ data class ShiftInputModel(
     var wash: String = "",
     var fuelCost: String = "",
     var mileage: String = "",
-    var note: String? = null
+    var note: String? = null,
 )

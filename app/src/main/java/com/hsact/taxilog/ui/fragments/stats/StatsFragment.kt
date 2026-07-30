@@ -70,7 +70,7 @@ class StatsFragment : Fragment() {
                 EmptyStateView(
                     icon = Icons.Default.Info,
                     title = getString(R.string.stats_empty_title),
-                    description = getString(R.string.stats_empty_description)
+                    description = getString(R.string.stats_empty_description),
                 )
             }
         }
@@ -118,7 +118,7 @@ class StatsFragment : Fragment() {
                     viewModel.onEndDateChange(date)
                 }
                 viewModel.updateShifts(Locale.getDefault())
-            }
+            },
         )
     }
 
@@ -131,12 +131,12 @@ class StatsFragment : Fragment() {
     private fun displayInfo(uiState: UiState) {
         val shifts = viewModel.shifts.value
         val isEmpty = shifts.isEmpty()
-        
+
         countLayout.isVisible = !isEmpty
         averageCard.isVisible = !isEmpty
         totalCard.isVisible = !isEmpty
         binding.emptyStateCompose.isVisible = isEmpty
-        
+
         if (isEmpty) return
 
         textShiftsCount.text = uiState.shiftsCount

@@ -14,9 +14,10 @@ fun CardHeader(
 ) {
     Text(
         text = text,
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier =
+            modifier
+                .fillMaxWidth(),
         color = MaterialTheme.colorScheme.onBackground,
-        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
+        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
     )
 }

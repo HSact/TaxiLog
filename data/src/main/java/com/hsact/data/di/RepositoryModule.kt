@@ -16,22 +16,15 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
+    @Binds
+    @Singleton
+    abstract fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
 
     @Binds
     @Singleton
-    abstract fun bindAuthRepository(
-        impl: AuthRepositoryImpl
-    ): AuthRepository
+    abstract fun bindLocalShiftRepository(impl: ShiftRepositoryLocalImpl): ShiftRepositoryLocal
 
     @Binds
     @Singleton
-    abstract fun bindLocalShiftRepository(
-        impl: ShiftRepositoryLocalImpl
-    ): ShiftRepositoryLocal
-
-    @Binds
-    @Singleton
-    abstract fun bindRemoteShiftRepository(
-        impl: ShiftRepositoryRemoteImpl
-    ): ShiftRepositoryRemote
+    abstract fun bindRemoteShiftRepository(impl: ShiftRepositoryRemoteImpl): ShiftRepositoryRemote
 }

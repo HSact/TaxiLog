@@ -22,7 +22,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
-
     @Inject
     lateinit var googleAuthClient: GoogleAuthClient
 
@@ -31,9 +30,9 @@ class SettingsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
+        savedInstanceState: Bundle?,
+    ): View =
+        ComposeView(requireContext()).apply {
             setContent {
                 AppTheme {
                     val uiState by viewModel.uiState.collectAsState()
@@ -45,12 +44,11 @@ class SettingsFragment : Fragment() {
                         onSignOutClick = { logout() },
                         onSignInClick = { login() },
                         onUpdateSettings = { viewModel.updateSettings(it) },
-                        onApplyClick = { handleApplyClick() }
+                        onApplyClick = { handleApplyClick() },
                     )
                 }
             }
         }
-    }
 
     private fun login() {
         viewModel.setAuthSkipped(false)
@@ -73,8 +71,7 @@ class SettingsFragment : Fragment() {
             .setCancelable(false)
             .setPositiveButton(getString(R.string.retry)) { _, _ ->
                 login()
-            }
-            .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+            }.setNegativeButton(getString(R.string.cancel)) { _, _ -> }
             .show()
     }
 
@@ -86,17 +83,18 @@ class SettingsFragment : Fragment() {
             viewModel.localeHelper.setLocale(settings.language)
             viewModel.saveSettings()
             switchTheme(settings.theme ?: "")
-            
+
             findNavController().navigateUp()
         }
     }
 
     private fun switchTheme(selectedTheme: String) {
-        val mode = when (selectedTheme) {
-            "dark" -> AppCompatDelegate.MODE_NIGHT_YES
-            "light" -> AppCompatDelegate.MODE_NIGHT_NO
-            else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-        }
+        val mode =
+            when (selectedTheme) {
+                "dark" -> AppCompatDelegate.MODE_NIGHT_YES
+                "light" -> AppCompatDelegate.MODE_NIGHT_NO
+                else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            }
 
         if (AppCompatDelegate.getDefaultNightMode() != mode) {
             AppCompatDelegate.setDefaultNightMode(mode)

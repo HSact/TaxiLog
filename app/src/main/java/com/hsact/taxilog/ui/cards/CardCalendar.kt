@@ -57,39 +57,41 @@ fun CardCalendar(
     val shiftList by shiftsFlow.collectAsStateWithLifecycle()
 
     val locale = LocalConfiguration.current.locales[0]
-    val monthName = month.month.getDisplayName(TextStyle.FULL_STANDALONE, locale)
-        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
+    val monthName =
+        month.month
+            .getDisplayName(TextStyle.FULL_STANDALONE, locale)
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
     val year = month.year
 
     BaseCard {
         Column(modifier = Modifier.fillMaxWidth()) {
             CardHeader(text = stringResource(R.string.calendar))
-            
+
             Spacer(modifier = Modifier.height(8.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 IconButton(onClick = onPreviousMonth) {
                     Icon(
                         Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                         contentDescription = "Previous Month",
-                        tint = MaterialTheme.colorScheme.onSurface
+                        tint = MaterialTheme.colorScheme.onSurface,
                     )
                 }
                 Text(
                     text = "$monthName $year",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 IconButton(onClick = onNextMonth) {
                     Icon(
                         Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         contentDescription = "Next Month",
-                        tint = MaterialTheme.colorScheme.onSurface
+                        tint = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }
@@ -109,11 +111,12 @@ private fun CalendarGrid(
     onShiftsClick: (List<Shift>) -> Unit,
 ) {
     val locale = LocalConfiguration.current.locales[0]
-    val firstDayOfWeek = if (firstDayOfWeekSetting > 0) {
-        DayOfWeek.of(firstDayOfWeekSetting)
-    } else {
-        WeekFields.of(locale).firstDayOfWeek
-    }
+    val firstDayOfWeek =
+        if (firstDayOfWeekSetting > 0) {
+            DayOfWeek.of(firstDayOfWeekSetting)
+        } else {
+            WeekFields.of(locale).firstDayOfWeek
+        }
     val daysInMonth = month.lengthOfMonth()
     val firstDayOfMonth = month.atDay(1).dayOfWeek
 
@@ -123,24 +126,30 @@ private fun CalendarGrid(
         scale.snapTo(0f)
         scale.animateTo(
             targetValue = 1f,
-            animationSpec = spring(
-                dampingRatio = Spring.DampingRatioMediumBouncy,
-                stiffness = Spring.StiffnessMediumLow
-            )
+            animationSpec =
+                spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessMediumLow,
+                ),
         )
     }
 
     // Calculate offset based on firstDayOfWeek
     val offset = ((firstDayOfMonth.value - firstDayOfWeek.value) + 7) % 7
 
-    val daysOfWeek = remember(firstDayOfWeek) {
-        (0..6).map { firstDayOfWeek + it.toLong() }
-    }
+    val daysOfWeek =
+        remember(firstDayOfWeek) {
+            (0..6).map { firstDayOfWeek + it.toLong() }
+        }
 
     // Pre-calculate shifts by date for performance
-    val shiftsByDate = remember(shifts) {
-        shifts.groupBy { it.time.period.start.toLocalDate() }
-    }
+    val shiftsByDate =
+        remember(shifts) {
+            shifts.groupBy {
+                it.time.period.start
+                    .toLocalDate()
+            }
+        }
 
     Column {
         // Day labels
@@ -151,7 +160,7 @@ private fun CalendarGrid(
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                 )
             }
         }
@@ -169,10 +178,11 @@ private fun CalendarGrid(
                     val dayNum = cellIndex - offset + 1
 
                     Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .aspectRatio(1f),
-                        contentAlignment = Alignment.Center
+                        modifier =
+                            Modifier
+                                .weight(1f)
+                                .aspectRatio(1f),
+                        contentAlignment = Alignment.Center,
                     ) {
                         if (dayNum in 1..daysInMonth) {
                             val date = month.atDay(dayNum)
@@ -181,28 +191,28 @@ private fun CalendarGrid(
 
                             if (hasShift) {
                                 Box(
-                                    modifier = Modifier
-                                        .size(36.dp)
-                                        .graphicsLayer {
-                                            scaleX = scale.value
-                                            scaleY = scale.value
-                                        }
-                                        .background(MaterialTheme.colorScheme.secondary, CircleShape)
-                                        .clickable { onShiftsClick(dayShifts) },
-                                    contentAlignment = Alignment.Center
+                                    modifier =
+                                        Modifier
+                                            .size(36.dp)
+                                            .graphicsLayer {
+                                                scaleX = scale.value
+                                                scaleY = scale.value
+                                            }.background(MaterialTheme.colorScheme.secondary, CircleShape)
+                                            .clickable { onShiftsClick(dayShifts) },
+                                    contentAlignment = Alignment.Center,
                                 ) {
                                     Text(
                                         text = dayNum.toString(),
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onSecondary,
-                                        fontWeight = FontWeight.Bold
+                                        fontWeight = FontWeight.Bold,
                                     )
                                 }
                             } else {
                                 Text(
                                     text = dayNum.toString(),
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSurface
+                                    color = MaterialTheme.colorScheme.onSurface,
                                 )
                             }
                         }

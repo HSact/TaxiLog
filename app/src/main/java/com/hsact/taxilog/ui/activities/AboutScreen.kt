@@ -31,53 +31,55 @@ fun AboutScreenContent() {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background,
-        contentColor = MaterialTheme.colorScheme.onBackground
+        contentColor = MaterialTheme.colorScheme.onBackground,
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp),
         ) {
             Text(
                 text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 8.dp),
             )
 
             Text(
                 text = stringResource(R.string.about_app_description),
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 16.dp),
             )
 
             Text(
                 text = stringResource(R.string.about_app_purpose),
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 16.dp),
             )
 
             Text(
                 text = stringResource(R.string.about_features_title),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 8.dp),
             )
 
-            val features = listOf(
-                R.string.about_feature_1,
-                R.string.about_feature_2,
-                R.string.about_feature_3,
-                R.string.about_feature_4,
-                R.string.about_feature_5
-            )
+            val features =
+                listOf(
+                    R.string.about_feature_1,
+                    R.string.about_feature_2,
+                    R.string.about_feature_3,
+                    R.string.about_feature_4,
+                    R.string.about_feature_5,
+                )
 
             features.forEach { featureRes ->
                 Text(
                     text = stringResource(featureRes),
                     style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(bottom = 4.dp, start = 8.dp)
+                    modifier = Modifier.padding(bottom = 4.dp, start = 8.dp),
                 )
             }
 
@@ -89,13 +91,14 @@ fun AboutScreenContent() {
                     context.startActivity(intent)
                 },
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                )
+                colors =
+                    ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                    ),
             ) {
                 Text(
-                    text = stringResource(R.string.privacy_policy)
+                    text = stringResource(R.string.privacy_policy),
                 )
             }
         }

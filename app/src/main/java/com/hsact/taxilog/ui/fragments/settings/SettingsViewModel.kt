@@ -20,65 +20,67 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(
-    private val getAllSettingsUseCase: GetAllSettingsUseCase,
-    private val saveAllSettingsUseCase: SaveAllSettingsUseCase,
-    private val authSkippedUseCase: AuthSkippedUseCase,
-    private val getAuthStateUseCase: GetAuthStateUseCase,
-    private val signOutUseCase: SignOutUseCase,
-    val localeHelper: LocaleHelper
-) : ViewModel() {
+class SettingsViewModel
+    @Inject
+    constructor(
+        private val getAllSettingsUseCase: GetAllSettingsUseCase,
+        private val saveAllSettingsUseCase: SaveAllSettingsUseCase,
+        private val authSkippedUseCase: AuthSkippedUseCase,
+        private val getAuthStateUseCase: GetAuthStateUseCase,
+        private val signOutUseCase: SignOutUseCase,
+        val localeHelper: LocaleHelper,
+    ) : ViewModel() {
+        private val _settings = MutableStateFlow<UserSettings?>(null)
 
-    private val _settings = MutableStateFlow<UserSettings?>(null)
-    
-    val user: StateFlow<User?> = getAuthStateUseCase()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+        val user: StateFlow<User?> =
+            getAuthStateUseCase()
+                .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
-    private val _uiState = MutableStateFlow<SettingsUiState>(SettingsUiState.Loading)
-    val uiState: StateFlow<SettingsUiState> = _uiState.asStateFlow()
+        private val _uiState = MutableStateFlow<SettingsUiState>(SettingsUiState.Loading)
+        val uiState: StateFlow<SettingsUiState> = _uiState.asStateFlow()
 
-    init {
-        loadSettings()
-    }
+        init {
+            loadSettings()
+        }
 
-    private fun loadSettings() {
-        viewModelScope.launch {
-            val settings = getAllSettingsUseCase()
-            _settings.value = settings
-            updateUiState(settings)
+        private fun loadSettings() {
+            viewModelScope.launch {
+                val settings = getAllSettingsUseCase()
+                _settings.value = settings
+                updateUiState(settings)
+            }
+        }
+
+        private fun updateUiState(settings: UserSettings?) {
+            val currentSettings = settings ?: UserSettings.default
+            _uiState.value = SettingsUiState.Success(currentSettings)
+        }
+
+        fun updateSettings(updated: UserSettings) {
+            val currentState = _uiState.value
+            if (currentState is SettingsUiState.Success) {
+                _uiState.value = currentState.copy(settings = updated)
+            }
+        }
+
+        fun setAuthSkipped(isSkipped: Boolean) {
+            authSkippedUseCase.setAuthSkipped(isSkipped)
+        }
+
+        fun saveSettings() {
+            val currentState = _uiState.value
+            if (currentState is SettingsUiState.Success) {
+                _uiState.value = currentState.copy(isSaving = true)
+                val settingsToSave = currentState.settings.copy(isConfigured = true)
+                saveAllSettingsUseCase(settingsToSave)
+                _settings.value = settingsToSave
+                _uiState.value = currentState.copy(isSaving = false, settings = settingsToSave)
+            }
+        }
+
+        fun signOut() {
+            viewModelScope.launch {
+                signOutUseCase()
+            }
         }
     }
-
-    private fun updateUiState(settings: UserSettings?) {
-        val currentSettings = settings ?: UserSettings.default
-        _uiState.value = SettingsUiState.Success(currentSettings)
-    }
-
-    fun updateSettings(updated: UserSettings) {
-        val currentState = _uiState.value
-        if (currentState is SettingsUiState.Success) {
-            _uiState.value = currentState.copy(settings = updated)
-        }
-    }
-
-    fun setAuthSkipped(isSkipped: Boolean) {
-        authSkippedUseCase.setAuthSkipped(isSkipped)
-    }
-
-    fun saveSettings() {
-        val currentState = _uiState.value
-        if (currentState is SettingsUiState.Success) {
-            _uiState.value = currentState.copy(isSaving = true)
-            val settingsToSave = currentState.settings.copy(isConfigured = true)
-            saveAllSettingsUseCase(settingsToSave)
-            _settings.value = settingsToSave
-            _uiState.value = currentState.copy(isSaving = false, settings = settingsToSave)
-        }
-    }
-
-    fun signOut() {
-        viewModelScope.launch {
-            signOutUseCase()
-        }
-    }
-}

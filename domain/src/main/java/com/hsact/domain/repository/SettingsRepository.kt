@@ -5,7 +5,6 @@ import com.hsact.domain.model.settings.UserSettings
 import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {
-
     val isConfigured: Boolean
     val deviceId: String
     val authSkipped: Boolean
@@ -32,7 +31,13 @@ interface SettingsRepository {
     fun getSettingsFlow(): Flow<UserSettings>
 
     fun getAllSettings(): UserSettings
-    fun updateSetting(key: String, value: Any?)
+
+    fun updateSetting(
+        key: String,
+        value: Any?,
+    )
+
     fun saveAuthSkipped(isAuthSkipped: Boolean)
+
     fun saveAllSettings(settings: UserSettings)
 }

@@ -7,7 +7,5 @@ import kotlinx.coroutines.flow.Flow
 class GetLastShiftUseCase(
     private val repository: ShiftRepository,
 ) {
-    operator fun invoke(): Flow<Shift?> {
-        return repository.getLastShift()
-    }
+    operator fun invoke(): Flow<Shift?> = repository.getLastShift()
 }

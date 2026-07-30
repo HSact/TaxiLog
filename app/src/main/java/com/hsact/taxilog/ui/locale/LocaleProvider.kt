@@ -4,16 +4,20 @@ import android.content.Context
 import android.content.res.Configuration
 import java.util.Locale
 
-internal class LocaleProvider(context: Context) {
+internal class LocaleProvider(
+    context: Context,
+) {
     private val prefs = context.getSharedPreferences("Settings", Context.MODE_PRIVATE)
     private val keyLanguage = "My_Lang"
 
-    fun getSavedLanguage(): String {
-        return prefs.getString(keyLanguage, "") ?: ""
-    }
+    fun getSavedLanguage(): String = prefs.getString(keyLanguage, "") ?: ""
 
-    fun updateLocale(context: Context, lang: String): Context {
-        @Suppress("DEPRECATION") val locale = Locale(lang)
+    fun updateLocale(
+        context: Context,
+        lang: String,
+    ): Context {
+        @Suppress("DEPRECATION")
+        val locale = Locale(lang)
         Locale.setDefault(locale)
         val config = Configuration()
         config.setLocale(locale)

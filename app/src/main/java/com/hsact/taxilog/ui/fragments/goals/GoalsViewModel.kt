@@ -25,126 +25,128 @@ import java.time.YearMonth
 import javax.inject.Inject
 
 @HiltViewModel
-class GoalsViewModel @Inject constructor(
-    getSettingsFlowUseCase: GetSettingsFlowUseCase,
-    private val getShiftsInRangeUseCase: GetShiftsInRangeUseCase,
-) : ViewModel() {
+class GoalsViewModel
+    @Inject
+    constructor(
+        getSettingsFlowUseCase: GetSettingsFlowUseCase,
+        private val getShiftsInRangeUseCase: GetShiftsInRangeUseCase,
+    ) : ViewModel() {
+        /**
+         * Reactive user settings used to define and calculate goals.
+         */
+        val settings: StateFlow<UserSettings> =
+            getSettingsFlowUseCase()
+                .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), UserSettings.default)
 
-    /**
-     * Reactive user settings used to define and calculate goals.
-     */
-    val settings: StateFlow<UserSettings> = getSettingsFlowUseCase()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), UserSettings.default)
+        private val _shifts = MutableStateFlow<List<Shift>>(emptyList())
+        val shifts: StateFlow<List<Shift>> = _shifts
 
-    private val _shifts = MutableStateFlow<List<Shift>>(emptyList())
-    val shifts: StateFlow<List<Shift>> = _shifts
+        private val _date = MutableStateFlow("")
+        val date: StateFlow<String> = _date
 
-    private val _date = MutableStateFlow("")
-    val date: StateFlow<String> = _date
+        private val _dateLD = MutableStateFlow(LocalDate.now())
+        val dateLD: StateFlow<LocalDate> = _dateLD
 
-    private val _dateLD = MutableStateFlow(LocalDate.now())
-    val dateLD: StateFlow<LocalDate> = _dateLD
+        private val _daysData = MutableStateFlow(MutableList(31) { 0.0 })
+        val daysData: StateFlow<List<Double>> = _daysData
 
-    private val _daysData = MutableStateFlow(MutableList(31) { 0.0 })
-    val daysData: StateFlow<List<Double>> = _daysData
+        private val _daysInMonthCardState =
+            MutableStateFlow(DaysInMonthCardState("", emptyList()))
+        val daysInMonthCardState: StateFlow<DaysInMonthCardState> = _daysInMonthCardState
 
-    private val _daysInMonthCardState =
-        MutableStateFlow(DaysInMonthCardState("", emptyList()))
-    val daysInMonthCardState: StateFlow<DaysInMonthCardState> = _daysInMonthCardState
+        private val _goalDataState = MutableStateFlow(GoalDataState())
+        val goalDataState: StateFlow<GoalDataState> = _goalDataState
 
-    private val _goalDataState = MutableStateFlow(GoalDataState())
-    val goalDataState: StateFlow<GoalDataState> = _goalDataState
+        private val _goalMonthString = MutableStateFlow<String?>(null)
+        val goalMonthString: StateFlow<String?> = _goalMonthString
 
-    private val _goalMonthString = MutableStateFlow<String?>(null)
-    val goalMonthString: StateFlow<String?> = _goalMonthString
+        private var goalMonth: Double = -1.0
+        private var goalWeek: Double = -1.0
+        private var goalDay: Double = -1.0
 
-    private var goalMonth: Double = -1.0
-    private var goalWeek: Double = -1.0
-    private var goalDay: Double = -1.0
-
-    init {
-        updateData()
-        viewModelScope.launch {
-            settings.collect {
-                defineGoals()
+        init {
+            updateData()
+            viewModelScope.launch {
+                settings.collect {
+                    defineGoals()
+                }
             }
         }
-    }
 
+        private fun updateData() {
+            _date.value = _dateLD.value.format(DeprecatedDateFormatter)
+            viewModelScope.launch {
+                val yearMonth = YearMonth.from(_dateLD.value)
+                val startOfMonth = yearMonth.atDay(1).atStartOfDay()
+                val endOfMonth = yearMonth.atEndOfMonth().atTime(LocalTime.MAX)
 
-    private fun updateData() {
-        _date.value = _dateLD.value.format(DeprecatedDateFormatter)
-        viewModelScope.launch {
-            val yearMonth = YearMonth.from(_dateLD.value)
-            val startOfMonth = yearMonth.atDay(1).atStartOfDay()
-            val endOfMonth = yearMonth.atEndOfMonth().atTime(LocalTime.MAX)
+                getShiftsInRangeUseCase(startOfMonth, endOfMonth)
+                    .collect { list ->
 
-            getShiftsInRangeUseCase(startOfMonth, endOfMonth)
-                .collect { list ->
+                        _shifts.value = list
 
-                    _shifts.value = list
+                        calculateDaysData()
+                        defineGoals()
 
-                    calculateDaysData()
-                    defineGoals()
+                        _daysInMonthCardState.value =
+                            DaysInMonthCardState(
+                                date = _date.value,
+                                days = _daysData.value,
+                            )
+                    }
+            }
+        }
 
-                    _daysInMonthCardState.value = DaysInMonthCardState(
-                        date = _date.value,
-                        days = _daysData.value
-                    )
+        fun setDate(date: String) {
+            _dateLD.value = LocalDate.parse(date, DeprecatedDateFormatter)
+            updateData()
+        }
+
+        fun calculateDaysData() {
+            _daysData.value =
+                _shifts.value
+                    .monthlyProfitByDay(_dateLD.value)
+                    .centsToDollars()
+                    .toMutableList()
+        }
+
+        fun defineGoals() {
+            val currentSettings = settings.value
+            _goalMonthString.value = currentSettings.goalPerMonth
+            val currentGoalString = _goalMonthString.value
+            if (currentGoalString.isNullOrEmpty() || currentGoalString == "-1") {
+                _goalMonthString.value = ""
+                return
+            }
+            goalMonth = currentGoalString.toDouble()
+            val denominatorWeek = 4.5
+            goalWeek = goalMonth / denominatorWeek
+            val denominatorDay =
+                when (currentSettings.schedule) {
+                    "7/0" -> 30.0
+                    "6/1" -> 25.7
+                    "5/2" -> 21.4
+                    else -> 30.0
                 }
+            goalDay = goalMonth / denominatorDay
+
+            val dayProfitSum = _shifts.value.dailyProfit(_dateLD.value)
+            val weekProfitSum = _shifts.value.weeklyProfitByDay(_dateLD.value).sum()
+            val monthProfitSum = _shifts.value.monthlyProfitByDay(_dateLD.value).sum()
+
+            _goalDataState.value =
+                GoalDataState(
+                    monthGoal = roundTo2(goalMonth),
+                    weekGoal = roundTo2(goalWeek),
+                    dayGoal = roundTo2(goalDay),
+                    dayProgress = dayProfitSum.centsToDollars(),
+                    weekProgress = weekProfitSum.centsToDollars(),
+                    monthProgress = monthProfitSum.centsToDollars(),
+                    todayPercent = roundTo2(dayProfitSum.centsToDollars() * 100 / goalDay),
+                    weekPercent = roundTo2(weekProfitSum.centsToDollars() * 100 / goalWeek),
+                    monthPercent = roundTo2(monthProfitSum.centsToDollars() * 100 / goalMonth),
+                )
         }
+
+        private fun roundTo2(value: Double): Double = BigDecimal(value).setScale(2, RoundingMode.HALF_UP).toDouble()
     }
-
-
-    fun setDate(date: String) {
-        _dateLD.value = LocalDate.parse(date, DeprecatedDateFormatter)
-        updateData()
-    }
-
-    fun calculateDaysData() {
-        _daysData.value =
-            _shifts.value.monthlyProfitByDay(_dateLD.value)
-                .centsToDollars()
-                .toMutableList()
-    }
-
-    fun defineGoals() {
-        val currentSettings = settings.value
-        _goalMonthString.value = currentSettings.goalPerMonth
-        val currentGoalString = _goalMonthString.value
-        if (currentGoalString.isNullOrEmpty() || currentGoalString == "-1") {
-            _goalMonthString.value = ""
-            return
-        }
-        goalMonth = currentGoalString.toDouble()
-        val denominatorWeek = 4.5
-        goalWeek = goalMonth / denominatorWeek
-        val denominatorDay = when (currentSettings.schedule) {
-            "7/0" -> 30.0
-            "6/1" -> 25.7
-            "5/2" -> 21.4
-            else  -> 30.0
-        }
-        goalDay = goalMonth / denominatorDay
-
-        val dayProfitSum = _shifts.value.dailyProfit(_dateLD.value)
-        val weekProfitSum = _shifts.value.weeklyProfitByDay(_dateLD.value).sum()
-        val monthProfitSum = _shifts.value.monthlyProfitByDay(_dateLD.value).sum()
-
-        _goalDataState.value = GoalDataState(
-            monthGoal = roundTo2(goalMonth),
-            weekGoal = roundTo2(goalWeek),
-            dayGoal = roundTo2(goalDay),
-            dayProgress = dayProfitSum.centsToDollars(),
-            weekProgress = weekProfitSum.centsToDollars(),
-            monthProgress = monthProfitSum.centsToDollars(),
-            todayPercent = roundTo2(dayProfitSum.centsToDollars() * 100 / goalDay),
-            weekPercent = roundTo2(weekProfitSum.centsToDollars() * 100 / goalWeek),
-            monthPercent = roundTo2(monthProfitSum.centsToDollars() * 100 / goalMonth)
-        )
-    }
-
-    private fun roundTo2(value: Double): Double {
-        return BigDecimal(value).setScale(2, RoundingMode.HALF_UP).toDouble()
-    }
-}

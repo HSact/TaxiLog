@@ -4,5 +4,5 @@ import java.time.LocalDateTime
 
 data class DateTimePeriodEntity(
     val start: LocalDateTime,
-    val end: LocalDateTime
+    val end: LocalDateTime,
 )

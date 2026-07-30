@@ -6,7 +6,5 @@ import com.hsact.domain.repository.SettingsRepository
 class SaveAllSettingsUseCase(
     private val repository: SettingsRepository,
 ) {
-    operator fun invoke(settings: UserSettings) {
-        return repository.saveAllSettings(settings)
-    }
+    operator fun invoke(settings: UserSettings) = repository.saveAllSettings(settings)
 }

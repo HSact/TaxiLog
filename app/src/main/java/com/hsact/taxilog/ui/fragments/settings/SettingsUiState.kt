@@ -4,8 +4,9 @@ import com.hsact.domain.model.settings.UserSettings
 
 sealed interface SettingsUiState {
     data object Loading : SettingsUiState
+
     data class Success(
         val settings: UserSettings,
-        val isSaving: Boolean = false
+        val isSaving: Boolean = false,
     ) : SettingsUiState
 }

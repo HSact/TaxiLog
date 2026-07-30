@@ -13,15 +13,19 @@ internal object GraphIndicatorHelper {
         return List(5) { i -> min + step * i }.reversed()
     }
 
-    fun formatIndicatorValue(value: Double, locale: Locale): String {
+    fun formatIndicatorValue(
+        value: Double,
+        locale: Locale,
+    ): String {
         val rounded = value.roundToLong()
         return if (rounded >= 1000) {
             val thousands = rounded / 1000.0
-            val formatted = if (thousands % 1.0 == 0.0) {
-                thousands.toInt().toString()
-            } else {
-                String.format(locale, "%.1f", thousands)
-            }
+            val formatted =
+                if (thousands % 1.0 == 0.0) {
+                    thousands.toInt().toString()
+                } else {
+                    String.format(locale, "%.1f", thousands)
+                }
             val suffix = if (locale.language == "ru") " тыс" else "k"
             "$formatted$suffix"
         } else {

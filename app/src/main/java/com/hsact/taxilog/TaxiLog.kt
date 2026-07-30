@@ -16,8 +16,10 @@ class TaxiLog : Application() {
     @Inject
     @ApplicationScope
     lateinit var applicationScope: CoroutineScope
+
     @Inject
     lateinit var syncShiftsUseCase: SyncShiftsUseCase
+
     @Inject
     lateinit var getAuthStateUseCase: GetAuthStateUseCase
 

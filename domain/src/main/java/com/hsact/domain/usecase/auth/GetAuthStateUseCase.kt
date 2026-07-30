@@ -5,7 +5,7 @@ import com.hsact.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetAuthStateUseCase(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
 ) {
     operator fun invoke(): Flow<User?> = authRepository.authState()
 }

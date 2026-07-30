@@ -15,7 +15,6 @@ abstract class BaseFirebaseWorker(
     context: Context,
     workerParams: WorkerParameters,
 ) : CoroutineWorker(context, workerParams) {
-
     @EntryPoint
     @InstallIn(SingletonComponent::class)
     interface ShiftSyncManagerEntryPoint {
@@ -35,23 +34,26 @@ abstract class BaseFirebaseWorker(
     }
 
     protected val shiftRepository: ShiftRepository by lazy {
-        EntryPointAccessors.fromApplication(
-            applicationContext,
-            ShiftRepositoryEntryPoint::class.java
-        ).shiftRepository()
+        EntryPointAccessors
+            .fromApplication(
+                applicationContext,
+                ShiftRepositoryEntryPoint::class.java,
+            ).shiftRepository()
     }
 
     protected val shiftSyncManager: ShiftSyncManager by lazy {
-        EntryPointAccessors.fromApplication(
-            applicationContext,
-            ShiftSyncManagerEntryPoint::class.java
-        ).syncShifts()
+        EntryPointAccessors
+            .fromApplication(
+                applicationContext,
+                ShiftSyncManagerEntryPoint::class.java,
+            ).syncShifts()
     }
 
     protected val firebaseShiftDataSource: FirebaseShiftDataSource by lazy {
-        EntryPointAccessors.fromApplication(
-            applicationContext,
-            FirebaseShiftEntryPoint::class.java
-        ).firebaseShiftDataSource()
+        EntryPointAccessors
+            .fromApplication(
+                applicationContext,
+                FirebaseShiftEntryPoint::class.java,
+            ).firebaseShiftDataSource()
     }
 }
