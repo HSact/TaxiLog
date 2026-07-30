@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.domain.model.Shift
 import com.hsact.domain.model.settings.UserSettings
-import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
+import com.hsact.domain.usecase.settings.GetSettingsFlowUseCase
 import com.hsact.domain.usecase.shift.GetLastShiftUseCase
 import com.hsact.domain.usecase.shift.GetShiftsInRangeUseCase
 import com.hsact.domain.utils.centsToDollars
@@ -21,12 +21,13 @@ import javax.inject.Inject
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    getAllSettingsUseCase: GetAllSettingsUseCase,
+    getSettingsFlowUseCase: GetSettingsFlowUseCase,
     private val getLastShiftUseCase: GetLastShiftUseCase,
     private val getShiftsInRangeUseCase: GetShiftsInRangeUseCase,
 ) : ViewModel() {
 
-    val settings: UserSettings = getAllSettingsUseCase.invoke()
+    private val _settings = MutableStateFlow(UserSettings.default)
+    val settings: UserSettings get() = _settings.value
 
     private val _lastShift = MutableStateFlow<Shift?>(null)
     val lastShift: StateFlow<Shift?> = _lastShift
@@ -53,6 +54,13 @@ class HomeViewModel @Inject constructor(
     val goalData: StateFlow<Double> = _goalData
 
     init {
+        // Подписка на настройки
+        viewModelScope.launch {
+            getSettingsFlowUseCase().collect {
+                _settings.value = it
+                calculateChart()
+            }
+        }
         // Подписка на последнюю смену
         viewModelScope.launch {
             getLastShiftUseCase()

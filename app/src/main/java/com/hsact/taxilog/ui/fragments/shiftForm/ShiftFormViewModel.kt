@@ -47,10 +47,14 @@ class ShiftFormViewModel @Inject constructor(
      */
     val sequenceNumber: StateFlow<Int?> = _sequenceNumber
 
-    val settings: UserSettings = getAllSettingsUseCase.invoke()
+    var settings: UserSettings = UserSettings.default
+        private set
 
     init {
-        loadGuess()
+        viewModelScope.launch {
+            settings = getAllSettingsUseCase.invoke()
+            loadGuess()
+        }
     }
 
     private fun loadGuess() {
@@ -172,22 +176,22 @@ class ShiftFormViewModel @Inject constructor(
      */
     fun submit() {
         val uiState = _uiState.value
-        val shiftInput = buildShiftInputModel(uiState)
-        val deviceId = getDeviceIdUseCase.invoke()
-        val remoteId =
-            if (uiState.editShift != null && uiState.editShift.remoteId != null) uiState.editShift.remoteId
-            else null
-
-        val createdAt =
-            if (uiState.editShift != null) uiState.editShift.meta.createdAt
-            else LocalDateTime.now()
-        val shiftMeta = ShiftMeta(
-            createdAt = createdAt,
-            updatedAt = LocalDateTime.now(),
-            lastModifiedBy = deviceId,
-        )
-        val shift: Shift = shiftInput.toDomain(shiftMeta)
         viewModelScope.launch {
+            val shiftInput = buildShiftInputModel(uiState)
+            val deviceId = getDeviceIdUseCase.invoke().first()
+            val remoteId =
+                if (uiState.editShift != null && uiState.editShift.remoteId != null) uiState.editShift.remoteId
+                else null
+
+            val createdAt =
+                if (uiState.editShift != null) uiState.editShift.meta.createdAt
+                else LocalDateTime.now()
+            val shiftMeta = ShiftMeta(
+                createdAt = createdAt,
+                updatedAt = LocalDateTime.now(),
+                lastModifiedBy = deviceId,
+            )
+            val shift: Shift = shiftInput.toDomain(shiftMeta)
             addShiftUseCase(shift.copy(id = uiState.id, remoteId = remoteId))
         }
     }

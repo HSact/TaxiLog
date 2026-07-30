@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.domain.model.Shift
 import com.hsact.domain.model.settings.CurrencySymbolMode
-import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
+import com.hsact.domain.model.settings.UserSettings
+import com.hsact.domain.usecase.settings.GetSettingsFlowUseCase
 import com.hsact.domain.usecase.shift.GetShiftsInRangeUseCase
 import com.hsact.domain.utils.DeprecatedDateFormatter
 import com.hsact.domain.utils.averageDuration
@@ -38,12 +39,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StatsViewModel @Inject constructor(
-    private val getAllSettingsUseCase: GetAllSettingsUseCase,
+    private val getSettingsFlowUseCase: GetSettingsFlowUseCase,
     private val getShiftsInRangeUseCase: GetShiftsInRangeUseCase,
 ) : ViewModel() {
 
     private val _shifts = MutableStateFlow<List<Shift>>(emptyList())
-
+    private var settings: UserSettings = UserSettings.default
+    
+    init {
+        viewModelScope.launch {
+            getSettingsFlowUseCase().collect {
+                settings = it
+            }
+        }
+    }
 
     val shifts: StateFlow<List<Shift>> = _shifts
 
@@ -123,7 +132,7 @@ class StatsViewModel @Inject constructor(
     }
 
     private val currencySymbol: CurrencySymbolMode?
-        get() = getAllSettingsUseCase.invoke().currency
+        get() = settings.currency
 
     private val String.localDate: LocalDate
         get() = LocalDate.parse(this, DeprecatedDateFormatter)

@@ -1,140 +1,164 @@
 package com.hsact.data.repository
 
-import android.content.Context
-import android.content.SharedPreferences
-import androidx.core.content.edit
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.hsact.domain.model.settings.CurrencySymbolMode
 import com.hsact.domain.model.settings.UserSettings
 import com.hsact.domain.model.settings.currencyNameToSymbolMode
 import com.hsact.domain.repository.SettingsRepository
-import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import java.util.UUID
 import javax.inject.Inject
 
 class SettingsRepositoryImpl @Inject constructor(
-    @param:ApplicationContext private val context: Context,
+    private val dataStore: DataStore<Preferences>,
 ) : SettingsRepository {
-    private val sharedPreferences: SharedPreferences =
-        context.getSharedPreferences("Settings", Context.MODE_PRIVATE)
 
-    override val isConfigured: Boolean
-        get() = sharedPreferences.getBoolean("Is_configured", false)
+    private object PreferencesKeys {
+        val IS_CONFIGURED = booleanPreferencesKey("Is_configured")
+        val AUTH_SKIPPED = booleanPreferencesKey("Auth_skipped")
+        val DEVICE_ID = stringPreferencesKey("Device_id")
+        val THEME = stringPreferencesKey("Theme")
+        val CURRENCY = stringPreferencesKey("Currency")
+        val LANGUAGE = stringPreferencesKey("My_Lang")
+        val KM_MI = booleanPreferencesKey("KmMi")
+        val CONSUMPTION = stringPreferencesKey("Consumption")
+        val RENTED = booleanPreferencesKey("Rented")
+        val RENT_COST = stringPreferencesKey("Rent_cost")
+        val FUEL_PRICE = stringPreferencesKey("Fuel_price")
+        val SERVICE = booleanPreferencesKey("Service")
+        val SERVICE_COST = stringPreferencesKey("Service_cost")
+        val GOAL_PER_MONTH = stringPreferencesKey("Goal_per_month")
+        val SCHEDULE = stringPreferencesKey("Schedule")
+        val TAXES = booleanPreferencesKey("Taxes")
+        val TAX_RATE = stringPreferencesKey("Tax_rate")
+        val FIRST_DAY_OF_WEEK = intPreferencesKey("FirstDayOfWeek")
+    }
 
-    override val authSkipped: Boolean
-        get() = sharedPreferences.getBoolean("Auth_skipped", false)
+    override val isConfigured: Flow<Boolean> = dataStore.data.map { it[PreferencesKeys.IS_CONFIGURED] ?: false }
+    override val authSkipped: Flow<Boolean> = dataStore.data.map { it[PreferencesKeys.AUTH_SKIPPED] ?: false }
+    
+    override val deviceId: Flow<String> = dataStore.data.map { prefs ->
+        prefs[PreferencesKeys.DEVICE_ID] ?: ""
+    }
 
-    override val deviceId: String
-        get() {
-            val current = sharedPreferences.getString("Device_id", null)
-            return if (current != null) {
-                current
-            } else {
-                val newId = UUID.randomUUID().toString()
-                updateSetting("Device_id", newId)
-                newId
-            }
+    override val theme: Flow<String?> = dataStore.data.map { it[PreferencesKeys.THEME] }
+    
+    override val currency: Flow<CurrencySymbolMode?> = dataStore.data.map { 
+        it[PreferencesKeys.CURRENCY]?.currencyNameToSymbolMode() 
+    }
+    
+    override val language: Flow<String?> = dataStore.data.map { it[PreferencesKeys.LANGUAGE] }
+    
+    override val kmMi: Flow<Boolean> = dataStore.data.map { it[PreferencesKeys.KM_MI] ?: false }
+    
+    override val consumption: Flow<String?> = dataStore.data.map { it[PreferencesKeys.CONSUMPTION] }
+    
+    override val rented: Flow<Boolean> = dataStore.data.map { it[PreferencesKeys.RENTED] ?: false }
+    
+    override val rentCost: Flow<String?> = dataStore.data.map { it[PreferencesKeys.RENT_COST] }
+    
+    override val fuelPrice: Flow<String?> = dataStore.data.map { it[PreferencesKeys.FUEL_PRICE] }
+    
+    override val service: Flow<Boolean> = dataStore.data.map { it[PreferencesKeys.SERVICE] ?: false }
+    
+    override val serviceCost: Flow<String?> = dataStore.data.map { it[PreferencesKeys.SERVICE_COST] }
+    
+    override val goalPerMonth: Flow<String?> = dataStore.data.map { it[PreferencesKeys.GOAL_PER_MONTH] }
+    
+    override val schedule: Flow<String?> = dataStore.data.map { it[PreferencesKeys.SCHEDULE] }
+    
+    override val taxes: Flow<Boolean> = dataStore.data.map { it[PreferencesKeys.TAXES] ?: false }
+    
+    override val taxRate: Flow<String?> = dataStore.data.map { it[PreferencesKeys.TAX_RATE] }
+    
+    override val firstDayOfWeek: Flow<Int> = dataStore.data.map { it[PreferencesKeys.FIRST_DAY_OF_WEEK] ?: 0 }
+
+    override fun getAllSettingsFlow(): Flow<UserSettings> = dataStore.data.map { prefs ->
+        mapToUserSettings(prefs)
+    }
+
+    override suspend fun getAllSettings(): UserSettings {
+        val prefs = dataStore.data.first()
+        
+        // Ensure Device ID exists
+        if (prefs[PreferencesKeys.DEVICE_ID] == null) {
+            val newId = UUID.randomUUID().toString()
+            dataStore.edit { it[PreferencesKeys.DEVICE_ID] = newId }
         }
 
-    override val theme: String?
-        get() = sharedPreferences.getString("Theme", null)
+        return mapToUserSettings(dataStore.data.first())
+    }
 
-    override val currency: CurrencySymbolMode?
-        get() = sharedPreferences.getString("Currency", null).currencyNameToSymbolMode()
-
-    override val language: String?
-        get() = sharedPreferences.getString("My_Lang", null)
-
-    override val kmMi: Boolean
-        get() = sharedPreferences.getBoolean("KmMi", false)
-
-    override val consumption: String?
-        get() = sharedPreferences.getString("Consumption", null)
-
-    override val rented: Boolean
-        get() = sharedPreferences.getBoolean("Rented", false)
-
-    override val rentCost: String?
-        get() = sharedPreferences.getString("Rent_cost", null)
-
-    override val fuelPrice: String?
-        get() = sharedPreferences.getString("Fuel_price", null)
-
-    override val service: Boolean
-        get() = sharedPreferences.getBoolean("Service", false)
-
-    override val serviceCost: String?
-        get() = sharedPreferences.getString("Service_cost", null)
-
-    override val goalPerMonth: String?
-        get() = sharedPreferences.getString("Goal_per_month", null)
-
-    override val schedule: String?
-        get() = sharedPreferences.getString("Schedule", null)
-
-    override val taxes: Boolean
-        get() = sharedPreferences.getBoolean("Taxes", false)
-
-    override val taxRate: String?
-        get() = sharedPreferences.getString("Tax_rate", null)
-
-    override val firstDayOfWeek: Int
-        get() = sharedPreferences.getInt("FirstDayOfWeek", 0)
-
-    override fun getAllSettings(): UserSettings {
+    private fun mapToUserSettings(prefs: Preferences): UserSettings {
         return UserSettings(
-            isConfigured = isConfigured,
-            language = language,
-            theme = theme,
-            currency = currency,
-            isKmUnit = kmMi,
-            consumption = consumption,
-            rented = rented,
-            rentCost = rentCost,
-            service = service,
-            serviceCost = serviceCost,
-            goalPerMonth = goalPerMonth,
-            schedule = schedule,
-            taxes = taxes,
-            taxRate = taxRate,
-            fuelPrice = fuelPrice,
-            firstDayOfWeek = firstDayOfWeek
+            isConfigured = prefs[PreferencesKeys.IS_CONFIGURED] ?: false,
+            language = prefs[PreferencesKeys.LANGUAGE],
+            theme = prefs[PreferencesKeys.THEME],
+            currency = prefs[PreferencesKeys.CURRENCY]?.currencyNameToSymbolMode(),
+            isKmUnit = prefs[PreferencesKeys.KM_MI] ?: true,
+            consumption = prefs[PreferencesKeys.CONSUMPTION],
+            rented = prefs[PreferencesKeys.RENTED] ?: false,
+            rentCost = prefs[PreferencesKeys.RENT_COST],
+            service = prefs[PreferencesKeys.SERVICE] ?: false,
+            serviceCost = prefs[PreferencesKeys.SERVICE_COST],
+            goalPerMonth = prefs[PreferencesKeys.GOAL_PER_MONTH],
+            schedule = prefs[PreferencesKeys.SCHEDULE],
+            taxes = prefs[PreferencesKeys.TAXES] ?: false,
+            taxRate = prefs[PreferencesKeys.TAX_RATE],
+            fuelPrice = prefs[PreferencesKeys.FUEL_PRICE],
+            firstDayOfWeek = prefs[PreferencesKeys.FIRST_DAY_OF_WEEK] ?: 0
         )
     }
 
-    override fun updateSetting(key: String, value: Any?) {
-        sharedPreferences.edit {
+    override suspend fun updateSetting(key: String, value: Any?) {
+        dataStore.edit { prefs ->
             when (value) {
-                is Boolean -> putBoolean(key, value)
-                is String -> putString(key, value)
-                is Int -> putInt(key, value)
-                is Float -> putFloat(key, value)
-                is Long -> putLong(key, value)
-                null -> remove(key)
+                is Boolean -> prefs[booleanPreferencesKey(key)] = value
+                is String -> prefs[stringPreferencesKey(key)] = value
+                is Int -> prefs[intPreferencesKey(key)] = value
+                null -> {
+                    // We don't know the type of the key if value is null, 
+                    // so we try to remove it from all common types or just use a generic remove if possible.
+                    // DataStore requires a typed key to remove.
+                    // This is a bit tricky. We can try to remove all possible keys with this name.
+                    prefs.remove(booleanPreferencesKey(key))
+                    prefs.remove(stringPreferencesKey(key))
+                    prefs.remove(intPreferencesKey(key))
+                }
                 else -> throw IllegalArgumentException("Unsupported type: ${value.javaClass.name}")
             }
         }
     }
 
-    override fun saveAuthSkipped(isAuthSkipped: Boolean) {
-        updateSetting("Auth_skipped", isAuthSkipped)
+    override suspend fun saveAuthSkipped(isAuthSkipped: Boolean) {
+        dataStore.edit { it[PreferencesKeys.AUTH_SKIPPED] = isAuthSkipped }
     }
 
-    override fun saveAllSettings(settings: UserSettings) {
-        updateSetting("Is_configured", settings.isConfigured)
-        updateSetting("My_Lang", settings.language)
-        updateSetting("Theme", settings.theme)
-        updateSetting("Currency", settings.currency?.toName())
-        updateSetting("KmMi", settings.isKmUnit)
-        updateSetting("Consumption", settings.consumption)
-        updateSetting("Rented", settings.rented)
-        updateSetting("Rent_cost", settings.rentCost)
-        updateSetting("Service", settings.service)
-        updateSetting("Service_cost", settings.serviceCost)
-        updateSetting("Goal_per_month", settings.goalPerMonth)
-        updateSetting("Schedule", settings.schedule)
-        updateSetting("Taxes", settings.taxes)
-        updateSetting("Tax_rate", settings.taxRate)
-        updateSetting("Fuel_price", settings.fuelPrice)
-        updateSetting("FirstDayOfWeek", settings.firstDayOfWeek)
+    override suspend fun saveAllSettings(settings: UserSettings) {
+        dataStore.edit { prefs ->
+            prefs[PreferencesKeys.IS_CONFIGURED] = settings.isConfigured
+            settings.language?.let { prefs[PreferencesKeys.LANGUAGE] = it } ?: prefs.remove(PreferencesKeys.LANGUAGE)
+            settings.theme?.let { prefs[PreferencesKeys.THEME] = it } ?: prefs.remove(PreferencesKeys.THEME)
+            settings.currency?.toName()?.let { prefs[PreferencesKeys.CURRENCY] = it } ?: prefs.remove(PreferencesKeys.CURRENCY)
+            prefs[PreferencesKeys.KM_MI] = settings.isKmUnit
+            settings.consumption?.let { prefs[PreferencesKeys.CONSUMPTION] = it } ?: prefs.remove(PreferencesKeys.CONSUMPTION)
+            prefs[PreferencesKeys.RENTED] = settings.rented
+            settings.rentCost?.let { prefs[PreferencesKeys.RENT_COST] = it } ?: prefs.remove(PreferencesKeys.RENT_COST)
+            prefs[PreferencesKeys.SERVICE] = settings.service
+            settings.serviceCost?.let { prefs[PreferencesKeys.SERVICE_COST] = it } ?: prefs.remove(PreferencesKeys.SERVICE_COST)
+            settings.goalPerMonth?.let { prefs[PreferencesKeys.GOAL_PER_MONTH] = it } ?: prefs.remove(PreferencesKeys.GOAL_PER_MONTH)
+            settings.schedule?.let { prefs[PreferencesKeys.SCHEDULE] = it } ?: prefs.remove(PreferencesKeys.SCHEDULE)
+            prefs[PreferencesKeys.TAXES] = settings.taxes
+            settings.taxRate?.let { prefs[PreferencesKeys.TAX_RATE] = it } ?: prefs.remove(PreferencesKeys.TAX_RATE)
+            settings.fuelPrice?.let { prefs[PreferencesKeys.FUEL_PRICE] = it } ?: prefs.remove(PreferencesKeys.FUEL_PRICE)
+            prefs[PreferencesKeys.FIRST_DAY_OF_WEEK] = settings.firstDayOfWeek
+        }
     }
 }

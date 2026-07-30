@@ -47,9 +47,10 @@ class ShiftDetailFragment : Fragment() {
         val composeView = ComposeView(requireContext()).apply {
             setContent {
                 val state by viewModel.uiState.collectAsState()
+                val settings by viewModel.settings.collectAsState()
                 ShiftDetailScreen(
                     state,
-                    viewModel.settings.currency,
+                    settings.currency,
                     { editShift() },
                     { deleteShift() })
             }

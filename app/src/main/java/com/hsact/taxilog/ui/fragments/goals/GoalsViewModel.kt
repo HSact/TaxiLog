@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.domain.model.Shift
 import com.hsact.domain.model.settings.UserSettings
-import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
+import com.hsact.domain.usecase.settings.GetSettingsFlowUseCase
 import com.hsact.domain.usecase.shift.GetShiftsInRangeUseCase
 import com.hsact.domain.utils.DeprecatedDateFormatter
 import com.hsact.domain.utils.centsToDollars
@@ -24,11 +24,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GoalsViewModel @Inject constructor(
-    getAllSettingsUseCase: GetAllSettingsUseCase,
+    getSettingsFlowUseCase: GetSettingsFlowUseCase,
     private val getShiftsInRangeUseCase: GetShiftsInRangeUseCase,
 ) : ViewModel() {
 
-    private val settings: UserSettings = getAllSettingsUseCase.invoke()
+    private var settings: UserSettings = UserSettings.default
     private val _shifts = MutableStateFlow<List<Shift>>(emptyList())
     val shifts: StateFlow<List<Shift>> = _shifts
 
@@ -55,6 +55,12 @@ class GoalsViewModel @Inject constructor(
     private var goalDay: Double = -1.0
 
     init {
+        viewModelScope.launch {
+            getSettingsFlowUseCase().collect {
+                settings = it
+                defineGoals()
+            }
+        }
         updateData()
     }
 

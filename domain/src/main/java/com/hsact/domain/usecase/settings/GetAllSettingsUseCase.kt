@@ -7,7 +7,7 @@ import com.hsact.domain.repository.SettingsRepository
 class GetAllSettingsUseCase(
     private val repository: SettingsRepository,
 ) {
-    operator fun invoke(): UserSettings {
+    suspend operator fun invoke(): UserSettings {
         return repository.getAllSettings()
     }
 }

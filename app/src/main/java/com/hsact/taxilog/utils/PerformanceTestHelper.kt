@@ -5,6 +5,7 @@ import com.hsact.domain.usecase.settings.GetDeviceIdUseCase
 import com.hsact.domain.usecase.shift.AddShiftUseCase
 import com.hsact.taxilog.ui.shift.ShiftInputModel
 import com.hsact.taxilog.ui.shift.mappers.toDomain
+import kotlinx.coroutines.flow.first
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -52,7 +53,7 @@ class PerformanceTestHelper @Inject constructor(
                 val shiftMeta = ShiftMeta(
                     createdAt = LocalDateTime.of(currentDate, LocalDateTime.now().toLocalTime()),
                     updatedAt = LocalDateTime.now(),
-                    lastModifiedBy = deviceId,
+                    lastModifiedBy = deviceId.first(),
                     isSynced = false
                 )
 

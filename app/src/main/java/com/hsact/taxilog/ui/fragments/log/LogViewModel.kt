@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.domain.model.Shift
 import com.hsact.domain.model.settings.UserSettings
-import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
+import com.hsact.domain.usecase.settings.GetSettingsFlowUseCase
 import com.hsact.domain.usecase.shift.DeleteAllShiftsUseCase
 import com.hsact.domain.usecase.shift.DeleteShiftUseCase
 import com.hsact.domain.usecase.shift.GetAllShiftsUseCase
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LogViewModel @Inject constructor(
-    private val getAllSettingsUseCase: GetAllSettingsUseCase,
+    private val getSettingsFlowUseCase: GetSettingsFlowUseCase,
     private val getAllShiftsUseCase: GetAllShiftsUseCase,
     private val deleteShiftUseCase: DeleteShiftUseCase,
     private val deleteAllShiftsUseCase: DeleteAllShiftsUseCase,
@@ -35,7 +35,9 @@ class LogViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _settings.value = getAllSettingsUseCase()
+            getSettingsFlowUseCase().collect {
+                _settings.value = it
+            }
         }
     }
 

@@ -62,7 +62,9 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun setAuthSkipped(isSkipped: Boolean) {
-        authSkippedUseCase.setAuthSkipped(isSkipped)
+        viewModelScope.launch {
+            authSkippedUseCase.setAuthSkipped(isSkipped)
+        }
     }
 
     fun saveSettings() {
@@ -70,9 +72,12 @@ class SettingsViewModel @Inject constructor(
         if (currentState is SettingsUiState.Success) {
             _uiState.value = currentState.copy(isSaving = true)
             val settingsToSave = currentState.settings.copy(isConfigured = true)
-            saveAllSettingsUseCase(settingsToSave)
-            _settings.value = settingsToSave
-            _uiState.value = currentState.copy(isSaving = false, settings = settingsToSave)
+            viewModelScope.launch {
+                saveAllSettingsUseCase(settingsToSave)
+                localeHelper.setLocale(settingsToSave.language)
+                _settings.value = settingsToSave
+                _uiState.value = currentState.copy(isSaving = false, settings = settingsToSave)
+            }
         }
     }
 

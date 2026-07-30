@@ -1,11 +1,13 @@
 package com.hsact.domain.usecase.settings
 
+import com.hsact.domain.model.settings.UserSettings
 import com.hsact.domain.repository.SettingsRepository
 import kotlinx.coroutines.flow.Flow
 
-class AuthSkippedUseCase(
+class GetSettingsFlowUseCase(
     private val repository: SettingsRepository,
 ) {
-    fun isAuthSkipped(): Flow<Boolean> = repository.authSkipped
-    suspend fun setAuthSkipped(value: Boolean) = repository.saveAuthSkipped(value)
+    operator fun invoke(): Flow<UserSettings> {
+        return repository.getAllSettingsFlow()
+    }
 }

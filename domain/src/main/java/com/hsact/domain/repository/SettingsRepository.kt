@@ -2,30 +2,32 @@ package com.hsact.domain.repository
 
 import com.hsact.domain.model.settings.CurrencySymbolMode
 import com.hsact.domain.model.settings.UserSettings
+import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {
 
-    val isConfigured: Boolean
-    val deviceId: String
-    val authSkipped: Boolean
-    val theme: String?
-    val currency: CurrencySymbolMode?
-    val language: String?
-    val kmMi: Boolean
-    val consumption: String?
-    val rented: Boolean
-    val rentCost: String?
-    val fuelPrice: String?
-    val service: Boolean
-    val serviceCost: String?
-    val goalPerMonth: String?
-    val schedule: String?
-    val taxes: Boolean
-    val taxRate: String?
-    val firstDayOfWeek: Int
+    val isConfigured: Flow<Boolean>
+    val deviceId: Flow<String>
+    val authSkipped: Flow<Boolean>
+    val theme: Flow<String?>
+    val currency: Flow<CurrencySymbolMode?>
+    val language: Flow<String?>
+    val kmMi: Flow<Boolean>
+    val consumption: Flow<String?>
+    val rented: Flow<Boolean>
+    val rentCost: Flow<String?>
+    val fuelPrice: Flow<String?>
+    val service: Flow<Boolean>
+    val serviceCost: Flow<String?>
+    val goalPerMonth: Flow<String?>
+    val schedule: Flow<String?>
+    val taxes: Flow<Boolean>
+    val taxRate: Flow<String?>
+    val firstDayOfWeek: Flow<Int>
 
-    fun getAllSettings(): UserSettings
-    fun updateSetting(key: String, value: Any?)
-    fun saveAuthSkipped(isAuthSkipped: Boolean)
-    fun saveAllSettings(settings: UserSettings)
+    fun getAllSettingsFlow(): Flow<UserSettings>
+    suspend fun getAllSettings(): UserSettings
+    suspend fun updateSetting(key: String, value: Any?)
+    suspend fun saveAuthSkipped(isAuthSkipped: Boolean)
+    suspend fun saveAllSettings(settings: UserSettings)
 }

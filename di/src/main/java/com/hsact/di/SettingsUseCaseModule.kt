@@ -4,6 +4,7 @@ import com.hsact.domain.repository.SettingsRepository
 import com.hsact.domain.usecase.settings.AuthSkippedUseCase
 import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.domain.usecase.settings.GetDeviceIdUseCase
+import com.hsact.domain.usecase.settings.GetSettingsFlowUseCase
 import com.hsact.domain.usecase.settings.SaveAllSettingsUseCase
 import com.hsact.domain.usecase.settings.UpdateSettingUseCase
 import dagger.Module
@@ -31,12 +32,17 @@ object SettingsUseCaseModule {
     ): GetDeviceIdUseCase = GetDeviceIdUseCase(repository)
 
     @Provides
-    fun provideUpdateSettingsUseCase(
+    fun provideUpdateSettingUseCase(
         repository: SettingsRepository
     ): UpdateSettingUseCase = UpdateSettingUseCase(repository)
 
     @Provides
-    fun provideUpdateSettingUseCase(
+    fun provideSaveAllSettingsUseCase(
         repository: SettingsRepository
     ): SaveAllSettingsUseCase = SaveAllSettingsUseCase(repository)
+
+    @Provides
+    fun provideGetSettingsFlowUseCase(
+        repository: SettingsRepository
+    ): GetSettingsFlowUseCase = GetSettingsFlowUseCase(repository)
 }
