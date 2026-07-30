@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalLocale
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.hsact.domain.model.Shift
 import com.hsact.domain.model.settings.CurrencySymbolMode
@@ -47,16 +49,18 @@ class HomeFragment : Fragment() {
         cardLastShift = binding.cardLastShift
         cardMonthGraph = binding.cardGraph
         cardGoal.setContent {
+            val settings by viewModel.settings.collectAsStateWithLifecycle()
             CardGoal(
-                viewModel.settings.goalPerMonth?.toFloatOrNull() ?: 0f,
+                settings.goalPerMonth?.toFloatOrNull() ?: 0f,
                 viewModel.shiftListThisMonth
             )
         }
         cardCalendar.setContent {
+            val settings by viewModel.settings.collectAsStateWithLifecycle()
             CardCalendar(
                 viewModel.calendarMonth,
                 viewModel.calendarShifts,
-                viewModel.settings.firstDayOfWeek,
+                settings.firstDayOfWeek,
                 { viewModel.onPreviousMonth() },
                 { viewModel.onNextMonth() }
             ) { shifts ->
@@ -64,9 +68,10 @@ class HomeFragment : Fragment() {
             }
         }
         cardLastShift.setContent {
+            val settings by viewModel.settings.collectAsStateWithLifecycle()
             CardLastShift(
                 viewModel.lastShift,
-                viewModel.settings.currency ?: CurrencySymbolMode.fromLocale(LocalLocale.current.platformLocale)
+                settings.currency ?: CurrencySymbolMode.fromLocale(LocalLocale.current.platformLocale)
             ) {
                 val action = HomeFragmentDirections.actionNavigationHomeToShiftDetails(
                     shiftId = viewModel.lastShift.value?.id ?: -1

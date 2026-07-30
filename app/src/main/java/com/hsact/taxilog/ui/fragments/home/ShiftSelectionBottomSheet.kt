@@ -36,8 +36,9 @@ class ShiftSelectionBottomSheet : BottomSheetDialogFragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 val shifts by viewModel.shiftsForSelection.collectAsStateWithLifecycle()
+                val settings by viewModel.settings.collectAsStateWithLifecycle()
                 val locale = LocalConfiguration.current.locales[0]
-                val currency = viewModel.settings.currency 
+                val currency = settings.currency 
                     ?: CurrencySymbolMode.fromLocale(locale)
 
                 ShiftSelectionContent(

@@ -4,20 +4,23 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.di.ApplicationScope
-import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
+import com.hsact.domain.model.settings.UserSettings
+import com.hsact.domain.usecase.settings.GetSettingsFlowUseCase
 import com.hsact.domain.usecase.shift.DeleteShiftUseCase
 import com.hsact.domain.usecase.shift.GetShiftByIdUseCase
 import com.hsact.domain.usecase.shift.GetShiftSequenceNumberUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ShiftDetailViewModel @Inject constructor(
-    private val getAllSettingsUseCase: GetAllSettingsUseCase,
+    getSettingsFlowUseCase: GetSettingsFlowUseCase,
     private val getShiftByIdUseCase: GetShiftByIdUseCase,
     private val getShiftSequenceNumberUseCase: GetShiftSequenceNumberUseCase,
     private val deleteShiftUseCase: DeleteShiftUseCase,
@@ -35,7 +38,11 @@ class ShiftDetailViewModel @Inject constructor(
      */
     val sequenceNumber: StateFlow<Int?> = _sequenceNumber
 
-    val settings = getAllSettingsUseCase()
+    /**
+     * Reactive user settings for formatting currency and time in shift details.
+     */
+    val settings: StateFlow<UserSettings> = getSettingsFlowUseCase()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), UserSettings.default)
 
     /**
      * Loads the shift data and its sequence number reactively.

@@ -2,6 +2,7 @@ package com.hsact.domain.repository
 
 import com.hsact.domain.model.settings.CurrencySymbolMode
 import com.hsact.domain.model.settings.UserSettings
+import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {
 
@@ -23,6 +24,12 @@ interface SettingsRepository {
     val taxes: Boolean
     val taxRate: String?
     val firstDayOfWeek: Int
+
+    /**
+     * Returns a reactive stream of the user settings.
+     * Emits a new [UserSettings] object whenever any setting value changes.
+     */
+    fun getSettingsFlow(): Flow<UserSettings>
 
     fun getAllSettings(): UserSettings
     fun updateSetting(key: String, value: Any?)

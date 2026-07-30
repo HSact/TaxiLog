@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.domain.model.Shift
 import com.hsact.domain.model.settings.UserSettings
-import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
+import com.hsact.domain.usecase.settings.GetSettingsFlowUseCase
 import com.hsact.domain.usecase.shift.GetShiftsInRangeUseCase
 import com.hsact.domain.utils.DeprecatedDateFormatter
 import com.hsact.domain.utils.centsToDollars
@@ -13,7 +13,9 @@ import com.hsact.domain.utils.monthlyProfitByDay
 import com.hsact.domain.utils.weeklyProfitByDay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -24,11 +26,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GoalsViewModel @Inject constructor(
-    getAllSettingsUseCase: GetAllSettingsUseCase,
+    getSettingsFlowUseCase: GetSettingsFlowUseCase,
     private val getShiftsInRangeUseCase: GetShiftsInRangeUseCase,
 ) : ViewModel() {
 
-    private val settings: UserSettings = getAllSettingsUseCase.invoke()
+    /**
+     * Reactive user settings used to define and calculate goals.
+     */
+    val settings: StateFlow<UserSettings> = getSettingsFlowUseCase()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), UserSettings.default)
+
     private val _shifts = MutableStateFlow<List<Shift>>(emptyList())
     val shifts: StateFlow<List<Shift>> = _shifts
 
@@ -48,7 +55,8 @@ class GoalsViewModel @Inject constructor(
     private val _goalDataState = MutableStateFlow(GoalDataState())
     val goalDataState: StateFlow<GoalDataState> = _goalDataState
 
-    var goalMonthString: String? = ""
+    private val _goalMonthString = MutableStateFlow<String?>(null)
+    val goalMonthString: StateFlow<String?> = _goalMonthString
 
     private var goalMonth: Double = -1.0
     private var goalWeek: Double = -1.0
@@ -56,6 +64,11 @@ class GoalsViewModel @Inject constructor(
 
     init {
         updateData()
+        viewModelScope.launch {
+            settings.collect {
+                defineGoals()
+            }
+        }
     }
 
 
@@ -96,15 +109,17 @@ class GoalsViewModel @Inject constructor(
     }
 
     fun defineGoals() {
-        goalMonthString = settings.goalPerMonth
-        if (goalMonthString.isNullOrEmpty() || goalMonthString == "-1") {
-            goalMonthString = ""
+        val currentSettings = settings.value
+        _goalMonthString.value = currentSettings.goalPerMonth
+        val currentGoalString = _goalMonthString.value
+        if (currentGoalString.isNullOrEmpty() || currentGoalString == "-1") {
+            _goalMonthString.value = ""
             return
         }
-        goalMonth = goalMonthString!!.toDouble()
+        goalMonth = currentGoalString.toDouble()
         val denominatorWeek = 4.5
         goalWeek = goalMonth / denominatorWeek
-        val denominatorDay = when (settings.schedule) {
+        val denominatorDay = when (currentSettings.schedule) {
             "7/0" -> 30.0
             "6/1" -> 25.7
             "5/2" -> 21.4

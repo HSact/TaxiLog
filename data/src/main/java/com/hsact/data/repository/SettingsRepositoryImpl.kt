@@ -8,6 +8,9 @@ import com.hsact.domain.model.settings.UserSettings
 import com.hsact.domain.model.settings.currencyNameToSymbolMode
 import com.hsact.domain.repository.SettingsRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import java.util.UUID
 import javax.inject.Inject
 
@@ -79,6 +82,21 @@ class SettingsRepositoryImpl @Inject constructor(
 
     override val firstDayOfWeek: Int
         get() = sharedPreferences.getInt("FirstDayOfWeek", 0)
+
+    /**
+     * Implementation of [SettingsRepository.getSettingsFlow] using [callbackFlow].
+     * Listens for changes in [SharedPreferences] and emits updated [UserSettings].
+     */
+    override fun getSettingsFlow(): Flow<UserSettings> = callbackFlow {
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+            trySend(getAllSettings())
+        }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+        trySend(getAllSettings())
+        awaitClose {
+            sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener)
+        }
+    }
 
     override fun getAllSettings(): UserSettings {
         return UserSettings(

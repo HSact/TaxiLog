@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.domain.model.Shift
 import com.hsact.domain.model.settings.CurrencySymbolMode
-import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
+import com.hsact.domain.model.settings.UserSettings
+import com.hsact.domain.usecase.settings.GetSettingsFlowUseCase
 import com.hsact.domain.usecase.shift.GetShiftsInRangeUseCase
 import com.hsact.domain.utils.DeprecatedDateFormatter
 import com.hsact.domain.utils.averageDuration
@@ -29,7 +30,9 @@ import com.hsact.taxilog.ui.shift.mappers.metersToKilometers
 import com.hsact.taxilog.ui.shift.mappers.minutesToHours
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -38,9 +41,26 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StatsViewModel @Inject constructor(
-    private val getAllSettingsUseCase: GetAllSettingsUseCase,
+    getSettingsFlowUseCase: GetSettingsFlowUseCase,
     private val getShiftsInRangeUseCase: GetShiftsInRangeUseCase,
 ) : ViewModel() {
+
+    /**
+     * Reactive user settings used for formatting statistics values (currency, km/mi).
+     */
+    val settings: StateFlow<UserSettings> = getSettingsFlowUseCase()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), UserSettings.default)
+
+    init {
+        viewModelScope.launch {
+            settings.collect {
+                // If shifts are already loaded, refresh UI state with new settings (e.g. currency)
+                if (_shifts.value.isNotEmpty()) {
+                    updateShifts(Locale.getDefault())
+                }
+            }
+        }
+    }
 
     private val _shifts = MutableStateFlow<List<Shift>>(emptyList())
 
@@ -123,7 +143,7 @@ class StatsViewModel @Inject constructor(
     }
 
     private val currencySymbol: CurrencySymbolMode?
-        get() = getAllSettingsUseCase.invoke().currency
+        get() = settings.value.currency
 
     private val String.localDate: LocalDate
         get() = LocalDate.parse(this, DeprecatedDateFormatter)

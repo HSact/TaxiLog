@@ -22,6 +22,7 @@ import com.hsact.domain.model.Shift
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentLogBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -48,8 +49,10 @@ class LogFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.shifts.collect { shiftList ->
-                    if (shiftList.isEmpty() && viewModel.settings.value != null) {
+                viewModel.shifts.combine(viewModel.settings) { shiftList, settings ->
+                    Pair(shiftList, settings)
+                }.collect { (shiftList, settings) ->
+                    if (shiftList.isEmpty()) {
                         Toast.makeText(
                             requireContext(),
                             getString(R.string.list_is_empty),
@@ -57,21 +60,19 @@ class LogFragment : Fragment() {
                         ).show()
                     }
 
-                    if (viewModel.settings.value != null) {
-                        binding.recyclerView.adapter = RecyclerAdapter(
-                            shiftList,
-                            settings = viewModel.settings.value!!,
-                            onItemClick = { shift ->
-                                onClickElement(shift)
-                            },
-                            onItemMenuClick = { visibleNumber, shift ->
-                                onLongClickElement(shift, visibleNumber)
-                            }
-                        )
-                        // Restore the RecyclerView scroll state
-                        viewModel.recyclerViewState?.let { state ->
-                            binding.recyclerView.layoutManager?.onRestoreInstanceState(state)
+                    binding.recyclerView.adapter = RecyclerAdapter(
+                        shiftList,
+                        settings = settings,
+                        onItemClick = { shift ->
+                            onClickElement(shift)
+                        },
+                        onItemMenuClick = { visibleNumber, shift ->
+                            onLongClickElement(shift, visibleNumber)
                         }
+                    )
+                    // Restore the RecyclerView scroll state
+                    viewModel.recyclerViewState?.let { state ->
+                        binding.recyclerView.layoutManager?.onRestoreInstanceState(state)
                     }
                 }
             }

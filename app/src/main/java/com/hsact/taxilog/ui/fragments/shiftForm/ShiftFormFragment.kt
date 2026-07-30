@@ -85,7 +85,7 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
     ): View {
         _binding = FragmentShiftFormBinding.inflate(inflater, container, false)
         bindItems()
-        val currencySymbol = viewModel.settings.currency?.toSymbol()
+        val currencySymbol = viewModel.settings.value.currency?.toSymbol()
             ?: CurrencySymbolMode.fromLocale(Locale.getDefault()).toSymbol()
         editEarningsL.hint = currencySymbol
         editTipsL.hint = currencySymbol

@@ -11,6 +11,9 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.hsact.domain.utils.DeprecatedDateFormatter
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentGoalsBinding
@@ -18,6 +21,7 @@ import com.hsact.taxilog.ui.cards.CardDayWeekMonthProgress
 import com.hsact.taxilog.ui.cards.CardDaysInMonth
 import com.hsact.taxilog.ui.components.DatePickerFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 @AndroidEntryPoint
@@ -56,7 +60,13 @@ class GoalsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        displayMonthGoal(viewModel.goalMonthString)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.goalMonthString.collect { goal ->
+                    displayMonthGoal(goal)
+                }
+            }
+        }
         card1.setContent {
             CardDayWeekMonthProgress(viewModel.goalDataState)
         }

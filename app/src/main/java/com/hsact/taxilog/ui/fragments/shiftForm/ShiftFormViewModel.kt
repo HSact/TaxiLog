@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.hsact.domain.model.Shift
 import com.hsact.domain.model.ShiftMeta
 import com.hsact.domain.model.settings.UserSettings
-import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.domain.usecase.settings.GetDeviceIdUseCase
+import com.hsact.domain.usecase.settings.GetSettingsFlowUseCase
 import com.hsact.domain.usecase.shift.AddShiftUseCase
 import com.hsact.domain.usecase.shift.GetShiftByIdUseCase
 import com.hsact.domain.usecase.shift.GetShiftSequenceNumberUseCase
@@ -19,9 +19,11 @@ import com.hsact.taxilog.ui.shift.ShiftInputModel
 import com.hsact.taxilog.ui.shift.mappers.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -32,7 +34,7 @@ import kotlin.math.roundToInt
 
 @HiltViewModel
 class ShiftFormViewModel @Inject constructor(
-    getAllSettingsUseCase: GetAllSettingsUseCase,
+    getSettingsFlowUseCase: GetSettingsFlowUseCase,
     private val getDeviceIdUseCase: GetDeviceIdUseCase,
     private val addShiftUseCase: AddShiftUseCase,
     private val getShiftByIdUseCase: GetShiftByIdUseCase,
@@ -47,7 +49,11 @@ class ShiftFormViewModel @Inject constructor(
      */
     val sequenceNumber: StateFlow<Int?> = _sequenceNumber
 
-    val settings: UserSettings = getAllSettingsUseCase.invoke()
+    /**
+     * Reactive user settings used for pre-filling the shift form and guessing costs.
+     */
+    val settings: StateFlow<UserSettings> = getSettingsFlowUseCase()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), UserSettings.default)
 
     init {
         loadGuess()
@@ -78,12 +84,13 @@ class ShiftFormViewModel @Inject constructor(
      * Attempts to guess the fuel cost based on mileage, fuel price, and consumption settings.
      */
     fun guessFuelCost() {
-        if (!settings.isConfigured) return
+        val currentSettings = settings.value
+        if (!currentSettings.isConfigured) return
         if (_uiState.value.mileage == 0.0) return
-        if (settings.fuelPrice.isNullOrEmpty() || settings.consumption.isNullOrEmpty()) return
+        if (currentSettings.fuelPrice.isNullOrEmpty() || currentSettings.consumption.isNullOrEmpty()) return
         var currentShift = _uiState.value
-        val fuelPrice: Double = (settings.fuelPrice!!).toDouble()
-        val consumption = (settings.consumption!!).toDouble()
+        val fuelPrice: Double = (currentSettings.fuelPrice!!).toDouble()
+        val consumption = (currentSettings.consumption!!).toDouble()
         if (fuelPrice == 0.0 || consumption == 0.0) {
             return
         }
@@ -195,6 +202,7 @@ class ShiftFormViewModel @Inject constructor(
     private fun buildShiftInputModel(
         uiState: UiState,
     ): ShiftInputModel {
+        val currentSettings = settings.value
         return ShiftInputModel(
             date = uiState.date,
             timeStart = uiState.timeBegin,
@@ -206,10 +214,10 @@ class ShiftFormViewModel @Inject constructor(
             wash = uiState.wash.toString(),
             fuelCost = uiState.fuelCost.toString(),
             mileage = uiState.mileage.toString(),
-            taxRate = settings.taxRate ?: "",
-            rentCost = settings.rentCost ?: "",
-            serviceCost = settings.serviceCost ?: "",
-            consumption = settings.consumption ?: "",
+            taxRate = currentSettings.taxRate ?: "",
+            rentCost = currentSettings.rentCost ?: "",
+            serviceCost = currentSettings.serviceCost ?: "",
+            consumption = currentSettings.consumption ?: "",
             note = uiState.note.ifEmpty { null },
         )
     }
