@@ -13,6 +13,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.hsact.domain.model.Shift
 import com.hsact.domain.model.settings.CurrencySymbolMode
+import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentHomeBinding
 import com.hsact.taxilog.ui.cards.CardCalendar
 import com.hsact.taxilog.ui.cards.CardGoal
@@ -52,7 +53,10 @@ class HomeFragment : Fragment() {
             val settings by viewModel.settings.collectAsStateWithLifecycle()
             CardGoal(
                 settings.goalPerMonth?.toFloatOrNull() ?: 0f,
-                viewModel.shiftListThisMonth
+                viewModel.shiftListThisMonth,
+                onSetGoalClick = {
+                    findNavController().navigate(R.id.settingsFragment)
+                }
             )
         }
         cardCalendar.setContent {

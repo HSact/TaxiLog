@@ -3,17 +3,29 @@ package com.hsact.taxilog.ui.cards
 import androidx.compose.animation.core.EaseInOutCubic
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -35,9 +47,12 @@ import java.util.Locale
 @Composable
 fun CardGoalProgress(chartData: StateFlow<List<Double>>, goalData: StateFlow<Double>) {
     val chartState by chartData.collectAsStateWithLifecycle()
-    val goal by goalData.collectAsState()
+    val goal by goalData.collectAsStateWithLifecycle()
     val daysInMonth = LocalDate.now().lengthOfMonth()
     val trimmedChartState = chartState.take(daysInMonth)
+    
+    val hasData = trimmedChartState.any { it > 0.0 }
+    
     val max = maxOf(chartState.maxOrNull() ?: 0.0, goal)
     val min = chartState.minOrNull()?.takeIf { it <= 0.0 } ?: 0.0
     val progressName = stringResource(R.string.progress)
@@ -49,7 +64,7 @@ fun CardGoalProgress(chartData: StateFlow<List<Double>>, goalData: StateFlow<Dou
     val colorGraphLine = Color(0xFFFBD323)
 
     val labelHelperProperties = LabelHelperProperties(
-        enabled = true,
+        enabled = hasData,
         textStyle = textStyle
     )
 
@@ -61,7 +76,7 @@ fun CardGoalProgress(chartData: StateFlow<List<Double>>, goalData: StateFlow<Dou
     }
 
     val labelProperties = LabelProperties(
-        enabled = true,
+        enabled = hasData,
         textStyle = textStyle,
         labels = labels,
         rotation = LabelProperties.Rotation(degree = 0f)
@@ -71,7 +86,7 @@ fun CardGoalProgress(chartData: StateFlow<List<Double>>, goalData: StateFlow<Dou
         enabled = false,
     )
     val indicatorProperties = HorizontalIndicatorProperties(
-        enabled = true,
+        enabled = hasData,
         textStyle = textStyle,
         indicators = GraphIndicatorHelper.buildIndicators(min, max),
         contentBuilder = {
@@ -85,7 +100,30 @@ fun CardGoalProgress(chartData: StateFlow<List<Double>>, goalData: StateFlow<Dou
 
     BaseCard {
         CardHeader(stringResource(R.string.month_graph))
-        if (chartState.isNotEmpty())
+        if (!hasData) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Info,
+                    contentDescription = null,
+                    modifier = Modifier.size(48.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = stringResource(R.string.stats_empty_description),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 32.dp)
+                )
+            }
+        } else {
             LineChart(
                 data =
                     listOf(
@@ -122,6 +160,7 @@ fun CardGoalProgress(chartData: StateFlow<List<Double>>, goalData: StateFlow<Dou
                     .heightIn(max = 300.dp)
                     .padding(top = 40.dp)
             )
+        }
     }
 }
 

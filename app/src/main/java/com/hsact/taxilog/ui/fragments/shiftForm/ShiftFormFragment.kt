@@ -23,6 +23,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputLayout
 import com.hsact.domain.model.settings.CurrencySymbolMode
+import com.hsact.domain.model.settings.UserSettings
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentShiftFormBinding
 import com.hsact.taxilog.ui.components.DatePickerFragment
@@ -85,12 +86,6 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
     ): View {
         _binding = FragmentShiftFormBinding.inflate(inflater, container, false)
         bindItems()
-        val currencySymbol = viewModel.settings.value.currency?.toSymbol()
-            ?: CurrencySymbolMode.fromLocale(Locale.getDefault()).toSymbol()
-        editEarningsL.hint = currencySymbol
-        editTipsL.hint = currencySymbol
-        editWashL.hint = currencySymbol
-        editFuelCostL.hint = currencySymbol
         scrollView.setPadding(0, 0, 0, 0)
         editEarnings.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
@@ -169,6 +164,13 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.settings.collect { settings ->
+                    updateCurrencyHints(settings)
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.sequenceNumber.collect { number ->
                     if (number != null && number != -1) {
                         (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
@@ -228,6 +230,15 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         val currentShift = viewModel.uiState.value
         val updated = fieldSetter(currentShift)
         viewModel.updateShift(updated)
+    }
+
+    private fun updateCurrencyHints(settings: UserSettings) {
+        val currencySymbol = settings.currency?.toSymbol()
+            ?: CurrencySymbolMode.fromLocale(Locale.getDefault()).toSymbol()
+        editEarningsL.hint = currencySymbol
+        editTipsL.hint = currencySymbol
+        editWashL.hint = currencySymbol
+        editFuelCostL.hint = currencySymbol
     }
 
     private fun updateUI(shift: UiState) {

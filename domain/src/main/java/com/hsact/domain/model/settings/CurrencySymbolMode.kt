@@ -37,13 +37,28 @@ enum class CurrencySymbolMode {
     }
 
     companion object {
+        /**
+         * Determines the [CurrencySymbolMode] based on the provided [Locale].
+         * Checks country code first, then falls back to language code.
+         */
         fun fromLocale(locale: Locale): CurrencySymbolMode {
-            return when (locale.country.uppercase()) {
-                "US" -> USD
-                "RU" -> RUB
-                "GB" -> GBP
-                "JP" -> JPY
-                "DE", "FR", "ES", "IT" -> EUR
+            val country = locale.country.uppercase()
+            if (country.isNotEmpty()) {
+                when (country) {
+                    "US" -> return USD
+                    "RU" -> return RUB
+                    "GB" -> return GBP
+                    "JP" -> return JPY
+                    "DE", "FR", "ES", "IT" -> return EUR
+                }
+            }
+
+            // Fallback to language code if country is missing or not matched
+            return when (locale.language.lowercase()) {
+                "ru" -> RUB
+                "ja" -> JPY
+                "de", "fr", "es", "it" -> EUR
+                "en" -> if (locale.country.uppercase() == "GB") GBP else USD
                 else -> USD
             }
         }

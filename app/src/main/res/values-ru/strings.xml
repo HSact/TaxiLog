@@ -154,4 +154,13 @@
     <string name="about_feature_4">• Отслеживание ежемесячных целей</string>
     <string name="about_feature_5">• Облачная синхронизация</string>
     <string name="liter_short">л</string>
+
+    <string name="log_empty_title">Тут пока пусто</string>
+    <string name="log_empty_description">Добавьте первую смену, чтобы следить за своими доходами! 🚀</string>
+    <string name="stats_empty_title">Упс! Нет данных</string>
+    <string name="stats_empty_description">В этом месяце пока нет смен.</string>
+    <string name="goals_empty_title">Цель не поставлена</string>
+    <string name="goals_empty_description">Самое время решить, сколько вы хотите заработать в этом месяце! 🎯</string>
+    <string name="home_no_shifts_yet">Смен пока нет. Самое время начать!</string>
+    <string name="settings_label">Настройки</string>
 </resources>

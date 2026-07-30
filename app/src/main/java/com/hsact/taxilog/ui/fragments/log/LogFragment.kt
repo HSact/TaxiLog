@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -21,6 +22,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.hsact.domain.model.Shift
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentLogBinding
+import com.hsact.taxilog.ui.AppTheme
+import com.hsact.taxilog.ui.components.EmptyStateView
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -47,32 +52,46 @@ class LogFragment : Fragment() {
         requireActivity().title = getString(R.string.title_my_shifts)
 
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        binding.emptyStateCompose.setContent {
+            AppTheme {
+                EmptyStateView(
+                    icon = Icons.AutoMirrored.Filled.List,
+                    title = getString(R.string.log_empty_title),
+                    description = getString(R.string.log_empty_description),
+                    actionText = getString(R.string.new_shift),
+                    onAction = {
+                        val action = LogFragmentDirections.actionLogFragmentToShiftForm(shiftId = -1)
+                        findNavController().navigate(action)
+                    }
+                )
+            }
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.shifts.combine(viewModel.settings) { shiftList, settings ->
                     Pair(shiftList, settings)
                 }.collect { (shiftList, settings) ->
-                    if (shiftList.isEmpty()) {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.list_is_empty),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                    val isEmpty = shiftList.isEmpty()
+                    binding.recyclerView.isVisible = !isEmpty
+                    binding.emptyStateCompose.isVisible = isEmpty
 
-                    binding.recyclerView.adapter = RecyclerAdapter(
-                        shiftList,
-                        settings = settings,
-                        onItemClick = { shift ->
-                            onClickElement(shift)
-                        },
-                        onItemMenuClick = { visibleNumber, shift ->
-                            onLongClickElement(shift, visibleNumber)
+                    if (!isEmpty) {
+                        binding.recyclerView.adapter = RecyclerAdapter(
+                            shiftList,
+                            settings = settings,
+                            onItemClick = { shift ->
+                                onClickElement(shift)
+                            },
+                            onItemMenuClick = { visibleNumber, shift ->
+                                onLongClickElement(shift, visibleNumber)
+                            }
+                        )
+                        // Restore the RecyclerView scroll state
+                        viewModel.recyclerViewState?.let { state ->
+                            binding.recyclerView.layoutManager?.onRestoreInstanceState(state)
                         }
-                    )
-                    // Restore the RecyclerView scroll state
-                    viewModel.recyclerViewState?.let { state ->
-                        binding.recyclerView.layoutManager?.onRestoreInstanceState(state)
                     }
                 }
             }

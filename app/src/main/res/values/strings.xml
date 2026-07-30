@@ -165,4 +165,13 @@
         <item>£</item>
         <item>¥</item>
     </string-array>
+
+    <string name="log_empty_title">It\'s empty here yet</string>
+    <string name="log_empty_description">Record your first shift to see your earnings! 🚀</string>
+    <string name="stats_empty_title">Oops! No data</string>
+    <string name="stats_empty_description">There are no shifts in this month.</string>
+    <string name="goals_empty_title">Goal not set</string>
+    <string name="goals_empty_description">It\'s time to decide how much you want to earn this month! 🎯</string>
+    <string name="home_no_shifts_yet">No shifts yet. Time to start!</string>
+    <string name="settings_label">Settings</string>
 </resources>
