@@ -42,7 +42,13 @@ fun CardLastShift(
     val locale = LocalConfiguration.current.locales[0]
     val lastShiftValue = lastShift.value
 
-    BaseCard(modifier = Modifier.clickable(onClick = onClick)) {
+    BaseCard(
+        modifier =
+            Modifier.clickable(
+                enabled = lastShiftValue != null,
+                onClick = onClick,
+            ),
+    ) {
         Column {
             CardHeader(text = stringResource(R.string.last_shift))
             Spacer(Modifier.height(8.dp))
