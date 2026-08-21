@@ -13,4 +13,11 @@
         android:paddingBottom="120dp"
         android:clipToPadding="false"
         tools:listitem="@layout/recyclerview_item" />
+
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/emptyStateCompose"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

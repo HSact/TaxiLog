@@ -1,6 +1,5 @@
 package com.hsact.taxilog.ui.activities
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -18,13 +17,10 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.ActivityMainBinding
-import com.hsact.taxilog.ui.activities.settings.SettingsActivity
-import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,32 +35,39 @@ class MainActivity : AppCompatActivity() {
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            val isBottomNavVisible = when (destination.id) {
-                R.id.shiftForm, R.id.shiftDetailFragment -> false
-                else -> true
-            }
+            val isBottomNavVisible =
+                when (destination.id) {
+                    R.id.shiftForm, R.id.shiftDetailFragment, R.id.settingsFragment -> false
+                    else -> true
+                }
             setBottomNavVisible(isBottomNavVisible)
             invalidateOptionsMenu()
         }
 
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_log, R.id.navigation_goals, R.id.navigation_stats
+        val appBarConfiguration =
+            AppBarConfiguration(
+                setOf(
+                    R.id.navigation_home,
+                    R.id.navigation_log,
+                    R.id.navigation_goals,
+                    R.id.navigation_stats,
+                ),
             )
-        )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
         navView.setOnItemSelectedListener { item ->
-            val options = NavOptions.Builder()
-                .setEnterAnim(R.anim.fade_in)
-                .setExitAnim(R.anim.fade_out)
-                .setPopEnterAnim(R.anim.fade_in)
-                .setPopExitAnim(R.anim.fade_out)
-                .setLaunchSingleTop(true)
-                .setPopUpTo(navController.graph.startDestinationId, false, saveState = true)
-                .setRestoreState(true)
-                .build()
+            val options =
+                NavOptions
+                    .Builder()
+                    .setEnterAnim(R.anim.fade_in)
+                    .setExitAnim(R.anim.fade_out)
+                    .setPopEnterAnim(R.anim.fade_in)
+                    .setPopExitAnim(R.anim.fade_out)
+                    .setLaunchSingleTop(true)
+                    .setPopUpTo(navController.graph.startDestinationId, false, saveState = true)
+                    .setRestoreState(true)
+                    .build()
 
             if (item.itemId != navController.currentDestination?.id) {
                 navController.navigate(item.itemId, null, options)
@@ -77,12 +80,25 @@ class MainActivity : AppCompatActivity() {
             view.setPadding(0, 0, 0, navBarHeight)
             insets
         }
+
+        if (savedInstanceState == null && intent.getBooleanExtra("NAVIGATE_TO_SETTINGS", false)) {
+            navController.navigate(R.id.settingsFragment, null, getSlideNavOptions())
+        }
     }
+
+    private fun getSlideNavOptions(): NavOptions =
+        NavOptions
+            .Builder()
+            .setEnterAnim(R.anim.slide_in_right)
+            .setExitAnim(R.anim.slide_out_left)
+            .setPopEnterAnim(R.anim.slide_in_left)
+            .setPopExitAnim(R.anim.slide_out_right)
+            .build()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         val currentDestination = navController.currentDestination?.id
-        return if (currentDestination == R.id.shiftDetailFragment) {
+        return if (currentDestination == R.id.shiftDetailFragment || currentDestination == R.id.settingsFragment) {
             false
         } else {
             menuInflater.inflate(R.menu.menu_main, menu)
@@ -90,12 +106,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        return when (item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        when (item.itemId) {
             R.id.action_settings -> {
-                val settingsIntent = Intent(this, SettingsActivity::class.java)
-                startActivity(settingsIntent)
+                findNavController(R.id.nav_host_fragment_activity_main).navigate(
+                    R.id.settingsFragment,
+                    null,
+                    getSlideNavOptions(),
+                )
                 true
             }
 
@@ -106,15 +124,10 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
         return super.onSupportNavigateUp()
-    }
-
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(ContextWrapper.wrapContext(newBase))
     }
 
     /**
@@ -126,7 +139,8 @@ class MainActivity : AppCompatActivity() {
         val duration = resources.getInteger(R.integer.anim_duration_short).toLong()
 
         if (visible) {
-            navView.animate()
+            navView
+                .animate()
                 .translationY(0f)
                 .setDuration(duration)
                 .withStartAction { navView.isVisible = true }
@@ -134,7 +148,8 @@ class MainActivity : AppCompatActivity() {
         } else {
             // Handle case where height is not yet measured (e.g. rapid navigation on startup)
             val height = if (navView.height > 0) navView.height.toFloat() else 200f
-            navView.animate()
+            navView
+                .animate()
                 .translationY(height)
                 .setDuration(duration)
                 .withEndAction { navView.isVisible = false }

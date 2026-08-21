@@ -6,5 +6,6 @@ class AuthSkippedUseCase(
     private val repository: SettingsRepository,
 ) {
     fun isAuthSkipped(): Boolean = repository.authSkipped
+
     fun setAuthSkipped(value: Boolean) = repository.saveAuthSkipped(value)
 }

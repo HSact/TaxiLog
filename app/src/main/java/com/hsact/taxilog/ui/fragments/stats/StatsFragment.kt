@@ -9,13 +9,19 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentStatsBinding
+import com.hsact.taxilog.ui.AppTheme
 import com.hsact.taxilog.ui.components.DatePickerFragment
+import com.hsact.taxilog.ui.components.EmptyStateView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -29,7 +35,6 @@ class StatsFragment : Fragment() {
     private lateinit var countLayout: LinearLayout
     private lateinit var averageCard: CardView
     private lateinit var totalCard: CardView
-    private lateinit var textListIsEmpty: TextView
     private lateinit var butDatePickBegin: EditText
     private lateinit var butDatePickEnd: EditText
     private lateinit var textShiftsCount: TextView
@@ -59,6 +64,17 @@ class StatsFragment : Fragment() {
         _binding = FragmentStatsBinding.inflate(inflater, container, false)
         val root: View = binding.root
         bindItems()
+
+        binding.emptyStateCompose.setContent {
+            AppTheme {
+                EmptyStateView(
+                    icon = Icons.Default.Info,
+                    title = getString(R.string.stats_empty_title),
+                    description = getString(R.string.stats_empty_description),
+                )
+            }
+        }
+
         lifecycleScope.launch {
             viewModel.defineDates()
             viewModel.updateShifts(Locale.getDefault())
@@ -102,7 +118,7 @@ class StatsFragment : Fragment() {
                     viewModel.onEndDateChange(date)
                 }
                 viewModel.updateShifts(Locale.getDefault())
-            }
+            },
         )
     }
 
@@ -114,17 +130,15 @@ class StatsFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun displayInfo(uiState: UiState) {
         val shifts = viewModel.shifts.value
-        if (shifts.isEmpty()) {
-            countLayout.visibility = View.GONE
-            textListIsEmpty.visibility = View.VISIBLE
-            averageCard.visibility = View.GONE
-            totalCard.visibility = View.GONE
-            return
-        }
-        textListIsEmpty.visibility = View.GONE
-        averageCard.visibility = View.VISIBLE
-        totalCard.visibility = View.VISIBLE
-        countLayout.visibility = View.VISIBLE
+        val isEmpty = shifts.isEmpty()
+
+        countLayout.isVisible = !isEmpty
+        averageCard.isVisible = !isEmpty
+        totalCard.isVisible = !isEmpty
+        binding.emptyStateCompose.isVisible = isEmpty
+
+        if (isEmpty) return
+
         textShiftsCount.text = uiState.shiftsCount
         textAvErPh.text = uiState.avErPh
         textAvProfitPh.text = uiState.avProfitPh
@@ -151,7 +165,6 @@ class StatsFragment : Fragment() {
         totalCard = binding.totalCard
         butDatePickBegin = binding.buttonDatePickBegin
         butDatePickEnd = binding.buttonDatePickEnd
-        textListIsEmpty = binding.textListIsEmpty
         textShiftsCount = binding.textShiftsCountVal
         textAvErPh = binding.textAvErPhVal
         textAvProfitPh = binding.textAvProfitPhVal

@@ -9,5 +9,5 @@ data class GoalDataState(
     val monthProgress: Double = 0.0,
     val todayPercent: Double = 0.0,
     val weekPercent: Double = 0.0,
-    val monthPercent: Double = 0.0
+    val monthPercent: Double = 0.0,
 )

@@ -12,8 +12,8 @@ import com.hsact.domain.model.car.CarSnapshot
 import com.hsact.domain.model.time.DateTimePeriod
 import com.hsact.domain.model.time.ShiftTime
 
-fun ShiftEntity.toDomain(): Shift {
-    return Shift(
+fun ShiftEntity.toDomain(): Shift =
+    Shift(
         id = id,
         remoteId = remoteId,
         carId = carId,
@@ -21,85 +21,85 @@ fun ShiftEntity.toDomain(): Shift {
         carSnapshot = carSnapshot.toDomain(),
         time = ShiftTime(
             period = period.toDomain(),
-            rest = rest?.toDomain()
+            rest = rest?.toDomain(),
         ),
         financeInput = financeInput.toDomain(),
-        note = note
+        note = note,
     )
-}
 
-fun ShiftMetaEntity.toDomain(): ShiftMeta {
-    return ShiftMeta(
+fun ShiftMetaEntity.toDomain(): ShiftMeta =
+    ShiftMeta(
         createdAt = createdAt,
         updatedAt = updatedAt,
         lastModifiedBy = lastModifiedBy,
-        isSynced = isSynced
+        isSynced = isSynced,
     )
-}
 
-fun CarSnapshotEntity.toDomain(): CarSnapshot {
-    return CarSnapshot(
+fun CarSnapshotEntity.toDomain(): CarSnapshot =
+    CarSnapshot(
         name = name,
         mileage = mileage,
         fuelConsumption = fuelConsumption,
         rentCost = rentCost,
-        serviceCost = serviceCost
+        serviceCost = serviceCost,
     )
-}
 
-fun DateTimePeriodEntity.toDomain(): DateTimePeriod {
-    return DateTimePeriod(
+fun DateTimePeriodEntity.toDomain(): DateTimePeriod =
+    DateTimePeriod(
         start = this.start,
-        end = this.end
+        end = this.end,
     )
-}
 
-fun ShiftFinanceInputEntity.toDomain(): ShiftFinanceInput {
-    return ShiftFinanceInput(
+fun ShiftFinanceInputEntity.toDomain(): ShiftFinanceInput =
+    ShiftFinanceInput(
         earnings = earnings,
         tips = tips,
         taxRate = taxRate,
         wash = wash,
-        fuelCost = fuelCost
+        fuelCost = fuelCost,
     )
-}
 
-fun Shift.toEntity(): ShiftEntity = ShiftEntity(
-    id = id,
-    remoteId = remoteId,
-    carId = carId,
-    meta = meta.toEntity(),
-    carSnapshot = carSnapshot.toEntity(),
-    period = time.period.toEntity(),
-    rest = time.rest?.toEntity(),
-    financeInput = financeInput.toEntity(),
-    note = note
-)
+fun Shift.toEntity(): ShiftEntity =
+    ShiftEntity(
+        id = id,
+        remoteId = remoteId,
+        carId = carId,
+        meta = meta.toEntity(),
+        carSnapshot = carSnapshot.toEntity(),
+        period = time.period.toEntity(),
+        rest = time.rest?.toEntity(),
+        financeInput = financeInput.toEntity(),
+        note = note,
+    )
 
-fun ShiftMeta.toEntity(): ShiftMetaEntity = ShiftMetaEntity(
-    createdAt = createdAt,
-    updatedAt = updatedAt,
-    lastModifiedBy = lastModifiedBy,
-    isSynced = isSynced
-)
+fun ShiftMeta.toEntity(): ShiftMetaEntity =
+    ShiftMetaEntity(
+        createdAt = createdAt,
+        updatedAt = updatedAt,
+        lastModifiedBy = lastModifiedBy,
+        isSynced = isSynced,
+    )
 
-fun CarSnapshot.toEntity(): CarSnapshotEntity = CarSnapshotEntity(
-    name = name,
-    mileage = mileage,
-    fuelConsumption = fuelConsumption,
-    rentCost = rentCost,
-    serviceCost = serviceCost
-)
+fun CarSnapshot.toEntity(): CarSnapshotEntity =
+    CarSnapshotEntity(
+        name = name,
+        mileage = mileage,
+        fuelConsumption = fuelConsumption,
+        rentCost = rentCost,
+        serviceCost = serviceCost,
+    )
 
-fun DateTimePeriod.toEntity(): DateTimePeriodEntity = DateTimePeriodEntity(
-    start = start,
-    end = end
-)
+fun DateTimePeriod.toEntity(): DateTimePeriodEntity =
+    DateTimePeriodEntity(
+        start = start,
+        end = end,
+    )
 
-fun ShiftFinanceInput.toEntity(): ShiftFinanceInputEntity = ShiftFinanceInputEntity(
-    earnings = earnings,
-    tips = tips,
-    taxRate = taxRate,
-    wash = wash,
-    fuelCost = fuelCost
-)
+fun ShiftFinanceInput.toEntity(): ShiftFinanceInputEntity =
+    ShiftFinanceInputEntity(
+        earnings = earnings,
+        tips = tips,
+        taxRate = taxRate,
+        wash = wash,
+        fuelCost = fuelCost,
+    )

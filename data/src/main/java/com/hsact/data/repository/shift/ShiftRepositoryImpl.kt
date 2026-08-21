@@ -9,80 +9,71 @@ import kotlinx.coroutines.flow.Flow
 import java.time.LocalDateTime
 import javax.inject.Inject
 
-class ShiftRepositoryImpl @Inject constructor(
-    private val shiftRepositoryLocal: ShiftRepositoryLocal,
-    private val shiftRepositoryRemote: ShiftRepositoryRemote,
-) : ShiftRepository {
-
-    override suspend fun sync() {
-        shiftRepositoryRemote.sync()
-    }
-
-    override fun getAllShifts() =
-        shiftRepositoryLocal.getAllShifts()
-
-    override fun getShiftsInRange(
-        start: LocalDateTime?,
-        end: LocalDateTime?,
-    ): Flow<List<Shift>> {
-        return shiftRepositoryLocal.getShiftsInRange(start, end)
-    }
-
-    override fun getShift(id: Int): Flow<Shift?> {
-        return shiftRepositoryLocal.getShiftById(id)
-    }
-
-    override fun getShiftSequenceNumber(id: Int): Flow<Int> {
-        return shiftRepositoryLocal.getShiftSequenceNumberById(id)
-    }
-
-    override fun getLastShift() =
-        shiftRepositoryLocal.getLastShift()
-
-    override suspend fun getUnsyncedShifts() =
-        shiftRepositoryLocal.getUnsyncedShifts()
-
-    override suspend fun getByRemoteId(remoteId: String) =
-        shiftRepositoryLocal.getByRemoteId(remoteId)
-
-    override suspend fun markAsSynced(id: Int, remoteId: String) {
-        shiftRepositoryLocal.markAsSynced(id, remoteId)
-    }
-
-    override suspend fun insertShift(shift: Shift) {
-        val id = shiftRepositoryLocal.insertShift(shift)
-        shiftRepositoryRemote.saveShift(shift.withId(id))
-    }
-
-    override suspend fun deleteShift(shift: Shift) {
-        shiftRepositoryLocal.deleteShift(shift)
-        if (shift.remoteId != null) {
-            shiftRepositoryRemote.deleteShift(shift.remoteId!!)
-            Log.d("ShiftRepository", "Successfully deleted remote shift: remoteId=${shift.remoteId}")
+class ShiftRepositoryImpl
+    @Inject
+    constructor(
+        private val shiftRepositoryLocal: ShiftRepositoryLocal,
+        private val shiftRepositoryRemote: ShiftRepositoryRemote,
+    ) : ShiftRepository {
+        override suspend fun sync() {
+            shiftRepositoryRemote.sync()
         }
-        else {
-            Log.d("ShiftRepository", "Shift has no remoteId: id=${shift.id}")
+
+        override fun getAllShifts() = shiftRepositoryLocal.getAllShifts()
+
+        override fun getShiftsInRange(
+            start: LocalDateTime?,
+            end: LocalDateTime?,
+        ): Flow<List<Shift>> = shiftRepositoryLocal.getShiftsInRange(start, end)
+
+        override fun getShift(id: Int): Flow<Shift?> = shiftRepositoryLocal.getShiftById(id)
+
+        override fun getShiftSequenceNumber(id: Int): Flow<Int> = shiftRepositoryLocal.getShiftSequenceNumberById(id)
+
+        override fun getLastShift() = shiftRepositoryLocal.getLastShift()
+
+        override suspend fun getUnsyncedShifts() = shiftRepositoryLocal.getUnsyncedShifts()
+
+        override suspend fun getByRemoteId(remoteId: String) = shiftRepositoryLocal.getByRemoteId(remoteId)
+
+        override suspend fun markAsSynced(
+            id: Int,
+            remoteId: String,
+        ) {
+            shiftRepositoryLocal.markAsSynced(id, remoteId)
         }
-    }
 
-    override suspend fun updateShift(shift: Shift) {
-        shiftRepositoryLocal.updateShift(shift)
-        if (shift.remoteId != null) {
-            shiftRepositoryRemote.saveShift(shift)
-            Log.d("ShiftRepository", "Successfully updated remote shift: remoteId=${shift.remoteId}")
+        override suspend fun insertShift(shift: Shift) {
+            val id = shiftRepositoryLocal.insertShift(shift)
+            shiftRepositoryRemote.saveShift(shift.withId(id))
         }
-        else {
-            Log.d("ShiftRepository", "Shift has no remoteId: id=${shift.id}")
+
+        override suspend fun deleteShift(shift: Shift) {
+            shiftRepositoryLocal.deleteShift(shift)
+            if (shift.remoteId != null) {
+                shiftRepositoryRemote.deleteShift(shift.remoteId!!)
+                Log.d("ShiftRepository", "Successfully deleted remote shift: remoteId=${shift.remoteId}")
+            } else {
+                Log.d("ShiftRepository", "Shift has no remoteId: id=${shift.id}")
+            }
         }
+
+        override suspend fun updateShift(shift: Shift) {
+            shiftRepositoryLocal.updateShift(shift)
+            if (shift.remoteId != null) {
+                shiftRepositoryRemote.saveShift(shift)
+                Log.d("ShiftRepository", "Successfully updated remote shift: remoteId=${shift.remoteId}")
+            } else {
+                Log.d("ShiftRepository", "Shift has no remoteId: id=${shift.id}")
+            }
+        }
+
+        override suspend fun deleteAll() {
+            shiftRepositoryLocal.deleteAll()
+            shiftRepositoryRemote.deleteAllShifts()
+        }
+
+        override suspend fun resetPrimaryKey() = shiftRepositoryLocal.resetPrimaryKey()
+
+        private fun Shift.withId(id: Int) = copy(id = id)
     }
-
-    override suspend fun deleteAll() {
-        shiftRepositoryLocal.deleteAll()
-        shiftRepositoryRemote.deleteAllShifts()
-    }
-
-    override suspend fun resetPrimaryKey() =
-        shiftRepositoryLocal.resetPrimaryKey()
-
-    private fun Shift.withId(id: Int) = copy(id = id)
-}

@@ -34,26 +34,30 @@ class ShiftDetailFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View {
-        return inflater.inflate(R.layout.fragment_shift_detail, container, false)
-    }
+    ): View = inflater.inflate(R.layout.fragment_shift_detail, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         if (shiftId != -1) {
             viewModel.loadShift(shiftId)
         }
         requireActivity().invalidateOptionsMenu()
         val container = view.findViewById<FrameLayout>(R.id.compose_container)
-        val composeView = ComposeView(requireContext()).apply {
-            setContent {
-                val state by viewModel.uiState.collectAsState()
-                ShiftDetailScreen(
-                    state,
-                    viewModel.settings.currency,
-                    { editShift() },
-                    { deleteShift() })
+        val composeView =
+            ComposeView(requireContext()).apply {
+                setContent {
+                    val state by viewModel.uiState.collectAsState()
+                    val settings by viewModel.settings.collectAsState()
+                    ShiftDetailScreen(
+                        state,
+                        settings.currency,
+                        { editShift() },
+                        { deleteShift() },
+                    )
+                }
             }
-        }
         container.addView(composeView)
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -70,17 +74,21 @@ class ShiftDetailFragment : Fragment() {
         super.onResume()
         val currentNumber = viewModel.sequenceNumber.value
         (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
-            if (currentNumber != null && currentNumber != -1) getString(R.string.title_shift_detail, currentNumber)
-            else getString(R.string.shift)
+            if (currentNumber != null && currentNumber != -1) {
+                getString(R.string.title_shift_detail, currentNumber)
+            } else {
+                getString(R.string.shift)
+            }
     }
 
     /**
      * Navigates to the shift form to edit the current shift.
      */
     fun editShift() {
-        val action = ShiftDetailFragmentDirections.actionShiftDetailFragmentToShiftForm(
-            shiftId = shiftId
-        )
+        val action =
+            ShiftDetailFragmentDirections.actionShiftDetailFragmentToShiftForm(
+                shiftId = shiftId,
+            )
         findNavController().navigate(action)
     }
 

@@ -10,17 +10,17 @@ class DeleteShiftWorker(
     context: Context,
     workerParams: WorkerParameters,
 ) : BaseFirebaseWorker(context, workerParams) {
+    override suspend fun doWork(): Result =
+        withContext(Dispatchers.IO) {
+            val remoteId = inputData.getString("remoteId") ?: return@withContext Result.failure()
 
-    override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-        val remoteId = inputData.getString("remoteId") ?: return@withContext Result.failure()
-
-        return@withContext try {
-            firebaseShiftDataSource.delete(remoteId)
-            Log.d("DeleteShiftWorker", "Deleted shift with remoteId $remoteId")
-            Result.success()
-        } catch (e: Exception) {
-            Log.e("DeleteShiftWorker", "Error deleting shift", e)
-            Result.retry()
+            return@withContext try {
+                firebaseShiftDataSource.delete(remoteId)
+                Log.d("DeleteShiftWorker", "Deleted shift with remoteId $remoteId")
+                Result.success()
+            } catch (e: Exception) {
+                Log.e("DeleteShiftWorker", "Error deleting shift", e)
+                Result.retry()
+            }
         }
-    }
 }

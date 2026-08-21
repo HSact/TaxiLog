@@ -1,26 +1,25 @@
 package com.hsact.taxilog.ui.locale
 
-import android.content.Context
-import android.content.res.Configuration
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import com.hsact.domain.usecase.settings.UpdateSettingUseCase
-import java.util.Locale
 import javax.inject.Inject
 
-class LocaleHelper @Inject constructor(
-    private val updateSettingUseCase: UpdateSettingUseCase
-) {
-    private val languageKey = "My_Lang"
+class LocaleHelper
+    @Inject
+    constructor(
+        private val updateSettingUseCase: UpdateSettingUseCase,
+    ) {
+        private val languageKey = "My_Lang"
 
-    fun setLocale(context: Context, lang: String): Context {
-        updateSettingUseCase(languageKey, lang)
-        return updateLocale(context, lang)
+        fun setLocale(lang: String?) {
+            updateSettingUseCase(languageKey, lang)
+            val appLocales =
+                if (lang != null) {
+                    LocaleListCompat.forLanguageTags(lang)
+                } else {
+                    LocaleListCompat.getEmptyLocaleList()
+                }
+            AppCompatDelegate.setApplicationLocales(appLocales)
+        }
     }
-
-    fun updateLocale(context: Context, lang: String): Context {
-        val locale = Locale(lang)
-        Locale.setDefault(locale)
-        val config = Configuration()
-        config.setLocale(locale)
-        return context.createConfigurationContext(config)
-    }
-}

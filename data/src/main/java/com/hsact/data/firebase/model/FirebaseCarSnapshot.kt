@@ -5,5 +5,5 @@ data class FirebaseCarSnapshot(
     val mileage: Long? = null,
     val fuelConsumption: Long? = null,
     val rentCost: Long? = null,
-    val serviceCost: Long? = null
+    val serviceCost: Long? = null,
 )

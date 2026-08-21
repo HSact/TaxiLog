@@ -6,6 +6,7 @@ import com.hsact.domain.usecase.settings.GetAllSettingsUseCase
 import com.hsact.domain.usecase.settings.GetDeviceIdUseCase
 import com.hsact.domain.usecase.shift.AddShiftUseCase
 import com.hsact.domain.usecase.shift.GetShiftByIdUseCase
+import com.hsact.domain.usecase.shift.GetShiftSequenceNumberUseCase
 import com.hsact.taxilog.ui.fragments.shiftForm.ShiftFormViewModel
 import com.hsact.taxilog.ui.fragments.shiftForm.UiState
 import kotlinx.coroutines.Dispatchers
@@ -22,13 +23,13 @@ import kotlin.test.assertEquals
 
 @ExperimentalCoroutinesApi
 class ShiftFormViewModelTest {
-
     private lateinit var viewModel: ShiftFormViewModel
 
     private val getAllSettingsUseCase = mock<GetAllSettingsUseCase>()
     private val getDeviceIdUseCase = mock<GetDeviceIdUseCase>()
     private val addShiftUseCase = mock<AddShiftUseCase>()
     private val getShiftByIdUseCase = mock<GetShiftByIdUseCase>()
+    private val getShiftSequenceNumberUseCase = mock<GetShiftSequenceNumberUseCase>()
 
     @Before
     fun setup() {
@@ -51,15 +52,17 @@ class ShiftFormViewModelTest {
                 taxes = false,
                 taxRate = "5",
                 fuelPrice = "1.5",
-            )
+            ),
         )
 
-        viewModel = ShiftFormViewModel(
-            getAllSettingsUseCase,
-            getDeviceIdUseCase,
-            addShiftUseCase,
-            getShiftByIdUseCase
-        )
+        viewModel =
+            ShiftFormViewModel(
+                getAllSettingsUseCase,
+                getDeviceIdUseCase,
+                addShiftUseCase,
+                getShiftByIdUseCase,
+                getShiftSequenceNumberUseCase,
+            )
     }
 
     @After
@@ -69,15 +72,16 @@ class ShiftFormViewModelTest {
 
     @Test
     fun `guessFuelCost calculates correctly`() {
-        val initial = UiState(
-            mileage = 100.0 // 100 км
-        )
+        val initial =
+            UiState(
+                mileage = 100.0, // 100 км
+            )
         viewModel.updateShift(initial)
 
         viewModel.guessFuelCost()
 
         val updated = viewModel.uiState.value
-        assertEquals(15.0, updated.fuelCost, 0.01) // 65 * 100 * 10 / 100 = 65.0? 
+        assertEquals(15.0, updated.fuelCost, 0.01) // 65 * 100 * 10 / 100 = 65.0?
         // Wait, fuelPrice is 65. mileage is 100. consumption is 10.
         // fuelPrice * mileage * consumption / 100 = 65 * 100 * 10 / 100 = 650?
         // Let me check the formula in ShiftFormViewModel.kt

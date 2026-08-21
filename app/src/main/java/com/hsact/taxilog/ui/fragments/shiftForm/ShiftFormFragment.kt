@@ -23,6 +23,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputLayout
 import com.hsact.domain.model.settings.CurrencySymbolMode
+import com.hsact.domain.model.settings.UserSettings
 import com.hsact.taxilog.R
 import com.hsact.taxilog.databinding.FragmentShiftFormBinding
 import com.hsact.taxilog.ui.components.DatePickerFragment
@@ -34,7 +35,6 @@ import java.util.Locale
 
 @AndroidEntryPoint
 class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
-
     private val viewModel: ShiftFormViewModel by viewModels()
 
     private var shiftId: Int = -1
@@ -80,17 +80,12 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentShiftFormBinding.inflate(inflater, container, false)
         bindItems()
-        val currencySymbol = viewModel.settings.currency?.toSymbol()
-            ?: CurrencySymbolMode.fromLocale(Locale.getDefault()).toSymbol()
-        editEarningsL.hint = currencySymbol
-        editTipsL.hint = currencySymbol
-        editWashL.hint = currencySymbol
-        editFuelCostL.hint = currencySymbol
         scrollView.setPadding(0, 0, 0, 0)
         editEarnings.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
@@ -137,22 +132,42 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
-        mileageWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                if (isProgrammaticChange) return
-                val mileageValue = s?.toString()?.toDoubleOrNull()
-                if (mileageValue != null) {
-                    updateShiftField { it.copy(mileage = mileageValue) }
-                    viewModel.guessFuelCost()
-                } else {
-                    editFuelCost.setText("")
+        mileageWatcher =
+            object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int,
+                ) {
+                    // Not used
+                }
+
+                override fun onTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    before: Int,
+                    count: Int,
+                ) {
+                    // Not used
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    if (isProgrammaticChange) return
+                    val mileageValue = s?.toString()?.toDoubleOrNull()
+                    if (mileageValue != null) {
+                        updateShiftField { it.copy(mileage = mileageValue) }
+                        viewModel.guessFuelCost()
+                    } else {
+                        editFuelCost.setText("")
+                    }
                 }
             }
-        }
         editMileage.addTextChangedListener(mileageWatcher)
         if (shiftId != -1) {
             viewModel.loadShift(shiftId)
@@ -164,6 +179,13 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { shift ->
                     updateUI(shift)
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.settings.collect { settings ->
+                    updateCurrencyHints(settings)
                 }
             }
         }
@@ -185,35 +207,39 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
             DatePickerFragment.pickDate(
                 this,
                 editDate,
-                onDatePicked = { viewModel.setDate(editDate.text.toString()) }
+                onDatePicked = { viewModel.setDate(editDate.text.toString()) },
             )
         }
         editStart.setOnClickListener {
             TimePickerFragment.pickTime(
-                this, editStart,
-                onTimePicked = { viewModel.setTimeBegin(editStart.text.toString()) }
+                this,
+                editStart,
+                onTimePicked = { viewModel.setTimeBegin(editStart.text.toString()) },
             )
         }
         editEnd.setOnClickListener {
             TimePickerFragment.pickTime(
-                this, editEnd,
-                onTimePicked = { viewModel.setTimeEnd(editEnd.text.toString()) }
+                this,
+                editEnd,
+                onTimePicked = { viewModel.setTimeEnd(editEnd.text.toString()) },
             )
         }
         editBreakStart.setOnClickListener {
             TimePickerFragment.pickTime(
-                this, editBreakStart,
+                this,
+                editBreakStart,
                 onTimePicked = {
                     viewModel.setBreakBegin(editBreakStart.text.toString())
-                }
+                },
             )
         }
         editBreakEnd.setOnClickListener {
             TimePickerFragment.pickTime(
-                this, editBreakEnd,
+                this,
+                editBreakEnd,
                 onTimePicked = {
                     viewModel.setBreakEnd(editBreakEnd.text.toString())
-                }
+                },
             )
         }
         switchBreak.setOnClickListener { switchBrake() }
@@ -228,6 +254,16 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         val currentShift = viewModel.uiState.value
         val updated = fieldSetter(currentShift)
         viewModel.updateShift(updated)
+    }
+
+    private fun updateCurrencyHints(settings: UserSettings) {
+        val currencySymbol =
+            settings.currency?.toSymbol()
+                ?: CurrencySymbolMode.fromLocale(Locale.getDefault()).toSymbol()
+        editEarningsL.hint = currencySymbol
+        editTipsL.hint = currencySymbol
+        editWashL.hint = currencySymbol
+        editFuelCostL.hint = currencySymbol
     }
 
     private fun updateUI(shift: UiState) {
@@ -330,15 +366,17 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
             editWash.text.toString().toDoubleOrNull() ?: 0.0,
             editFuelCost.text.toString().toDoubleOrNull() ?: 0.0,
             editMileage.text.toString().toDoubleOrNull() ?: 0.0,
-            editNote.text.toString()
+            editNote.text.toString(),
         )
 
         showSubmitMessage(
             getString(
                 R.string.you_earn_in_hours,
-                viewModel.uiState.value.profit.toString(),
-                viewModel.uiState.value.totalTime.millisToHours(Locale.getDefault())
-            )
+                viewModel.uiState.value.profit
+                    .toString(),
+                viewModel.uiState.value.totalTime
+                    .millisToHours(Locale.getDefault()),
+            ),
         )
     }
 
@@ -363,10 +401,12 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
      */
     private fun submit() {
         viewModel.submit()
-        Toast.makeText(activity,
-            getString(R.string.shift_added_successfully),
-            Toast.LENGTH_SHORT)
-            .show()
+        Toast
+            .makeText(
+                activity,
+                getString(R.string.shift_added_successfully),
+                Toast.LENGTH_SHORT,
+            ).show()
         findNavController().navigate(R.id.action_shiftForm_to_home_fragment)
     }
 

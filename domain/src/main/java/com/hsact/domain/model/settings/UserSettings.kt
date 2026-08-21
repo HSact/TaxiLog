@@ -17,4 +17,19 @@ data class UserSettings(
     val taxRate: String?,
     val fuelPrice: String?,
     val firstDayOfWeek: Int = 0,
-)
+) {
+    companion object {
+        val default = UserSettings(
+            language = null,
+            theme = null,
+            currency = null,
+            consumption = "",
+            rentCost = "",
+            serviceCost = "",
+            goalPerMonth = "",
+            schedule = "6/1",
+            taxRate = "",
+            fuelPrice = "",
+        )
+    }
+}

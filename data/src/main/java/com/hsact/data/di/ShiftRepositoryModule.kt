@@ -12,10 +12,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class ShiftRepositoryModule {
-
     @Binds
     @Singleton
-    abstract fun bindShiftRepository(
-        impl: ShiftRepositoryImpl,
-    ): ShiftRepository
+    abstract fun bindShiftRepository(impl: ShiftRepositoryImpl): ShiftRepository
 }

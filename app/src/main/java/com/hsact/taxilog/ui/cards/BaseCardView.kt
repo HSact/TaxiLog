@@ -22,11 +22,12 @@ fun BaseCard(
 ) {
     CardTheme {
         Card(
-            modifier = modifier
-                .fillMaxWidth(),
+            modifier =
+                modifier
+                    .fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
-            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         ) {
             Box(modifier = Modifier.padding(16.dp)) {
                 content()

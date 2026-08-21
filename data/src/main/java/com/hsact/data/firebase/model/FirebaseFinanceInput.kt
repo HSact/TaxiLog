@@ -5,5 +5,5 @@ data class FirebaseFinanceInput(
     val tips: Long? = null,
     val taxRate: Int? = null,
     val wash: Long? = null,
-    val fuelCost: Long? = null
+    val fuelCost: Long? = null,
 )

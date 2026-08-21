@@ -1,56 +1,48 @@
-@file:Suppress("DEPRECATION")
-
 package com.hsact.taxilog.ui.activities.startup
 
-import android.content.Context
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
+import androidx.credentials.exceptions.NoCredentialException
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 import com.hsact.domain.model.settings.UserSettings
 import com.hsact.taxilog.R
 import com.hsact.taxilog.auth.GoogleAuthClient
-import com.hsact.taxilog.auth.GoogleAuthResult
 import com.hsact.taxilog.databinding.ActivityStartUpBinding
 import com.hsact.taxilog.ui.activities.MainActivity
-import com.hsact.taxilog.ui.activities.settings.SettingsActivity
-import com.hsact.taxilog.ui.locale.ContextWrapper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class StartUpActivity : AppCompatActivity() {
+
+    companion object {
+        private const val LOGO_DURATION: Long = 1200
+    }
     @Inject
     lateinit var googleAuthClient: GoogleAuthClient
-    private lateinit var signInLauncher: ActivityResultLauncher<Intent>
-
-    private companion object {
-        const val RC_SIGN_IN = 9001
-    }
 
     private val viewModel: StartUpViewModel by viewModels()
     private lateinit var settings: UserSettings
     private var isInitialized = false
+    private var isNavigating = false
+    private var isAuthInProgress = false
+    private var currentDialog: Dialog? = null
 
     private lateinit var binding: ActivityStartUpBinding
-    private val logoDuration: Long = 1200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,104 +50,141 @@ class StartUpActivity : AppCompatActivity() {
         supportActionBar?.hide()
         setContentView(binding.root)
 
-        signInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                googleAuthClient.handleResult(result.data) { authResult ->
-                    when (authResult) {
-                        is GoogleAuthResult.Success -> {
-                            proceedAfterLogin()
-                        }
-                        is GoogleAuthResult.Error -> {
-                            showRetryDialog()
-                        }
-                    }
+        lifecycleScope.launch {
+            // Wait for both settings to be loaded and AuthState to be determined (not Loading)
+            val initializationFlow =
+                combine(
+                    viewModel.settings.filterNotNull(),
+                    viewModel.authState.filter { it !is AuthState.Loading },
+                ) { settings, authState ->
+                    Pair(settings, authState)
                 }
-            } else {
-                viewModel.setAuthSkipped(true)
-                proceedAfterLogin()
+
+            initializationFlow.collect { (settings, authState) ->
+                handleInitialization(settings, authState)
             }
         }
 
+        // Fallback: If nothing happens in 5 seconds, try to proceed with what we have
         lifecycleScope.launch {
-            viewModel.settings.collect { settings ->
-                if (settings == null || isInitialized) return@collect
-                isInitialized = true
+            delay(5000)
+            if (!isInitialized) {
+                Log.w("StartUpActivity", "Initialization timed out, forcing setup")
+                val fallbackSettings = viewModel.settings.value ?: UserSettings.default
+                val fallbackAuthState = viewModel.authState.value
+                handleInitialization(fallbackSettings, fallbackAuthState)
+            }
+        }
+    }
 
-                this@StartUpActivity.settings = settings
-                val theme: String = settings.theme ?: getCurrentTheme()
-                setTheme(theme)
+    override fun onResume() {
+        super.onResume()
+        // Re-check state when returning to the app (e.g., from settings)
+        // Skip if we are currently in the middle of a Google Sign-In process
+        if (isInitialized && !isNavigating && !isAuthInProgress) {
+            val currentSettings = viewModel.settings.value
+            val currentAuthState = viewModel.authState.value
+            if (currentSettings != null && currentAuthState !is AuthState.Loading) {
+                handleInitialization(currentSettings, currentAuthState)
+            }
+        }
+    }
 
-                binding.imageLogo.alpha = 0f
-                binding.buttonOkay.setOnClickListener {
-                    val intent = Intent(this@StartUpActivity, SettingsActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-                }
+    private fun handleInitialization(
+        settings: UserSettings,
+        authState: AuthState,
+    ) {
+        if (isNavigating) return
 
-                binding.buttonNope.setOnClickListener {
-                    val intent = Intent(this@StartUpActivity, MainActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-                }
+        this.settings = settings
 
-                binding.imageLogo.animate().setDuration(logoDuration).alpha(1f)
+        if (!isInitialized) {
+            isInitialized = true
+            applyInitialSetup(settings)
+        }
 
-                val firebaseAuth = FirebaseAuth.getInstance()
-                val googleAccount = GoogleSignIn.getLastSignedInAccount(this@StartUpActivity)
-
-                if (firebaseAuth.currentUser != null) {
-                    // 1. User is authenticated in Firebase → proceed
-                    proceedAfterLogin()
-                } else if (googleAccount != null) {
-                    // 2. Authenticated in Google, but not in Firebase → request Firebase
-                    firebaseAuthWithGoogle(googleAccount.idToken!!)
-                } else if (!viewModel.isAuthSkipped()) {
-                    // 3. Not authenticated → begin login process
+        when (authState) {
+            is AuthState.Authenticated -> {
+                currentDialog?.dismiss()
+                proceedAfterLogin()
+            }
+            is AuthState.NotAuthenticated -> {
+                if (!viewModel.isAuthSkipped()) {
                     showAuthChoiceDialog()
                 } else {
                     proceedAfterLogin()
                 }
             }
+            AuthState.Loading -> {
+                // Wait for collect to emit a non-loading state
+            }
         }
     }
 
+    private fun applyInitialSetup(settings: UserSettings) {
+        val theme: String = settings.theme ?: getCurrentTheme()
+        setTheme(theme)
+
+        binding.imageLogo.alpha = 0f
+        binding.buttonOkay.setOnClickListener {
+            navigateToMain(true)
+        }
+
+        binding.buttonNope.setOnClickListener {
+            navigateToMain(false)
+        }
+
+        binding.imageLogo
+            .animate()
+            .setDuration(LOGO_DURATION)
+            .alpha(1f)
+    }
+
+    private fun navigateToMain(toSettings: Boolean) {
+        if (isNavigating) return
+        isNavigating = true
+
+        val intent = Intent(this, MainActivity::class.java)
+        if (toSettings) intent.putExtra("NAVIGATE_TO_SETTINGS", true)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+    }
+
     private fun showAuthChoiceDialog() {
-        MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.sign_in_title))
-            .setMessage(getString(R.string.sign_in_description))
-            .setPositiveButton(getString(R.string.sign_in)) { _, _ ->
-                lifecycleScope.launch {
-                    delay(logoDuration - 100)
-                    signInLauncher.launch(googleAuthClient.getSignInIntent())
-                }
-            }
-            .setNegativeButton(getString(R.string.skip)) { _, _ ->
-                viewModel.setAuthSkipped(true)
-                proceedAfterLogin()
-            }
-            .setCancelable(false)
-            .show()
+        if (currentDialog?.isShowing == true || isNavigating) return
+
+        currentDialog =
+            MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.sign_in_title))
+                .setMessage(getString(R.string.sign_in_description))
+                .setPositiveButton(getString(R.string.sign_in)) { _, _ ->
+                    lifecycleScope.launch {
+                        delay(LOGO_DURATION - 100)
+                        signInWithGoogle()
+                    }
+                }.setNegativeButton(getString(R.string.skip)) { _, _ ->
+                    viewModel.setAuthSkipped(true)
+                    // proceedAfterLogin will be called via collect when settings update or next emit
+                    proceedAfterLogin()
+                }.setCancelable(false)
+                .show()
     }
 
     private fun proceedAfterLogin() {
+        if (isNavigating) return
+
         if (settings.isConfigured) {
+            isNavigating = true
             Handler(Looper.getMainLooper()).postDelayed({
                 val intent = Intent(this, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-            }, logoDuration)
+            }, LOGO_DURATION)
         } else {
-            Handler(Looper.getMainLooper()).postDelayed({
-                setUp()
-            }, logoDuration)
+            setUp()
         }
-    }
-
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(ContextWrapper.wrapContext(newBase))
     }
 
     private fun setTheme(theme: String) {
@@ -167,78 +196,86 @@ class StartUpActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_SIGN_IN) {
-            @Suppress("DEPRECATION")
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+    private fun signInWithGoogle() {
+        lifecycleScope.launch {
+            isAuthInProgress = true
             try {
-                val account = task.getResult(ApiException::class.java)!!
-                firebaseAuthWithGoogle(account.idToken!!)
-            } catch (e: ApiException) {
-                Log.w("GoogleSignIn", "Google sign in failed", e)
+                val result = googleAuthClient.signInAndAuthenticate(this@StartUpActivity)
+                result
+                    .onSuccess { user ->
+                        Log.d(
+                            "GoogleSignIn",
+                            "signInWithGoogle:success. Email: ${user.email}",
+                        )
+                        // Navigation will happen via initializationFlow.collect
+                    }.onFailure { e ->
+                        Log.w("GoogleSignIn", "CredentialManager sign in failed", e)
+                        if (e is NoCredentialException) {
+                            showNoAccountDialog()
+                        } else {
+                            showRetryDialog()
+                        }
+                    }
+            } finally {
+                isAuthInProgress = false
             }
         }
     }
 
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        FirebaseAuth.getInstance().signInWithCredential(credential)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val user = task.result?.user
-                    Log.d("GoogleSignIn", "signInWithCredential:success. Email: ${user?.email}")
+    private fun showNoAccountDialog() {
+        if (isNavigating) return
+        currentDialog?.dismiss()
+
+        currentDialog =
+            MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.no_google_accounts))
+                .setMessage(getString(R.string.add_account_instruction))
+                .setPositiveButton(getString(R.string.go_to_settings)) { _, _ ->
+                    try {
+                        val intent = Intent(android.provider.Settings.ACTION_ADD_ACCOUNT)
+                        intent.putExtra(android.provider.Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
+                        startActivity(intent)
+                    } catch (e: Exception) {
+                        Log.e("StartUpActivity", "Could not open account settings", e)
+                    }
+                }.setNegativeButton(getString(R.string.skip)) { _, _ ->
+                    viewModel.setAuthSkipped(true)
                     proceedAfterLogin()
-                } else {
-                    Log.w("GoogleSignIn", "signInWithCredential:failure", task.exception)
-                    Toast.makeText(this,
-                        getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show()
-                    showRetryDialog()
-                }
-            }
+                }.setCancelable(false)
+                .show()
     }
 
     private fun showRetryDialog() {
-        MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.authentication_failed))
-            .setMessage(getString(R.string.retry_login_question))
-            .setCancelable(false)
-            .setPositiveButton(getString(R.string.retry)) { _, _ ->
-                retryGoogleSignIn()
-            }
-            .setNegativeButton(getString(R.string.cancel)) { _, _ ->
-                finish()
-            }
-            .show()
-    }
+        if (isNavigating) return
+        currentDialog?.dismiss()
 
-    private fun retryGoogleSignIn() {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-
-        val googleSignInClient = GoogleSignIn.getClient(this, gso)
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            signInLauncher.launch(googleSignInClient.signInIntent)
-        }, 500)
+        currentDialog =
+            MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.authentication_failed))
+                .setMessage(getString(R.string.retry_login_question))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.retry)) { _, _ ->
+                    signInWithGoogle()
+                }.setNegativeButton(getString(R.string.cancel)) { _, _ ->
+                    finish()
+                }.show()
     }
 
     private fun getCurrentTheme(): String {
         val currentTheme = AppCompatDelegate.getDefaultNightMode()
-        if (currentTheme == 1) {
-            return "light"
+        return when (currentTheme) {
+            1 -> "light"
+            2 -> "dark"
+            else -> "default"
         }
-        if (currentTheme == 2) {
-            return "dark"
-        }
-        return "default"
     }
 
     private fun setUp() {
         binding.SetUpLayout.alpha = 0f
         binding.LogoLayout.isVisible = false
-        binding.SetUpLayout.animate().setDuration(logoDuration).alpha(1f)
+        binding.SetUpLayout
+            .animate()
+            .setDuration(LOGO_DURATION)
+            .alpha(1f)
     }
 }

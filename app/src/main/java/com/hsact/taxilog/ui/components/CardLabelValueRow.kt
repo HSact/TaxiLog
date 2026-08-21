@@ -14,17 +14,22 @@ import androidx.compose.ui.unit.dp
 fun LabelValueRow(
     label: String,
     value: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 2.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = 2.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Text(text = label,
-            style = MaterialTheme.typography.bodyMedium)
-        Text(text = value,
-            style = MaterialTheme.typography.bodyLarge)
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodyLarge,
+        )
     }
 }

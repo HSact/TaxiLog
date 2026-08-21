@@ -8,8 +8,11 @@ data class ShiftTime(
 ) {
     val totalDuration: Duration
         get() {
-            return if (rest != null) period.duration.minus(rest.duration)
-            else period.duration
+            return if (rest != null) {
+                period.duration.minus(rest.duration)
+            } else {
+                period.duration
+            }
         }
 
     fun validate(): List<TimeValidationError> {

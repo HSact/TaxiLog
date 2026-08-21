@@ -14,13 +14,11 @@ data class Shift(
     val financeInput: ShiftFinanceInput,
     val note: String? = null,
 ) {
-
     val serviceCost: Long
         get() = carSnapshot.serviceCost * carSnapshot.mileage / 1000
 
     val carExpenses: Long
         get() = carSnapshot.rentCost + carSnapshot.serviceCost * carSnapshot.mileage / 1000
-
 
     val consumption: Long
         get() = (carSnapshot.fuelConsumption * carSnapshot.mileage) / 100_000
@@ -36,12 +34,19 @@ data class Shift(
         }
 
     val earningsPerKm: Long
-        get() = if (carSnapshot.mileage > 0)
+        get() = if (carSnapshot.mileage > 0) {
             financeInput.earnings * 1000 / carSnapshot.mileage
-        else 0
+        } else {
+            0
+        }
 
     val profit: Long
-        get() = financeInput.earnings + financeInput.tips - financeInput.tax - financeInput.wash - financeInput.fuelCost - carExpenses
+        get() = financeInput.earnings +
+            financeInput.tips -
+            financeInput.tax -
+            financeInput.wash -
+            financeInput.fuelCost -
+            carExpenses
 
     val profitPerHour: Long
         get() {
@@ -51,14 +56,18 @@ data class Shift(
         }
 
     val profitMarginPercent: Int
-        get() = if (financeInput.earnings + financeInput.tips > 0)
+        get() = if (financeInput.earnings + financeInput.tips > 0) {
             ((profit.toDouble() / (financeInput.earnings + financeInput.tips)) * 100).roundToInt()
-        else 0
+        } else {
+            0
+        }
 
     val profitPerKm: Long
-        get() = if (carSnapshot.mileage > 0)
+        get() = if (carSnapshot.mileage > 0) {
             profit * 1000 / carSnapshot.mileage
-        else 0
+        } else {
+            0
+        }
 
     val tipsIsNotZero: Boolean
         get() = financeInput.tips != 0L

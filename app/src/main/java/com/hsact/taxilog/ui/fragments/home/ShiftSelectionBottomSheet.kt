@@ -22,7 +22,6 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class ShiftSelectionBottomSheet : BottomSheetDialogFragment() {
-
     private val viewModel: HomeViewModel by viewModels({ requireParentFragment() })
 
     @Inject
@@ -31,14 +30,16 @@ class ShiftSelectionBottomSheet : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
+        savedInstanceState: Bundle?,
+    ): View =
+        ComposeView(requireContext()).apply {
             setContent {
                 val shifts by viewModel.shiftsForSelection.collectAsStateWithLifecycle()
+                val settings by viewModel.settings.collectAsStateWithLifecycle()
                 val locale = LocalConfiguration.current.locales[0]
-                val currency = viewModel.settings.currency 
-                    ?: CurrencySymbolMode.fromLocale(locale)
+                val currency =
+                    settings.currency
+                        ?: CurrencySymbolMode.fromLocale(locale)
 
                 ShiftSelectionContent(
                     shifts = shifts,
@@ -47,11 +48,10 @@ class ShiftSelectionBottomSheet : BottomSheetDialogFragment() {
                     onShiftSelected = {
                         (parentFragment as? HomeFragment)?.navigateToShiftDetail(it.id)
                         dismiss()
-                    }
+                    },
                 )
             }
         }
-    }
 
     companion object {
         const val TAG = "ShiftSelectionBottomSheet"

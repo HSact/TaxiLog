@@ -3,19 +3,19 @@ package com.hsact.domain.model
 import kotlin.math.roundToLong
 
 data class ShiftFinanceInput(
-    val earnings: Long, //in cents
-    val tips: Long = 0, //in cents
-    val taxRate: Int = 0, //0.00-100.00% * 100
-    val wash: Long = 0, //in cents
-    val fuelCost: Long, //in cents
+    val earnings: Long, // in cents
+    val tips: Long = 0, // in cents
+    val taxRate: Int = 0, // 0.00-100.00% * 100
+    val wash: Long = 0, // in cents
+    val fuelCost: Long, // in cents
 ) {
-    val tax: Long   //in cents
+    val tax: Long // in cents
         get() = ((earnings * taxRate).toDouble() / 10000).roundToLong()
 
     val earningsAndTips: Long
         get() = earnings + tips
 
-    val profit: Long    //in cents
+    val profit: Long // in cents
         get() = earningsAndTips - tax - fuelCost
 
     init {

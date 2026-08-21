@@ -2,10 +2,17 @@ package com.hsact.taxilog.ui.cards
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -37,61 +44,107 @@ import kotlin.math.roundToInt
 fun CardGoal(
     monthGoal: Float,
     shiftListFlow: StateFlow<List<Shift>>,
+    onSetGoalClick: () -> Unit = {},
 ) {
     val shiftList = shiftListFlow.collectAsStateWithLifecycle().value
     val locale = LocalConfiguration.current.locales[0]
     val totalProfit = shiftList.totalProfit.toFloat() / 100
-    val rawProgress: Float = if (monthGoal != 0f) {
-        (totalProfit / monthGoal).coerceIn(0f, 1f)
-    } else {
-        0f
-    }
-    var progress by remember { mutableFloatStateOf(0f) }
-    val formatter = NumberFormat.getNumberInstance(locale).apply {
-        minimumFractionDigits = 2
-        maximumFractionDigits = 2
-    }
-    var formattedGoal = formatter.format(monthGoal)
-    val formattedTotalProfit = formatter.format(totalProfit)
-    if (monthGoal == 1f) {
-        formattedGoal = "N/A"
-    }
-    LaunchedEffect(rawProgress) {
-        progress = rawProgress
-    }
-    val animatedProgress by animateFloatAsState(
-        targetValue = progress,
-        animationSpec = tween(durationMillis = 2000)
-    )
 
-    val stringOf = stringResource(R.string.of)
-    progress = (progress * 1000).roundToInt() / 1000f
+    val isGoalSet = monthGoal > 0f
+
     BaseCard {
-        CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
+        if (!isGoalSet) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
             ) {
-                CardHeader(stringResource(R.string.goal_per_month, formattedGoal))
+                CardHeader(stringResource(R.string.goal_per_month, ""))
+                Spacer(Modifier.height(16.dp))
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = null,
+                    modifier = Modifier.size(40.dp),
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+                Spacer(Modifier.height(8.dp))
                 Text(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(top = 8.dp),
-                    text = "$formattedTotalProfit $stringOf $formattedGoal"
-                )
-                LinearProgressIndicator(
-                    modifier = Modifier
-                        .height(12.dp)
-                        .fillMaxWidth(),
-                    progress = { animatedProgress },
-                    color = MaterialTheme.colorScheme.secondary,
-                    trackColor = MaterialTheme.colorScheme.secondaryContainer
+                    text = stringResource(R.string.goals_empty_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally),
-                    text = ("${"%.1f".format(progress * 100)}%")
+                    text = stringResource(R.string.goals_empty_description),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                 )
+                Spacer(Modifier.height(16.dp))
+                Button(onClick = onSetGoalClick) {
+                    Text(stringResource(R.string.settings_label))
+                }
+            }
+        } else {
+            val rawProgress: Float =
+                if (monthGoal != 0f) {
+                    (totalProfit / monthGoal).coerceIn(0f, 1f)
+                } else {
+                    0f
+                }
+            var progress by remember { mutableFloatStateOf(0f) }
+            val formatter =
+                NumberFormat.getNumberInstance(locale).apply {
+                    minimumFractionDigits = 2
+                    maximumFractionDigits = 2
+                }
+            val formattedGoal = formatter.format(monthGoal)
+            val formattedTotalProfit = formatter.format(totalProfit)
+
+            LaunchedEffect(rawProgress) {
+                progress = rawProgress
+            }
+            val animatedProgress by animateFloatAsState(
+                targetValue = progress,
+                animationSpec = tween(durationMillis = 2000),
+            )
+
+            val stringOf = stringResource(R.string.of)
+            val displayProgress = (progress * 1000).roundToInt() / 10f
+
+            CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    CardHeader(stringResource(R.string.goal_per_month, formattedGoal))
+                    Text(
+                        modifier =
+                            Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(top = 8.dp),
+                        text = "$formattedTotalProfit $stringOf $formattedGoal",
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    LinearProgressIndicator(
+                        modifier =
+                            Modifier
+                                .height(12.dp)
+                                .fillMaxWidth(),
+                        progress = { animatedProgress },
+                        color = MaterialTheme.colorScheme.secondary,
+                        trackColor = MaterialTheme.colorScheme.secondaryContainer,
+                    )
+                    Text(
+                        modifier =
+                            Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(top = 4.dp),
+                        text = ("$displayProgress%"),
+                    )
+                }
             }
         }
     }
@@ -106,8 +159,8 @@ private fun CardPreview() {
         MutableStateFlow(
             mapOf(
                 "goal" to goal,
-                "goalCurrent" to goalCurrent
-            )
+                "goalCurrent" to goalCurrent,
+            ),
         )
     }
 }

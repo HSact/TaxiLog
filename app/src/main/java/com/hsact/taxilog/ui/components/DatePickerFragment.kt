@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.widget.DatePicker
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +18,9 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 
-internal class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
+internal class DatePickerFragment :
+    DialogFragment(),
+    DatePickerDialog.OnDateSetListener {
     private val calendar = Calendar.getInstance()
     private lateinit var selectedDate: String
     var minDate = ""
@@ -39,8 +42,8 @@ internal class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSet
             if (date != null) {
                 calendar.time = date
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (e: java.text.ParseException) {
+            Log.e("DatePickerFragment", "Error parsing date: $selectedDate", e)
         }
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -51,7 +54,12 @@ internal class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSet
         return datePickerDialog
     }
 
-    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+    override fun onDateSet(
+        view: DatePicker?,
+        year: Int,
+        month: Int,
+        dayOfMonth: Int,
+    ) {
         calendar.set(Calendar.YEAR, year)
         calendar.set(Calendar.MONTH, month)
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
@@ -70,22 +78,25 @@ internal class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSet
             editObj: EditText,
             minDate: String = "",
             maxDate: String = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
-            onDatePicked: (() -> Unit)? = null
+            onDatePicked: (() -> Unit)? = null,
         ) {
-            val datePickerFragment = DatePickerFragment().apply {
-                this.minDate = minDate
-                this.maxDate = maxDate
-                this.selectedDate = editObj.text.toString()
-            }
+            val datePickerFragment =
+                DatePickerFragment().apply {
+                    this.minDate = minDate
+                    this.maxDate = maxDate
+                    this.selectedDate = editObj.text.toString()
+                }
 
-            val fragmentManager = when (context) {
-                is AppCompatActivity -> context.supportFragmentManager
-                is Fragment -> context.parentFragmentManager
-                else -> throw IllegalArgumentException("Context must be an Activity or Fragment")
-            }
+            val fragmentManager =
+                when (context) {
+                    is AppCompatActivity -> context.supportFragmentManager
+                    is Fragment -> context.parentFragmentManager
+                    else -> throw IllegalArgumentException("Context must be an Activity or Fragment")
+                }
 
             fragmentManager.setFragmentResultListener(
-                "REQUEST_KEY", context as LifecycleOwner
+                "REQUEST_KEY",
+                context as LifecycleOwner,
             ) { resultKey, bundle ->
                 if (resultKey == "REQUEST_KEY") {
                     editObj.setText(bundle.getString("SELECTED_DATE"))

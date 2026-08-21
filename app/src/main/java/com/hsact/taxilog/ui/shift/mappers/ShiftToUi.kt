@@ -8,14 +8,18 @@ import java.time.Duration
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-fun Shift.toUi(locale: Locale, currencySymbol: CurrencySymbolMode): ShiftOutputModel {
+fun Shift.toUi(
+    locale: Locale,
+    currencySymbol: CurrencySymbolMode,
+): ShiftOutputModel {
     val formatterDate = DateTimeFormatter.ofPattern("dd.MM.yyyy", locale)
     val formatterTime = DateTimeFormatter.ofPattern("HH:mm", locale)
 
-    val kmString = when (locale.language) {
-        "ru" -> "км"
-        else -> "km"
-    }
+    val kmString =
+        when (locale.language) {
+            "ru" -> "км"
+            else -> "km"
+        }
     val start = time.period.start
     val end = time.period.end
 
@@ -39,27 +43,35 @@ fun Shift.toUi(locale: Locale, currencySymbol: CurrencySymbolMode): ShiftOutputM
         fuelCost = financeInput.fuelCost.centsToCurrency(locale, currencySymbol),
         fuelConsumption = consumption.millilitersToLiters(locale),
         rent = carSnapshot.rentCost.centsToCurrency(locale, currencySymbol),
-        serviceCost = (carSnapshot.serviceCost * carSnapshot.mileage / 1000)
-            .centsToCurrency(locale, currencySymbol),
+        serviceCost =
+            (carSnapshot.serviceCost * carSnapshot.mileage / 1000)
+                .centsToCurrency(locale, currencySymbol),
         tax = financeInput.tax.centsToCurrency(locale, currencySymbol),
         totalExpenses = totalExpenses.centsToCurrency(locale, currencySymbol),
         profit = profit.centsToCurrency(locale, currencySymbol),
         profitPerHour = profitPerHour.centsToCurrency(locale, currencySymbol),
         profitPerKm = "${profitPerKm.centsToCurrency(locale, currencySymbol)}/$kmString",
         profitMarginPercent = "$profitMarginPercent %",
-        note = note
+        note = note,
     )
 }
 
-fun List<Shift>.toUi(locale: Locale, currencySymbol: CurrencySymbolMode): List<ShiftOutputModel> =
-    map { shift -> shift.toUi(locale, currencySymbol) }
-fun Long.centsToCurrency(locale: Locale, currencySymbol: CurrencySymbolMode): String {
+fun List<Shift>.toUi(
+    locale: Locale,
+    currencySymbol: CurrencySymbolMode,
+): List<ShiftOutputModel> = map { shift -> shift.toUi(locale, currencySymbol) }
+
+fun Long.centsToCurrency(
+    locale: Locale,
+    currencySymbol: CurrencySymbolMode,
+): String {
     val amount = this.toDouble() / 100
 
-    val numberFormat = NumberFormat.getNumberInstance(locale).apply {
-        minimumFractionDigits = 2
-        maximumFractionDigits = 2
-    }
+    val numberFormat =
+        NumberFormat.getNumberInstance(locale).apply {
+            minimumFractionDigits = 2
+            maximumFractionDigits = 2
+        }
 
     val formattedAmount = numberFormat.format(amount)
     val symbol = currencySymbol.toSymbol()
@@ -73,13 +85,9 @@ fun Long.centsToCurrency(locale: Locale, currencySymbol: CurrencySymbolMode): St
     }
 }
 
-fun Long.minutesToHours(locale: Locale): String {
-    return formatDuration(Duration.ofMinutes(this), locale)
-}
+fun Long.minutesToHours(locale: Locale): String = formatDuration(Duration.ofMinutes(this), locale)
 
-fun Long.millisToHours(locale: Locale): String {
-    return formatDuration(Duration.ofMillis(this), locale)
-}
+fun Long.millisToHours(locale: Locale): String = formatDuration(Duration.ofMillis(this), locale)
 
 fun Long.metersToKilometers(locale: Locale): String {
     val kilometers = this.toDouble() / 1000
@@ -97,19 +105,24 @@ fun Long.millilitersToLiters(locale: Locale): String {
     }
 }
 
-private fun formatDuration(duration: Duration, locale: Locale): String {
+private fun formatDuration(
+    duration: Duration,
+    locale: Locale,
+): String {
     val hours = duration.toHours()
     val minutes = (duration.toMinutes() % 60)
 
     return when (locale.language) {
-        "ru" -> buildString {
-            if (hours > 0) append("$hours ч ")
-            if (minutes > 0 || hours == 0L) append("$minutes мин")
-        }.trim()
+        "ru" ->
+            buildString {
+                if (hours > 0) append("$hours ч ")
+                if (minutes > 0 || hours == 0L) append("$minutes мин")
+            }.trim()
 
-        else -> buildString {
-            if (hours > 0) append("$hours h ")
-            if (minutes > 0 || hours == 0L) append("$minutes min")
-        }.trim()
+        else ->
+            buildString {
+                if (hours > 0) append("$hours h ")
+                if (minutes > 0 || hours == 0L) append("$minutes min")
+            }.trim()
     }
 }

@@ -14,7 +14,9 @@ sealed interface ShiftDetailUiState {
     /**
      * Shift data successfully loaded.
      */
-    data class Success(val shift: Shift) : ShiftDetailUiState
+    data class Success(
+        val shift: Shift,
+    ) : ShiftDetailUiState
 
     /**
      * Shift was not found (e.g. deleted).

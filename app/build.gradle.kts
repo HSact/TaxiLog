@@ -8,16 +8,25 @@ plugins {
     alias(libs.plugins.crashlytics)
 }
 
-val vName = "1.5.0"
-val vCode = 15
+val vName = "1.6.0"
+val vCode = 16
 android {
     namespace = "com.hsact.taxilog"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk =
+        libs.versions.compileSdk
+            .get()
+            .toInt()
 
     defaultConfig {
         applicationId = "com.hsact.taxilog"
-        minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
+        minSdk =
+            libs.versions.minSdk
+                .get()
+                .toInt()
+        targetSdk =
+            libs.versions.targetSdk
+                .get()
+                .toInt()
         versionCode = vCode
         versionName = vName
 
@@ -29,7 +38,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -67,10 +76,6 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.preference.ktx)
-    
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
@@ -78,14 +83,14 @@ dependencies {
     implementation(libs.androidx.hilt.work)
 
     implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.firestore)
-    implementation(libs.firebase.auth)
     implementation(libs.firebase.crashlytics.ndk)
     implementation(libs.firebase.analytics)
 
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.kotlinx.coroutines.play.services)
-    implementation(libs.play.services.auth)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -95,6 +100,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.compose.charts)
+    implementation(libs.coil.compose)
 
     implementation(libs.kotlin.test)
 
@@ -104,7 +110,7 @@ dependencies {
     testImplementation(libs.mockito.kotlin)
 
     debugImplementation(libs.androidx.ui.tooling)
-    
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

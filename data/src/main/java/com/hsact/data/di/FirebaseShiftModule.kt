@@ -12,10 +12,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class FirebaseShiftModule {
-
     @Binds
     @Singleton
-    abstract fun bindFirebaseShiftDataSource(
-        impl: FirebaseShiftDataSourceImpl
-    ): FirebaseShiftDataSource
+    abstract fun bindFirebaseShiftDataSource(impl: FirebaseShiftDataSourceImpl): FirebaseShiftDataSource
 }

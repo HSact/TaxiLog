@@ -13,29 +13,27 @@ import com.hsact.data.db.entities.ShiftEntity
         ShiftEntity::class,
     ],
     version = 1,
-    exportSchema = false
+    exportSchema = false,
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
-
     abstract fun shiftDao(): ShiftDao
 
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
-        fun getInstance(context: Context): AppDatabase {
-            return INSTANCE ?: synchronized(this) {
+        fun getInstance(context: Context): AppDatabase =
+            INSTANCE ?: synchronized(this) {
                 INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
             }
-        }
 
-        private fun buildDatabase(context: Context): AppDatabase {
-            return Room.databaseBuilder(
-                context.applicationContext,
-                AppDatabase::class.java,
-                "taxilog_db"
-            ).build()
-        }
+        private fun buildDatabase(context: Context): AppDatabase =
+            Room
+                .databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java,
+                    "taxilog_db",
+                ).build()
     }
 }

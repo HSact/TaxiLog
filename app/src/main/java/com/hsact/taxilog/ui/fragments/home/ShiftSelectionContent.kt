@@ -39,33 +39,34 @@ fun ShiftSelectionContent(
         Surface(
             modifier = Modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.onSurface
+            contentColor = MaterialTheme.colorScheme.onSurface,
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier =
+                    Modifier
+                        .fillMaxWidth(),
             ) {
                 Text(
                     text = stringResource(R.string.select_shift),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
                 )
 
                 LazyColumn(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     items(shifts) { shift ->
                         ShiftListItem(
                             shift = shift,
                             currencySymbolMode = currencySymbolMode,
                             getShiftSequenceNumberUseCase = getShiftSequenceNumberUseCase,
-                            onClick = { onShiftSelected(shift) }
+                            onClick = { onShiftSelected(shift) },
                         )
                         HorizontalDivider(
                             modifier = Modifier.padding(horizontal = 16.dp),
-                            color = MaterialTheme.colorScheme.outlineVariant
+                            color = MaterialTheme.colorScheme.outlineVariant,
                         )
                     }
                 }
@@ -81,43 +82,48 @@ private fun ShiftListItem(
     shift: Shift,
     currencySymbolMode: CurrencySymbolMode,
     getShiftSequenceNumberUseCase: GetShiftSequenceNumberUseCase? = null,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     val locale = LocalConfiguration.current.locales[0]
     val ui = shift.toUi(locale, currencySymbolMode)
 
-    val sequenceNumber = getShiftSequenceNumberUseCase?.invoke(shift.id)
-        ?.collectAsStateWithLifecycle(initialValue = null)
-        ?.value
+    val sequenceNumber =
+        getShiftSequenceNumberUseCase
+            ?.invoke(shift.id)
+            ?.collectAsStateWithLifecycle(initialValue = null)
+            ?.value
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clickable(onClick = onClick)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = if (sequenceNumber != null) 
-                    stringResource(R.string.shift_number) + sequenceNumber
-                else 
-                    "${ui.timeBegin} - ${ui.timeEnd}",
+                text =
+                    if (sequenceNumber != null) {
+                        stringResource(R.string.shift_number) + sequenceNumber
+                    } else {
+                        "${ui.timeBegin} - ${ui.timeEnd}"
+                    },
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
             )
             if (sequenceNumber != null) {
                 Text(
                     text = "${ui.timeBegin} - ${ui.timeEnd}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             } else {
                 Text(
                     text = ui.dateBegin,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
@@ -125,7 +131,7 @@ private fun ShiftListItem(
             text = ui.profit,
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
     }
 }

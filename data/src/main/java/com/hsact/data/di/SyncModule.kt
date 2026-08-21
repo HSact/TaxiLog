@@ -1,7 +1,7 @@
 package com.hsact.data.di
 
-import com.hsact.data.sync.ShiftRemoteControllerImpl
 import com.hsact.data.sync.ShiftRemoteController
+import com.hsact.data.sync.ShiftRemoteControllerImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -12,10 +12,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class SyncModule {
-
     @Singleton
     @Binds
-    abstract fun bindRemoteShiftController(
-        impl: ShiftRemoteControllerImpl
-    ): ShiftRemoteController
+    abstract fun bindRemoteShiftController(impl: ShiftRemoteControllerImpl): ShiftRemoteController
 }

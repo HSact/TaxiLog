@@ -3,6 +3,7 @@ package com.hsact.taxilog.ui.components
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.widget.EditText
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
@@ -12,7 +13,9 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-internal class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
+internal class TimePickerFragment :
+    DialogFragment(),
+    TimePickerDialog.OnTimeSetListener {
     private val clock = Calendar.getInstance()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -22,8 +25,8 @@ internal class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSet
             if (time != null) {
                 clock.time = time
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (e: java.text.ParseException) {
+            Log.e("TimePickerFragment", "Error parsing time: $selectedTime", e)
         }
 
         val hours = clock.get(Calendar.HOUR_OF_DAY)
@@ -32,30 +35,39 @@ internal class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSet
         return TimePickerDialog(requireActivity(), this, hours, minutes, true)
     }
 
-    override fun onTimeSet(view: TimePicker?, hours: Int, minutes: Int) {
+    override fun onTimeSet(
+        view: TimePicker?,
+        hours: Int,
+        minutes: Int,
+    ) {
         clock.set(Calendar.HOUR_OF_DAY, hours)
         clock.set(Calendar.MINUTE, minutes)
         val selectedTime = SimpleDateFormat("H:mm", Locale.getDefault()).format(clock.time)
 
-        val selectedTimeBundle = Bundle().apply {
-            putString("SELECTED_TIME", selectedTime)
-        }
+        val selectedTimeBundle =
+            Bundle().apply {
+                putString("SELECTED_TIME", selectedTime)
+            }
         setFragmentResult("REQUEST_KEY", selectedTimeBundle)
     }
 
     companion object {
-        fun pickTime(fragment: Fragment,
+        fun pickTime(
+            fragment: Fragment,
             editObj: EditText,
             onTimePicked: (() -> Unit)? = null,
         ) {
-            val timePickerFragment = TimePickerFragment().apply {
-                arguments = Bundle().apply {
-                    putString("SELECTED_TIME", editObj.text.toString())
+            val timePickerFragment =
+                TimePickerFragment().apply {
+                    arguments =
+                        Bundle().apply {
+                            putString("SELECTED_TIME", editObj.text.toString())
+                        }
                 }
-            }
 
             fragment.parentFragmentManager.setFragmentResultListener(
-                "REQUEST_KEY", fragment.viewLifecycleOwner
+                "REQUEST_KEY",
+                fragment.viewLifecycleOwner,
             ) { resultKey, bundle ->
                 if (resultKey == "REQUEST_KEY") {
                     editObj.setText(bundle.getString("SELECTED_TIME"))
