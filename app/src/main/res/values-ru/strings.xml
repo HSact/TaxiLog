@@ -69,6 +69,7 @@
     <string name="this_month">Месяц</string>
     <string name="privacy_policy_link">https://gist.github.com/HSact/4879da5ee7ffc776eaee348cc712e507</string>
     <string name="privacy_policy">Политика конфиденциальности</string>
+    <string name="support_project">Поддержать проект</string>
     <string name="shift_added_successfully">Смена успешно сохранена</string>
     <string name="shift_deleted_successfully">Смена %1$s удалена успешно</string>
     <string name="all_shifts_have_been_deleted_successfully">Все смены были успешно удалены</string>
