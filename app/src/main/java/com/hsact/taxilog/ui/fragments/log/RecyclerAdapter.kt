@@ -52,28 +52,29 @@ class RecyclerAdapter(
         index: Int,
     ) {
         val locale = Locale.getDefault()
-        val shift =
-            items[index].toUi(
+        val shiftModel = items[index]
+        val shiftUi =
+            shiftModel.toUi(
                 locale,
                 settings.currency ?: CurrencySymbolMode.fromLocale(Locale.getDefault()),
             )
-        val visibleNumber = itemCount - index
+        val visibleNumber = shiftModel.sequenceNumber
         holder.textId.text = visibleNumber.toString()
-        holder.textDate.text = shift.dateBegin
-        holder.textTime.text = shift.duration
-        holder.textEarnings.text = shift.earnings
-        holder.textWash.text = shift.wash
-        holder.textFuel.text = shift.fuelCost
-        holder.textMileage.text = shift.mileageKm
-        holder.textPerHour.text = shift.earningsPerHour
-        holder.textProfit.text = shift.profit
+        holder.textDate.text = shiftUi.dateBegin
+        holder.textTime.text = shiftUi.duration
+        holder.textEarnings.text = shiftUi.earnings
+        holder.textWash.text = shiftUi.wash
+        holder.textFuel.text = shiftUi.fuelCost
+        holder.textMileage.text = shiftUi.mileageKm
+        holder.textPerHour.text = shiftUi.earningsPerHour
+        holder.textProfit.text = shiftUi.profit
 
         holder.itemView.setOnClickListener {
-            onItemClick(items[index])
+            onItemClick(shiftModel)
         }
 
         holder.itemView.setOnLongClickListener {
-            onItemMenuClick(visibleNumber, items[index])
+            onItemMenuClick(visibleNumber, shiftModel)
             true
         }
     }

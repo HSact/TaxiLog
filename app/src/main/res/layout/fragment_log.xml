@@ -1,23 +1,34 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:clipToPadding="false"
-    android:layout_height="match_parent">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        android:paddingBottom="120dp"
-        android:clipToPadding="false"
-        tools:listitem="@layout/recyclerview_item" />
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <androidx.compose.ui.platform.ComposeView
-        android:id="@+id/emptyStateCompose"
+        android:id="@+id/filterComposeView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:layout_height="wrap_content" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:paddingBottom="120dp"
+            android:clipToPadding="false"
+            tools:listitem="@layout/recyclerview_item" />
+
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/emptyStateCompose"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

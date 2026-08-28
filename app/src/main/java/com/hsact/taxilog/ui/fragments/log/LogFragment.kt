@@ -10,6 +10,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
@@ -55,13 +61,54 @@ class LogFragment : Fragment() {
 
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+        binding.filterComposeView.setContent {
+            AppTheme {
+                val currentPeriod by viewModel.filterPeriod.collectAsState()
+                val currentSort by viewModel.sortOrder.collectAsState()
+                var showSortSheet by remember { mutableStateOf(false) }
+
+                FilterSortBar(
+                    currentPeriod = currentPeriod,
+                    onPeriodSelected = { viewModel.handleIntent(LogIntent.ChangeFilter(it)) },
+                    onSortClick = { showSortSheet = true },
+                )
+
+                if (showSortSheet) {
+                    SortBottomSheet(
+                        currentSort = currentSort,
+                        onSortSelected = {
+                            viewModel.handleIntent(LogIntent.ChangeSort(it))
+                            showSortSheet = false
+                        },
+                        onDismiss = { showSortSheet = false },
+                    )
+                }
+            }
+        }
+
         binding.emptyStateCompose.setContent {
             AppTheme {
+                val isDbEmpty by viewModel.isDatabaseEmpty.collectAsState()
+
+                val title =
+                    if (isDbEmpty) {
+                        stringResource(R.string.log_empty_title)
+                    } else {
+                        stringResource(R.string.list_is_empty)
+                    }
+
+                val description =
+                    if (isDbEmpty) {
+                        stringResource(R.string.log_empty_description)
+                    } else {
+                        stringResource(R.string.filter_empty_description)
+                    }
+
                 EmptyStateView(
                     icon = Icons.AutoMirrored.Filled.List,
-                    title = getString(R.string.log_empty_title),
-                    description = getString(R.string.log_empty_description),
-                    actionText = getString(R.string.new_shift),
+                    title = title,
+                    description = description,
+                    actionText = stringResource(R.string.new_shift),
                     onAction = {
                         val action = LogFragmentDirections.actionLogFragmentToShiftForm(shiftId = -1)
                         findNavController().navigate(action)

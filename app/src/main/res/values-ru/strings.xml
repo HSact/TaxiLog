@@ -164,4 +164,18 @@
     <string name="goals_empty_description">Самое время решить, сколько вы хотите заработать в этом месяце! 🎯</string>
     <string name="home_no_shifts_yet">Смен пока нет. Самое время начать!</string>
     <string name="settings_label">Настройки</string>
+
+    <!-- Filter & Sort -->
+    <string name="filter_period_week">Неделя</string>
+    <string name="filter_period_month">Месяц</string>
+    <string name="filter_period_year">Год</string>
+    <string name="filter_period_all">Все время</string>
+    <string name="filter_empty_description">Попробуйте выбрать другой период или добавить новую смену.</string>
+    <string name="sort_by">Сортировка</string>
+    <string name="sort_date_desc">Дата (сначала новые)</string>
+    <string name="sort_date_asc">Дата (сначала старые)</string>
+    <string name="sort_profit_desc">Прибыль (по убыванию)</string>
+    <string name="sort_profit_asc">Прибыль (по возрастанию)</string>
+    <string name="sort_duration_desc">Время (сначала долгие)</string>
+    <string name="sort_duration_asc">Время (сначала короткие)</string>
 </resources>

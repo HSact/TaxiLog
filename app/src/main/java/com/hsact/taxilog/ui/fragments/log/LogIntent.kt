@@ -10,4 +10,8 @@ sealed class LogIntent {
     object UpdateList : LogIntent()
 
     object DeleteAllShifts : LogIntent()
+
+    data class ChangeFilter(val period: LogFilterPeriod) : LogIntent()
+
+    data class ChangeSort(val sortOrder: LogSortOrder) : LogIntent()
 }

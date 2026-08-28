@@ -13,6 +13,11 @@ data class Shift(
     val time: ShiftTime,
     val financeInput: ShiftFinanceInput,
     val note: String? = null,
+    /**
+     * Stable sequence number for user-facing identification (Shift #N).
+     * Assigned chronologically and preserved during sorting/filtering.
+     */
+    val sequenceNumber: Int = 0,
 ) {
     val serviceCost: Long
         get() = carSnapshot.serviceCost * carSnapshot.mileage / 1000
