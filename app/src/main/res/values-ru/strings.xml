@@ -178,4 +178,15 @@
     <string name="sort_profit_asc">Прибыль (по возрастанию)</string>
     <string name="sort_duration_desc">Время (сначала долгие)</string>
     <string name="sort_duration_asc">Время (сначала короткие)</string>
+
+    <!-- Feedback -->
+    <string name="action_report_bug">Сообщить об ошибке</string>
+    <string name="feedback_title">Сообщить об ошибке</string>
+    <string name="feedback_hint">Опишите проблему или ваше пожелание</string>
+    <string name="feedback_send">Отправить</string>
+    <string name="feedback_cancel">Отмена</string>
+    <string name="feedback_success">Спасибо за ваш отзыв!</string>
+    <string name="feedback_error">Ошибка отправки. Пожалуйста, попробуйте позже.</string>
+    <string name="feedback_placeholder">Например: «Неверно считается прибыль при ночных сменах…»</string>
+    <string name="feedback_cooldown">Пожалуйста, подождите минуту перед отправкой следующего сообщения.</string>
 </resources>

@@ -190,4 +190,15 @@
     <string name="sort_profit_asc">Profit (low first)</string>
     <string name="sort_duration_desc">Duration (long first)</string>
     <string name="sort_duration_asc">Duration (short first)</string>
+
+    <!-- Feedback -->
+    <string name="action_report_bug">Report a bug</string>
+    <string name="feedback_title">Report a bug</string>
+    <string name="feedback_hint">Describe the problem or your suggestion</string>
+    <string name="feedback_send">Send</string>
+    <string name="feedback_cancel">Cancel</string>
+    <string name="feedback_success">Thank you for your feedback!</string>
+    <string name="feedback_error">Error sending feedback. Please try again later.</string>
+    <string name="feedback_placeholder">For example: \"The profit calculation for night shifts seems wrong…\"</string>
+    <string name="feedback_cooldown">Please wait a minute before sending another report.</string>
 </resources>
