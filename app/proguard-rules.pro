@@ -19,3 +19,11 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 -renamesourcefileattribute SourceFile
+
+# Credential Manager & Google Sign-In (Optimized)
+-keep class androidx.credentials.playservices.** { *; }
+-keep class com.google.android.libraries.identity.googleid.** { *; }
+-keep class * implements androidx.credentials.CredentialProvider { *; }
+
+# Domain models (to ensure stable mapping between layers)
+-keep class com.hsact.domain.model.** { *; }
