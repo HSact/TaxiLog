@@ -76,8 +76,10 @@ class HomeFragment : Fragment() {
         }
         cardLastShift.setContent {
             val settings by viewModel.settings.collectAsStateWithLifecycle()
+            val isLoading by viewModel.isLoadingLastShift.collectAsStateWithLifecycle()
             CardLastShift(
                 viewModel.lastShift,
+                isLoading,
                 settings.currency ?: CurrencySymbolMode.fromLocale(LocalLocale.current.platformLocale),
             ) {
                 val action =

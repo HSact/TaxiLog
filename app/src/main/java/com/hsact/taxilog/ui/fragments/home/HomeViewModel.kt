@@ -40,6 +40,9 @@ class HomeViewModel
         private val _lastShift = MutableStateFlow<Shift?>(null)
         val lastShift: StateFlow<Shift?> = _lastShift
 
+        private val _isLoadingLastShift = MutableStateFlow(true)
+        val isLoadingLastShift: StateFlow<Boolean> = _isLoadingLastShift
+
         private val _shiftListThisMonth = MutableStateFlow<List<Shift>>(emptyList())
         val shiftListThisMonth: StateFlow<List<Shift>> = _shiftListThisMonth
 
@@ -65,9 +68,11 @@ class HomeViewModel
         init {
             // Подписка на последнюю смену
             viewModelScope.launch {
+                _isLoadingLastShift.value = true
                 getLastShiftUseCase()
                     .collect { last ->
                         _lastShift.value = last
+                        _isLoadingLastShift.value = false
                     }
             }
             // Подписка на список смен в этом месяце
