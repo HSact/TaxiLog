@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -39,14 +40,21 @@ class LogViewModel
             getSettingsFlowUseCase()
                 .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), UserSettings.default)
 
-        private val _rawShifts = MutableStateFlow<List<Shift>>(emptyList())
+        private val _rawShifts = MutableStateFlow<List<Shift>?>(null)
+
+        private val _isLoading = MutableStateFlow(true)
+
+        /**
+         * State indicating if the data is currently being loaded.
+         */
+        val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
         /**
          * Boolean state indicating if the database has any shifts at all,
          * regardless of current filters or sorting.
          */
         val isDatabaseEmpty: StateFlow<Boolean> =
-            _rawShifts.map { it.isEmpty() }
+            _rawShifts.map { it.isNullOrEmpty() }
                 .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
 
         /**
@@ -66,7 +74,7 @@ class LogViewModel
          * Also assigns a stable [Shift.sequenceNumber] based on chronological order.
          */
         val shifts: StateFlow<List<Shift>> =
-            combine(_rawShifts, _filterPeriod, _sortOrder) { rawList, filter, sort ->
+            combine(_rawShifts.filterNotNull(), _filterPeriod, _sortOrder) { rawList, filter, sort ->
                 val listWithSequence =
                     rawList
                         .sortedBy { it.time.period.start }
@@ -135,21 +143,27 @@ class LogViewModel
 
         private fun deleteAllShifts() {
             viewModelScope.launch {
+                _isLoading.value = true
                 deleteAllShiftsUseCase.invoke()
                 _rawShifts.value = getAllShiftsUseCase().first()
+                _isLoading.value = false
             }
         }
 
         private fun deleteShift(shift: Shift) {
             viewModelScope.launch {
+                _isLoading.value = true
                 deleteShiftUseCase(shift)
                 _rawShifts.value = getAllShiftsUseCase().first()
+                _isLoading.value = false
             }
         }
 
         private fun updateList() {
             viewModelScope.launch {
+                _isLoading.value = true
                 _rawShifts.value = getAllShiftsUseCase().first()
+                _isLoading.value = false
             }
         }
     }

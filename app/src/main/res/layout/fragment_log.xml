@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
@@ -25,10 +25,9 @@
             tools:listitem="@layout/recyclerview_item" />
 
         <androidx.compose.ui.platform.ComposeView
-            android:id="@+id/emptyStateCompose"
+            android:id="@+id/statusComposeView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
+            android:layout_height="match_parent" />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </FrameLayout>
 </LinearLayout>

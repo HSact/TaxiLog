@@ -1,13 +1,18 @@
 package com.hsact.taxilog.ui.fragments.log
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,11 +27,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.hsact.taxilog.R
+import com.hsact.taxilog.ui.shimmerLoadingAnimation
 
 /**
  * Horizontal bar with chips for filtering by period and opening the sort menu.
@@ -59,6 +66,28 @@ internal fun FilterSortBar(
                 selected = currentPeriod == period,
                 onClick = { onPeriodSelected(period) },
                 label = { Text(stringResource(period.titleRes)) },
+            )
+        }
+    }
+}
+
+/**
+ * Shimmer loading state for the shifts log.
+ */
+@Composable
+fun LogShimmer() {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(6) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp) // Соответствует высоте карточки из recycler
+                    .clip(RoundedCornerShape(12.dp)) // Скругление как у MaterialCardView
+                    .shimmerLoadingAnimation()
             )
         }
     }
