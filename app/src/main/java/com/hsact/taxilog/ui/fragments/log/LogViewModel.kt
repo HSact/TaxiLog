@@ -77,7 +77,7 @@ class LogViewModel
             combine(_rawShifts.filterNotNull(), _filterPeriod, _sortOrder) { rawList, filter, sort ->
                 val listWithSequence =
                     rawList
-                        .sortedBy { it.time.period.start }
+                        .sortedWith(compareBy({ it.time.period.start }, { it.id }))
                         .mapIndexed { index, shift ->
                             shift.copy(sequenceNumber = index + 1)
                         }

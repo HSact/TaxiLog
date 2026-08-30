@@ -29,10 +29,17 @@ interface ShiftDao {
     fun getShiftById(id: Int): Flow<ShiftEntity?>
 
     /**
-     * Returns the sequence number of a shift based on its ID.
-     * The sequence number is calculated as the count of shifts with an ID less than or equal to the given ID.
+     * Returns the sequence number of a shift based on its chronological start time.
+     * The sequence number is calculated as the count of shifts that started before
+     * or at the same time as the given shift.
      */
-    @Query("SELECT COUNT(*) FROM shiftentity WHERE id <= :id")
+    @Query(
+        """
+        SELECT COUNT(*) FROM shiftentity
+        WHERE period_start < (SELECT period_start FROM shiftentity WHERE id = :id)
+        OR (period_start = (SELECT period_start FROM shiftentity WHERE id = :id) AND id <= :id)
+        """,
+    )
     fun getShiftSequenceNumber(id: Int): Flow<Int>
 
     @Query("SELECT * FROM shiftentity ORDER BY id DESC LIMIT 1")
