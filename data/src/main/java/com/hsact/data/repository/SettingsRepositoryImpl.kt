@@ -50,7 +50,7 @@ class SettingsRepositoryImpl
             get() = sharedPreferences.getString("My_Lang", null)
 
         override val kmMi: Boolean
-            get() = sharedPreferences.getBoolean("KmMi", false)
+            get() = sharedPreferences.getBoolean("KmMi", true)
 
         override val consumption: String?
             get() = sharedPreferences.getString("Consumption", null)
