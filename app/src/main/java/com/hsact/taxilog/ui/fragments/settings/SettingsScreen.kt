@@ -657,7 +657,10 @@ private fun CurrencySelector(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val currencies = stringArrayResource(R.array.currencies)
-    val selectedIndex = selectedCurrency?.toIndex() ?: 0
+
+    val currentLocale = LocalConfiguration.current.locales[0]
+    val effectiveCurrency = selectedCurrency ?: CurrencySymbolMode.fromLocale(currentLocale)
+    val selectedIndex = effectiveCurrency.toIndex()
 
     ExposedDropdownMenuBox(
         expanded = expanded,

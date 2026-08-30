@@ -3,6 +3,7 @@ package com.hsact.taxilog.ui.fragments.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hsact.domain.model.User
+import com.hsact.domain.model.settings.CurrencySymbolMode
 import com.hsact.domain.model.settings.UserSettings
 import com.hsact.domain.usecase.auth.GetAuthStateUseCase
 import com.hsact.domain.usecase.auth.SignOutUseCase
@@ -52,8 +53,16 @@ class SettingsViewModel
         }
 
         private fun updateUiState(settings: UserSettings?) {
-            val currentSettings = settings ?: UserSettings.default
-            _uiState.value = SettingsUiState.Success(currentSettings)
+            val baseSettings = settings ?: UserSettings.default
+            val finalSettings =
+                if (baseSettings.currency == null) {
+                    baseSettings.copy(
+                        currency = CurrencySymbolMode.fromLocale(java.util.Locale.getDefault()),
+                    )
+                } else {
+                    baseSettings
+                }
+            _uiState.value = SettingsUiState.Success(finalSettings)
         }
 
         fun updateSettings(updated: UserSettings) {
