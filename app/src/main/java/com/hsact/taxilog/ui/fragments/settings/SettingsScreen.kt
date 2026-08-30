@@ -110,6 +110,10 @@ private fun SettingsScreenContent(
     onUpdateSettings: (UserSettings) -> Unit,
     onApplyClick: () -> Unit,
 ) {
+    val settings = uiState.settings
+    val taxRateValue = settings.taxRate?.replace(',', '.')?.toDoubleOrNull() ?: 0.0
+    val isTaxRateValid = taxRateValue in 0.0..100.0
+
     Box(modifier = Modifier.fillMaxSize()) {
         val scrollState = rememberScrollState()
         var isFabVisible by remember { mutableStateOf(true) }
@@ -134,16 +138,17 @@ private fun SettingsScreenContent(
                     .fillMaxSize()
                     .verticalScroll(scrollState)
                     .padding(16.dp),
-            settings = uiState.settings,
+            settings = settings,
             user = user,
             onSignOutClick = onSignOutClick,
             onSignInClick = onSignInClick,
             onUpdateSettings = onUpdateSettings,
+            isTaxRateValid = isTaxRateValid,
             bottomPadding = fabHeightDp,
         )
 
         ApplyFab(
-            visible = isFabVisible,
+            visible = isFabVisible && isTaxRateValid,
             isSaving = uiState.isSaving,
             onApplyClick = onApplyClick,
             modifier = Modifier.align(Alignment.BottomCenter),
@@ -210,6 +215,7 @@ private fun SettingsContent(
     onSignOutClick: () -> Unit,
     onSignInClick: () -> Unit,
     onUpdateSettings: (UserSettings) -> Unit,
+    isTaxRateValid: Boolean,
     bottomPadding: Dp = 0.dp,
 ) {
     val configuration = LocalConfiguration.current
@@ -258,6 +264,7 @@ private fun SettingsContent(
         WorkSection(
             settings = settings,
             onUpdateSettings = onUpdateSettings,
+            isTaxRateValid = isTaxRateValid,
             moneyPrefix = moneyPrefix,
             moneySuffixProvider = { getMoneySuffix(it) },
         )
@@ -402,6 +409,7 @@ private fun CarSection(
 private fun WorkSection(
     settings: UserSettings,
     onUpdateSettings: (UserSettings) -> Unit,
+    isTaxRateValid: Boolean,
     moneyPrefix: @Composable (() -> Unit)?,
     moneySuffixProvider: (String?) -> @Composable () -> Unit,
 ) {
@@ -424,7 +432,7 @@ private fun WorkSection(
 
         ScheduleSelector(
             selectedSchedule = settings.schedule,
-            onScheduleSelected = { onUpdateSettings(settings.copy(schedule = it)) },
+            onScheduleSelected = { onScheduleSelected -> onUpdateSettings(settings.copy(schedule = onScheduleSelected)) },
         )
 
         Divider()
@@ -440,11 +448,32 @@ private fun WorkSection(
                 OutlinedTextField(
                     value = settings.taxRate ?: "",
                     onValueChange = { newValue ->
-                        val filtered = newValue.filter { it.isDigit() || it == '.' || it == ',' || it == '-' }
-                        onUpdateSettings(settings.copy(taxRate = filtered))
+                        if (newValue.length > 5) return@OutlinedTextField
+                        val allowedChars = "0123456789.,"
+                        if (newValue.any { it !in allowedChars }) return@OutlinedTextField
+
+                        val separatorCount = newValue.count { it == '.' || it == ',' }
+                        if (separatorCount > 1) return@OutlinedTextField
+
+                        if (newValue.startsWith("0") && newValue.length > 1) {
+                            val nextChar = newValue[1]
+                            if (nextChar != '.' && nextChar != ',') return@OutlinedTextField
+                        }
+
+                        val separatorIndex = newValue.indexOfAny(charArrayOf('.', ','))
+                        if (separatorIndex != -1) {
+                            val fractionalPart = newValue.substring(separatorIndex + 1)
+                            if (fractionalPart.length > 2) return@OutlinedTextField
+                        }
+
+                        val numericValue = newValue.replace(',', '.').toDoubleOrNull()
+                        if (numericValue != null && numericValue > 100.0) return@OutlinedTextField
+
+                        onUpdateSettings(settings.copy(taxRate = newValue))
                     },
                     label = { Text(stringResource(R.string.settings_tax_rate)) },
                     suffix = { Text(stringResource(R.string.percent)) },
+                    isError = !isTaxRateValid,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     singleLine = true,
                     modifier =
