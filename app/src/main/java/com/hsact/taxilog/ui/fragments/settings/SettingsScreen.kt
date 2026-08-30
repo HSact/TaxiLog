@@ -73,6 +73,7 @@ import com.hsact.domain.model.settings.UserSettings
 import com.hsact.domain.model.settings.indexToCurrencySymbolMode
 import com.hsact.taxilog.R
 import com.hsact.taxilog.ui.shimmerLoadingAnimation
+import com.hsact.taxilog.utils.NumericInputUtils
 import java.time.temporal.WeekFields
 
 @Composable
@@ -111,8 +112,14 @@ private fun SettingsScreenContent(
     onApplyClick: () -> Unit,
 ) {
     val settings = uiState.settings
+
     val taxRateValue = settings.taxRate?.replace(',', '.')?.toDoubleOrNull() ?: 0.0
-    val isTaxRateValid = taxRateValue in 0.0..100.0
+    val isTaxRateValid = !settings.taxes || taxRateValue in 0.0..100.0
+
+    val consumptionValue = settings.consumption?.replace(',', '.')?.toDoubleOrNull() ?: 0.0
+    val isConsumptionValid = consumptionValue in 0.0..100.0
+
+    val isFormValid = isTaxRateValid && isConsumptionValid
 
     Box(modifier = Modifier.fillMaxSize()) {
         val scrollState = rememberScrollState()
@@ -144,11 +151,12 @@ private fun SettingsScreenContent(
             onSignInClick = onSignInClick,
             onUpdateSettings = onUpdateSettings,
             isTaxRateValid = isTaxRateValid,
+            isConsumptionValid = isConsumptionValid,
             bottomPadding = fabHeightDp,
         )
 
         ApplyFab(
-            visible = isFabVisible && isTaxRateValid,
+            visible = isFabVisible && isFormValid,
             isSaving = uiState.isSaving,
             onApplyClick = onApplyClick,
             modifier = Modifier.align(Alignment.BottomCenter),
@@ -216,6 +224,7 @@ private fun SettingsContent(
     onSignInClick: () -> Unit,
     onUpdateSettings: (UserSettings) -> Unit,
     isTaxRateValid: Boolean,
+    isConsumptionValid: Boolean,
     bottomPadding: Dp = 0.dp,
 ) {
     val configuration = LocalConfiguration.current
@@ -256,6 +265,7 @@ private fun SettingsContent(
         CarSection(
             settings = settings,
             onUpdateSettings = onUpdateSettings,
+            isConsumptionValid = isConsumptionValid,
             moneyPrefix = moneyPrefix,
             moneySuffixProvider = { getMoneySuffix(it) },
             distanceUnit = distanceUnit,
@@ -271,6 +281,34 @@ private fun SettingsContent(
 
         Spacer(modifier = Modifier.height(bottomPadding))
     }
+}
+
+@Composable
+private fun SettingsTextField(
+    value: String?,
+    onValueChange: (String) -> Unit,
+    labelRes: Int,
+    maxLength: Int = 10,
+    maxValue: Double = Double.MAX_VALUE,
+    isError: Boolean = false,
+    prefix: @Composable (() -> Unit)? = null,
+    suffix: @Composable (() -> Unit)? = null,
+    modifier: Modifier = Modifier.fillMaxWidth(),
+) {
+    OutlinedTextField(
+        value = value ?: "",
+        onValueChange = { newValue ->
+            val formatted = NumericInputUtils.formatNumericInput(newValue, maxLength, maxValue)
+            if (formatted != null) onValueChange(formatted)
+        },
+        label = { Text(stringResource(labelRes)) },
+        prefix = prefix,
+        suffix = suffix,
+        isError = isError,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+        singleLine = true,
+        modifier = modifier,
+    )
 }
 
 @Composable
@@ -313,36 +351,30 @@ private fun InterfaceSection(
 private fun CarSection(
     settings: UserSettings,
     onUpdateSettings: (UserSettings) -> Unit,
+    isConsumptionValid: Boolean,
     moneyPrefix: @Composable (() -> Unit)?,
     moneySuffixProvider: (String?) -> @Composable () -> Unit,
     distanceUnit: String,
 ) {
     SettingsSection(title = stringResource(R.string.car)) {
-        OutlinedTextField(
-            value = settings.consumption ?: "",
-            onValueChange = { newValue ->
-                val filtered = newValue.filter { it.isDigit() || it == '.' || it == ',' || it == '-' }
-                onUpdateSettings(settings.copy(consumption = filtered))
-            },
-            label = { Text(stringResource(R.string.settings_consumption)) },
+        SettingsTextField(
+            value = settings.consumption,
+            onValueChange = { onUpdateSettings(settings.copy(consumption = it)) },
+            labelRes = R.string.settings_consumption,
+            maxLength = 6,
+            maxValue = 100.0,
+            isError = !isConsumptionValid,
             suffix = { Text(stringResource(R.string.settings_consumption_hint)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
         )
 
-        OutlinedTextField(
-            value = settings.fuelPrice ?: "",
-            onValueChange = { newValue ->
-                val filtered = newValue.filter { it.isDigit() || it == '.' || it == ',' || it == '-' }
-                onUpdateSettings(settings.copy(fuelPrice = filtered))
-            },
-            label = { Text(stringResource(R.string.settings_fuel_price)) },
+        SettingsTextField(
+            value = settings.fuelPrice,
+            onValueChange = { onUpdateSettings(settings.copy(fuelPrice = it)) },
+            labelRes = R.string.settings_fuel_price,
+            maxLength = 8,
+            maxValue = 10000.0,
             prefix = moneyPrefix,
             suffix = moneySuffixProvider("/" + stringResource(R.string.liter_short)),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
         )
 
         Divider()
@@ -355,21 +387,15 @@ private fun CarSection(
             )
 
             AnimatedVisibility(visible = settings.rented) {
-                OutlinedTextField(
-                    value = settings.rentCost ?: "",
-                    onValueChange = { newValue ->
-                        val filtered = newValue.filter { it.isDigit() || it == '.' || it == ',' || it == '-' }
-                        onUpdateSettings(settings.copy(rentCost = filtered))
-                    },
-                    label = { Text(stringResource(R.string.settings_rent_cost)) },
+                SettingsTextField(
+                    value = settings.rentCost,
+                    onValueChange = { onUpdateSettings(settings.copy(rentCost = it)) },
+                    labelRes = R.string.settings_rent_cost,
+                    maxLength = 10,
+                    maxValue = 1000000.0,
                     prefix = moneyPrefix,
                     suffix = moneySuffixProvider("/" + stringResource(R.string.shift).lowercase()),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                    singleLine = true,
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp),
+                    modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
                 )
             }
         }
@@ -384,21 +410,15 @@ private fun CarSection(
             )
 
             AnimatedVisibility(visible = settings.service) {
-                OutlinedTextField(
-                    value = settings.serviceCost ?: "",
-                    onValueChange = { newValue ->
-                        val filtered = newValue.filter { it.isDigit() || it == '.' || it == ',' || it == '-' }
-                        onUpdateSettings(settings.copy(serviceCost = filtered))
-                    },
-                    label = { Text(stringResource(R.string.settings_service_cost_per_km)) },
+                SettingsTextField(
+                    value = settings.serviceCost,
+                    onValueChange = { onUpdateSettings(settings.copy(serviceCost = it)) },
+                    labelRes = R.string.settings_service_cost_per_km,
+                    maxLength = 8,
+                    maxValue = 10000.0,
                     prefix = moneyPrefix,
                     suffix = moneySuffixProvider("/$distanceUnit"),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                    singleLine = true,
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp),
+                    modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
                 )
             }
         }
@@ -414,18 +434,13 @@ private fun WorkSection(
     moneySuffixProvider: (String?) -> @Composable () -> Unit,
 ) {
     SettingsSection(title = stringResource(R.string.settings_plan)) {
-        OutlinedTextField(
-            value = settings.goalPerMonth ?: "",
-            onValueChange = { newValue ->
-                val filtered = newValue.filter { it.isDigit() || it == '.' || it == ',' || it == '-' }
-                onUpdateSettings(settings.copy(goalPerMonth = filtered))
-            },
-            label = { Text(stringResource(R.string.settings_goal_per_month)) },
+        SettingsTextField(
+            value = settings.goalPerMonth,
+            onValueChange = { onUpdateSettings(settings.copy(goalPerMonth = it)) },
+            labelRes = R.string.settings_goal_per_month,
+            maxLength = 12,
+            maxValue = 10000000.0,
             prefix = moneyPrefix,
-            suffix = moneySuffixProvider(null),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
         )
 
         Divider()
@@ -445,41 +460,15 @@ private fun WorkSection(
             )
 
             AnimatedVisibility(visible = settings.taxes) {
-                OutlinedTextField(
-                    value = settings.taxRate ?: "",
-                    onValueChange = { newValue ->
-                        if (newValue.length > 5) return@OutlinedTextField
-                        val allowedChars = "0123456789.,"
-                        if (newValue.any { it !in allowedChars }) return@OutlinedTextField
-
-                        val separatorCount = newValue.count { it == '.' || it == ',' }
-                        if (separatorCount > 1) return@OutlinedTextField
-
-                        if (newValue.startsWith("0") && newValue.length > 1) {
-                            val nextChar = newValue[1]
-                            if (nextChar != '.' && nextChar != ',') return@OutlinedTextField
-                        }
-
-                        val separatorIndex = newValue.indexOfAny(charArrayOf('.', ','))
-                        if (separatorIndex != -1) {
-                            val fractionalPart = newValue.substring(separatorIndex + 1)
-                            if (fractionalPart.length > 2) return@OutlinedTextField
-                        }
-
-                        val numericValue = newValue.replace(',', '.').toDoubleOrNull()
-                        if (numericValue != null && numericValue > 100.0) return@OutlinedTextField
-
-                        onUpdateSettings(settings.copy(taxRate = newValue))
-                    },
-                    label = { Text(stringResource(R.string.settings_tax_rate)) },
-                    suffix = { Text(stringResource(R.string.percent)) },
+                SettingsTextField(
+                    value = settings.taxRate,
+                    onValueChange = { onUpdateSettings(settings.copy(taxRate = it)) },
+                    labelRes = R.string.settings_tax_rate,
+                    maxLength = 5,
+                    maxValue = 100.0,
                     isError = !isTaxRateValid,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                    singleLine = true,
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp),
+                    suffix = { Text(stringResource(R.string.percent)) },
+                    modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
                 )
             }
         }
