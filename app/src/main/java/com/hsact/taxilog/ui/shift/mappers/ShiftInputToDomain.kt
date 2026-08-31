@@ -69,7 +69,7 @@ fun ShiftInputModel.toDomain(meta: ShiftMeta): Shift {
                 tips = dollarsToCents(tips),
                 wash = dollarsToCents(wash),
                 fuelCost = dollarsToCents(fuelCost),
-                taxRate = ((taxRate.toDoubleOrNull() ?: 0.0) * 100).toInt(),
+                taxRate = ((taxRate.toDoubleOrNull() ?: 0.0) * 100).toInt().coerceIn(0, 10000),
             ),
         note = note?.trim(),
     )

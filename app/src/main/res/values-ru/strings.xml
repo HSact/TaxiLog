@@ -69,6 +69,7 @@
     <string name="this_month">Месяц</string>
     <string name="privacy_policy_link">https://gist.github.com/HSact/4879da5ee7ffc776eaee348cc712e507</string>
     <string name="privacy_policy">Политика конфиденциальности</string>
+    <string name="support_project">Поддержать проект</string>
     <string name="shift_added_successfully">Смена успешно сохранена</string>
     <string name="shift_deleted_successfully">Смена %1$s удалена успешно</string>
     <string name="all_shifts_have_been_deleted_successfully">Все смены были успешно удалены</string>
@@ -163,4 +164,29 @@
     <string name="goals_empty_description">Самое время решить, сколько вы хотите заработать в этом месяце! 🎯</string>
     <string name="home_no_shifts_yet">Смен пока нет. Самое время начать!</string>
     <string name="settings_label">Настройки</string>
+
+    <!-- Filter & Sort -->
+    <string name="filter_period_week">Неделя</string>
+    <string name="filter_period_month">Месяц</string>
+    <string name="filter_period_year">Год</string>
+    <string name="filter_period_all">Все время</string>
+    <string name="filter_empty_description">Попробуйте выбрать другой период или добавить новую смену.</string>
+    <string name="sort_by">Сортировка</string>
+    <string name="sort_date_desc">Дата (сначала новые)</string>
+    <string name="sort_date_asc">Дата (сначала старые)</string>
+    <string name="sort_profit_desc">Прибыль (по убыванию)</string>
+    <string name="sort_profit_asc">Прибыль (по возрастанию)</string>
+    <string name="sort_duration_desc">Время (сначала долгие)</string>
+    <string name="sort_duration_asc">Время (сначала короткие)</string>
+
+    <!-- Feedback -->
+    <string name="action_report_bug">Сообщить об ошибке</string>
+    <string name="feedback_title">Сообщить об ошибке</string>
+    <string name="feedback_hint">Опишите проблему или ваше пожелание</string>
+    <string name="feedback_send">Отправить</string>
+    <string name="feedback_cancel">Отмена</string>
+    <string name="feedback_success">Спасибо за ваш отзыв!</string>
+    <string name="feedback_error">Ошибка отправки. Пожалуйста, попробуйте позже.</string>
+    <string name="feedback_placeholder">Например: «Неверно считается прибыль при ночных сменах…»</string>
+    <string name="feedback_cooldown">Пожалуйста, подождите минуту перед отправкой следующего сообщения.</string>
 </resources>

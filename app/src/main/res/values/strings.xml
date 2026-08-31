@@ -68,6 +68,8 @@
     <string name="this_month">Month</string>
     <string name="privacy_policy_link">https://gist.github.com/HSact/4ad0f5e5ae6a3206819c157ddfe32410</string>
     <string name="privacy_policy">Privacy policy</string>
+    <string name="support_project">Support the project</string>
+    <string name="donate_link" translatable="false">https://pay.cloudtips.ru/p/7715dc90</string>
     <string name="shift_added_successfully">Shift saved successfully</string>
     <string name="shift_deleted_successfully">Shift %1$s deleted successfully</string>
     <string name="all_shifts_have_been_deleted_successfully">All shifts have been deleted successfully</string>
@@ -174,4 +176,29 @@
     <string name="goals_empty_description">It\'s time to decide how much you want to earn this month! 🎯</string>
     <string name="home_no_shifts_yet">No shifts yet. Time to start!</string>
     <string name="settings_label">Settings</string>
+
+    <!-- Filter & Sort -->
+    <string name="filter_period_week">Week</string>
+    <string name="filter_period_month">Month</string>
+    <string name="filter_period_year">Year</string>
+    <string name="filter_period_all">All time</string>
+    <string name="filter_empty_description">Try choosing a different period or add a new shift.</string>
+    <string name="sort_by">Sort by</string>
+    <string name="sort_date_desc">Date (new first)</string>
+    <string name="sort_date_asc">Date (old first)</string>
+    <string name="sort_profit_desc">Profit (high first)</string>
+    <string name="sort_profit_asc">Profit (low first)</string>
+    <string name="sort_duration_desc">Duration (long first)</string>
+    <string name="sort_duration_asc">Duration (short first)</string>
+
+    <!-- Feedback -->
+    <string name="action_report_bug">Report a bug</string>
+    <string name="feedback_title">Report a bug</string>
+    <string name="feedback_hint">Describe the problem or your suggestion</string>
+    <string name="feedback_send">Send</string>
+    <string name="feedback_cancel">Cancel</string>
+    <string name="feedback_success">Thank you for your feedback!</string>
+    <string name="feedback_error">Error sending feedback. Please try again later.</string>
+    <string name="feedback_placeholder">For example: \"The profit calculation for night shifts seems wrong…\"</string>
+    <string name="feedback_cooldown">Please wait a minute before sending another report.</string>
 </resources>

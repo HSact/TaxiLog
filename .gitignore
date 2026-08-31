@@ -12,8 +12,10 @@ Thumbs.db
 /build
 /captures
 /out
+app/release
 .externalNativeBuild
 .cxx
+output-metadata.json
 
 # Secrets and configs
 **/google-services.json

@@ -8,8 +8,19 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
@@ -51,53 +62,119 @@ class LogFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        requireActivity().title = getString(R.string.title_my_shifts)
-
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        binding.emptyStateCompose.setContent {
+        binding.filterComposeView.setContent {
             AppTheme {
-                EmptyStateView(
-                    icon = Icons.AutoMirrored.Filled.List,
-                    title = getString(R.string.log_empty_title),
-                    description = getString(R.string.log_empty_description),
-                    actionText = getString(R.string.new_shift),
-                    onAction = {
-                        val action = LogFragmentDirections.actionLogFragmentToShiftForm(shiftId = -1)
-                        findNavController().navigate(action)
-                    },
+                val currentPeriod by viewModel.filterPeriod.collectAsState()
+                val currentSort by viewModel.sortOrder.collectAsState()
+                var showSortSheet by remember { mutableStateOf(false) }
+
+                FilterSortBar(
+                    currentPeriod = currentPeriod,
+                    onPeriodSelected = { viewModel.handleIntent(LogIntent.ChangeFilter(it)) },
+                    onSortClick = { showSortSheet = true },
                 )
+
+                if (showSortSheet) {
+                    SortBottomSheet(
+                        currentSort = currentSort,
+                        onSortSelected = {
+                            viewModel.handleIntent(LogIntent.ChangeSort(it))
+                            showSortSheet = false
+                        },
+                        onDismiss = { showSortSheet = false },
+                    )
+                }
+            }
+        }
+
+        binding.statusComposeView.setContent {
+            AppTheme {
+                val isLoading by viewModel.isLoading.collectAsState()
+                val isDbEmpty by viewModel.isDatabaseEmpty.collectAsState()
+                val shifts by viewModel.shifts.collectAsState()
+
+                Crossfade(
+                    targetState = isLoading,
+                    animationSpec = tween(500),
+                    modifier = Modifier.fillMaxSize(),
+                    label = "LogStatusTransition",
+                ) { loading ->
+                    if (loading) {
+                        LogShimmer()
+                    } else if (shifts.isEmpty()) {
+                        val title = if (isDbEmpty) stringResource(R.string.log_empty_title) else stringResource(R.string.list_is_empty)
+                        val description = if (isDbEmpty) stringResource(R.string.log_empty_description) else stringResource(R.string.filter_empty_description)
+
+                        EmptyStateView(
+                            icon = Icons.AutoMirrored.Filled.List,
+                            title = title,
+                            description = description,
+                            actionText = stringResource(R.string.new_shift),
+                            onAction = {
+                                val action = LogFragmentDirections.actionLogFragmentToShiftForm(shiftId = -1)
+                                findNavController().navigate(action)
+                            },
+                        )
+                    } else {
+                        // Keep it transparent but fill size to prevent "shrink" effect during transition
+                        Box(modifier = Modifier.fillMaxSize())
+                    }
+                }
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.shifts
-                    .combine(viewModel.settings) { shiftList, settings ->
-                        Pair(shiftList, settings)
-                    }.collect { (shiftList, settings) ->
-                        val isEmpty = shiftList.isEmpty()
-                        binding.recyclerView.isVisible = !isEmpty
-                        binding.emptyStateCompose.isVisible = isEmpty
+                combine(
+                    viewModel.shifts,
+                    viewModel.settings,
+                    viewModel.isLoading,
+                ) { shiftList, settings, isLoading ->
+                    Triple(shiftList, settings, isLoading)
+                }.collect { (shiftList, settings, isLoading) ->
+                    val isEmpty = shiftList.isEmpty()
+                    val isDataReady = !isLoading && !isEmpty
 
-                        if (!isEmpty) {
-                            binding.recyclerView.adapter =
-                                RecyclerAdapter(
-                                    shiftList,
-                                    settings = settings,
-                                    onItemClick = { shift ->
-                                        onClickElement(shift)
-                                    },
-                                    onItemMenuClick = { visibleNumber, shift ->
-                                        onLongClickElement(shift, visibleNumber)
-                                    },
-                                )
-                            // Restore the RecyclerView scroll state
-                            viewModel.recyclerViewState?.let { state ->
-                                binding.recyclerView.layoutManager?.onRestoreInstanceState(state)
-                            }
+                    if (isDataReady) {
+                        // Data loaded, fade out status layer smoothly
+                        if (binding.statusComposeView.isVisible) {
+                            binding.statusComposeView.animate()
+                                .alpha(0f)
+                                .setDuration(400)
+                                .withEndAction {
+                                    _binding?.let { b ->
+                                        b.statusComposeView.visibility = View.GONE
+                                        b.statusComposeView.alpha = 1f
+                                    }
+                                }
+                                .start()
                         }
+                        binding.recyclerView.visibility = View.VISIBLE
+
+                        binding.recyclerView.adapter =
+                            RecyclerAdapter(
+                                shiftList,
+                                settings = settings,
+                                onItemClick = { shift ->
+                                    onClickElement(shift)
+                                },
+                                onItemMenuClick = { visibleNumber, shift ->
+                                    onLongClickElement(shift, visibleNumber)
+                                },
+                            )
+                        // Restore the RecyclerView scroll state
+                        viewModel.recyclerViewState?.let { state ->
+                            binding.recyclerView.layoutManager?.onRestoreInstanceState(state)
+                        }
+                    } else {
+                        // Loading or Empty, show status layer
+                        binding.statusComposeView.alpha = 1f
+                        binding.statusComposeView.visibility = View.VISIBLE
+                        binding.recyclerView.visibility = View.GONE
                     }
+                }
             }
         }
 
@@ -140,6 +217,7 @@ class LogFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        requireActivity().title = getString(R.string.title_my_shifts)
         viewModel.handleIntent(LogIntent.UpdateList)
     }
 
@@ -220,6 +298,8 @@ class LogFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        _binding?.statusComposeView?.animate()?.cancel()
+        _binding?.recyclerView?.animate()?.cancel()
         super.onDestroyView()
         _binding = null
     }

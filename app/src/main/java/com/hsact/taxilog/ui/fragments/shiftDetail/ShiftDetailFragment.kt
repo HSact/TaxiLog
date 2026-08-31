@@ -62,7 +62,7 @@ class ShiftDetailFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.sequenceNumber.collect { number ->
-                if (number != null) {
+                if (number != null && number > 0) {
                     (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
                         getString(R.string.title_shift_detail, number)
                 }
@@ -74,7 +74,7 @@ class ShiftDetailFragment : Fragment() {
         super.onResume()
         val currentNumber = viewModel.sequenceNumber.value
         (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
-            if (currentNumber != null && currentNumber != -1) {
+            if (currentNumber != null && currentNumber > 0) {
                 getString(R.string.title_shift_detail, currentNumber)
             } else {
                 getString(R.string.shift)

@@ -14,8 +14,16 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+-keepattributes SourceFile,LineNumberTable
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
-#-renamesourcefileattribute SourceFile
+-renamesourcefileattribute SourceFile
+
+# Credential Manager & Google Sign-In (Optimized)
+-keep class androidx.credentials.playservices.** { *; }
+-keep class com.google.android.libraries.identity.googleid.** { *; }
+-keep class * implements androidx.credentials.CredentialProvider { *; }
+
+# Domain models (to ensure stable mapping between layers)
+-keep class com.hsact.domain.model.** { *; }

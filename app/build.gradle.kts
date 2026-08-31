@@ -8,8 +8,8 @@ plugins {
     alias(libs.plugins.crashlytics)
 }
 
-val vName = "1.6.0"
-val vCode = 16
+val vName = "1.7.0"
+val vCode = 17
 android {
     namespace = "com.hsact.taxilog"
     compileSdk =
@@ -35,7 +35,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -97,6 +98,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.core)
+    implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.compose.charts)
