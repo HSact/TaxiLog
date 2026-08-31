@@ -62,8 +62,6 @@ class LogFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        requireActivity().title = getString(R.string.title_my_shifts)
-
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         binding.filterComposeView.setContent {
@@ -219,6 +217,7 @@ class LogFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        requireActivity().title = getString(R.string.title_my_shifts)
         viewModel.handleIntent(LogIntent.UpdateList)
     }
 
