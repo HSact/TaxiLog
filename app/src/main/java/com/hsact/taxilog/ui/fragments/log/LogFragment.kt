@@ -8,13 +8,12 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -142,13 +141,15 @@ class LogFragment : Fragment() {
 
                     if (isDataReady) {
                         // Data loaded, fade out status layer smoothly
-                        if (binding.statusComposeView.visibility == View.VISIBLE) {
+                        if (binding.statusComposeView.isVisible) {
                             binding.statusComposeView.animate()
                                 .alpha(0f)
                                 .setDuration(400)
                                 .withEndAction {
-                                    binding.statusComposeView.visibility = View.GONE
-                                    binding.statusComposeView.alpha = 1f
+                                    _binding?.let { b ->
+                                        b.statusComposeView.visibility = View.GONE
+                                        b.statusComposeView.alpha = 1f
+                                    }
                                 }
                                 .start()
                         }
@@ -298,6 +299,8 @@ class LogFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        _binding?.statusComposeView?.animate()?.cancel()
+        _binding?.recyclerView?.animate()?.cancel()
         super.onDestroyView()
         _binding = null
     }
