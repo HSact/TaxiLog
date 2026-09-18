@@ -55,7 +55,7 @@ class HomeFragment : Fragment() {
         cardGoal.setContent {
             val settings by viewModel.settings.collectAsStateWithLifecycle()
             CardGoal(
-                settings.goalPerMonth?.toFloatOrNull() ?: 0f,
+                settings.goalPerMonth?.replace(',', '.')?.toFloatOrNull() ?: 0f,
                 viewModel.shiftListThisMonth,
                 onSetGoalClick = {
                     findNavController().navigate(R.id.settingsFragment)

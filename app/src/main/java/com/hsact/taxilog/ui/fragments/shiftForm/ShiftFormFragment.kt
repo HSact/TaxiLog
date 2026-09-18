@@ -159,7 +159,7 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
 
                 override fun afterTextChanged(s: Editable?) {
                     if (isProgrammaticChange) return
-                    val mileageValue = s?.toString()?.toDoubleOrNull()
+                    val mileageValue = s?.toString()?.replace(',', '.')?.toDoubleOrNull()
                     if (mileageValue != null) {
                         updateShiftField { it.copy(mileage = mileageValue) }
                         viewModel.guessFuelCost()
@@ -361,11 +361,11 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         }
 
         viewModel.calculateShift(
-            editEarnings.text.toString().toDoubleOrNull() ?: 0.0,
-            editTips.text.toString().toDoubleOrNull() ?: 0.0,
-            editWash.text.toString().toDoubleOrNull() ?: 0.0,
-            editFuelCost.text.toString().toDoubleOrNull() ?: 0.0,
-            editMileage.text.toString().toDoubleOrNull() ?: 0.0,
+            editEarnings.text.toString().replace(',', '.').toDoubleOrNull() ?: 0.0,
+            editTips.text.toString().replace(',', '.').toDoubleOrNull() ?: 0.0,
+            editWash.text.toString().replace(',', '.').toDoubleOrNull() ?: 0.0,
+            editFuelCost.text.toString().replace(',', '.').toDoubleOrNull() ?: 0.0,
+            editMileage.text.toString().replace(',', '.').toDoubleOrNull() ?: 0.0,
             editNote.text.toString(),
         )
 

@@ -118,7 +118,7 @@ class HomeViewModel
             val shifts = shiftListThisMonth.value
             val currentSettings = settings.value
 
-            _goalData.value = currentSettings.goalPerMonth?.toDoubleOrNull() ?: 0.0
+            _goalData.value = currentSettings.goalPerMonth?.replace(',', '.')?.toDoubleOrNull() ?: 0.0
             val tempData = mutableMapOf<Int, Double>()
             for (shift in shifts) {
                 val day = shift.time.period.start.dayOfMonth

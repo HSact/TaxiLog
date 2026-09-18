@@ -99,8 +99,8 @@ class ShiftFormViewModel
                     !currentSettings.consumption.isNullOrEmpty()
 
             if (canGuess) {
-                val fuelPrice: Double = (currentSettings.fuelPrice!!).toDouble()
-                val consumption = (currentSettings.consumption!!).toDouble()
+                val fuelPrice: Double = currentSettings.fuelPrice?.replace(',', '.')?.toDoubleOrNull() ?: 0.0
+                val consumption = currentSettings.consumption?.replace(',', '.')?.toDoubleOrNull() ?: 0.0
 
                 if (fuelPrice != 0.0 && consumption != 0.0) {
                     _uiState.value =

@@ -53,10 +53,10 @@ fun ShiftInputModel.toDomain(meta: ShiftMeta): Shift {
         carSnapshot =
             CarSnapshot(
                 name = carName,
-                mileage = ((mileage.toDoubleOrNull() ?: 0.0) * 1000).toLong(),
-                fuelConsumption = ((consumption.toDoubleOrNull() ?: 0.0) * 1000).toLong(),
-                rentCost = ((rentCost.toDoubleOrNull() ?: 0.0) * 100).toLong(),
-                serviceCost = ((serviceCost.toDoubleOrNull() ?: 0.0) * 100).toLong(),
+                mileage = ((mileage.replace(',', '.').toDoubleOrNull() ?: 0.0) * 1000).toLong(),
+                fuelConsumption = ((consumption.replace(',', '.').toDoubleOrNull() ?: 0.0) * 1000).toLong(),
+                rentCost = ((rentCost.replace(',', '.').toDoubleOrNull() ?: 0.0) * 100).toLong(),
+                serviceCost = ((serviceCost.replace(',', '.').toDoubleOrNull() ?: 0.0) * 100).toLong(),
             ),
         time =
             ShiftTime(
@@ -69,7 +69,7 @@ fun ShiftInputModel.toDomain(meta: ShiftMeta): Shift {
                 tips = dollarsToCents(tips),
                 wash = dollarsToCents(wash),
                 fuelCost = dollarsToCents(fuelCost),
-                taxRate = ((taxRate.toDoubleOrNull() ?: 0.0) * 100).toInt().coerceIn(0, 10000),
+                taxRate = ((taxRate.replace(',', '.').toDoubleOrNull() ?: 0.0) * 100).toInt().coerceIn(0, 10000),
             ),
         note = note?.trim(),
     )
