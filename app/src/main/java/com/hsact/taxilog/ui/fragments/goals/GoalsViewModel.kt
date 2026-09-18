@@ -118,7 +118,7 @@ class GoalsViewModel
                 _goalMonthString.value = ""
                 return
             }
-            goalMonth = currentGoalString.toDouble()
+            goalMonth = currentGoalString.replace(',', '.').toDoubleOrNull() ?: 0.0
             val denominatorWeek = 4.5
             goalWeek = goalMonth / denominatorWeek
             val denominatorDay =

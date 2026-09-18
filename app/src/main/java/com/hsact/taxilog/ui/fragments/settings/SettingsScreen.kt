@@ -119,7 +119,10 @@ private fun SettingsScreenContent(
     val consumptionValue = settings.consumption?.replace(',', '.')?.toDoubleOrNull() ?: 0.0
     val isConsumptionValid = consumptionValue in 0.0..100.0
 
-    val isFormValid = isTaxRateValid && isConsumptionValid
+    val goalValue = settings.goalPerMonth?.replace(',', '.')?.toDoubleOrNull()
+    val isGoalValid = settings.goalPerMonth.isNullOrEmpty() || goalValue != null
+
+    val isFormValid = isTaxRateValid && isConsumptionValid && isGoalValid
 
     Box(modifier = Modifier.fillMaxSize()) {
         val scrollState = rememberScrollState()
@@ -152,6 +155,7 @@ private fun SettingsScreenContent(
             onUpdateSettings = onUpdateSettings,
             isTaxRateValid = isTaxRateValid,
             isConsumptionValid = isConsumptionValid,
+            isGoalValid = isGoalValid,
             bottomPadding = fabHeightDp,
         )
 
@@ -225,6 +229,7 @@ private fun SettingsContent(
     onUpdateSettings: (UserSettings) -> Unit,
     isTaxRateValid: Boolean,
     isConsumptionValid: Boolean,
+    isGoalValid: Boolean,
     bottomPadding: Dp = 0.dp,
 ) {
     val configuration = LocalConfiguration.current
@@ -275,6 +280,7 @@ private fun SettingsContent(
             settings = settings,
             onUpdateSettings = onUpdateSettings,
             isTaxRateValid = isTaxRateValid,
+            isGoalValid = isGoalValid,
             moneyPrefix = moneyPrefix,
             moneySuffixProvider = { getMoneySuffix(it) },
         )
@@ -430,6 +436,7 @@ private fun WorkSection(
     settings: UserSettings,
     onUpdateSettings: (UserSettings) -> Unit,
     isTaxRateValid: Boolean,
+    isGoalValid: Boolean,
     moneyPrefix: @Composable (() -> Unit)?,
     moneySuffixProvider: (String?) -> @Composable () -> Unit,
 ) {
@@ -440,6 +447,7 @@ private fun WorkSection(
             labelRes = R.string.settings_goal_per_month,
             maxLength = 12,
             maxValue = 10000000.0,
+            isError = !isGoalValid,
             prefix = moneyPrefix,
         )
 
