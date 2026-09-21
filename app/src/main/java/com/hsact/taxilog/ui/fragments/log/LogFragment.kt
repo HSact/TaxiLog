@@ -178,7 +178,7 @@ class LogFragment : Fragment() {
             }
         }
 
-        val menuHost = requireActivity() as MenuHost
+        val menuHost = activity as? MenuHost ?: return
         menuHost.addMenuProvider(
             object : MenuProvider {
                 override fun onCreateMenu(
@@ -191,12 +191,14 @@ class LogFragment : Fragment() {
                 override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
                     when (menuItem.itemId) {
                         R.id.action_delete_all -> {
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(R.string.delete)
-                                .setMessage(getString(R.string.delete_all) + "?")
-                                .setPositiveButton(getString(R.string.yes)) { _, _ -> deleteAll() }
-                                .setNegativeButton(getString(R.string.cancel), null)
-                                .show()
+                            context?.let { ctx ->
+                                MaterialAlertDialogBuilder(ctx)
+                                    .setTitle(R.string.delete)
+                                    .setMessage(ctx.getString(R.string.delete_all) + "?")
+                                    .setPositiveButton(ctx.getString(R.string.yes)) { _, _ -> deleteAll() }
+                                    .setNegativeButton(ctx.getString(R.string.cancel), null)
+                                    .show()
+                            }
                             true
                         }
 
@@ -217,7 +219,7 @@ class LogFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        requireActivity().title = getString(R.string.title_my_shifts)
+        activity?.title = getString(R.string.title_my_shifts)
         viewModel.handleIntent(LogIntent.UpdateList)
     }
 
@@ -242,9 +244,10 @@ class LogFragment : Fragment() {
         shift: Shift,
         visibleNumber: Int,
     ) {
-        val items = arrayOf(getString(R.string.edit), getString(R.string.delete))
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("${getString(R.string.edit_or_delete_shift)} $visibleNumber?")
+        val currentContext = context ?: return
+        val items = arrayOf(currentContext.getString(R.string.edit), currentContext.getString(R.string.delete))
+        MaterialAlertDialogBuilder(currentContext)
+            .setTitle("${currentContext.getString(R.string.edit_or_delete_shift)} $visibleNumber?")
             .setItems(items) { _, which -> onPopUpMenuClicked(which, shift, visibleNumber) }
             .show()
     }
@@ -279,22 +282,26 @@ class LogFragment : Fragment() {
         visibleNumber: Int,
     ) {
         viewModel.handleIntent(LogIntent.DeleteShift(shift))
-        Toast
-            .makeText(
-                requireContext(),
-                getString(R.string.shift_deleted_successfully, visibleNumber.toString()),
-                Toast.LENGTH_SHORT,
-            ).show()
+        context?.let { ctx ->
+            Toast
+                .makeText(
+                    ctx,
+                    ctx.getString(R.string.shift_deleted_successfully, visibleNumber.toString()),
+                    Toast.LENGTH_SHORT,
+                ).show()
+        }
     }
 
     private fun deleteAll() {
         viewModel.handleIntent(LogIntent.DeleteAllShifts)
-        Toast
-            .makeText(
-                requireContext(),
-                getString(R.string.all_shifts_have_been_deleted_successfully),
-                Toast.LENGTH_SHORT,
-            ).show()
+        context?.let { ctx ->
+            Toast
+                .makeText(
+                    ctx,
+                    ctx.getString(R.string.all_shifts_have_been_deleted_successfully),
+                    Toast.LENGTH_SHORT,
+                ).show()
+        }
     }
 
     override fun onDestroyView() {

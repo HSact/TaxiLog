@@ -43,7 +43,7 @@ class ShiftDetailFragment : Fragment() {
         if (shiftId != -1) {
             viewModel.loadShift(shiftId)
         }
-        requireActivity().invalidateOptionsMenu()
+        activity?.invalidateOptionsMenu()
         val container = view.findViewById<FrameLayout>(R.id.compose_container)
         val composeView =
             ComposeView(requireContext()).apply {
@@ -63,7 +63,7 @@ class ShiftDetailFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.sequenceNumber.collect { number ->
                 if (number != null && number > 0) {
-                    (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
+                    (activity as? AppCompatActivity)?.supportActionBar?.title =
                         getString(R.string.title_shift_detail, number)
                 }
             }
@@ -73,7 +73,7 @@ class ShiftDetailFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         val currentNumber = viewModel.sequenceNumber.value
-        (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
+        (activity as? AppCompatActivity)?.supportActionBar?.title =
             if (currentNumber != null && currentNumber > 0) {
                 getString(R.string.title_shift_detail, currentNumber)
             } else {

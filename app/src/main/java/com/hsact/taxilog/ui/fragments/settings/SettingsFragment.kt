@@ -51,11 +51,14 @@ class SettingsFragment : Fragment() {
         }
 
     private fun login() {
+        val currentActivity = activity ?: return
         viewModel.setAuthSkipped(false)
         lifecycleScope.launch {
-            val result = googleAuthClient.signInAndAuthenticate(requireActivity())
+            val result = googleAuthClient.signInAndAuthenticate(currentActivity)
             result.onFailure {
-                showRetryDialog()
+                if (isAdded) {
+                    showRetryDialog()
+                }
             }
         }
     }
@@ -65,13 +68,14 @@ class SettingsFragment : Fragment() {
     }
 
     private fun showRetryDialog() {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.authentication_failed))
-            .setMessage(getString(R.string.retry_login_question))
+        val currentContext = context ?: return
+        MaterialAlertDialogBuilder(currentContext)
+            .setTitle(currentContext.getString(R.string.authentication_failed))
+            .setMessage(currentContext.getString(R.string.retry_login_question))
             .setCancelable(false)
-            .setPositiveButton(getString(R.string.retry)) { _, _ ->
+            .setPositiveButton(currentContext.getString(R.string.retry)) { _, _ ->
                 login()
-            }.setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+            }.setNegativeButton(currentContext.getString(R.string.cancel)) { _, _ -> }
             .show()
     }
 
