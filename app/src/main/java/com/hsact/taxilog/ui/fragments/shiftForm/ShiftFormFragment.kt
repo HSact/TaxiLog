@@ -172,7 +172,7 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
         if (shiftId != -1) {
             viewModel.loadShift(shiftId)
         } else {
-            (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
+            (activity as? AppCompatActivity)?.supportActionBar?.title =
                 getString(R.string.title_new_shift)
         }
         viewLifecycleOwner.lifecycleScope.launch {
@@ -193,10 +193,10 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.sequenceNumber.collect { number ->
                     if (number != null && number != -1) {
-                        (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
+                        (activity as? AppCompatActivity)?.supportActionBar?.title =
                             getString(R.string.title_edit_shift, number)
                     } else if (shiftId != -1) {
-                        (requireActivity() as? AppCompatActivity)?.supportActionBar?.title =
+                        (activity as? AppCompatActivity)?.supportActionBar?.title =
                             getString(R.string.last_shift)
                     }
                 }
@@ -384,8 +384,9 @@ class ShiftFormFragment : Fragment(R.layout.fragment_shift_form) {
      * Shows a confirmation dialog before submitting the shift data.
      */
     private fun showSubmitMessage(warningCode: String) {
-        val alert = MaterialAlertDialogBuilder(requireContext())
-        alert.setTitle(getString(R.string.submit))
+        val currentContext = context ?: return
+        val alert = MaterialAlertDialogBuilder(currentContext)
+        alert.setTitle(currentContext.getString(R.string.submit))
         alert.setPositiveButton(R.string.ok) { _, _ ->
             viewLifecycleOwner.lifecycleScope.launch {
                 submit()
