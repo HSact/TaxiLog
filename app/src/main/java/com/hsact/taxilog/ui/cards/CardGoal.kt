@@ -91,7 +91,7 @@ fun CardGoal(
         } else {
             val rawProgress: Float =
                 if (monthGoal != 0f) {
-                    (totalProfit / monthGoal).coerceIn(0f, 1f)
+                    totalProfit / monthGoal
                 } else {
                     0f
                 }
@@ -108,7 +108,7 @@ fun CardGoal(
                 progress = rawProgress
             }
             val animatedProgress by animateFloatAsState(
-                targetValue = progress,
+                targetValue = progress.coerceIn(0f, 1f),
                 animationSpec = tween(durationMillis = 2000),
             )
 

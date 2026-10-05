@@ -54,7 +54,7 @@ fun CardGoalProgress(
     val daysInMonth = LocalDate.now().lengthOfMonth()
     val trimmedChartState = chartState.take(daysInMonth)
 
-    val hasData = trimmedChartState.any { it > 0.0 }
+    val hasData = trimmedChartState.any { it != 0.0 }
 
     val max = maxOf(chartState.maxOrNull() ?: 0.0, goal)
     val min = chartState.minOrNull()?.takeIf { it <= 0.0 } ?: 0.0

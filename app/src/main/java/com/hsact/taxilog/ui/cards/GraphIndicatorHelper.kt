@@ -18,7 +18,8 @@ internal object GraphIndicatorHelper {
         locale: Locale,
     ): String {
         val rounded = value.roundToLong()
-        return if (rounded >= 1000) {
+        val absValue = kotlin.math.abs(rounded)
+        return if (absValue >= 1000) {
             val thousands = rounded / 1000.0
             val formatted =
                 if (thousands % 1.0 == 0.0) {
