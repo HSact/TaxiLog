@@ -12,11 +12,13 @@ import com.hsact.domain.utils.dailyProfit
 import com.hsact.domain.utils.monthlyProfitByDay
 import com.hsact.domain.utils.weeklyProfitByDay
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDate
@@ -82,17 +84,18 @@ class GoalsViewModel
 
                 getShiftsInRangeUseCase(startOfMonth, endOfMonth)
                     .collect { list ->
-
                         _shifts.value = list
 
-                        calculateDaysData()
-                        defineGoals()
+                        withContext(Dispatchers.Default) {
+                            calculateDaysData()
+                            defineGoals()
 
-                        _daysInMonthCardState.value =
-                            DaysInMonthCardState(
-                                date = _date.value,
-                                days = _daysData.value,
-                            )
+                            _daysInMonthCardState.value =
+                                DaysInMonthCardState(
+                                    date = _date.value,
+                                    days = _daysData.value,
+                                )
+                        }
                     }
             }
         }
