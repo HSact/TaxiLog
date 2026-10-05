@@ -10,6 +10,7 @@ import com.hsact.domain.usecase.shift.DeleteAllShiftsUseCase
 import com.hsact.domain.usecase.shift.DeleteShiftUseCase
 import com.hsact.domain.usecase.shift.GetAllShiftsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -82,7 +84,9 @@ class LogViewModel
                             shift.copy(sequenceNumber = index + 1)
                         }
                 filterAndSort(listWithSequence, filter, sort)
-            }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+            }
+                .flowOn(Dispatchers.Default)
+                .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
         var recyclerViewState: Parcelable? = null // For saving the RecyclerView scroll state
 

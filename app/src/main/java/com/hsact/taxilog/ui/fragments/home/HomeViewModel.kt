@@ -66,6 +66,12 @@ class HomeViewModel
         val goalData: StateFlow<Double> = _goalData
 
         init {
+            // Подписка на настройки для перерасчета графика
+            viewModelScope.launch {
+                settings.collect {
+                    calculateChart()
+                }
+            }
             // Подписка на последнюю смену
             viewModelScope.launch {
                 _isLoadingLastShift.value = true
@@ -114,23 +120,28 @@ class HomeViewModel
             _shiftsForSelection.value = shifts
         }
 
-        fun calculateChart() {
-            val shifts = shiftListThisMonth.value
-            val currentSettings = settings.value
+        fun calculateChart(dispatcher: kotlinx.coroutines.CoroutineDispatcher = kotlinx.coroutines.Dispatchers.Default) {
+            viewModelScope.launch(dispatcher) {
+                val shifts = shiftListThisMonth.value
+                val currentSettings = settings.value
 
-            _goalData.value = currentSettings.goalPerMonth?.replace(',', '.')?.toDoubleOrNull() ?: 0.0
-            val tempData = mutableMapOf<Int, Double>()
-            for (shift in shifts) {
-                val day = shift.time.period.start.dayOfMonth
-                tempData[day] = (tempData[day] ?: 0.0) + shift.profit.centsToDollars()
-            }
-
-            var cumulativeSum = 0.0
-            _chartData.value =
-                MutableList(31) { index ->
-                    val day = index + 1 // day with start at 0
-                    cumulativeSum += tempData[day] ?: 0.0
-                    cumulativeSum
+                val goal = currentSettings.goalPerMonth?.replace(',', '.')?.toDoubleOrNull() ?: 0.0
+                val tempData = mutableMapOf<Int, Double>()
+                for (shift in shifts) {
+                    val day = shift.time.period.start.dayOfMonth
+                    tempData[day] = (tempData[day] ?: 0.0) + shift.profit.centsToDollars()
                 }
+
+                var cumulativeSum = 0.0
+                val chartList =
+                    MutableList(31) { index ->
+                        val day = index + 1 // day with start at 0
+                        cumulativeSum += tempData[day] ?: 0.0
+                        cumulativeSum
+                    }
+
+                _goalData.value = goal
+                _chartData.value = chartList
+            }
         }
     }

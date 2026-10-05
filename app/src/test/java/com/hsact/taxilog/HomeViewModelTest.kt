@@ -72,7 +72,7 @@ class HomeViewModelTest {
         val settingsJob = launch { viewModel.settings.collect {} }
         advanceUntilIdle()
 
-        viewModel.calculateChart()
+        viewModel.calculateChart(testDispatcher)
 
         assertEquals(50000.50, viewModel.goalData.value, 0.01)
 

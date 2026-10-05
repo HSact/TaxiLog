@@ -50,20 +50,32 @@ class ShiftSyncManager
         /**
          * Pulls all shifts from Firebase and merges them into the local repository.
          *
-         * - New remote shifts are inserted locally.
-         * - Existing shifts are updated if the remote version is newer ShiftMeta.updatedAt.
-         * - If local and remote timestamps are equal but the local shift is not marked as synced,
-         *   it updates the local status synced.
+         * - Remote shifts are matched with local ones by [Shift.remoteId] first.
+         * - Fallback: Unsynced local shifts are matched by content fingerprint ([Shift.isSameContent])
+         *   to prevent duplication when local shifts haven't received their remote ID yet.
+         * - New remote shifts without a local match are inserted locally.
+         * - Existing shifts are updated if the remote version has a newer update timestamp.
          * - Orphaned local shifts (marked as synced but missing in Firebase) are deleted.
          */
         private suspend fun syncFromFirebase() {
             try {
                 val remoteShifts = firebaseShiftDataSource.getAll()
                 val remoteIds = remoteShifts.mapNotNull { it.remoteId }.toSet()
+                val allLocal = shiftRepositoryLocal.getAllShifts().first()
+                val matchedLocalIds = mutableSetOf<Int>()
 
                 for (remoteShift in remoteShifts) {
                     val remoteId = remoteShift.remoteId ?: continue
-                    val localShift = shiftRepositoryLocal.getByRemoteId(remoteId)
+                    var localShift = shiftRepositoryLocal.getByRemoteId(remoteId)
+
+                    // Fallback content-based matching for unsynced local shifts to avoid duplicates
+                    if (localShift == null) {
+                        localShift = allLocal.firstOrNull { local ->
+                            local.id !in matchedLocalIds &&
+                                !local.meta.isSynced &&
+                                local.isSameContent(remoteShift)
+                        }
+                    }
 
                     val newMeta = remoteShift.meta.copy(isSynced = true)
                     val shiftWithSynced = remoteShift.copy(meta = newMeta)
@@ -71,19 +83,21 @@ class ShiftSyncManager
                     if (localShift == null) {
                         shiftRepositoryLocal.insertShift(shiftWithSynced.withNewId())
                         Log.d("Sync", "Inserted remote shift: $remoteId")
-                    } else if (localShift.meta.updatedAt < remoteShift.meta.updatedAt) {
-                        shiftRepositoryLocal.updateShift(shiftWithSynced.copy(id = localShift.id))
-                        Log.d("Sync", "Updated remote shift: $remoteId")
-                    } else if (!localShift.meta.isSynced) {
-                        // If timestamps are equal but local is not marked as synced, fix it
-                        shiftRepositoryLocal.markAsSynced(localShift.id, remoteId)
-                        Log.d("Sync", "Marked identical shift as synced: $remoteId")
+                    } else {
+                        matchedLocalIds.add(localShift.id)
+                        if (!localShift.meta.isSynced || localShift.remoteId != remoteId) {
+                            shiftRepositoryLocal.markAsSynced(localShift.id, remoteId)
+                            Log.d("Sync", "Linked content-matched shift as synced: id=${localShift.id} remoteId=$remoteId")
+                        } else if (localShift.meta.updatedAt < remoteShift.meta.updatedAt) {
+                            shiftRepositoryLocal.updateShift(shiftWithSynced.copy(id = localShift.id))
+                            Log.d("Sync", "Updated remote shift: $remoteId")
+                        }
                     }
                 }
 
                 // Removing shifts from local, which are not in Firebase — but only if isSynced == true
-                val allLocal = shiftRepositoryLocal.getAllShifts().first()
-                val toDelete = allLocal.filter { local ->
+                val remainingLocal = shiftRepositoryLocal.getAllShifts().first()
+                val toDelete = remainingLocal.filter { local ->
                     val remoteId = local.remoteId
                     remoteId != null && local.meta.isSynced && remoteId !in remoteIds
                 }

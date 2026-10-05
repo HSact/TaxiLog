@@ -5,8 +5,10 @@ import com.hsact.data.db.ShiftDao
 import com.hsact.data.mappers.toDomain
 import com.hsact.data.mappers.toEntity
 import com.hsact.domain.model.Shift
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -20,6 +22,7 @@ class ShiftRepositoryLocalImpl
             shiftDao
                 .getAllShifts()
                 .map { list -> list.map { it.toDomain() } }
+                .flowOn(Dispatchers.Default)
 
         override fun getShiftsInRange(
             start: LocalDateTime?,
@@ -30,6 +33,7 @@ class ShiftRepositoryLocalImpl
             return shiftDao
                 .getShiftsInRange(startString, endString)
                 .map { list -> list.map { it.toDomain() } }
+                .flowOn(Dispatchers.Default)
         }
 
         override fun getShiftById(id: Int): Flow<Shift?> =
@@ -42,20 +46,25 @@ class ShiftRepositoryLocalImpl
                     )
                     entity?.toDomain()
                 }
+                .flowOn(Dispatchers.Default)
 
-        override fun getShiftSequenceNumberById(id: Int): Flow<Int> = shiftDao.getShiftSequenceNumber(id)
+        override fun getShiftSequenceNumberById(id: Int): Flow<Int> =
+            shiftDao.getShiftSequenceNumber(id)
+                .flowOn(Dispatchers.Default)
 
         override fun getLastShift(): Flow<Shift?> =
             shiftDao
                 .getLastShift()
                 .map { it?.toDomain() }
+                .flowOn(Dispatchers.Default)
 
-        override suspend fun getUnsyncedShifts() =
+        override suspend fun getUnsyncedShifts(): List<Shift> =
             shiftDao
                 .getUnsyncedShifts()
                 .map { it.toDomain() }
 
-        override suspend fun getByRemoteId(remoteId: String) = shiftDao.getByRemoteId(remoteId)?.toDomain()
+        override suspend fun getByRemoteId(remoteId: String): Shift? =
+            shiftDao.getByRemoteId(remoteId)?.toDomain()
 
         override suspend fun markAsSynced(
             id: Int,

@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.Locale
@@ -110,8 +111,11 @@ class StatsViewModel
                 ).collect { list ->
                     _shifts.value = list
                     val currency = currencySymbol ?: CurrencySymbolMode.fromLocale(locale)
-                    _uiState.value =
-                        buildUiState(_uiState.value.startDate, _uiState.value.endDate, list, locale, currency)
+                    val newUiState =
+                        withContext(kotlinx.coroutines.Dispatchers.Default) {
+                            buildUiState(_uiState.value.startDate, _uiState.value.endDate, list, locale, currency)
+                        }
+                    _uiState.value = newUiState
                 }
             }
         }
