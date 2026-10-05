@@ -88,4 +88,21 @@ data class Shift(
 
     val taxIsNotZero: Boolean
         get() = financeInput.tax != 0L
+
+    /**
+     * Checks whether this shift has the same core domain content as [other].
+     *
+     * Used for content-based deduplication during data synchronization when
+     * a local shift has not yet received its [remoteId] from the cloud.
+     *
+     * @param other The shift to compare with.
+     * @return `true` if start time, end time, rest period, car ID, financial figures, and mileage match.
+     */
+    fun isSameContent(other: Shift): Boolean =
+        time.period.start == other.time.period.start &&
+            time.period.end == other.time.period.end &&
+            time.rest == other.time.rest &&
+            carId == other.carId &&
+            financeInput == other.financeInput &&
+            carSnapshot.mileage == other.carSnapshot.mileage
 }

@@ -190,10 +190,17 @@ class ShiftFormViewModel
             _uiState.value = _uiState.value.copy(breakEnd = time)
         }
 
+        private var isSubmitting = false
+
         /**
          * Submits the shift data (insert or update) and pushes to remote if configured.
+         *
+         * Includes a guard against multiple submissions from rapid UI taps.
          */
         fun submit() {
+            if (isSubmitting) return
+            isSubmitting = true
+
             val uiState = _uiState.value
             val shiftInput = buildShiftInputModel(uiState)
             val deviceId = getDeviceIdUseCase.invoke()
@@ -218,7 +225,11 @@ class ShiftFormViewModel
                 )
             val shift: Shift = shiftInput.toDomain(shiftMeta)
             viewModelScope.launch {
-                addShiftUseCase(shift.copy(id = uiState.id, remoteId = remoteId))
+                try {
+                    addShiftUseCase(shift.copy(id = uiState.id, remoteId = remoteId))
+                } finally {
+                    isSubmitting = false
+                }
             }
         }
 
